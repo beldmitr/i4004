@@ -902,7 +902,33 @@ void Simulator::SBM()
 
 void Simulator::RDM()
 {
-    /// TODO RDM
+    /*
+     * READ DATA RAM DATA CHARACTER
+     *
+     * 1110 1001
+     *
+     * The DATA RAM data character specified by the last SRC instruction is loaded into
+     * the accumulator. The carry bit and the data character are not affected.
+     */
+
+    /*
+     * The 8 bits of the address sent by the SRC are interpreted as follows:
+     *
+     * When referencing a DATA RAM data character:
+     *   xxyyzzzz
+     *   xx   - 1 of 4 DATA RAM chips within the DATA RAM bank previously selected by a DCL instruction.
+     *   yy   - 1 of 4 registers within the DATA RAM chip.
+     *   zzzz - 1 of 16 4-bit data characters within the register
+     */
+
+    int bank = cpu->getDcl();
+    int chip = (cpu->getSrc() & 0b11000000) >> 6;
+    int reg = (cpu->getSrc() & 0b00110000) >> 4;
+    int character = (cpu->getSrc() & 0xF);
+
+    int value = dram->getDataRAMBank(bank)->getDataRAMChip(chip)->
+            getDataRAMRegister(reg)->getCharacter(character);
+    cpu->setAcc(value);
 
     cpu->setPC(cpu->getPC() + 1);
 }
