@@ -1,0 +1,21 @@
+#include "subwindow.h"
+
+SubWindow::SubWindow(QWidget *parent) : QMdiSubWindow(parent)
+{
+
+}
+
+void SubWindow::closeEvent(QCloseEvent* event)
+{
+    event->ignore();
+    this->setWindowState(Qt::WindowMinimized);
+}
+
+bool SubWindow::event(QEvent *event)
+{
+
+}
+
+
+
+

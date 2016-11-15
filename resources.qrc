@@ -1,0 +1,28 @@
+<RCC>
+    <qresource prefix="/">
+        <file>Resources/icons/about.png</file>
+        <file>Resources/icons/compile.png</file>
+        <file>Resources/icons/compile_run.png</file>
+        <file>Resources/icons/copy.png</file>
+        <file>Resources/icons/cut.png</file>
+        <file>Resources/icons/delete.png</file>
+        <file>Resources/icons/exit.png</file>
+        <file>Resources/icons/icon.png</file>
+        <file>Resources/icons/new.png</file>
+        <file>Resources/icons/open.png</file>
+        <file>Resources/icons/paste.png</file>
+        <file>Resources/icons/preference.png</file>
+        <file>Resources/icons/redo.png</file>
+        <file>Resources/icons/run.png</file>
+        <file>Resources/icons/save.png</file>
+        <file>Resources/icons/saveas.png</file>
+        <file>Resources/icons/selectall.png</file>
+        <file>Resources/icons/undo.png</file>
+        <file>Resources/components/push_button.png</file>
+        <file>Resources/components/7segment.png</file>
+        <file>Resources/components/button.png</file>
+        <file>Resources/components/led.png</file>
+        <file>Resources/icons/editor.png</file>
+        <file>Resources/icons/io.png</file>
+    </qresource>
+</RCC>

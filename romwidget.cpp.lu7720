@@ -1,0 +1,18 @@
+#include "romwidget.h"
+
+RomWidget::RomWidget(QWidget *parent) : QWidget(parent)
+{
+    this->setAutoFillBackground(true);
+
+    layout = new QHBoxLayout(this);
+
+    QGroupBox* memGBox = new QGroupBox("Memory");
+    QGroupBox* ioGBox = new QGroupBox("Input/Output");
+
+//    tabPages = new QTabWidget();
+//    tabPages->addTab(NULL, "1");
+
+//    layout->addWidget(memGBox);
+//    layout->addWidget(ioGBox);
+    this->setLayout(layout);
+}
