@@ -935,7 +935,32 @@ void Simulator::RDM()
 
 void Simulator::RDR()
 {
-    /// TODO RDR
+    /*
+     * READ ROM PORT
+     *
+     * 1110 1010
+     *
+     * The ROM port specified by the last SRC instruction is read. When using the 4001
+     * ROM, each of the 4 lines of the port may be an input or an output line; the data on
+     * the input lines is transferred to the corresponding bits of the accumulator. Any
+     * output lines cause either a 0 or a 1 to be transferred to the corresponding bits of
+     * the accumulator. Whether a 0 or a 1 is transferred is a function of the hardware,
+     * not under control of the programmer.
+     *
+     * The carry bit is not affected.
+     */
+
+    /*
+     * The 8 bits of the address sent by the SRC are interpreted as follows:
+     *
+     * When referencing a ROM input or output port:
+     *   xxxxyyyy
+     *   xxxx - The port associated with 1 of 16 ROM's.
+     *   yyyy - These bits are not relevant for this reference.
+     */
+
+    int port = (cpu->getSrc() & 0xF) >> 4;
+    cpu->setAcc(rom->getIO(port));
 
     cpu->setPC(cpu->getPC() + 1);
 }
