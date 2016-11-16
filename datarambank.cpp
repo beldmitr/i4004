@@ -2,8 +2,9 @@
 
 DataRAMBank::DataRAMBank() : length(4)
 {
-    for (int i = 0; i < length; i++) {
-        chips.push_back(DataRAMChip());
+    /// TODO remove 4 and write length
+    for (int i = 0; i < 4; i++) {
+        chips.push_back(new DataRAMChip());
     }
 }
 
@@ -15,5 +16,5 @@ DataRAMChip* DataRAMBank::getDataRAMChip(int index)
         throw "Error accessing Data RAM Chip."; /// FIXME Exception
     }
 
-    return &chips[index];
+    return chips[index];
 }

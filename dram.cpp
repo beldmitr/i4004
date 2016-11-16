@@ -3,7 +3,7 @@
 DRAM::DRAM(int bankNumber) : length(bankNumber)
 {
     for (int i = 0; i < length; i++) {
-        banks.push_back(DataRAMBank());
+        banks.push_back(new DataRAMBank());
     }
 }
 
@@ -15,5 +15,5 @@ DataRAMBank *DRAM::getDataRAMBank(int index)
         throw "Data RAM accessing error.";
     }
 
-    return &banks[index];
+    return banks[index];
 }

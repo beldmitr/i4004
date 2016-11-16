@@ -8,7 +8,7 @@
 class DRAM
 {
 private:
-    std::vector<DataRAMBank> banks;
+    std::vector<DataRAMBank*> banks;
 
     const int length;
 

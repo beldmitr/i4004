@@ -8,7 +8,7 @@
 class DataRAMBank
 {
 private:
-    std::vector<DataRAMChip> chips;
+    std::vector<DataRAMChip*> chips;
     const int length;
 
 public:

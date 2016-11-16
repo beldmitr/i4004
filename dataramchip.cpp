@@ -3,7 +3,7 @@
 DataRAMChip::DataRAMChip():output(0),length(4)
 {
     for (int i = 0; i < length; i++) {
-        registers.push_back(DataRAMRegister());
+        registers.push_back(new DataRAMRegister());
     }
 }
 
@@ -15,7 +15,7 @@ DataRAMRegister* DataRAMChip::getDataRAMRegister(int index)
         throw "Data RAM access error. Wrong index of a register in a chip."; /// FIXME Exception
     }
 
-    return &registers[index];
+    return registers[index];
 }
 
 int DataRAMChip::getOutput() const

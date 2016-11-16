@@ -8,7 +8,7 @@
 class DataRAMChip
 {
 private:
-    std::vector<DataRAMRegister> registers;
+    std::vector<DataRAMRegister*> registers;
     int output;
 
     const int length;
