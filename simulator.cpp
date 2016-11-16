@@ -2,14 +2,13 @@
 
 Simulator::Simulator():rom(new ROM(16)), pram(new PRAM),dram(new DRAM(8)), cpu(new CPU)
 {
-
 }
 
 /// TODO step
 void Simulator::step()
 {
-//    int programCounter = cpu->getPC();
-//    int command = rom->getValue(programCounter);
+    //    int programCounter = cpu->getPC();
+    //    int command = rom->getValue(programCounter);
 
 }
 
@@ -218,8 +217,9 @@ void Simulator::evalCommand(int command)
     }
 }
 
-/// TODO Everywhere check params
-
+/**
+ * @brief Simulator::NOP - NO OPERATION
+ */
 void Simulator::NOP()
 {
     /*
@@ -235,12 +235,29 @@ void Simulator::NOP()
     cpu->setPC(cpu->getPC() + 1);
 }
 
-void Simulator::JCN(int condition, int address)
+/**
+ * @brief Simulator::JCN - JUMP ON CONDITION
+ * @param condition - (4 bit) jumps if condition is true
+ * @param address - (8 bit) address to jump
+ */
+void Simulator::JCN(unsigned int condition, unsigned int address)
 {
     /*
      * JUMP ON CONDITION
      *
      * The JCN instruction occupies two bytes.
+     *
+     * If the condition specified by condition(CN) is false, no action occurs and program execution
+     * continues with the next sequential instruction. If the condition specified by
+     * CN is true, the 8 bits specified by address (ADDR) replace the lower 8 bits of the program
+     * counter. The highest 4 bits of the program counter are unchanged. Therefore,
+     * program execution continues at the specified address on the same page of memory
+     * in which the JCN instruction is located. The carry bit is not affected.
+     *
+     * The condition code is specified in the assembly language statement as a decimal
+     * value from 0 to 15, which is represented in the assembled instruction as the
+     * corresponding 4 bit hexadecimal digit. Each bit of the condition code has a
+     * meaning, as follows:
      *
      *        CN
      *  _______________
@@ -258,17 +275,33 @@ void Simulator::JCN(int condition, int address)
      * JUMP = !C1 * ((ACC == 0) * C2 + (carry == 1) * C3 + !TEST * C4) +
      *         C1 * (((ACC != 0) + !C2) * ((carry == 0) + !C3) * (TEST + !C4))
      *
-     * http://bitsavers.trailing-edge.com/pdf/intel/MCS4/MCS-4_Assembly_Language_Programming_Manual_Dec73.pdf
-     * str. 70
+     *
+     * Note: If the JCN instruction is located in the last two locations of a page in
+     * memory and the jump condition is true, the highest 4 bits of the program counter
+     * are incremented by 1, causing control to be transferred to the corresponding location
+     * on the next page.
      */
+
+    /// TODO JCN Note
+
+    if (condition > 0xF) {
+        std::cerr << std::hex << "Error: JCN condition. 0x" << condition
+                  << " is invalid, because is bigger than 4 bit." << std::endl;
+        return;
+    }
+
+    if (address > 0xFF) {
+        std::cerr << std::hex << "Error: 0x" << address << " is too big. It may be 8 bit." << std::endl;
+        return;
+    }
 
     bool c4 = (condition & 0x1) == 1;
     bool c3 = ((condition & 0x2) >> 1) == 1;
     bool c2 = ((condition & 0x4) >> 2) == 1;
     bool c1 = ((condition & 0x8) >> 3) == 1;
 
-    bool jump = !c1 & ((cpu->getAcc() == 0) & c2 | (cpu->getCarry() == 1) & c3 | (cpu->getTest() == 0) & c4) |
-            c1 & (((cpu->getAcc() != 0) | !c2) & ((cpu->getCarry() == 0) | !c3) & ((cpu->getTest() == 1) | !c4));
+    bool jump = (!c1 & (((cpu->getAcc() == 0) & c2) | ((cpu->getCarry() == 1) & c3) | ((cpu->getTest() == 0) & c4))) |
+            (c1 & (((cpu->getAcc() != 0) | !c2) & ((cpu->getCarry() == 0) | !c3) & ((cpu->getTest() == 1) | !c4)));
 
     if (jump) {
         /*
@@ -286,7 +319,12 @@ void Simulator::JCN(int condition, int address)
     }
 }
 
-void Simulator::FIM(int pair, int data)
+/**
+ * @brief Simulator::FIM - FETCH IMMEDIATE
+ * @param pair - pair [0-7]
+ * @param data - data (8 bit)
+ */
+void Simulator::FIM(unsigned int pair, unsigned int data)
 {
     /*
      * FETCH IMMEDIATE
@@ -300,21 +338,28 @@ void Simulator::FIM(int pair, int data)
      *
      * The 8 bits of immediate data are loaded into the register pair specified by RP.
      * The carry bit is not affected.
-     *
      */
 
-    if (pair < 0 || pair > 0x7) {
-        std::cerr << "Wrong number of pair " << pair << std::endl;
+    if (pair > 0x7) {
+        std::cerr << "Error: wrong number of pair " << pair << std::endl;
         return;
+    }
+
+    if (data > 0xFF) {
+        std::cerr << std::hex << "Warning: 0x" << data << " may consider only 8 bit. It will be reduced." << std::endl;
     }
 
     cpu->setPairs(pair, data & 0xFF);
     cpu->setPC(cpu->getPC() + 2);
 }
 
-void Simulator::SRC(int pair)
+/**
+ * @brief Simulator::SRC - SEND REGISTER CONTROL
+ * @param pair - pair [0-7]
+ */
+void Simulator::SRC(unsigned int pair)
 {
-   /*
+    /*
     * SEND REGISTER CONTROL
     *
     * The SRC instruction occupies one byte.
@@ -351,11 +396,10 @@ void Simulator::SRC(int pair)
     *   xxxxyyyy
     *   xxxx - The port associated with 1 of 16 ROM's.
     *   yyyy - These bits are not relevant for this reference.
-    *
     */
 
-    if (pair < 0 || pair > 0x7) {
-        std::cerr << "Wrong number of pair " << pair << std::endl;
+    if (pair > 0x7) {
+        std::cerr << "Error: wrong number of pair " << pair << std::endl;
         return;
     }
 
@@ -363,9 +407,12 @@ void Simulator::SRC(int pair)
     cpu->setPC(cpu->getPC() + 1);
 }
 
-void Simulator::FIN(int pair)
+/**
+ * @brief Simulator::FIN - FETCH INDIRECT
+ * @param pair - pair [0-7]
+ */
+void Simulator::FIN(unsigned int pair)
 {
-    /// TODO do this method better (see more in method comments)
     /*
      * FETCH INDIRECT
      *
@@ -382,15 +429,14 @@ void Simulator::FIN(int pair)
      *
      * The carry bit is not affected.
      *
-     * EXCEPTION:
-     * If a FIN instruction is located in the last location of a page, the upper
-     * 4 bits of the designated address will be assumed equal to the upper 4 bits of the
+     * Note:
+     * There is an exception: If a FIN instruction is located in the last location of a page,
+     * the upper 4 bits of the designated address will be assumed equal to the upper 4 bits of the
      * next page.
-     *
      */
 
-    if (pair < 0 || pair > 0x7) {
-        std::cerr << "Wrong number of pair " << pair << std::endl;
+    if (pair > 0x7) {
+        std::cerr << "Error: wrong number of pair " << pair << std::endl;
         return;
     }
 
@@ -398,14 +444,18 @@ void Simulator::FIN(int pair)
     int addr = ph | (cpu->getRegisters()[0] << 4) | cpu->getRegisters()[1];
 
     /// TODO choose between ROM and Program RAM !!!!!!!
-    /// TODO Make a EXCEPTION as it is described in a comment above
+    /// TODO Make a Note as it is described in a comment above
     int value = rom->getValue(addr);
     cpu->setPairs(pair & 0b111, value);
 
     cpu->setPC(cpu->getPC() + 1);
 }
 
-void Simulator::JIN(int pair)
+/**
+ * @brief Simulator::JIN - JUMP INDIRECT
+ * @param pair - pair [0-7]
+ */
+void Simulator::JIN(unsigned int pair)
 {
     /*
      * JUMP INDIRECT
@@ -423,8 +473,8 @@ void Simulator::JIN(int pair)
      * The carry bit is not affected.
      */
 
-    if (pair < 0 || pair > 0x7) {
-        std::cerr << "Wrong number of pair " << pair << std::endl;
+    if (pair > 0x7) {
+        std::cerr << "Error: wrong number of pair " << pair << std::endl;
         return;
     }
 
@@ -432,7 +482,12 @@ void Simulator::JIN(int pair)
     cpu->setPC(addr);
 }
 
-void Simulator::JUN(int address1, int address2)
+/**
+ * @brief Simulator::JUN - JUMP UNCONDITIONALLY
+ * @param address1 - high address (4 bit)
+ * @param address2 - low address (8 bit)
+ */
+void Simulator::JUN(unsigned int address1, unsigned int address2)
 {
     /*
      * JUMP UNCONDITIONALLY
@@ -448,18 +503,25 @@ void Simulator::JUN(int address1, int address2)
      * if located in program RAM, ADDR is a program RAM address).
      *
      * The carry bit is not affected.
-     *
      */
+
+    if (address1 > 0xF) {
+        std::cerr << std::hex << "Warning: address1 0x" << address1 << " may consider 4 bit. It will be reduced." << std::endl;
+    }
+
+    if (address2 > 0xFF) {
+        std::cerr << std::hex << "Warning: address2 0x" << address2 << " may consider 8 bit. It will be reduced." << std::endl;
+    }
 
     cpu->setPC(((address1 & 0xF) << 8) | (address2 & 0xFF));
 }
 
 /**
  * @brief Simulator::JMS - Jump to subroutine
- * @param address1 - high 4 bit of address
- * @param address2 - low 8 bit of address
+ * @param address1 - high address (4 bit)
+ * @param address2 - low address (8 bit)
  */
-void Simulator::JMS(int address1, int address2)
+void Simulator::JMS(unsigned int address1, unsigned int address2)
 {
     /*
      * JUMP TO SUBROUTINE
@@ -476,12 +538,24 @@ void Simulator::JMS(int address1, int address2)
      * The carty bit is not affected.
      */
 
+    if (address1 > 0xF) {
+        std::cerr << std::hex << "Warning: address1 0x" << address1 << " may consider 4 bit. It will be reduced." << std::endl;
+    }
+
+    if (address2 > 0xFF) {
+        std::cerr << std::hex << "Warning: address2 0x" << address2 << " may consider 8 bit. It will be reduced." << std::endl;
+    }
+
     cpu->getStack()->write(cpu->getPC() + 2);
     cpu->setPC(((address1 & 0xF) << 8) | (address2 & 0xFF));
 
 }
 
-void Simulator::INC(int reg)
+/**
+ * @brief Simulator::INC - INCREMENT REGISTER
+ * @param reg - register [0-15]
+ */
+void Simulator::INC(unsigned int reg)
 {
     /*
      * INCREMENT REGISTER
@@ -493,8 +567,8 @@ void Simulator::INC(int reg)
      * The carry bit is not affected.
      */
 
-    if (reg < 0 || reg > 0xF) {
-        std::cerr << "Wrong number of register " << reg << std::endl;
+    if (reg > 0xF) {
+        std::cerr << "Error: wrong number of register " << reg << std::endl;
         return;
     }
 
@@ -504,9 +578,13 @@ void Simulator::INC(int reg)
     cpu->setPC(cpu->getPC() + 1);
 }
 
-void Simulator::ISZ(int reg, int address)
+/**
+ * @brief Simulator::ISZ - INCREMENT AND SKIP IF ZERO
+ * @param reg - register [0-15]
+ * @param address - address for jumpng (8 bit)
+ */
+void Simulator::ISZ(unsigned int reg, unsigned int address)
 {
-    /// TODO better (more is in function comment)
     /*
      * INCREMENT AND SKIP IF ZERO
      *
@@ -533,9 +611,14 @@ void Simulator::ISZ(int reg, int address)
 
     /// TODO Note !!!
 
-    if (reg < 0 || reg > 0xF) {
-        std::cerr << "Wrong number of register " << reg << std::endl;
+    if (reg > 0xF) {
+        std::cerr << "Error: wrong number of register " << reg << std::endl;
         return;
+    }
+
+    if (address > 0xFF) {
+        std::cerr << std::hex << "Warning: address 0x" << address
+                  << " may consider only 8 bit. It will be reduced." << std::endl;
     }
 
     INC(reg);
@@ -546,7 +629,11 @@ void Simulator::ISZ(int reg, int address)
     }
 }
 
-void Simulator::ADD(int reg)
+/**
+ * @brief Simulator::ADD - ADD REGISTER TO ACCUMULATOR WITH CARRY
+ * @param reg - register [0-15]
+ */
+void Simulator::ADD(unsigned int reg)
 {
     /*
      * ADD REGISTER TO ACCUMULATOR WITH CARRY
@@ -558,11 +645,10 @@ void Simulator::ADD(int reg)
      * added to the accumulator. The result is kept in the accumulator; the contents
      * of REG are unchanged. The carry bit is set if there is, a carry out of the highorder
      * bit position, and reset if there is no carty.
-     *
      */
 
-    if (reg < 0 || reg > 0xF) {
-        std::cerr << "Wrong number of register " << reg << std::endl;
+    if (reg > 0xF) {
+        std::cerr << "Error: wrong number of register " << reg << std::endl;
         return;
     }
 
@@ -574,7 +660,11 @@ void Simulator::ADD(int reg)
     cpu->setPC(cpu->getPC() + 1);
 }
 
-void Simulator::SUB(int reg)
+/**
+ * @brief Simulator::SUB - SUBTRACT REGISTER FROM ACCUMULATOR WITH BORROW
+ * @param reg - register [0-15]
+ */
+void Simulator::SUB(unsigned int reg)
 {
     /*
      * SUBTRACT REGISTER FROM ACCUMULATOR WITH BORROW
@@ -594,11 +684,10 @@ void Simulator::SUB(int reg)
      * The subtract with borrow operation is actually performed by complementing each bit
      * of the contents of REG and adding the resulting value plus the complement of the
      * carry bit to the accumulator.
-     *
      */
 
-    if (reg < 0 || reg > 0xF) {
-        std::cerr << "Wrong number of register " << reg << std::endl;
+    if (reg > 0xF) {
+        std::cerr << "Error: wrong number of register " << reg << std::endl;
         return;
     }
 
@@ -611,7 +700,11 @@ void Simulator::SUB(int reg)
     cpu->setPC(cpu->getPC() + 1);
 }
 
-void Simulator::LD(int reg)
+/**
+ * @brief Simulator::LD - LOAD ACCUMULATOR
+ * @param reg - register [0-15]
+ */
+void Simulator::LD(unsigned int reg)
 {
     /*
      * LOAD ACCUMULATOR
@@ -621,11 +714,10 @@ void Simulator::LD(int reg)
      *
      * The contents of REG are stored into the accumulator, replacing the previous contents
      * of the accumulator. The contents of REG are unchanged. The carry bit is not affected.
-     *
      */
 
-    if (reg < 0 || reg > 0xF) {
-        std::cerr << "Wrong number of register " << reg << std::endl;
+    if (reg > 0xF) {
+        std::cerr << "Error: wrong number of register " << reg << std::endl;
         return;
     }
 
@@ -634,7 +726,11 @@ void Simulator::LD(int reg)
     cpu->setPC(cpu->getPC() + 1);
 }
 
-void Simulator::XCH(int reg)
+/**
+ * @brief Simulator::XCH - EXCHANGE REGISTER AND ACCUMULATOR
+ * @param reg - register [0-15]
+ */
+void Simulator::XCH(unsigned int reg)
 {
     /*
      * EXCHANGE REGISTER AND ACCUMULATOR
@@ -646,11 +742,10 @@ void Simulator::XCH(int reg)
      * the accumulator.
      *
      * The carry bit is not affected.
-     *
      */
 
-    if (reg < 0 || reg > 0xF) {
-        std::cerr << "Wrong number of register " << reg << std::endl;
+    if (reg > 0xF) {
+        std::cerr << "Error: wrong number of register " << reg << std::endl;
         return;
     }
 
@@ -663,7 +758,11 @@ void Simulator::XCH(int reg)
     cpu->setPC(cpu->getPC() + 1);
 }
 
-void Simulator::BBL(int data)
+/**
+ * @brief Simulator::BBL - BRANCH BACK AND LOAD
+ * @param data - data (4 bit)
+ */
+void Simulator::BBL(unsigned int data)
 {
     /*
      * BRANCH BACK AND LOAD
@@ -681,8 +780,9 @@ void Simulator::BBL(int data)
      * The carry bit is not affected.
      */
 
-    if (data < 0 || data > 0xF) {
-        std::cerr << std::hex << "Data " << data << " is too big and was reduced to 4 bits." << std::endl;
+    if (data > 0xF) {
+        std::cerr << std::hex << "Warning: data " << data
+                  << " is too big and will be reduced to 4 bits." << std::endl;
     }
 
     cpu->setAcc(data);
@@ -691,7 +791,11 @@ void Simulator::BBL(int data)
     cpu->setPC(stackedAddress);
 }
 
-void Simulator::LDM(int data)
+/**
+ * @brief Simulator::LDM - LOAD ACCUMULATOR IMMEDIATE
+ * @param data - data (4 bit)
+ */
+void Simulator::LDM(unsigned int data)
 {
     /*
      * LOAD ACCUMULATOR IMMEDIATE
@@ -706,11 +810,19 @@ void Simulator::LDM(int data)
      * The carry bit is not affected.
      */
 
+    if (data > 0xF) {
+        std::cerr << std::hex << "Warning: data 0x" << data
+                  << " is too big and will be reduced to 4 bits." << std::endl;
+    }
+
     cpu->setAcc(data & 0xF);
 
     cpu->setPC(cpu->getPC() + 1);
 }
 
+/**
+ * @brief Simulator::WRM - WRITE DATA RAM CHARACTER
+ */
 void Simulator::WRM()
 {
     /*
@@ -744,6 +856,9 @@ void Simulator::WRM()
             getDataRAMRegister(reg)->setCharacter(character, cpu->getAcc());
 }
 
+/**
+ * @brief Simulator::WMP - WRITE RAM PORT
+ */
 void Simulator::WMP()
 {
     /*
@@ -777,6 +892,9 @@ void Simulator::WMP()
     cpu->setPC(cpu->getPC() + 1);
 }
 
+/**
+ * @brief Simulator::WRR - WRITE ROM PORT
+ */
 void Simulator::WRR()
 {
     /*
@@ -789,7 +907,6 @@ void Simulator::WRR()
      * until overwritten.
      *
      * The carry bit and the accumulator are unchanged.
-     *
      */
 
     int romPage = (cpu->getSrc() & 0xF) >> 4;
@@ -799,7 +916,7 @@ void Simulator::WRR()
 }
 
 /**
- * @brief Simulator::WR0 - WRITE DATA RAM STATUS CHARACTER
+ * @brief Simulator::WR0 - WRITE DATA RAM STATUS CHARACTER 0
  */
 void Simulator::WR0()
 {
@@ -840,6 +957,9 @@ void Simulator::WR0()
     cpu->setPC(cpu->getPC() + 1);
 }
 
+/**
+ * @brief Simulator::WR1 - WRITE DATA RAM STATUS CHARACTER 1
+ */
 void Simulator::WR1()
 {
     /*
@@ -855,6 +975,9 @@ void Simulator::WR1()
     cpu->setPC(cpu->getPC() + 1);
 }
 
+/**
+ * @brief Simulator::WR2 - WRITE DATA RAM STATUS CHARACTER 2
+ */
 void Simulator::WR2()
 {
     /*
@@ -870,6 +993,9 @@ void Simulator::WR2()
     cpu->setPC(cpu->getPC() + 1);
 }
 
+/**
+ * @brief Simulator::WR3 - WRITE DATA RAM STATUS CHARACTER 3
+ */
 void Simulator::WR3()
 {
     /*
@@ -885,6 +1011,9 @@ void Simulator::WR3()
     cpu->setPC(cpu->getPC() + 1);
 }
 
+/**
+ * @brief Simulator::SBM - SUBTRACT DATA RAM FROM MEMORY WITH BORROW
+ */
 void Simulator::SBM()
 {
     /*
@@ -904,9 +1033,6 @@ void Simulator::SBM()
      * The subtract with borrow operation is actually performed by complementing each bit of
      * the data character and adding the resulting value plus the complement of the carry bit
      * to the accumulator.
-     *
-     * http://bitsavers.trailing-edge.com/pdf/intel/MCS4/MCS-4_Assembly_Language_Programming_Manual_Dec73.pdf
-     * str. 90
      */
 
     /*
@@ -934,6 +1060,9 @@ void Simulator::SBM()
     cpu->setPC(cpu->getPC() + 1);
 }
 
+/**
+ * @brief Simulator::RDM - READ DATA RAM DATA CHARACTER
+ */
 void Simulator::RDM()
 {
     /*
@@ -967,6 +1096,9 @@ void Simulator::RDM()
     cpu->setPC(cpu->getPC() + 1);
 }
 
+/**
+ * @brief Simulator::RDR - READ ROM PORT
+ */
 void Simulator::RDR()
 {
     /*
@@ -999,6 +1131,9 @@ void Simulator::RDR()
     cpu->setPC(cpu->getPC() + 1);
 }
 
+/**
+ * @brief Simulator::ADM - ADD DATA RAM TO ACCUMULATOR WITH CARRY
+ */
 void Simulator::ADM()
 {
     /*
@@ -1012,9 +1147,6 @@ void Simulator::ADM()
      * The carry bit will be set if the result generates a carry, and will be reset otherwise.
      *
      * The data character is not affected.
-     *
-     * http://bitsavers.trailing-edge.com/pdf/intel/MCS4/MCS-4_Assembly_Language_Programming_Manual_Dec73.pdf
-     * str 89.
      */
 
     /*
@@ -1042,6 +1174,9 @@ void Simulator::ADM()
     cpu->setPC(cpu->getPC() + 1);
 }
 
+/**
+ * @brief Simulator::RD0 - READ DATA RAM STATUS CHARACTER 0
+ */
 void Simulator::RD0()
 {
     /*
@@ -1084,6 +1219,9 @@ void Simulator::RD0()
     cpu->setPC(cpu->getPC() + 1);
 }
 
+/**
+ * @brief Simulator::RD1 - READ DATA RAM STATUS CHARACTER 1
+ */
 void Simulator::RD1()
 {
     /*
@@ -1101,6 +1239,9 @@ void Simulator::RD1()
     cpu->setPC(cpu->getPC() + 1);
 }
 
+/**
+ * @brief Simulator::RD2 - READ DATA RAM STATUS CHARACTER 2
+ */
 void Simulator::RD2()
 {
     /*
@@ -1118,6 +1259,9 @@ void Simulator::RD2()
     cpu->setPC(cpu->getPC() + 1);
 }
 
+/**
+ * @brief Simulator::RD3 - READ DATA RAM STATUS CHARACTER 3
+ */
 void Simulator::RD3()
 {
     /*
@@ -1135,6 +1279,9 @@ void Simulator::RD3()
     cpu->setPC(cpu->getPC() + 1);
 }
 
+/**
+ * @brief Simulator::CLB - CLEAR BOTH
+ */
 void Simulator::CLB()
 {
     /*
@@ -1151,6 +1298,9 @@ void Simulator::CLB()
     cpu->setPC(cpu->getPC() + 1);
 }
 
+/**
+ * @brief Simulator::CLC - CLEAR CARRY
+ */
 void Simulator::CLC()
 {
     /*
@@ -1166,6 +1316,9 @@ void Simulator::CLC()
     cpu->setPC(cpu->getPC() + 1);
 }
 
+/**
+ * @brief Simulator::IAC - INCREMENT ACCUMULATOR
+ */
 void Simulator::IAC()
 {
     /*
@@ -1185,6 +1338,9 @@ void Simulator::IAC()
     cpu->setPC(cpu->getPC() + 1);
 }
 
+/**
+ * @brief Simulator::CMC - COMPLEMENT CARRY
+ */
 void Simulator::CMC()
 {
     /*
@@ -1201,6 +1357,9 @@ void Simulator::CMC()
     cpu->setPC(cpu->getPC() + 1);
 }
 
+/**
+ * @brief Simulator::CMA - COMPLEMENT ACCUMULATOR
+ */
 void Simulator::CMA()
 {
     /*
@@ -1220,6 +1379,9 @@ void Simulator::CMA()
     cpu->setPC(cpu->getPC() + 1);
 }
 
+/**
+ * @brief Simulator::RAL - ROTATE ACCUMULATOR LEFT THROUGH CARRY
+ */
 void Simulator::RAL()
 {
     /*
@@ -1242,8 +1404,8 @@ void Simulator::RAL()
     cpu->setPC(cpu->getPC() + 1);
 }
 
-/*
- * ROTATE ACCUMULATOR RIGHT THROUGH CARRY
+/**
+ * @brief Simulator::RAR - ROTATE ACCUMULATOR RIGHT THROUGH CARRY
  */
 void Simulator::RAR()
 {
@@ -1267,9 +1429,12 @@ void Simulator::RAR()
     cpu->setPC(cpu->getPC() + 1);
 }
 
+/**
+ * @brief Simulator::TCC - TRANSMIT CARRY AND CLEAR
+ */
 void Simulator::TCC()
 {
-   /*
+    /*
     * TRANSMIT CARRY AND CLEAR
     *
     * 1111 0111
@@ -1279,15 +1444,18 @@ void Simulator::TCC()
     */
 
     if (cpu->getCarry() == 0) {
-        cpu->setAcc(0x0);
+        cpu->setAcc(0);
     } else {
-        cpu->setAcc(0x1);
+        cpu->setAcc(1);
     }
     cpu->setCarry(0);
 
     cpu->setPC(cpu->getPC() + 1);
 }
 
+/**
+ * @brief Simulator::DAC - DECREMENT ACCUMULATOR
+ */
 void Simulator::DAC()
 {
     /*
@@ -1322,6 +1490,9 @@ void Simulator::DAC()
     cpu->setPC(cpu->getPC() + 1);
 }
 
+/**
+ * @brief Simulator::TCS - TRANSFER CARRY SUBTRACT
+ */
 void Simulator::TCS()
 {
     /*
@@ -1343,6 +1514,9 @@ void Simulator::TCS()
     cpu->setPC(cpu->getPC() + 1);
 }
 
+/**
+ * @brief Simulator::STC - SET CARRY
+ */
 void Simulator::STC()
 {
     /*
@@ -1358,6 +1532,9 @@ void Simulator::STC()
     cpu->setPC(cpu->getPC() + 1);
 }
 
+/**
+ * @brief Simulator::DAA - DECIMAL ADJUST ACCUMULATOR
+ */
 void Simulator::DAA()
 {
     /*
@@ -1383,6 +1560,9 @@ void Simulator::DAA()
     cpu->setPC(cpu->getPC() + 1);
 }
 
+/**
+ * @brief Simulator::KBP - KEYBOARD PROCESS
+ */
 void Simulator::KBP()
 {
     /*
@@ -1395,10 +1575,6 @@ void Simulator::KBP()
      * set.
      *
      * If more than one bit of the accumulator is set, the accumulator is set to 1111 B.
-     *
-     * see more here:
-     * http://bitsavers.trailing-edge.com/pdf/intel/MCS4/MCS-4_Assembly_Language_Programming_Manual_Dec73.pdf
-     * str. 64
      */
 
     switch(cpu->getAcc()) {
@@ -1455,9 +1631,8 @@ void Simulator::KBP()
     cpu->setPC(cpu->getPC() + 1);
 }
 
-
-/*
- * Chooses DATA RAM BANK
+/**
+ * @brief Simulator::DCL - DESIGNATE COMMAND LINE
  */
 void Simulator::DCL()
 {
@@ -1468,9 +1643,8 @@ void Simulator::DCL()
      *
      * 1111 1101
      *
-     * The DCL instruction uses the rightmost
-     * 3 bits of the accumulator to determine which of the 8 DATA RAM BANKS will be
-     * referenced during subsequent operations.
+     * The DCL instruction uses the rightmost 3 bits of the accumulator to determine
+     * which of the 8 DATA RAM BANKS will be referenced during subsequent operations.
      */
     cpu->setDcl(cpu->getAcc() & 0x7);
 
