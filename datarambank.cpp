@@ -2,8 +2,7 @@
 
 DataRAMBank::DataRAMBank() : length(4)
 {
-    /// TODO remove 4 and write length
-    for (int i = 0; i < 4; i++) {
+    for (int i = 0; i < length; i++) {
         chips.push_back(std::shared_ptr<DataRAMChip>(new DataRAMChip()));
     }
 }

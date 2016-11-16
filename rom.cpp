@@ -33,11 +33,11 @@ void ROM::setValue(unsigned int index, int value) {
 
 void ROM::clearRom()
 {
-    for (int i = 0; i < pages * bytesPerPage; i++) {
+    for (unsigned int i = 0; i < pages * bytesPerPage; i++) {
         table.push_back(0);
     }
 
-    for (int i = 0; i < pages; i++) {
+    for (unsigned int i = 0; i < pages; i++) {
         io.push_back(0);
     }
 }
