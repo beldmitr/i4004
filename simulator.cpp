@@ -997,7 +997,27 @@ void Simulator::ADM()
      * str 89.
      */
 
-    /// TODO ADM
+    /*
+     * The 8 bits of the address sent by the SRC are interpreted as follows:
+     *
+     * When referencing a DATA RAM data character:
+     *   xxyyzzzz
+     *   xx   - 1 of 4 DATA RAM chips within the DATA RAM bank previously selected by a DCL instruction.
+     *   yy   - 1 of 4 registers within the DATA RAM chip.
+     *   zzzz - 1 of 16 4-bit data characters within the register
+     */
+
+    int bank = cpu->getDcl();
+    int chip = (cpu->getSrc() & 0b11000000) >> 6;
+    int reg = (cpu->getSrc() & 0b00110000) >> 4;
+    int character = cpu->getSrc() & 0xF;
+
+    int memValue = dram->getDataRAMBank(bank)->getDataRAMChip(chip)->
+            getDataRAMRegister(reg)->getCharacter(character);
+
+    int result = memValue + cpu->getCarry() + cpu->getAcc();
+    cpu->setAcc(result % 0xF);
+    cpu->setCarry((result & 0b10000) >> 4);
 
     cpu->setPC(cpu->getPC() + 1);
 }
