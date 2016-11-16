@@ -3,11 +3,11 @@
 DataRAMChip::DataRAMChip():output(0),length(4)
 {
     for (int i = 0; i < length; i++) {
-        registers.push_back(new DataRAMRegister());
+        registers.push_back(std::shared_ptr<DataRAMRegister>(new DataRAMRegister()));
     }
 }
 
-DataRAMRegister* DataRAMChip::getDataRAMRegister(int index)
+std::shared_ptr<DataRAMRegister> DataRAMChip::getDataRAMRegister(int index)
 {
     if (index < 0 || index > length-1) {
         std::cerr << "The number of registers in Data RAM Chip is " << length

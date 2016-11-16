@@ -3,18 +3,19 @@
 
 #include <vector>
 #include <iostream>
+#include <memory>
 #include "datarambank.h"
 
 class DRAM
 {
 private:
-    std::vector<DataRAMBank*> banks;
+    std::vector<std::shared_ptr<DataRAMBank>> banks;
 
     const int length;
 
 public:
     DRAM(int bankNumber);
-    DataRAMBank* getDataRAMBank(int index);
+    std::shared_ptr<DataRAMBank> getDataRAMBank(int index);
 };
 
 #endif // DRAM_H

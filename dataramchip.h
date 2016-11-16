@@ -3,19 +3,20 @@
 
 #include <vector>
 #include <iostream>
+#include <memory>
 #include "dataramregister.h"
 
 class DataRAMChip
 {
 private:
-    std::vector<DataRAMRegister*> registers;
+    std::vector<std::shared_ptr<DataRAMRegister>> registers;
     int output;
 
     const int length;
 public:
     DataRAMChip();
 
-    DataRAMRegister* getDataRAMRegister(int index);
+    std::shared_ptr<DataRAMRegister> getDataRAMRegister(int index);
     int getOutput() const;
     void setOutput(int value);
 };
