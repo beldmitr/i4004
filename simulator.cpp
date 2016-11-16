@@ -974,28 +974,93 @@ void Simulator::ADM()
 
 void Simulator::RD0()
 {
-    /// TODO RD0
+    /*
+     * READ DATA RAM STATUS CHARACTER
+     *
+     * Description is the same for RD0, RD1, RD2, RD3
+     *
+     * 1110 11xx
+     * xx - number of a status character
+     * 00 - RD0
+     * 01 - RD1
+     * 10 - RD2
+     * 11 - RD3
+     *
+     * The DATA RAM status character whose number from 0 to 3 is specified by n, associated
+     * with the DATA RAM register specified by the last SRC instruction, is loaded
+     * into the accumulator.
+     *
+     * The carry bit and the status character are not affected.
+     */
+
+    /*
+     * The 8 bits of the address sent by the SRC are interpreted as follows:
+     *
+     * When referencing a DATA RAM status character:
+     *   xxyyzzzz
+     *   xx   - 1 of 4 DATA RAM chips within the DATA RAM bank previously selected by a DCL instruction.
+     *   yy   - 1 of 4 registers within the DATA RAM chip.
+     *   zzzz - These bits are not relevant for this reference.
+     */
+
+    int bank = cpu->getDcl();
+    int chip = (cpu->getSrc() & 0b11000000) >> 6;
+    int reg = (cpu->getSrc() & 0b00110000) >> 4;
+
+    int value = dram->getDataRAMBank(bank)->getDataRAMChip(chip)->
+            getDataRAMRegister(reg)->getStatus(0);
+    cpu->setAcc(value);
 
     cpu->setPC(cpu->getPC() + 1);
 }
 
 void Simulator::RD1()
 {
-    /// TODO RD1
+    /*
+     * For description see RD0 function
+     */
+
+    int bank = cpu->getDcl();
+    int chip = (cpu->getSrc() & 0b11000000) >> 6;
+    int reg = (cpu->getSrc() & 0b00110000) >> 4;
+
+    int value = dram->getDataRAMBank(bank)->getDataRAMChip(chip)->
+            getDataRAMRegister(reg)->getStatus(1);
+    cpu->setAcc(value);
 
     cpu->setPC(cpu->getPC() + 1);
 }
 
 void Simulator::RD2()
 {
-    /// TODO RD2
+    /*
+     * For description see RD0 function
+     */
+
+    int bank = cpu->getDcl();
+    int chip = (cpu->getSrc() & 0b11000000) >> 6;
+    int reg = (cpu->getSrc() & 0b00110000) >> 4;
+
+    int value = dram->getDataRAMBank(bank)->getDataRAMChip(chip)->
+            getDataRAMRegister(reg)->getStatus(2);
+    cpu->setAcc(value);
 
     cpu->setPC(cpu->getPC() + 1);
 }
 
 void Simulator::RD3()
 {
-    /// TODO RD3
+    /*
+     * For description see RD0 function
+     */
+
+    int bank = cpu->getDcl();
+    int chip = (cpu->getSrc() & 0b11000000) >> 6;
+    int reg = (cpu->getSrc() & 0b00110000) >> 4;
+
+    int value = dram->getDataRAMBank(bank)->getDataRAMChip(chip)->
+            getDataRAMRegister(reg)->getStatus(3);
+    cpu->setAcc(value);
 
     cpu->setPC(cpu->getPC() + 1);
 }
