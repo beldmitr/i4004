@@ -892,7 +892,21 @@ void Simulator::SBM()
      *
      * 1110 1000
      *
+     * The value of the DATA RAM character specified by the last SRC instruction is subtracted
+     * from the accumulator with borrow. The data character is unaffected. A borrow from the
+     * previous subtraction is indicated by the carry bit being equal to one at the beginning
+     * of this instruction. No borrow from the previous subtraction is indicated by the carry
+     * bit being equal to zero at the beginning of this instruction.
      *
+     * This instruction sets the carry bit if the result generates no borrow, and resets the
+     * carry bit if the result generates a borrow.
+     *
+     * The subtract with borrow operation is actually performed by complementing each bit of
+     * the data character and adding the resulting value plus the complement of the carry bit
+     * to the accumulator.
+     *
+     * http://bitsavers.trailing-edge.com/pdf/intel/MCS4/MCS-4_Assembly_Language_Programming_Manual_Dec73.pdf
+     * str. 90
      */
 
     /// TODO SBM
@@ -967,6 +981,22 @@ void Simulator::RDR()
 
 void Simulator::ADM()
 {
+    /*
+     * ADD DATA RAM TO ACCUMULATOR WITH CARRY
+     *
+     * 1110 1011
+     *
+     * The DATA RAM data character specified by the last SRC instruction, plus the
+     * carry bit, are added to the accumulator.
+     *
+     * The carry bit will be set if the result generates a carry, and will be reset otherwise.
+     *
+     * The data character is not affected.
+     *
+     * http://bitsavers.trailing-edge.com/pdf/intel/MCS4/MCS-4_Assembly_Language_Programming_Manual_Dec73.pdf
+     * str 89.
+     */
+
     /// TODO ADM
 
     cpu->setPC(cpu->getPC() + 1);
