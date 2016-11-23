@@ -1,15 +1,8 @@
 #include "mathexpr.h"
 
-MathExpr::MathExpr(const std::string &expression):expr(expression)
-{
-}
-
-
 int MathExpr::evaluate(const std::string& infix) {
-    std::string postfix = convertToPostfix(infix);
 
-    std::vector<std::string> eq;// = convertToPostfix(infix); // after doing this function return a vector
-
+    std::vector<std::string> eq = infixToPostfix(infix);
 
     if (eq.size() == 1 && isNumber(eq[0])) {
         return stoi(eq[0]);
@@ -38,8 +31,8 @@ int MathExpr::evaluate(const std::string& infix) {
 
             /*
              * Here is not switch, because c++ can't work in switch with std::string, only with int.
-             * May be to resolve this using hash.
-             * TODO to do this code better, using f.e. switch
+             * Maybe to resolve this using hash.
+             * TODO Maybe to do this code better, using f.e. switch
              */
             if (s.compare("+") == 0) {
                 strStack.push(std::to_string(op1 + op2));
@@ -50,32 +43,37 @@ int MathExpr::evaluate(const std::string& infix) {
             } else if (s.compare("/") == 0) {
                 if (op2 == 0) {
                     std::string msg = "";
-                    msg.append("Dividing to zero in ").append(postfix);
+                    msg.append("Dividing to zero in ").append(infix);
                     throw msg;
                 }
                 strStack.push(std::to_string(op1 / op2));
             } else {
                 std::string msg = "";
-                msg.append("Unknown operator ").append(s).append(" in postfix equaton");
+                msg.append("Unknown operator ").append(s).append(" in infix equaton");
                 throw msg;
             }
 
         }
-
     }
+
     return std::stoi(strStack.top());
 }
 
-bool MathExpr::isNumber(const std::string& s) const {
+bool MathExpr::isNumber(const std::string& s) {
     return std::regex_match(s, std::regex("[0-9]+"));
 }
 
-bool MathExpr::isNumber(char c) const {
-    return (c >= 0x30 && c <= 0x39); // ASCII: 0 is 0x30 and 9 is 0x39
+bool MathExpr::isOperation(const std::string &s) {
+    // TODO Maybe to do more elegance with regex
+    return ((s.compare("+") == 0)
+            || (s.compare("-") == 0)
+            || (s.compare("*") == 0)
+            || (s.compare("/") == 0));
 }
 
-bool MathExpr::isOperation(const std::string &s) const {
-    return std::regex_match(s, std::regex("[+-[*]/]"));
+bool MathExpr::isParenthesis(const std::string &s) {
+    return ((s.compare("(") == 0)
+            || (s.compare(")") == 0));
 }
 
 /*
@@ -107,33 +105,31 @@ bool MathExpr::isOperation(const std::string &s) const {
  * 4. When the input expression has been completely processed, check the stack.
  *    Any operators still on the stack can be removed and appended to the end of the output list.
  */
-std::string MathExpr::convertToPostfix(const std::string &infix) {
+std::vector<std::string> MathExpr::infixToPostfix(const std::string &infix) {
 
-    // TODO Parse string to vector
+    std::vector<std::string> eq = equationToVector(infix);
+    std::vector<std::string> result;
 
-    std::vector<std::string> eq;// = split(infix); // Maybe a function, that makes from string an array of strings
-
-    std::string output = "";
     std::stack<std::string> strStack;
 
     for (unsigned int i = 0; i < eq.size(); i++) {
         std::string s = eq[i];
 
         if (isNumber(s)) {
-            output.append(s).append(",");
+            result.push_back(s);
         } else if (s.compare("(") == 0) {
             strStack.push(s);
         } else if (s.compare(")") == 0) {
             std::string t = strStack.top();
             strStack.pop();
             while (t.compare("(") != 0) {
-                output.append(t).append(",");
+                result.push_back(t);
                 t = strStack.top();
                 strStack.pop();
             }
         } else {
             while (!strStack.empty() && (operatorPriority(strStack.top()) >= operatorPriority(s))) {
-                output.append(strStack.top()).append(",");
+                result.push_back(strStack.top());
                 strStack.pop();
             }
             strStack.push(s);
@@ -141,15 +137,14 @@ std::string MathExpr::convertToPostfix(const std::string &infix) {
     }
 
     while (!strStack.empty()) {
-        output.append(strStack.top()).append(",");
+        result.push_back(strStack.top());
         strStack.pop();
     }
 
-    // TODO make return a vector, not as a string. it will simplify an evaluate method
-    return output;
+    return result;
 }
 
-int MathExpr::operatorPriority(const std::string &op) const {
+int MathExpr::operatorPriority(const std::string &op) {
     if (op.compare("*") == 0 || op.compare("/") == 0) {
         return 3; // Higher priority
     } else if (op.compare("+") == 0 || op.compare("-") == 0) {
@@ -162,40 +157,35 @@ int MathExpr::operatorPriority(const std::string &op) const {
 }
 
 // split an equation to vector. f.e. 2+3 - 1* 4/3 => to vector with elements {2,+,3,-,1,*,4,/,3}
-std::vector<std::string> MathExpr::equationToVector(const std::string &equation) {
-    // TODO MathExpr::equationToVector
+std::vector<std::string> MathExpr::equationToVector(const std::string &infix) {
 
     std::vector<std::string> result;
 
-    std::stack<std::string> strStack;
+    for (std::string::const_iterator it = infix.begin(); it != infix.end(); ++it) {
+        if (isNumber(std::string(1, *it)) && !result.empty() && isNumber(result.back())) {
 
-    for (std::string::const_iterator it = equation.begin(); it != equation.end(); ++it) {
-        if (isNumber(*it) &&
-                !strStack.empty() &&
-                isNumber(strStack.top())) {
-            std::string &last = strStack.top();
+            std::string &last = result.back();
             last.append(std::string(1, *it));
-        } else if (*it != ' ') {
-            strStack.push(std::string(1, *it));
+
+        } else if (isNumber(std::string(1, *it))
+                   || isParenthesis(std::string(1, *it))
+                   || isOperation(std::string(1, *it))) {
+
+            result.push_back(std::string(1, *it));
+
+        } else if (*it == ' ' || *it == '\t' ) {
+            // ignore if it is a white symbol
+        } else {
+            std::string msg = "";
+            msg.append("Wrong symbol \'").append(std::string(1, *it)).append("\' in equation ").append(infix);
+            /*
+             * NOTE
+             * The following throw statement throws an exception type "const std::string&",
+             * so to catch it DO NOT use catch(const char *), but USE:
+             * try { ... } catch (const std::string& e) { ... }
+             */
+            throw msg;
         }
-
-
-//        if (isNumber(*it)) {
-
-//            if (strStack.empty()) {
-//                strStack.push(*it);
-//            } else {
-//                std::string &last = strStack.top();
-//                if (isNumber(last)) {
-//                    last.append(*it);
-//                } else {
-//                    strStack.push(*it);
-//                }
-//            }
-
-//        } else if (it->compare(" ") != 0) {
-//            strStack.push(*it);
-//        }
     }
 
     return result;

@@ -7,24 +7,19 @@
 #include <iostream>
 #include <regex>
 
-// TODO Test this class
 class MathExpr
 {
 private:
-    std::string expr;
-
-    // TODO make functions return const as possible
-    bool isNumber(const std::string &s) const;
-    bool isNumber(char c) const;
-    bool isOperation(const std::string &s) const;
-    int operatorPriority(const std::string &op) const;
-    std::string convertToPostfix(const std::string &infix);
-
+    static bool isNumber(const std::string &s);
+    static bool isParenthesis(const std::string &s);
+    static bool isOperation(const std::string &s);
+    static int operatorPriority(const std::string &op);
+    static std::vector<std::string> infixToPostfix(const std::string &infix);
+    static std::vector<std::string> equationToVector(const std::string &infix);
 
 public:
-    MathExpr(const std::string &expression);
-    int evaluate(const std::string &infix); // TODO static
-    std::vector<std::string> equationToVector(const std::string &equation); // TODO static
+    static int evaluate(const std::string &infix);
+
 };
 
 #endif // MATHEXPR_H
