@@ -31,7 +31,8 @@ SOURCES += \
     iolistcomponents.cpp \
     dataramregister.cpp \
     dataramchip.cpp \
-    datarambank.cpp
+    datarambank.cpp \
+    mathexpr.cpp
 
 HEADERS += \
     mainwindow.h \
@@ -58,7 +59,8 @@ HEADERS += \
     iolistcomponents.h \
     dataramregister.h \
     dataramchip.h \
-    datarambank.h
+    datarambank.h \
+    mathexpr.h
 
 RESOURCES += \
     resources.qrc
