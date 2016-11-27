@@ -3,20 +3,21 @@
 
 #include <vector>
 #include <iostream>
+#include <string>
 
 class ROM
 {
 private:
-    std::vector<int> table;
-    std::vector<int> io;
+    std::vector<unsigned int> table;
+    std::vector<unsigned int> io;
 
     const unsigned int pages;
     const unsigned int bytesPerPage;
 
 public:
-    ROM(int pages);
+    ROM(unsigned int pages);
     void clearRom();
-    void setRom(std::vector<int> table);
+    void flashRom(std::vector<unsigned int> compiledCode);
 
     int getValue(unsigned int index) const;
     void setValue(unsigned int index, int value);
