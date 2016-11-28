@@ -1,8 +1,8 @@
 #include "rom.h"
 
-ROM::ROM(unsigned int pages) : pages(pages), bytesPerPage(256)
+ROM::ROM(unsigned int pages) : pages(pages), bytesPerPage(256), maxPossiblePages(16)
 {
-    if (pages > 16) {
+    if (pages > maxPossiblePages) {
         std::cerr << "Number of pages of ROM may be less than 16. "
                   << pages << " is too much pages." << std::endl;
         throw "Number of pages of ROM may be less than 16";
@@ -57,6 +57,14 @@ void ROM::setValue(unsigned int index, int value) {
 
 void ROM::clearRom()
 {
+    /*
+     * Do not use table.clear(), because we need there cells with 0 values, but clear() function
+     * delete every data and every cell in the table.
+     * So It is better for us to assigne to a zero every value in table,
+     * but do not delete that cells from the memory table.
+     *
+     * The same is for Input/Output vector (io).
+     */
     for (unsigned int i = 0; i < pages * bytesPerPage; i++) {
         table[i] = 0;
     }

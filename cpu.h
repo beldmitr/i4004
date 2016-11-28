@@ -22,7 +22,7 @@ private:
     Stack* stack;
     vector<int> registers;
     vector<int> pairs;
-    int dcl; // chooses memory bank (0-8)
+    int dcl; // chooses memory bank (0-7)
 
     /*
      * SRC chooses:

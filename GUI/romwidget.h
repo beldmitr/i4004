@@ -15,10 +15,6 @@
 #include <vector>
 
 #include "memorytable.h"
-#include "instruction.h"
-
-
-using namespace std;
 
 class RomWidget : public QWidget
 {
@@ -44,7 +40,7 @@ public:
     explicit RomWidget(QWidget *parent = 0);
 
     void clear();
-    void write(vector<Instruction>);
+    void write(std::vector<unsigned int> instructions);
 
 signals:
 

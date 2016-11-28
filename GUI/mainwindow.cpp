@@ -478,7 +478,7 @@ void MainWindow::selectAllEdit()
     editor->selectAll();
 }
 
-void MainWindow::compileBuild()
+void MainWindow::buildCode()
 {
     saveFile();
     lstResult->clear();
@@ -503,8 +503,13 @@ void MainWindow::compileBuild()
         lstResult->addItem("Project was compiled successfully.\n");
 
         lstRom->clear();
-        lstRom->write(compiler->getInstructionTable());
+        lstRom->write(compiler->getCompiledCode());
     }
+}
+
+void MainWindow::compileBuild()
+{
+    buildCode();
 }
 
 void MainWindow::runBuild()
@@ -514,7 +519,8 @@ void MainWindow::runBuild()
 
 void MainWindow::compileRunBuild()
 {
-
+    buildCode();
+    simualtor = new Simulator;
 }
 
 void MainWindow::closeEvent(QCloseEvent* event) {

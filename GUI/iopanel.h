@@ -10,8 +10,8 @@
 #include <QSizePolicy>
 #include <QDragEnterEvent>
 
-#include "iowidget.h"
-#include "iolistcomponents.h"
+#include "GUI/iowidget.h"
+#include "GUI/iolistcomponents.h"
 
 #include <iostream>
 

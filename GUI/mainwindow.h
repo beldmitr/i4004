@@ -26,6 +26,8 @@
 #include <QAbstractTableModel>
 
 #include <sstream>
+#include <iostream>
+#include <memory>
 
 #include "asmeditor.h"
 #include "programramwidget.h"
@@ -37,13 +39,15 @@
 #include "subwindow.h"
 #include "dataramwidgetn.h"
 #include "error.h"
+#include "simulator.h"
 
 class MainWindow : public QMainWindow
 {
     Q_OBJECT
 private:
-
+    // FIXME What about delete pointers or make them smart?
     Compiler* compiler;
+    Simulator* simualtor;
 
     QString filename;
     QString outputname;
@@ -94,7 +98,7 @@ private:
 
     fstream file;
 
-
+    // Methods
     void createActions();
     void createMenu();
     void createToolbars();
@@ -103,11 +107,12 @@ private:
     void writeFile();
     void createOutputFilename();
 
-
     void createSubWindows();
 
     void createDocks();
 
+    void buildCode();
+    
 public:
     explicit MainWindow(QWidget *parent = 0);
 

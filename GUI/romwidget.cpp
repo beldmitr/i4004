@@ -1,23 +1,5 @@
 #include "romwidget.h"
 
-
-void RomWidget::setMemoryTitle(int value)
-{
-    // Uncomment this if you want a "Page Z [0xZZZ - 0xZZZ]" as a title of a GroupBox
-//    memoryGB->setTitle("Page " + QString::number(value / 16) +
-//                       " [ 0x" + QString::number(256 * (value / 16), 16) + " - 0x" +
-//                       QString::number(256 * ((value / 16) + 1) - 1, 16) + " ]");
-
-    comboTitle->setCurrentIndex(value / 16);
-}
-
-void RomWidget::setIOGroupBoxVisible(int value) {
-    QGroupBox* gb = (QGroupBox*)memLayout->itemAt(1 + value / 16)->widget();
-    activeIOGroupBox->setVisible(false);
-    gb->setVisible(true);
-    activeIOGroupBox = gb;
-}
-
 RomWidget::RomWidget(QWidget *parent) : QWidget(parent)
 {
     this->setAutoFillBackground(true);
@@ -114,6 +96,25 @@ RomWidget::RomWidget(QWidget *parent) : QWidget(parent)
     });
 }
 
+void RomWidget::setMemoryTitle(int value)
+{
+    // Uncomment this if you want a "Page Z [0xZZZ - 0xZZZ]" as a title of a GroupBox
+//    memoryGB->setTitle("Page " + QString::number(value / 16) +
+//                       " [ 0x" + QString::number(256 * (value / 16), 16) + " - 0x" +
+//                       QString::number(256 * ((value / 16) + 1) - 1, 16) + " ]");
+
+    comboTitle->setCurrentIndex(value / 16);
+}
+
+void RomWidget::setIOGroupBoxVisible(int value) {
+    QGroupBox* gb = (QGroupBox*)memLayout->itemAt(1 + value / 16)->widget();
+    activeIOGroupBox->setVisible(false);
+    gb->setVisible(true);
+    activeIOGroupBox = gb;
+}
+
+
+
 void RomWidget::clear()
 {
     for (int i=0; i < memory->horizontalHeader()->count(); i++) {
@@ -125,14 +126,14 @@ void RomWidget::clear()
     }
 }
 
-void RomWidget::write(vector<Instruction> instructons)
+void RomWidget::write(std::vector<unsigned int> instructions)
 {
     int i = 0;
     int j = 0;
-    for(const Instruction& ins : instructons) {
+    for(int ins : instructions) {
 
-        int highByte = (ins.code & 0xFF00) >> 8;
-        int lowByte = ins.code & 0xFF;
+        int highByte = (ins & 0xFF00) >> 8;
+        int lowByte = ins & 0xFF;
 
 
 

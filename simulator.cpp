@@ -1,7 +1,12 @@
 #include "simulator.h"
 
-Simulator::Simulator():rom(new ROM(16)), pram(new PRAM),dram(new DRAM(8)), cpu(new CPU)
+Simulator::Simulator():rom(new ROM(16)), pram(new PRAM(16)),dram(new DRAM(8)), cpu(new CPU)
 {
+}
+
+void Simulator::setCode(std::vector<unsigned int> compiledCode)
+{
+    rom->flashRom(compiledCode);
 }
 
 /// TODO step

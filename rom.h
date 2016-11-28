@@ -8,11 +8,14 @@
 class ROM
 {
 private:
+    const unsigned int pages;
+    const unsigned int bytesPerPage;
+    const unsigned int maxPossiblePages;
+
     std::vector<unsigned int> table;
     std::vector<unsigned int> io;
 
-    const unsigned int pages;
-    const unsigned int bytesPerPage;
+    void setValue(unsigned int index, int value);
 
 public:
     ROM(unsigned int pages);
@@ -20,7 +23,7 @@ public:
     void flashRom(std::vector<unsigned int> compiledCode);
 
     int getValue(unsigned int index) const;
-    void setValue(unsigned int index, int value);
+
 
     int getIO(unsigned int page) const;
     void setIO(unsigned int page, int value);

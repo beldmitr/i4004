@@ -9,13 +9,16 @@ using namespace std;
 class PRAM
 {
 private:
-    vector<int> table;
+    std::vector<unsigned int> table;
+
+    const unsigned int pages;
+    const unsigned int bytesPerPage;
+    const unsigned int maxPossiblePages;
 
 public:
-    PRAM();
+    PRAM(unsigned int pages);
 
     void clearPRam();
-    void setPRam(vector<int> table);
     int getValue(unsigned int index) const;
     void setValue(unsigned int index, int value);
 };
