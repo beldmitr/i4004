@@ -1,16 +1,39 @@
 #include "cpu.h"
 
+CPU::CPU()
+{
+    stack = new Stack;
+    PC = 0;
+    acc = 0;
+    carry = 0;
+    test = 0;
+    cycles = 0;
+    operation = "";
+    dcl = 0;
+    src = 0;
+
+    for (int i = 0; i <= 15; i++)
+    {
+        registers.push_back(0);
+    }
+
+}
+
 int CPU::getAcc() const
 {
     return acc;
 }
 
-void CPU::setAcc(int value)
+void CPU::setAcc(unsigned int value)
 {
-    if (value >= 0 && value < 16) {
+    if (value < 16)
+    {
         acc = value;
-    } else {
-        cerr << "Accumulator value can be 0-15. " << value << " is wrong value." << endl;
+    }
+    else
+    {
+        std::cerr << "Accumulator value can be 0-15. " << value
+                  << " is wrong value." << std::endl;
     }
 }
 
@@ -19,12 +42,16 @@ int CPU::getCarry() const
     return carry;
 }
 
-void CPU::setCarry(int value)
+void CPU::setCarry(unsigned int value)
 {
-    if (value == 1 || value == 0) {
+    if (value == 1 || value == 0)
+    {
         carry = value;
-    } else {
-        cerr << "Carry is a bit and can be 0 or 1. " << value << " is wrong value of a carry bit." << endl;
+    }
+    else
+    {
+        std::cerr << "Carry is a bit and can be 0 or 1. " << value
+             << " is wrong value of a carry bit." << std::endl;
     }
 }
 
@@ -33,12 +60,16 @@ int CPU::getTest() const
     return test;
 }
 
-void CPU::setTest(int value)
+void CPU::setTest(unsigned int value)
 {
-    if (value == 1 || value == 0) {
+    if (value == 1 || value == 0)
+    {
         test = value;
-    } else {
-        cerr << "Test is a bit and can be 0 or 1. " << value << " is wrong value of a test bit." << endl;
+    }
+    else
+    {
+        std::cerr << "Test is a bit and can be 0 or 1. " << value
+                  << " is wrong value of a test bit." << std::endl;
     }
 }
 
@@ -67,45 +98,74 @@ Stack* CPU::getStack() const
     return stack;
 }
 
-vector<int> CPU::getRegisters() const
+unsigned int CPU::getRegisterAt(unsigned int index) const
 {
-    return registers;
+    if(index > 0xF)
+    {
+        std::cerr << "Indexes of registers could be 0-15. " << index
+                  << " is wrong index." << std::endl;
+        throw QString("Indexes of registers could be 0-15. ")
+                .append(QString::number(index))
+                .append(" is wrong index.").toStdString();
+    }
+
+    return registers.at(index);
 }
 
-void CPU::setRegisters(int index, int value)
+void CPU::setRegisters(unsigned int index, unsigned int value)
 {
 
-    if(!(index >= 0 && index <= 0xF)) {
-        cerr << "Indexes of registers could be 0-15. " << index << " is wrong index." << endl;
+    if(index > 0xF)
+    {
+        std::cerr << "Indexes of registers could be 0-15. " << index
+                  << " is wrong index." << std::endl;
         return;
     }
 
-    if(value >= 0 && value <= 0xF) {
-        cerr << "Register value could be 0-15. " << value << " is wrong value." << endl;
+    if(value > 0xF)
+    {
+        std::cerr << "Register value could be 0-15. " << value
+                  << " is wrong value." << std::endl;
         return;
     }
 
     registers.at(index) = value;
 }
 
-vector<int> CPU::getPairs() const
+unsigned int CPU::getPairAt(unsigned int index) const
 {
-    return pairs;
+    if(index > 7)
+    {
+        std::cerr << "Indexes of pairs could be 0-7. " << index
+                  << " is wrong index." << std::endl;
+        throw QString("Indexes of pairs could be 0-7. ")
+                .append(QString::number(index))
+                .append(" is wrong index.").toStdString();
+    }
+
+    unsigned int registerLow = getRegisterAt(2*index);
+    unsigned int registerHigh = getRegisterAt(2*index + 1);
+
+    return (registerHigh << 4) | registerLow;
 }
 
-void CPU::setPairs(int index, int value)
+void CPU::setPairs(unsigned int index, unsigned int value)
 {
-    if(!(index >= 0 && index <= 7)) {
-        cerr << "Indexes of pairs could be 0-7. " << index << " is wrong index." << endl;
+    if(index > 7)
+    {
+        std::cerr << "Indexes of pairs could be 0-7. " << index
+                  << " is wrong index." << std::endl;
         return;
     }
 
-    if(value >= 0 && value <= 0xFF) {
-        cerr << "Pair value could be 0-255. " << value << " is wrong value." << endl;
+    if(value > 0xFF)
+    {
+        std::cerr << "Pair value could be 0-255. " << value
+                  << " is wrong value." << std::endl;
         return;
     }
-
-    pairs.at(index) = value;
+    registers.at(2*index) = (value & 0xF);
+    registers.at(2*index + 1) = (value & 0xF0) >> 4;
 }
 
 int CPU::getPC() const
@@ -113,10 +173,12 @@ int CPU::getPC() const
     return PC;
 }
 
-void CPU::setPC(int value)
+void CPU::setPC(unsigned int value)
 {
-    if (value <= 0 || value > 0xFFFFFF) {
-        std::cerr << "Program counter could be 0-0xFFFFFF. " << value << " is wrong value." << endl;
+    if (value > 0xFFFFFF)
+    {
+        std::cerr << "Program counter could be 0-0xFFFFFF. " << value
+                  << " is wrong value." << std::endl;
         return;
     }
 
@@ -128,11 +190,12 @@ int CPU::getDcl() const
     return dcl;
 }
 
-void CPU::setDcl(int value)
+void CPU::setDcl(unsigned int value)
 {
-
-    if(value >= 0 && value <= 0xFF) {
-        cerr << "DCL value could be 0-255. " << value << " is wrong value." << endl;
+    if(value > 0xFF)
+    {
+        std::cerr << "DCL value could be 0-255. " << value
+                  << " is wrong value." << std::endl;
         return;
     }
 
@@ -144,34 +207,14 @@ int CPU::getSrc() const
     return src;
 }
 
-void CPU::setSrc(int value)
+void CPU::setSrc(unsigned int value)
 {
-    if(value >= 0 && value <= 0xFF) {
-        cerr << "SRC value could be 0-255. " << value << " is wrong value." << endl;
+    if(value > 0xFF)
+    {
+        std::cerr << "SRC value could be 0-255. " << value
+                  << " is wrong value." << std::endl;
         return;
     }
 
     src = value;
-}
-
-CPU::CPU()
-{
-    stack = new Stack;
-    PC = 0;
-    acc = 0;
-    carry = 0;
-    test = 0;
-    cycles = 0;
-    operation = "";
-    dcl = 0;
-    src = 0;
-
-    for (int i = 0; i <= 7; i++) {
-        pairs.push_back(0);
-    }
-
-    for (int i = 0; i <= 15; i++) {
-        registers.push_back(0);
-    }
-
 }

@@ -8,8 +8,7 @@
 
 #include "stack.h"
 
-using namespace std;
-
+/// TESTME test all cpu class how does it works
 class CPU
 {
 private:
@@ -20,8 +19,7 @@ private:
     int cycles;
     QString operation;
     Stack* stack;
-    vector<int> registers;
-    vector<int> pairs;
+    std::vector<unsigned int> registers;
     int dcl; // chooses memory bank (0-7)
 
     /*
@@ -39,27 +37,27 @@ public:
 
 
     int getAcc() const;
-    void setAcc(int value);
+    void setAcc(unsigned int value);
     int getCarry() const;
-    void setCarry(int value);
+    void setCarry(unsigned int value);
     int getTest() const;
-    void setTest(int value);
+    void setTest(unsigned int value);
     int getCycles() const;
     void setCycles(unsigned int value);
     QString getOperation() const;
     void setOperation(const QString &value);
     Stack* getStack() const;
     void setStack(const Stack &value);
-    vector<int> getRegisters() const;
-    void setRegisters(int index, int value);
-    vector<int> getPairs() const;
-    void setPairs(int index, int value);
+    unsigned int getRegisterAt(unsigned int index) const;
+    void setRegisters(unsigned int index, unsigned int value);
+    unsigned int getPairAt(unsigned int index) const;
+    void setPairs(unsigned int index, unsigned int value);
     int getPC() const;
-    void setPC(int value);
+    void setPC(unsigned int value);
     int getDcl() const;
-    void setDcl(int value);
+    void setDcl(unsigned int value);
     int getSrc() const;
-    void setSrc(int value);
+    void setSrc(unsigned int value);
 };
 
 #endif // CPU_H
