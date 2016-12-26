@@ -14,12 +14,14 @@ QWidget* DataRamWidget::addElements()
     QGridLayout *layoutStatus = new QGridLayout(statusGBox);
     QVBoxLayout *layoutOutput = new QVBoxLayout(outputGBox);
 
-    for (int i = 0; i < 16; i++) {
+    for (int i = 0; i < 16; i++)
+    {
         QLabel *addr = new QLabel("0x" + QString::number(i, 16));
         layoutMem->addWidget(addr,0,i+1,1,1, Qt::AlignHCenter);
         addr->setMaximumHeight(10);
 
-        for (int j = 0; j < 4; j++) {
+        for (int j = 0; j < 4; j++)
+        {
             QLabel *addr = new QLabel("0x" + QString::number(j*(i+1), 16));
             layoutMem->addWidget(addr,j+1,0,1,1);
             addr->setAutoFillBackground(true);
@@ -27,22 +29,24 @@ QWidget* DataRamWidget::addElements()
 
             QLineEdit *cell = new QLineEdit("F");
             layoutMem->addWidget(cell,j+1,i+1,1,1);
-
         }
     }
 
-    for (int i = 0; i < 4; i++) {
+    for (int i = 0; i < 4; i++)
+    {
         QLabel *addr = new QLabel("0x" + QString::number(i, 16));
         layoutStatus->addWidget(addr,0,i,1,1, Qt::AlignHCenter);
         addr->setMaximumHeight(10);
 
-        for (int j = 0; j < 4; j++) {
+        for (int j = 0; j < 4; j++)
+        {
             QLineEdit *cell = new QLineEdit("F");
             layoutStatus->addWidget(cell,j+1,i,1,1);
         }
     }
 
-    for (int i=0; i < 4; i++) {
+    for (int i=0; i < 4; i++)
+    {
         QCheckBox *outputCB = new QCheckBox();
         outputCB->setCheckable(false);
         layoutOutput->addWidget(outputCB);
@@ -78,9 +82,11 @@ DataRamWidget::DataRamWidget(QWidget *parent) : QWidget(parent)
     tabDRam = new QTabWidget();
     scroll = new QScrollBar();
 
-    for (int i=0; i<8; i++) {
+    for (int i=0; i<8; i++)
+    {
         QTabWidget *tw = new QTabWidget();
-        for (int j=0; j<4; j++) {
+        for (int j=0; j<4; j++)
+        {
             QWidget *w = addElements();
             tw->addTab(w, "Chip " + QString::number(j));
         }
@@ -97,17 +103,20 @@ DataRamWidget::DataRamWidget(QWidget *parent) : QWidget(parent)
 
     // connects
     connect(tabDRam, &QTabWidget::currentChanged,
-        [=](int value){
+        [=](int value)
+        {
             QTabWidget* w = (QTabWidget*)tabDRam->widget(value);
             int tabChipCurrent = w->currentIndex();
 
             scroll->setValue(value * 4 + tabChipCurrent);
         });
 
-    for (int i=0; i<tabDRam->count(); i++) {
+    for (int i=0; i<tabDRam->count(); i++)
+    {
         QTabWidget* w = (QTabWidget*)tabDRam->widget(i);
         connect(w, &QTabWidget::currentChanged,
-            [=](int value) {
+            [=](int value)
+            {
                 scroll->setValue(i * 4 + value);
             });
     }

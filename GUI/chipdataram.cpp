@@ -21,11 +21,13 @@ ChipDataRam::ChipDataRam(QWidget *parent) : QWidget(parent)
     memTable->horizontalHeader()->setSectionResizeMode(QHeaderView::Stretch);
     memTable->verticalHeader()->setStretchLastSection(true);
     memTable->horizontalHeader()->setStretchLastSection(true);
-    for (int i=0; i < memTable->verticalHeader()->count(); i++) {
+    for (int i=0; i < memTable->verticalHeader()->count(); i++)
+    {
         QTableWidgetItem* item = new QTableWidgetItem(QString::number(i));
         memTable->setVerticalHeaderItem(i, item);
     }
-    for (int i=0; i < memTable->horizontalHeader()->count(); i++) {
+    for (int i=0; i < memTable->horizontalHeader()->count(); i++)
+    {
         QTableWidgetItem* item = new QTableWidgetItem("0x" + QString::number(i, 16));
         memTable->setHorizontalHeaderItem(i, item);
     }
@@ -35,7 +37,8 @@ ChipDataRam::ChipDataRam(QWidget *parent) : QWidget(parent)
     statTable->horizontalHeader()->setSectionResizeMode(QHeaderView::Stretch);
     statTable->verticalHeader()->setStretchLastSection(true);
     statTable->horizontalHeader()->setStretchLastSection(true);
-    for (int i=0; i < statTable->horizontalHeader()->count(); i++) {
+    for (int i=0; i < statTable->horizontalHeader()->count(); i++)
+    {
         QTableWidgetItem* item = new QTableWidgetItem("0x" + QString::number(i, 16));
         statTable->setHorizontalHeaderItem(i, item);
     }
@@ -57,7 +60,8 @@ ChipDataRam::ChipDataRam(QWidget *parent) : QWidget(parent)
     statTable->setSizePolicy(sp);
 
     // make output checkboxes
-    for (int i = 0; i < 4; i++) {
+    for (int i = 0; i < 4; i++)
+    {
         QCheckBox* output = new QCheckBox;
         output->setCheckable(false);
 

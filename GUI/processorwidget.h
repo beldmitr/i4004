@@ -8,10 +8,13 @@
 #include <QCheckBox>
 #include <QLabel>
 
+#include "cpumodel.h"
+
 
 class ProcessorWidget : public QTreeWidget
 {
     Q_OBJECT
+
 public:
     explicit ProcessorWidget(QWidget *parent = 0);
 

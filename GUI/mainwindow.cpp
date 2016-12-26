@@ -82,9 +82,15 @@ void MainWindow::createActions()
     actCompileRun->setShortcut(tr("Ctrl+R"));
     actCompileRun->setDisabled(true);
     connect(actCompileRun, SIGNAL(triggered(bool)), this, SLOT(compileRunBuild()));
+
+    actStep = new QAction(tr("Step"), this);
+    //    actStep->setIcon(QIcon(":/Resources/icons/step.png")); // TODO icon
+    //    actStep->setShortcut(tr("Ctrl+R"));   // TODO shortcut
+    connect(actStep, SIGNAL(triggered(bool)), this, SLOT(step()));
 }
 
-void MainWindow::createMenu() {
+void MainWindow::createMenu()
+{
     mainMenu = new QMenuBar();
     this->setMenuBar(mainMenu);
 
@@ -128,7 +134,8 @@ void MainWindow::createMenu() {
 
     menuWindows->addSeparator();
 
-    for(QMdiSubWindow* w : mdi->subWindowList()) {
+    for(QMdiSubWindow* w : mdi->subWindowList())
+    {
         QAction* act = new QAction(w->windowTitle(), this);
         connect(act, SIGNAL(triggered(bool)), w, SLOT(show()));
         connect(act, SIGNAL(triggered(bool)), w, SLOT(setFocus()));
@@ -138,13 +145,15 @@ void MainWindow::createMenu() {
     menuWindows->addSeparator();
 
     QAction* minimizeAll = new QAction("Minimize all", this);
-    for(QMdiSubWindow* w : mdi->subWindowList()) {
+    for(QMdiSubWindow* w : mdi->subWindowList())
+    {
         connect(minimizeAll, SIGNAL(triggered(bool)), w, SLOT(showMinimized()));
     }
     menuWindows->addAction(minimizeAll);
 
     QAction* showWindows = new QAction("Show windows", this);
-    for(QMdiSubWindow* w : mdi->subWindowList()) {
+    for(QMdiSubWindow* w : mdi->subWindowList())
+    {
         connect(showWindows, SIGNAL(triggered(bool)), w, SLOT(showNormal()));
     }
     connect(showWindows, SIGNAL(triggered(bool)), mdi, SLOT(tileSubWindows()));
@@ -154,11 +163,11 @@ void MainWindow::createMenu() {
     mainMenu->addMenu("Help");
 }
 
-
-
-void MainWindow::createToolbars() {
+void MainWindow::createToolbars()
+{
     toolBarMinimize = new QToolBar("Minimize");
-    for(QMdiSubWindow* w : mdi->subWindowList()) {
+    for(QMdiSubWindow* w : mdi->subWindowList())
+    {
         QIcon ico = w->windowIcon();
         QString title = w->windowTitle();
 
@@ -170,6 +179,7 @@ void MainWindow::createToolbars() {
 
         toolBarMinimize->addAction(act);
     }
+
     toolBarMinimize->setFloatable(false);
     toolBarMinimize->setMovable(false);
 
@@ -195,17 +205,16 @@ void MainWindow::createToolbars() {
     toolBarBuild->addAction(actCompileRun);
 
     toolBarDebug = new QToolBar("Debug");
-    toolBarDebug->addAction("Run");
-    toolBarDebug->addAction("Stop");
-    toolBarDebug->addAction("Step");
-    toolBarDebug->addAction("Reset");
+    toolBarDebug->addAction("Run");     // TODO action
+    toolBarDebug->addAction("Stop");    // TODO action
+    toolBarDebug->addAction(actStep);
+    toolBarDebug->addAction("Reset");   // TODO action
 
     this->addToolBar(toolBarFile);
     this->addToolBar(toolBarEdit);
     this->addToolBar(toolBarBuild);
     this->addToolBar(toolBarDebug);
     this->addToolBar(Qt::LeftToolBarArea, toolBarMinimize);
-
 }
 
 void MainWindow::createSubWindows()
@@ -228,9 +237,6 @@ void MainWindow::createSubWindows()
 
     mdi->addSubWindow(ioWindow);
     mdi->addSubWindow(editorWindow);
-
-
-
 }
 
 void MainWindow::createDocks()
@@ -242,8 +248,8 @@ void MainWindow::createDocks()
     this->setCorner(Qt::BottomRightCorner, Qt::RightDockWidgetArea);
 
     QDockWidget* dockProc = new QDockWidget("Processor");
-    lstProcessor = new ProcessorWidget;
-    dockProc->setWidget(lstProcessor);
+    cpuWidget = new ProcessorWidget;
+    dockProc->setWidget(cpuWidget);
     this->addDockWidget(Qt::RightDockWidgetArea, dockProc);
 
     QDockWidget* dockResult = new QDockWidget("Compile Output");
@@ -252,18 +258,18 @@ void MainWindow::createDocks()
     this->addDockWidget(Qt::BottomDockWidgetArea, dockResult);
 
     QDockWidget* dockDRam = new QDockWidget("Data RAM");
-    dataram = new DataRamWidgetN;
-    dockDRam->setWidget(dataram);
+    dramWidget = new DataRamWidgetN;
+    dockDRam->setWidget(dramWidget);
     this->addDockWidget(Qt::BottomDockWidgetArea, dockDRam);
 
     QDockWidget* dockRom = new QDockWidget("ROM");
-    lstRom = new RomWidget;
-    dockRom->setWidget(lstRom);
+    romWidget = new RomWidget;
+    dockRom->setWidget(romWidget);
     this->addDockWidget(Qt::BottomDockWidgetArea, dockRom);
 
     QDockWidget* dockPRam = new QDockWidget("Program RAM");
-    lstPRam = new ProgramRamWidget;
-    dockPRam->setWidget(lstPRam);
+    pramWidget = new ProgramRamWidget;
+    dockPRam->setWidget(pramWidget);
     this->addDockWidget(Qt::BottomDockWidgetArea, dockPRam);
 
     this->tabifyDockWidget(dockResult, dockDRam);
@@ -273,7 +279,6 @@ void MainWindow::createDocks()
 
 MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent)
 {
-
     this->setWindowState(Qt::WindowMaximized);
 
     // create components
@@ -281,7 +286,6 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent)
     mdi->tileSubWindows();
     mdi->setHorizontalScrollBarPolicy(Qt::ScrollBarAsNeeded);
     mdi->setVerticalScrollBarPolicy(Qt::ScrollBarAsNeeded);
-
 
     createDocks();
     createSubWindows();
@@ -302,68 +306,93 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent)
 
     // connects
     connect(editor, SIGNAL(textChanged()), this, SLOT(setWindowTitleFilename()));
+
+    // delegate GUI
+    delegate = std::shared_ptr<DelegateGUI>(new DelegateGUI(std::shared_ptr<RomWidget>(romWidget),
+                                                            std::shared_ptr<DataRamWidgetN>(dramWidget),
+                                                            std::shared_ptr<ProgramRamWidget>(pramWidget),
+                                                            std::shared_ptr<ProcessorWidget>(cpuWidget)));
 }
 
-void MainWindow::createOutputFilename() {
-//    outputname = filename.split("/").last();
+void MainWindow::createOutputFilename()
+{
+    //    outputname = filename.split("/").last();
     outputname = filename;
     outputname = outputname.split(".").first();
     outputname.append(".bin");
 }
 
-void MainWindow::setWindowTitleFilename() {
+void MainWindow::setWindowTitleFilename()
+{
     QString title;
 
-    if (editor->document()->isModified()) {
+    if (editor->document()->isModified())
+    {
         title = "*Intel4004";
-    } else {
+    }
+    else
+    {
         title = "Intel4004";
     }
-    if (!filename.isEmpty()) {
+    if (!filename.isEmpty())
+    {
         title.append(" - [").append(filename).append("]");
     }
     this->setWindowTitle(title);
 }
 
 
-void MainWindow::readFile() {
+void MainWindow::readFile()
+{
     file.open(filename.toStdString(), ios::in);
-    if(file.is_open()) {
+
+    if(file.is_open())
+    {
         string line;
         QString doc;
 
         bool firstLine = true;
 
-        while(getline(file, line)) {
-            if(firstLine) {
+        while(getline(file, line))
+        {
+            if(firstLine)
+            {
                 firstLine = false;
-            } else {
+            }
+            else
+            {
                 doc.append("\n");
             }
             doc.append(line.c_str());
         }
 
-
-
         file.close();
         editor->setPlainText(doc);
-    } else {
+    }
+    else
+    {
         QMessageBox::critical(this, tr("Error"), tr("Can't open file ").append(filename));
     }
 }
 
-void MainWindow::writeFile() {
+void MainWindow::writeFile()
+{
     file.open(filename.toStdString(), ios::out | ios::trunc);
-    if (file.is_open()) {
+
+    if (file.is_open())
+    {
         QStringList lines;
         lines = editor->toPlainText().split("\n");
 
-        for (QString l : lines) {
+        for (QString l : lines)
+        {
             file << l.toStdString() << "\n";
         }
 
         file.close();
-    } else {
+    }
+    else
+    {
         QMessageBox::critical(this, tr("Error"), tr("Can't save to file ").append(filename));
     }
 }
@@ -373,7 +402,8 @@ void MainWindow::newFile()
 {
     QMessageBox::StandardButton btn;
     btn = QMessageBox::question(this, tr("New file"), tr("Do you want to start a new file?"));
-    if (btn == QMessageBox::Yes) {
+    if (btn == QMessageBox::Yes)
+    {
         editor->clear();
         filename.clear();
 
@@ -392,7 +422,8 @@ void MainWindow::openFile()
     openDlg.setAcceptMode(QFileDialog::AcceptOpen);
 
     QString filename = openDlg.getOpenFileName(this, tr("Open File"), "", "Intel4004 assembler (*.asm);;All files (*.*)");
-    if (!filename.isEmpty()) {
+    if (!filename.isEmpty())
+    {
         this->filename = filename;
         createOutputFilename();
         readFile();
@@ -408,9 +439,12 @@ void MainWindow::openFile()
 
 void MainWindow::saveFile()
 {
-    if (filename.isEmpty()) {
+    if (filename.isEmpty())
+    {
         saveAsFile();
-    } else {
+    }
+    else
+    {
         editor->document()->setModified(false);
         writeFile();
     }
@@ -424,7 +458,8 @@ void MainWindow::saveAsFile()
     saveAsDlg.setAcceptMode(QFileDialog::AcceptSave);
 
     QString filename = saveAsDlg.getSaveFileName(this, tr("Save File As"), "", "Intel4004 assembler (*.asm);;All files (*.*)");
-    if (!filename.isEmpty()) {
+    if (!filename.isEmpty())
+    {
         this->filename = filename;
         createOutputFilename();
         writeFile();
@@ -482,12 +517,14 @@ void MainWindow::buildCode()
 {
     saveFile();
     lstResult->clear();
-    compiler = new Compiler(filename.toStdString(), outputname.toStdString());
+    compiler.reset(new Compiler(filename.toStdString(), outputname.toStdString()));
     compiler->toCompile();
 
-    for (Error i : compiler->getErrors()) {
+    for (const Error& i : compiler->getErrors())
+    {
         QString e;
-        if (i.line != -1) {
+        if (i.line != -1)
+        {
             e.append("Line ").append(QString::number(i.line));
         }
         e.append("\tCommand: ")
@@ -499,11 +536,12 @@ void MainWindow::buildCode()
 
     }
 
-    if(compiler->getErrors().empty()) {
+    if(compiler->getErrors().empty())
+    {
         lstResult->addItem("Project was compiled successfully.\n");
 
-        lstRom->clear();
-        lstRom->write(compiler->getCompiledCode());
+        romWidget->clear();
+//        romWidget->write(compiler->getCompiledCode());
     }
 }
 
@@ -520,15 +558,34 @@ void MainWindow::runBuild()
 void MainWindow::compileRunBuild()
 {
     buildCode();
-    simualtor = new Simulator;
+    simulator.reset(new Simulator(delegate));
+    simulator->setCode(compiler->getCompiledCode());
 }
 
-void MainWindow::closeEvent(QCloseEvent* event) {
+void MainWindow::step()
+{
+    if (simulator)
+    {
+        simulator->step();
+        delegate->updateAllGui();
+    }
+    else
+    {
+        // TODO Exception
+        std::cerr << "Can't make a step, because simulator was not created."  << std::endl;
+    }
+}
+
+void MainWindow::closeEvent(QCloseEvent* event)
+{
     QMessageBox::StandardButton btn;
     btn = QMessageBox::question(this, tr("Exit"), tr("Do you want to exit?"));
-    if (btn == QMessageBox::Yes) {
+    if (btn == QMessageBox::Yes)
+    {
         event->accept();
-    } else {
+    }
+    else
+    {
         event->ignore();
     }
 }

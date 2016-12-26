@@ -24,6 +24,7 @@
 
 using namespace std;
 
+/// TODO Delete old DataRam Widget
 class DataRamWidget : public QWidget
 {
     Q_OBJECT

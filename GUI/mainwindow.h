@@ -45,9 +45,10 @@ class MainWindow : public QMainWindow
 {
     Q_OBJECT
 private:
-    // FIXME What about delete pointers or make them smart?
-    Compiler* compiler;
-    Simulator* simualtor;
+    // FIXME What about delete these pointers, man, or make them smart?
+    std::shared_ptr<Compiler> compiler;
+    std::shared_ptr<Simulator> simulator;
+    std::shared_ptr<DelegateGUI> delegate;
 
     QString filename;
     QString outputname;
@@ -70,12 +71,12 @@ private:
 //    QDockWidget* dockResults;
 //    QDockWidget* dockIO;
 
-    ProgramRamWidget* lstPRam;
-    RomWidget* lstRom;
-    ProcessorWidget* lstProcessor;
+    ProgramRamWidget* pramWidget;
+    RomWidget* romWidget;
+    ProcessorWidget* cpuWidget;
 //    QTabWidget* tabDRam;
     QListWidget* lstResult;
-    DataRamWidgetN* dataram;
+    DataRamWidgetN* dramWidget;
     IOPanel* iopanel;
 
     QAction* actNew;
@@ -95,6 +96,8 @@ private:
     QAction* actCompile;
     QAction* actRun;
     QAction* actCompileRun;
+
+    QAction* actStep;
 
     fstream file;
 
@@ -136,6 +139,8 @@ private slots:
     void compileBuild();
     void runBuild();
     void compileRunBuild();
+
+    void step();
 
     void setWindowTitleFilename();
 
