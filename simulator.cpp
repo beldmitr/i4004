@@ -1,7 +1,14 @@
 #include "simulator.h"
 
-Simulator::Simulator():rom(new ROM(16)), pram(new PRAM(16)),dram(new DRAM(8)), cpu(new CPU)
+Simulator::Simulator(std::shared_ptr<DelegateGUI> delegate)
+    :rom(new ROM(16)), pram(new PRAM(16)),dram(new DRAM(8)), cpu(new CPU)
 {
+    this->delegate = delegate;
+
+    delegate->setCpu(cpu);
+    delegate->setRom(rom);
+    delegate->setPram(pram);
+    delegate->setDram(dram);
 }
 
 void Simulator::setCode(std::vector<unsigned int> compiledCode)
@@ -9,218 +16,445 @@ void Simulator::setCode(std::vector<unsigned int> compiledCode)
     rom->flashRom(compiledCode);
 }
 
-/// TODO step
 void Simulator::step()
 {
-    //    int programCounter = cpu->getPC();
-    //    int command = rom->getValue(programCounter);
+    unsigned int code = rom->getValue(cpu->getPC());
 
+    /*
+     *  If it is a 2 byte instruction, read the next byte
+     *  There are 5 instructions 2 byte long:
+     *  Jump Conditional	JCN	0001CCCC	AAAAAAAA	condition, address
+     *  Fetch Immediate     FIM	0010RRR0	DDDDDDDD	register pair, data
+     *  Jump Uncoditional	JUN	0100AAAA	AAAAAAAA	address
+     *  Jump to Subroutine	JMS	0101AAAA	AAAAAAAA	address
+     *  Increment and Skip	ISZ	0111RRRR	AAAAAAAA	register, address
+     *
+     *  So we took a high byte with previous command
+     *  and after we read the lowest byte.
+     */
+
+    switch(code)
+    {
+    case 0x10:
+    case 0x20:
+    case 0x40:
+    case 0x50:
+    case 0x70:
+        int low = rom->getValue(cpu->getPC() + 1);  // read the next byte
+        code = (code << 8) | low;   // combine code to 2 byte
+    }
+
+    evalCommand(code);
 }
 
+// TESTME evalCommand
 void Simulator::evalCommand(int command)
 {
-    int operand1 = -1;
-    int operand2 = -1;
-
-    switch((command & 0xF0) >> 4) {
-    case 0x0: // NOP
+    if ((command & 0xFFFF) == 0x0000) // NOP
+    {
         NOP();
-        break;
-    case 0x1: // JCN
-        operand1 = command & 0xF;
-        operand2 = rom->getValue(cpu->getPC()+1) & 0xFF;
-
-        JCN(operand1, operand2);
-        break;
-    case 0x2: // FIM, SRC
-        if ((command & 0x1) == 0) { // FIM
-            operand1 = (command & 0xF) > 1;
-            operand2 = rom->getValue(cpu->getPC()+1);
-
-            FIM(operand1, operand2);
-        } else if ((command & 0x1) == 1) { // SRC
-            operand1 = (command & 0xF) > 1;
-            operand2 = -1;
-
-            SRC(operand1);
-        } else {
-            std::cerr << "Simulation error: wrong command " << command << endl;
-        }
-        break;
-    case 0x3: // FIN, JIN
-        if ((command & 0x1) == 0) { // FIN
-            operand1 = (command & 0xF) > 1;
-            operand2 = -1;
-
-            FIN(operand1);
-        } else if ((command & 0x1) == 1) { // JIN
-            operand1 = (command & 0xF) > 1;
-            operand2 = -1;
-
-            JIN(operand1);
-        } else {
-            std::cerr << "Simulation error : wrong command " << command << endl;
-        }
-        break;
-    case 0x4: // JUN
-        operand1 = command & 0xF;
-        operand2 = rom->getValue(cpu->getPC() + 1);
-
-        JUN(operand1, operand2);
-        break;
-    case 0x5:// JMS
-        operand1 = command & 0xF;
-        operand2 = rom->getValue(cpu->getPC() + 1);
-
-        JMS(operand1, operand2);
-        break;
-    case 0x6: // INC
-        operand1 = command & 0xF;
-        operand2 = -1;
-
-        INC(operand1);
-        break;
-    case 0x7: // ISZ
-        operand1 = command & 0xF;
-        operand2 = rom->getValue(cpu->getPC() + 1);
-
-        ISZ(operand1, operand2);
-        break;
-    case 0x8: // ADD
-        operand1 = command & 0xF;
-        operand2 = -1;
-
-        ADD(operand1);
-        break;
-    case 0x9: // SUB
-        operand1 = command & 0xF;
-        operand2 = -1;
-
-        SUB(operand1);
-        break;
-    case 0xA: // LD
-        operand1 = command & 0xF;
-        operand2 = -1;
-
-        LD(operand1);
-        break;
-    case 0xB: // XCH
-        operand1 = command & 0xF;
-        operand2 = -1;
-
-        XCH(operand1);
-        break;
-    case 0xC: // BBL
-        operand1 = command & 0xF;
-        operand2 = -1;
-
-        BBL(operand1);
-        break;
-    case 0xD: // LDM
-        operand1 = command & 0xF;
-        operand2 = -1;
-
-        LDM(operand1);
-        break;
-    case 0xE: // WRM, WMP, WRR, WR0-3, SBM, RDM, RDR, ADM, RD0-3
-
-        switch(command & 0xF) {
-        case 0x0: // WRM
-            WRM();
-            break;
-        case 0x1: // WMP
-            WMP();
-            break;
-        case 0x2: // WRR
-            WRR();
-            break;
-        case 0x4: // WR0
-            WR0();
-            break;
-        case 0x5: // WR1
-            WR1();
-            break;
-        case 0x6: // WR2
-            WR2();
-            break;
-        case 0x7: // WR3
-            WR3();
-            break;
-        case 0x8: // SBM
-            SBM();
-            break;
-        case 0x9: // RDM
-            RDM();
-            break;
-        case 0xA: // RDR
-            RDR();
-            break;
-        case 0xB: // ADM
-            ADM();
-            break;
-        case 0xC: // RD0
-            RD0();
-            break;
-        case 0xD: // RD1
-            RD1();
-            break;
-        case 0xE: // RD2
-            RD2();
-            break;
-        case 0xF: // RD3
-            RD3();
-            break;
-        }
-
-        break;
-    case 0xF: // CLB, CLC, IAC, CMC, CMA, RAL, RAR, TCC, DAC, TCS, STC, DAA, KBP, DCL
-        switch(command & 0xF) {
-        case 0x0: // CLB
-            CLB();
-            break;
-        case 0x1: // CLC
-            CLC();
-            break;
-        case 0x2: // IAC
-            IAC();
-            break;
-        case 0x3: // CMC
-            CMC();
-            break;
-        case 0x4: // CMA
-            CMA();
-            break;
-        case 0x5: // RAL
-            RAL();
-            break;
-        case 0x6: // RAR
-            RAR();
-            break;
-        case 0x7: // TCC
-            TCC();
-            break;
-        case 0x8: // DAC
-            DAC();
-            break;
-        case 0x9: // TCS
-            TCS();
-            break;
-        case 0xA: // STC
-            STC();
-            break;
-        case 0xB: // DAA
-            DAA();
-            break;
-        case 0xC: // KBP
-            KBP();
-            break;
-        case 0xD: // DCL
-            DCL();
-            break;
-        }
-        break;
+    }
+    else if ((command & 0xF000) == 0x1000) // JCN
+    {
+        JCN((command & 0x0F00) >> 8, command & 0x00FF);
+    }
+    else if ((command & 0xF100) == 0x2000) // FIM
+    {
+        FIM((command & 0xE) >> 9, command & 0xFF);
+    }
+    else if ((command & 0xFFF1) == 0x0021) // SRC
+    {
+        SRC((command & 0x0E) >> 1);
+    }
+    else if ((command & 0xFFF1) == 0x0030) // FIN
+    {
+        FIN((command & 0xE) >> 1);
+    }
+    else if ((command & 0xFFF1) == 0x0031) // JIN
+    {
+        JIN((command & 0xE) >> 1);
+    }
+    else if ((command & 0xF000) == 0x4000) // JUN
+    {
+        JUN((command & 0x0F00) >> 8, command & 0x00FF);
+    }
+    else if ((command & 0xF000) == 0x5000) // JMS
+    {
+        JMS((command & 0x0F00) >> 8, command & 0x00FF);
+    }
+    else if ((command & 0xFFF0) == 0x0060) // INC
+    {
+        INC(command & 0xF);
+    }
+    else if ((command & 0xF000) == 0x7000) // ISZ
+    {
+        ISZ((command & 0x0F00) >> 8, command & 0xFF);
+    }
+    else if ((command & 0xFFF0) == 0x0080) // ADD
+    {
+        ADD(command & 0xF);
+    }
+    else if ((command & 0xFFF0) == 0x0090) // SUB
+    {
+        SUB(command & 0xF);
+    }
+    else if ((command & 0xFFF0) == 0x00A0) // LD
+    {
+        LD(command & 0xF);
+    }
+    else if ((command & 0xFFF0) == 0x00B0) // XCH
+    {
+        XCH(command & 0xF);
+    }
+    else if ((command & 0xFFF0)== 0x00C0) // BBL
+    {
+        BBL(command & 0xF);
+    }
+    else if ((command & 0xFFF0) == 0x00D0) // LDM
+    {
+        LDM(command & 0xF);
+    }
+    else if ((command & 0xFFFF) == 0x00E0) // WRM
+    {
+        WRM();
+    }
+    else if ((command & 0xFFFF) == 0x00E1) // WMP
+    {
+        WMP();
+    }
+    else if ((command & 0xFFFF) == 0x00E2) // WRR
+    {
+        WRR();
+    }
+    else if ((command & 0xFFFF) == 0x00E4) // WR0
+    {
+        WR0();
+    }
+    else if ((command & 0xFFFF) == 0x00E5) // WR1
+    {
+        WR1();
+    }
+    else if ((command & 0xFFFF) == 0x00E6) // WR2
+    {
+        WR2();
+    }
+    else if ((command & 0xFFFF) == 0x00E7) // WR3
+    {
+        WR3();
+    }
+    else if ((command & 0xFFFF) == 0x00E8) // SBM
+    {
+        SBM();
+    }
+    else if ((command & 0xFFFF) == 0x00E9) // RDM
+    {
+        RDM();
+    }
+    else if ((command & 0xFFFF) == 0x00EA) // RDR
+    {
+        RDR();
+    }
+    else if ((command & 0xFFFF) == 0x00EB) // ADM
+    {
+        ADM();
+    }
+    else if ((command & 0xFFFF) == 0x00EC) // RD0
+    {
+        RD0();
+    }
+    else if ((command & 0xFFFF) == 0x00ED) // RD1
+    {
+        RD1();
+    }
+    else if ((command & 0xFFFF) == 0x00EE) // RD2
+    {
+        RD2();
+    }
+    else if ((command & 0xFFFF) == 0x00EF) // RD3
+    {
+        RD3();
+    }
+    else if ((command & 0xFFFF) == 0x00F0) // CLB
+    {
+        CLB();
+    }
+    else if ((command & 0xFFFF) == 0x00F1) // CLC
+    {
+        CLC();
+    }
+    else if ((command & 0xFFFF) == 0x00F2) // IAC
+    {
+        IAC();
+    }
+    else if ((command & 0xFFFF) == 0x00F3) // CMC
+    {
+        CMC();
+    }
+    else if ((command & 0xFFFF) == 0x00F4) // CMA
+    {
+        CMA();
+    }
+    else if ((command & 0xFFFF) == 0x00F5) // RAL
+    {
+        RAL();
+    }
+    else if ((command & 0xFFFF) == 0x00F6) // RAR
+    {
+        RAR();
+    }
+    else if ((command & 0xFFFF) == 0x00F7) // TCC
+    {
+        TCC();
+    }
+    else if ((command & 0xFFFF) == 0x00F8) // DAC
+    {
+        DAC();
+    }
+    else if ((command & 0xFFFF) == 0x00F9) // TCS
+    {
+        TCS();
+    }
+    else if ((command & 0xFFFF) == 0x00FA) // STC
+    {
+        STC();
+    }
+    else if ((command & 0xFFFF) == 0x00FB) // DAA
+    {
+        DAA();
+    }
+    else if ((command & 0xFFFF) == 0x00FC) // KBP
+    {
+        KBP();
+    }
+    else if ((command & 0xFFFF) == 0x00FD) // DCL
+    {
+        DCL();
+    }
+    else
+    {
+        // TODO throw exception UNKNOWN COMMAND
     }
 }
+
+
+/// TODO Delete this comment with old code
+//void Simulator::evalCommand(int command)
+//{
+//    int operand1 = -1;
+//    int operand2 = -1;
+
+//    switch((command & 0xFF00) >> 4)
+//    {
+//    case 0x0: // NOP
+//        NOP();
+//        break;
+//    case 0x1: // JCN
+//        operand1 = command & 0xF;
+//        operand2 = rom->getValue(cpu->getPC()+1) & 0xFF;
+
+//        JCN(operand1, operand2);
+//        break;
+//    case 0x2: // FIM, SRC
+//        if ((command & 0x1) == 0) // FIM
+//        {
+//            operand1 = (command & 0xF) >> 1;
+//            operand2 = rom->getValue(cpu->getPC()+1);
+
+//            FIM(operand1, operand2);
+//        }
+//        else if ((command & 0x1) == 1) // SRC
+//        {
+//            operand1 = (command & 0xF) > 1;
+//            operand2 = -1;
+
+//            SRC(operand1);
+//        }
+//        else
+//        {
+//            std::cerr << "Simulation error: wrong command " << command << endl;
+//        }
+//        break;
+//    case 0x3: // FIN, JIN
+//        if ((command & 0x1) == 0) // FIN
+//        {
+//            operand1 = (command & 0xF) > 1;
+//            operand2 = -1;
+
+//            FIN(operand1);
+//        }
+//        else if ((command & 0x1) == 1) // JIN
+//        {
+//            operand1 = (command & 0xF) > 1;
+//            operand2 = -1;
+
+//            JIN(operand1);
+//        }
+//        else
+//        {
+//            std::cerr << "Simulation error : wrong command " << command << endl;
+//        }
+//        break;
+//    case 0x4: // JUN
+//        operand1 = command & 0xF;
+//        operand2 = rom->getValue(cpu->getPC() + 1);
+
+//        JUN(operand1, operand2);
+//        break;
+//    case 0x5:// JMS
+//        operand1 = command & 0xF;
+//        operand2 = rom->getValue(cpu->getPC() + 1);
+
+//        JMS(operand1, operand2);
+//        break;
+//    case 0x6: // INC
+//        operand1 = command & 0xF;
+//        operand2 = -1;
+
+//        INC(operand1);
+//        break;
+//    case 0x7: // ISZ
+//        operand1 = command & 0xF;
+//        operand2 = rom->getValue(cpu->getPC() + 1);
+
+//        ISZ(operand1, operand2);
+//        break;
+//    case 0x8: // ADD
+//        operand1 = command & 0xF;
+//        operand2 = -1;
+
+//        ADD(operand1);
+//        break;
+//    case 0x9: // SUB
+//        operand1 = command & 0xF;
+//        operand2 = -1;
+
+//        SUB(operand1);
+//        break;
+//    case 0xA: // LD
+//        operand1 = command & 0xF;
+//        operand2 = -1;
+
+//        LD(operand1);
+//        break;
+//    case 0xB: // XCH
+//        operand1 = command & 0xF;
+//        operand2 = -1;
+
+//        XCH(operand1);
+//        break;
+//    case 0xC: // BBL
+//        operand1 = command & 0xF;
+//        operand2 = -1;
+
+//        BBL(operand1);
+//        break;
+//    case 0xD: // LDM
+//        operand1 = command & 0xF;
+//        operand2 = -1;
+
+//        LDM(operand1);
+//        break;
+//    case 0xE: // WRM, WMP, WRR, WR0-3, SBM, RDM, RDR, ADM, RD0-3
+
+//        switch(command & 0xF)
+//        {
+//        case 0x0: // WRM
+//            WRM();
+//            break;
+//        case 0x1: // WMP
+//            WMP();
+//            break;
+//        case 0x2: // WRR
+//            WRR();
+//            break;
+//        case 0x4: // WR0
+//            WR0();
+//            break;
+//        case 0x5: // WR1
+//            WR1();
+//            break;
+//        case 0x6: // WR2
+//            WR2();
+//            break;
+//        case 0x7: // WR3
+//            WR3();
+//            break;
+//        case 0x8: // SBM
+//            SBM();
+//            break;
+//        case 0x9: // RDM
+//            RDM();
+//            break;
+//        case 0xA: // RDR
+//            RDR();
+//            break;
+//        case 0xB: // ADM
+//            ADM();
+//            break;
+//        case 0xC: // RD0
+//            RD0();
+//            break;
+//        case 0xD: // RD1
+//            RD1();
+//            break;
+//        case 0xE: // RD2
+//            RD2();
+//            break;
+//        case 0xF: // RD3
+//            RD3();
+//            break;
+//        }
+
+//        break;
+//    case 0xF: // CLB, CLC, IAC, CMC, CMA, RAL, RAR, TCC, DAC, TCS, STC, DAA, KBP, DCL
+//        switch(command & 0xF)
+//        {
+//        case 0x0: // CLB
+//            CLB();
+//            break;
+//        case 0x1: // CLC
+//            CLC();
+//            break;
+//        case 0x2: // IAC
+//            IAC();
+//            break;
+//        case 0x3: // CMC
+//            CMC();
+//            break;
+//        case 0x4: // CMA
+//            CMA();
+//            break;
+//        case 0x5: // RAL
+//            RAL();
+//            break;
+//        case 0x6: // RAR
+//            RAR();
+//            break;
+//        case 0x7: // TCC
+//            TCC();
+//            break;
+//        case 0x8: // DAC
+//            DAC();
+//            break;
+//        case 0x9: // TCS
+//            TCS();
+//            break;
+//        case 0xA: // STC
+//            STC();
+//            break;
+//        case 0xB: // DAA
+//            DAA();
+//            break;
+//        case 0xC: // KBP
+//            KBP();
+//            break;
+//        case 0xD: // DCL
+//            DCL();
+//            break;
+//        }
+//        break;
+//    }
+//}
 
 /**
  * @brief Simulator::NOP - NO OPERATION
@@ -289,13 +523,15 @@ void Simulator::JCN(unsigned int condition, unsigned int address)
 
     /// TODO JCN Note
 
-    if (condition > 0xF) {
+    if (condition > 0xF)
+    {
         std::cerr << std::hex << "Error: JCN condition. 0x" << condition
                   << " is invalid, because is bigger than 4 bit." << std::endl;
         return;
     }
 
-    if (address > 0xFF) {
+    if (address > 0xFF)
+    {
         std::cerr << std::hex << "Error: 0x" << address << " is too big. It may be 8 bit." << std::endl;
         return;
     }
@@ -308,14 +544,17 @@ void Simulator::JCN(unsigned int condition, unsigned int address)
     bool jump = (!c1 & (((cpu->getAcc() == 0) & c2) | ((cpu->getCarry() == 1) & c3) | ((cpu->getTest() == 0) & c4))) |
             (c1 & (((cpu->getAcc() != 0) | !c2) & ((cpu->getCarry() == 0) | !c3) & ((cpu->getTest() == 1) | !c4)));
 
-    if (jump) {
+    if (jump)
+    {
         /*
          * If the condition is true, the 8 bits specified by
          * address replace the lower 8 bits of the program counter.
          * The highest 4 bits of the program counter are unchanged.
          */
         cpu->setPC((cpu->getPC() & 0x0F00) | (address & 0xFF));
-    } else {
+    }
+    else
+    {
         /*
          * If the condition specified is false, no action occurs and program execution
          * continues with the next sequential instruction.
@@ -345,12 +584,14 @@ void Simulator::FIM(unsigned int pair, unsigned int data)
      * The carry bit is not affected.
      */
 
-    if (pair > 0x7) {
+    if (pair > 0x7)
+    {
         std::cerr << "Error: wrong number of pair " << pair << std::endl;
         return;
     }
 
-    if (data > 0xFF) {
+    if (data > 0xFF)
+    {
         std::cerr << std::hex << "Warning: 0x" << data << " may consider only 8 bit. It will be reduced." << std::endl;
     }
 
@@ -403,12 +644,13 @@ void Simulator::SRC(unsigned int pair)
     *   yyyy - These bits are not relevant for this reference.
     */
 
-    if (pair > 0x7) {
+    if (pair > 0x7)
+    {
         std::cerr << "Error: wrong number of pair " << pair << std::endl;
         return;
     }
 
-    cpu->setSrc(cpu->getPairs()[pair & 0x7]);
+    cpu->setSrc(cpu->getPairAt(pair & 0x7));
     cpu->setPC(cpu->getPC() + 1);
 }
 
@@ -440,13 +682,14 @@ void Simulator::FIN(unsigned int pair)
      * next page.
      */
 
-    if (pair > 0x7) {
+    if (pair > 0x7)
+    {
         std::cerr << "Error: wrong number of pair " << pair << std::endl;
         return;
     }
 
     int ph = cpu->getPC() & 0x0F00; // high order program counter Field (4 bit)
-    int addr = ph | (cpu->getRegisters()[0] << 4) | cpu->getRegisters()[1];
+    int addr = ph | (cpu->getRegisterAt(0) << 4) | cpu->getRegisterAt(1);
 
     /// TODO choose between ROM and Program RAM !!!!!!!
     /// TODO Make a Note as it is described in a comment above
@@ -478,12 +721,13 @@ void Simulator::JIN(unsigned int pair)
      * The carry bit is not affected.
      */
 
-    if (pair > 0x7) {
+    if (pair > 0x7)
+    {
         std::cerr << "Error: wrong number of pair " << pair << std::endl;
         return;
     }
 
-    int addr = (cpu->getPC() & 0x0F00) | cpu->getPairs()[pair & 0x7];
+    int addr = (cpu->getPC() & 0x0F00) | cpu->getPairAt(pair & 0x7);
     cpu->setPC(addr);
 }
 
@@ -510,11 +754,13 @@ void Simulator::JUN(unsigned int address1, unsigned int address2)
      * The carry bit is not affected.
      */
 
-    if (address1 > 0xF) {
+    if (address1 > 0xF)
+    {
         std::cerr << std::hex << "Warning: address1 0x" << address1 << " may consider 4 bit. It will be reduced." << std::endl;
     }
 
-    if (address2 > 0xFF) {
+    if (address2 > 0xFF)
+    {
         std::cerr << std::hex << "Warning: address2 0x" << address2 << " may consider 8 bit. It will be reduced." << std::endl;
     }
 
@@ -543,11 +789,13 @@ void Simulator::JMS(unsigned int address1, unsigned int address2)
      * The carty bit is not affected.
      */
 
-    if (address1 > 0xF) {
+    if (address1 > 0xF)
+    {
         std::cerr << std::hex << "Warning: address1 0x" << address1 << " may consider 4 bit. It will be reduced." << std::endl;
     }
 
-    if (address2 > 0xFF) {
+    if (address2 > 0xFF)
+    {
         std::cerr << std::hex << "Warning: address2 0x" << address2 << " may consider 8 bit. It will be reduced." << std::endl;
     }
 
@@ -572,12 +820,13 @@ void Simulator::INC(unsigned int reg)
      * The carry bit is not affected.
      */
 
-    if (reg > 0xF) {
+    if (reg > 0xF)
+    {
         std::cerr << "Error: wrong number of register " << reg << std::endl;
         return;
     }
 
-    int value = (cpu->getRegisters()[reg] + 1) % 0xF;
+    int value = (cpu->getRegisterAt(reg) + 1) % 0xF;
     cpu->setRegisters(reg & 0xF, value);
 
     cpu->setPC(cpu->getPC() + 1);
@@ -616,20 +865,25 @@ void Simulator::ISZ(unsigned int reg, unsigned int address)
 
     /// TODO Note !!!
 
-    if (reg > 0xF) {
+    if (reg > 0xF)
+    {
         std::cerr << "Error: wrong number of register " << reg << std::endl;
         return;
     }
 
-    if (address > 0xFF) {
+    if (address > 0xFF)
+    {
         std::cerr << std::hex << "Warning: address 0x" << address
                   << " may consider only 8 bit. It will be reduced." << std::endl;
     }
 
     INC(reg);
-    if (cpu->getRegisters()[reg] == 0) {
+    if (cpu->getRegisterAt(reg) == 0)
+    {
         cpu->setPC(cpu->getPC() + 2);
-    } else {
+    }
+    else
+    {
         cpu->setPC((cpu->getPC() & 0x0F00) | (address & 0xFF));
     }
 }
@@ -652,12 +906,13 @@ void Simulator::ADD(unsigned int reg)
      * bit position, and reset if there is no carty.
      */
 
-    if (reg > 0xF) {
+    if (reg > 0xF)
+    {
         std::cerr << "Error: wrong number of register " << reg << std::endl;
         return;
     }
 
-    int value = cpu->getRegisters()[reg] + cpu->getAcc() + cpu->getCarry();
+    int value = cpu->getRegisterAt(reg) + cpu->getAcc() + cpu->getCarry();
 
     cpu->setCarry((value & 0x10) >> 4);
     cpu->setAcc(value % 0xF);
@@ -691,13 +946,14 @@ void Simulator::SUB(unsigned int reg)
      * carry bit to the accumulator.
      */
 
-    if (reg > 0xF) {
+    if (reg > 0xF)
+    {
         std::cerr << "Error: wrong number of register " << reg << std::endl;
         return;
     }
 
     int complementCarry = (cpu->getCarry() == 0) ? 1 : 0;
-    int value = cpu->getAcc() + cpu->getRegisters()[reg] + complementCarry ;
+    int value = cpu->getAcc() + cpu->getRegisterAt(reg) + complementCarry ;
 
     cpu->setCarry((value & 0x10) >> 4);
     cpu->setAcc(value % 0xF);
@@ -721,12 +977,13 @@ void Simulator::LD(unsigned int reg)
      * of the accumulator. The contents of REG are unchanged. The carry bit is not affected.
      */
 
-    if (reg > 0xF) {
+    if (reg > 0xF)
+    {
         std::cerr << "Error: wrong number of register " << reg << std::endl;
         return;
     }
 
-    cpu->setAcc(cpu->getRegisters()[reg]);
+    cpu->setAcc(cpu->getRegisterAt(reg));
 
     cpu->setPC(cpu->getPC() + 1);
 }
@@ -749,12 +1006,13 @@ void Simulator::XCH(unsigned int reg)
      * The carry bit is not affected.
      */
 
-    if (reg > 0xF) {
+    if (reg > 0xF)
+    {
         std::cerr << "Error: wrong number of register " << reg << std::endl;
         return;
     }
 
-    int r = cpu->getRegisters()[reg];
+    int r = cpu->getRegisterAt(reg);
     int a = cpu->getAcc();
 
     cpu->setRegisters(reg, a);
@@ -785,7 +1043,8 @@ void Simulator::BBL(unsigned int data)
      * The carry bit is not affected.
      */
 
-    if (data > 0xF) {
+    if (data > 0xF)
+    {
         std::cerr << std::hex << "Warning: data " << data
                   << " is too big and will be reduced to 4 bits." << std::endl;
     }
@@ -815,7 +1074,8 @@ void Simulator::LDM(unsigned int data)
      * The carry bit is not affected.
      */
 
-    if (data > 0xF) {
+    if (data > 0xF)
+    {
         std::cerr << std::hex << "Warning: data 0x" << data
                   << " is too big and will be reduced to 4 bits." << std::endl;
     }
@@ -1448,9 +1708,12 @@ void Simulator::TCC()
     * accumulator is set to 0001B. In either case, the carry bit is then reset.
     */
 
-    if (cpu->getCarry() == 0) {
+    if (cpu->getCarry() == 0)
+    {
         cpu->setAcc(0);
-    } else {
+    }
+    else
+    {
         cpu->setAcc(1);
     }
     cpu->setCarry(0);
@@ -1509,9 +1772,12 @@ void Simulator::TCS()
      * accumulator is set to 10. In either case, the carry bit is then reset.
      */
 
-    if (cpu->getCarry() == 0) {
+    if (cpu->getCarry() == 0)
+    {
         cpu->setAcc(0x9);
-    } else {
+    }
+    else
+    {
         cpu->setAcc(0xA);
     }
     cpu->setCarry(0);
@@ -1554,9 +1820,11 @@ void Simulator::DAA()
      * it is not reset).
      */
 
-    if (cpu->getAcc() > 9 || cpu->getCarry() == 1) {
+    if (cpu->getAcc() > 9 || cpu->getCarry() == 1)
+    {
         int acc = cpu->getAcc() + 6;
-        if (acc > 0xF) {
+        if (acc > 0xF)
+        {
             cpu->setCarry(1);
         }
         cpu->setAcc(acc % 0xF);
@@ -1582,7 +1850,8 @@ void Simulator::KBP()
      * If more than one bit of the accumulator is set, the accumulator is set to 1111 B.
      */
 
-    switch(cpu->getAcc()) {
+    switch(cpu->getAcc())
+    {
     case 0x0:
         // do nothing
         break;
@@ -1655,7 +1924,3 @@ void Simulator::DCL()
 
     cpu->setPC(cpu->getPC() + 1);
 }
-
-
-
-
