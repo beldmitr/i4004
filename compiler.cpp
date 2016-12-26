@@ -14,7 +14,8 @@
 // TODO Format of a pair maybe P0, p0 and 0P, 0p. Maybe to do 0P and 0p format too.
 // TODO Format of a register maybe R0, r0 and 0R, 0r. Maybe to do 0R and 0r format too.
 
-Compiler::Compiler(const std::string& filename, const std::string& output) {
+Compiler::Compiler(const std::string& filename, const std::string& output)
+{
 
     this->output = output;
 
@@ -90,14 +91,18 @@ Compiler::Compiler(const std::string& filename, const std::string& output) {
 
     sourcefile.open(filename.c_str(), ios::in);
 
-    if (sourcefile.is_open()) {
+    if (sourcefile.is_open())
+    {
         std::string line;
 
-        while (getline(sourcefile, line)) {
+        while (getline(sourcefile, line))
+        {
             code.push_back(line);
         }
 
-    } else {
+    }
+    else
+    {
         sourcefile.close();
         cout << "File " << filename << " wasn't open" << endl; // TODO after an implementing an exception, delete this cout
         throw "File was not opened"; // TODO throw exception file wasn't open
@@ -105,7 +110,8 @@ Compiler::Compiler(const std::string& filename, const std::string& output) {
 
 }
 
-Compiler::~Compiler() {
+Compiler::~Compiler()
+{
     sourcefile.close();
 }
 
@@ -117,34 +123,45 @@ Compiler::Instruction::Instruction(std::string name, std::string operandLeft,std
 
 }
 
-std::string Compiler::trimStrong(const std::string& text) {
+std::string Compiler::trimStrong(const std::string& text)
+{
     return regex_replace(text, regex("([[:space:]]{1})"), "");
 }
 
-std::string Compiler::trim(const std::string& text) {
+std::string Compiler::trim(const std::string& text)
+{
 
     string res = regex_replace(text, regex("([[:space:]]+)"), " ");
-    if (res.empty() || strcmp(res.c_str(), " ") == 0) {
+    if (res.empty() || strcmp(res.c_str(), " ") == 0)
+    {
         return "";
     }
 
-    if (res.at(0) == ' ') {
+    if (res.at(0) == ' ')
+    {
         res.erase(0, 1);
     }
 
-    if (res.at(res.length() - 1) == ' ') {
+    if (res.at(res.length() - 1) == ' ')
+    {
         res.erase(res.length() - 1, 1);
     }
 
     return res;
 }
 
-std::string Compiler::getConstByLabel(const std::string& label) {
-    for (const Constants& c : constantsTable) {
-        if (label == c.label) {
-            if (regex_match(c.constant, rOpDec) || regex_match(c.constant, rOpBin) || regex_match(c.constant, rOpHex)) {
+std::string Compiler::getConstByLabel(const std::string& label)
+{
+    for (const Constants& c : constantsTable)
+    {
+        if (label == c.label)
+        {
+            if (regex_match(c.constant, rOpDec) || regex_match(c.constant, rOpBin) || regex_match(c.constant, rOpHex))
+            {
                 return c.constant;
-            } else if (regex_match(c.constant, rOpLabel) && !c.constant.empty()) {
+            }
+            else if (regex_match(c.constant, rOpLabel) && !c.constant.empty())
+            {
                 return getConstByLabel(c.constant);
             }
         }
@@ -158,9 +175,12 @@ std::string Compiler::getConstByLabel(const std::string& label) {
     return "";
 }
 
-int Compiler::getInstructionLength(const std::string& name) {
-    for (const InstructionSet& instr : set) {
-        if (instr.mnemonic == name) {
+int Compiler::getInstructionLength(const std::string& name)
+{
+    for (const InstructionSet& instr : set)
+    {
+        if (instr.mnemonic == name)
+        {
             return (instr.code & 0xFF00) ? 2 : 1;
         }
     }
@@ -168,9 +188,12 @@ int Compiler::getInstructionLength(const std::string& name) {
     return 0;
 }
 
-int Compiler::getAddressByLabel(const std::string& label) {
-    for (const Labels& l : labelsTable) {
-        if (l.label == label) {
+int Compiler::getAddressByLabel(const std::string& label)
+{
+    for (const Labels& l : labelsTable)
+    {
+        if (l.label == label)
+        {
             return l.address;
         }
     }
@@ -178,15 +201,20 @@ int Compiler::getAddressByLabel(const std::string& label) {
     return -1;
 }
 
-bool Compiler::checkLabelExist(const std::string& label) {
-    for (const Labels& l : labelsTable) {
-        if (label == l.label) {
+bool Compiler::checkLabelExist(const std::string& label)
+{
+    for (const Labels& l : labelsTable)
+    {
+        if (label == l.label)
+        {
             return true;
         }
     }
 
-    for (const Constants& c : constantsTable) {
-        if (label == c.label) {
+    for (const Constants& c : constantsTable)
+    {
+        if (label == c.label)
+        {
             return true;
         }
     }
@@ -194,9 +222,12 @@ bool Compiler::checkLabelExist(const std::string& label) {
     return false;
 }
 
-int Compiler::getCodeByInstruction(const std::string& instr) {
-    for (const InstructionSet& i : set) {
-        if (instr == i.mnemonic) {
+int Compiler::getCodeByInstruction(const std::string& instr)
+{
+    for (const InstructionSet& i : set)
+    {
+        if (instr == i.mnemonic)
+        {
             return i.code;
         }
     }
@@ -204,9 +235,12 @@ int Compiler::getCodeByInstruction(const std::string& instr) {
     return -1;
 }
 
-bool Compiler::isInstruction(const std::string& name) const {
-    for (const InstructionSet& i : set) {
-        if (i.mnemonic == name) {
+bool Compiler::isInstruction(const std::string& name) const
+{
+    for (const InstructionSet& i : set)
+    {
+        if (i.mnemonic == name)
+        {
             return true;
         }
     }
@@ -241,12 +275,15 @@ void Compiler::saveToTables(const std::string& line, const std::string& label,
      *
      */
 
-    if (label == "" && instruction == "" && operandLeft == "" && operandRight == "") {
+    if (label == "" && instruction == "" && operandLeft == "" && operandRight == "")
+    {
         /*
          * Case 0
          * If line is empty, then nothing to do
          */
-    } else if (label == "" && instruction == "" && operandLeft == "" && operandRight != "") {
+    }
+    else if (label == "" && instruction == "" && operandLeft == "" && operandRight != "")
+    {
         /*
          *	Case 1
          */
@@ -257,7 +294,9 @@ void Compiler::saveToTables(const std::string& line, const std::string& label,
         //                << trim(line) << endl;
         //        errList->addItem(QString::fromStdString(s.str()));
         errors.push_back( { lineNumber,  "Instruction expected, but left operand was acquired (1).", trim(line)} );
-    } else if (label == "" && instruction == "" && operandLeft != "" && operandRight == "") {
+    }
+    else if (label == "" && instruction == "" && operandLeft != "" && operandRight == "")
+    {
         /*
          *	Case 2
          */
@@ -268,7 +307,9 @@ void Compiler::saveToTables(const std::string& line, const std::string& label,
         //                << trim(line) << endl;
         //        errList->addItem(QString::fromStdString(s.str()));
         errors.push_back( { lineNumber,  "Instruction expected, but right operand was acquired (2).", trim(line)} );
-    } else if (label == "" && instruction == "" && operandLeft != "" && operandRight != "") {
+    }
+    else if (label == "" && instruction == "" && operandLeft != "" && operandRight != "")
+    {
         /*
          *	Case 3
          */
@@ -279,7 +320,9 @@ void Compiler::saveToTables(const std::string& line, const std::string& label,
         //                << trim(line) << endl; // TODO Delete this cout
         //        errList->addItem(QString::fromStdString(s.str()));
         errors.push_back( { lineNumber,  "Instruction expected, but both operands was acquired (3).", trim(line)} );
-    } else if (label == "" && instruction != "" && operandLeft == "" && operandRight == "") {
+    }
+    else if (label == "" && instruction != "" && operandLeft == "" && operandRight == "")
+    {
         /*
          *	Case 4
          * 	if a line has only instruction and no label
@@ -289,7 +332,9 @@ void Compiler::saveToTables(const std::string& line, const std::string& label,
          */
 
         instructionTable.push_back( { instruction, operandLeft, operandRight, trim(line), lineNumber, -1 });
-    } else if (label == "" && instruction != "" && operandLeft == "" && operandRight != "") {
+    }
+    else if (label == "" && instruction != "" && operandLeft == "" && operandRight != "")
+    {
         /*
          *	Case 5
          *	ERROR, Must be LeftOperand
@@ -300,7 +345,9 @@ void Compiler::saveToTables(const std::string& line, const std::string& label,
         //        s << "Error at line " << lineNumber << ": Left operand acquired (5). Line: " << trim(line) << endl;
         //        errList->addItem(QString::fromStdString(s.str()));
         errors.push_back( { lineNumber,  "Left operand acquired (5).", trim(line)} );
-    } else if (label == "" && instruction != "" && operandLeft != "" && operandRight == "") {
+    }
+    else if (label == "" && instruction != "" && operandLeft != "" && operandRight == "")
+    {
         /*
          *	Case 6
          * 	if a line has only instruction and no label
@@ -310,7 +357,9 @@ void Compiler::saveToTables(const std::string& line, const std::string& label,
          */
 
         instructionTable.push_back( { instruction, operandLeft, operandRight, trim(line), lineNumber, -1 });
-    } else if (label == "" && instruction != "" && operandLeft != "" && operandRight != "") {
+    }
+    else if (label == "" && instruction != "" && operandLeft != "" && operandRight != "")
+    {
         /*
          *	Case 7
          * 	if a line has only instruction and no label
@@ -320,7 +369,9 @@ void Compiler::saveToTables(const std::string& line, const std::string& label,
          */
 
         instructionTable.push_back( { instruction, operandLeft, operandRight, trim(line), lineNumber, -1 });
-    } else if (label != "" && instruction == "" && operandLeft == "" && operandRight == "") {
+    }
+    else if (label != "" && instruction == "" && operandLeft == "" && operandRight == "")
+    {
         /*
          *	Case 8
          */
@@ -330,7 +381,9 @@ void Compiler::saveToTables(const std::string& line, const std::string& label,
         //        s << "Error at line " << lineNumber << ": Label to an empty line (8). Line: " << trim(line) << endl;
         //        errList->addItem(QString::fromStdString(s.str()));
         errors.push_back( { lineNumber,  "Label to an empty line (8).", trim(line)} );
-    } else if (label != "" && instruction == "" && operandLeft == "" && operandRight != "") {
+    }
+    else if (label != "" && instruction == "" && operandLeft == "" && operandRight != "")
+    {
         /*
          *	Case 9
          */
@@ -340,7 +393,9 @@ void Compiler::saveToTables(const std::string& line, const std::string& label,
         //        s << "Error at line " << lineNumber << ": Label to right operand (9). Line: " << trim(line) << endl;
         //        errList->addItem(QString::fromStdString(s.str()));
         errors.push_back( { lineNumber,  "Label to right operand (9).", trim(line)} );
-    } else if (label != "" && instruction == "" && operandLeft != "" && operandRight == "") {
+    }
+    else if (label != "" && instruction == "" && operandLeft != "" && operandRight == "")
+    {
         /*
          *	Case A
          * 	if format of a line is
@@ -352,7 +407,9 @@ void Compiler::saveToTables(const std::string& line, const std::string& label,
          */
 
         constantsTable.push_back( { label, operandLeft });
-    } else if (label != "" && instruction == "" && operandLeft != "" && operandRight != "") {
+    }
+    else if (label != "" && instruction == "" && operandLeft != "" && operandRight != "")
+    {
         /*
          *	Case B
          */
@@ -362,7 +419,9 @@ void Compiler::saveToTables(const std::string& line, const std::string& label,
         //        s << "Error at line " << lineNumber << ": Label to both operands (B). Line: " << trim(line) << endl;
         //        errList->addItem(QString::fromStdString(s.str()));
         errors.push_back( { lineNumber,  "Label to both operands (B).", trim(line)} );
-    } else if (label != "" && instruction != "" && operandLeft == "" && operandRight == "") {
+    }
+    else if (label != "" && instruction != "" && operandLeft == "" && operandRight == "")
+    {
         /*
          *	Case C
          *	if a line has a label
@@ -374,7 +433,9 @@ void Compiler::saveToTables(const std::string& line, const std::string& label,
 
         labelsTable.push_back( { label, address });
         instructionTable.push_back( { instruction, operandLeft, operandRight, trim(line), lineNumber, -1 });
-    } else if (label != "" && instruction != "" && operandLeft == "" && operandRight != "") {
+    }
+    else if (label != "" && instruction != "" && operandLeft == "" && operandRight != "")
+    {
         /*
          * Case D
          * ERROR, Must be LeftOperand
@@ -385,7 +446,9 @@ void Compiler::saveToTables(const std::string& line, const std::string& label,
         //        s << "Error at line " << lineNumber << ": Expected left operand (D). Line: " << trim(line) << endl;
         //        errList->addItem(QString::fromStdString(s.str()));
         errors.push_back( { lineNumber,  "Expected left operand (D).", trim(line)} );
-    } else if (label != "" && instruction != "" && operandLeft != "" && operandRight == "") {
+    }
+    else if (label != "" && instruction != "" && operandLeft != "" && operandRight == "")
+    {
         /*
          *	Case E
          *	if a line has a label
@@ -397,7 +460,9 @@ void Compiler::saveToTables(const std::string& line, const std::string& label,
 
         labelsTable.push_back( { label, address });
         instructionTable.push_back( { instruction, operandLeft, operandRight, trim(line), lineNumber, -1 });
-    } else if (label != "" && instruction != "" && operandLeft != "" && operandRight != "") {
+    }
+    else if (label != "" && instruction != "" && operandLeft != "" && operandRight != "")
+    {
         /*
          *	Case F
          *	if a line has a label
@@ -409,7 +474,9 @@ void Compiler::saveToTables(const std::string& line, const std::string& label,
 
         labelsTable.push_back( { label, address });
         instructionTable.push_back( { instruction, operandLeft, operandRight, trim(line), lineNumber, -1 });
-    } else {
+    }
+    else
+    {
         /*
          *  TODO write an error to ErrorStream
          *  Here is some unexpected error
@@ -425,25 +492,27 @@ void Compiler::saveToTables(const std::string& line, const std::string& label,
 
 void Compiler::parseLine(std::string& line, std::string& label, std::string& instruction,
                          std::string& operand, std::string& operandLeft, std::string& operandRight,
-                         const int& lineNumber) {
-
+                         const int& lineNumber)
+{
     std::string currentLine = trim(line);
     smatch m;
     // Find and delete from line a comment, if it exists
-    if (regex_search(line, m, rComment)) {
+    if (regex_search(line, m, rComment))
+    {
         line = m.prefix().str();	// We don't need a comment in ObjectCode, so only delete it
     }
 
     // Parse a label
-    if (regex_search(line, m, rLabel)) {
+    if (regex_search(line, m, rLabel))
+    {
         label = trimStrong(m[0]);	// A label on a line
         label = regex_replace(label, regex("(,)"), "");	// Delete "," from label
         line = m.suffix().str();
 
         std::string prefix = m.prefix().str();
         // Check if something is by left side of a label. If it is, then this is error
-        if (!trimStrong(prefix).empty()) {
-
+        if (!trimStrong(prefix).empty())
+        {
             // write error
             //            stringstream s;
             //            s << "Error at line " << lineNumber << ": Wrong label \"" << prefix << "\". Line: " << currentLine
@@ -456,8 +525,8 @@ void Compiler::parseLine(std::string& line, std::string& label, std::string& ins
          *  Check if label exists.
          *  If exists, it throws error
          */
-        if (checkLabelExist(label)) {
-
+        if (checkLabelExist(label))
+        {
             // write error
             //            stringstream s;
             //            s << "Error at line " << lineNumber << ": Label " << label << " exists. Line: " << currentLine << endl;// TODO Delete cout after implementing error stream
@@ -470,25 +539,29 @@ void Compiler::parseLine(std::string& line, std::string& label, std::string& ins
      *  It resolve constants with expression
      *  Label, 23+AAA
      */
-    if (regex_search(line, m, rOpExpr) && !isInstruction(m[0])) {
+    if (regex_search(line, m, rOpExpr) && !isInstruction(m[0]))
+    {
         operandLeft = trimStrong(m[0]);
         return;
     }
 
     // Parse an instruction
-    if (regex_search(line, m, rInstruction)) {
+    if (regex_search(line, m, rInstruction))
+    {
         instruction = trimStrong(m[0]);	// An instruction on a line
         line = m.suffix().str();
     }
 
     // Parse operand(s)
-    if (regex_search(line, m, rOperand)) {
+    if (regex_search(line, m, rOperand))
+    {
         operand = m[0];	//	Operand
         line = m.suffix().str();
 
         // Divide operand to left and right, if they exist
         operandLeft = trimStrong(operand);
-        if (regex_search(operand, m, regex("(,)"))) {
+        if (regex_search(operand, m, regex("(,)")))
+        {
             operandLeft = trimStrong(m.prefix().str());
             operandRight = trimStrong(m.suffix().str());
         }
@@ -498,7 +571,8 @@ void Compiler::parseLine(std::string& line, std::string& label, std::string& ins
      * If line is not empty, that means, that compiler couldn't resolve something,
      * so we should to throw an error to the error stream
      */
-    if (!trimStrong(line).empty()) {
+    if (!trimStrong(line).empty())
+    {
 
         // write error
         //        stringstream s;
@@ -508,21 +582,26 @@ void Compiler::parseLine(std::string& line, std::string& label, std::string& ins
     }
 }
 
-void Compiler::preprocessing() {
+void Compiler::preprocessing()
+{
 
     // Evaluate constant labels
-    for (Constants& c : constantsTable) {
-        if (regex_match(c.constant, rOpLabel)) {
+    for (Constants& c : constantsTable)
+    {
+        if (regex_match(c.constant, rOpLabel))
+        {
             c.constant = getConstByLabel(c.constant);
         }
     }
 
-    for (Instruction& instr : instructionTable) {
+    for (Instruction& instr : instructionTable)
+    {
         /*
          * Check instructions
          * if don't exist or if they have got wrong operands
          */
-        switch (getCodeByInstruction(instr.name)) {
+        switch (getCodeByInstruction(instr.name))
+        {
         case 0x0:
             checkNoOperands(instr);
             break;
@@ -687,14 +766,17 @@ void Compiler::preprocessing() {
     }	// for
 }
 
-void Compiler::composing() {
-    for (Instruction& instr : instructionTable) {
+void Compiler::composing()
+{
+    for (Instruction& instr : instructionTable)
+    {
         int op1 = 0;
         int op2 = 0;
         /*
          * Compose instructions to object code
          */
-        switch (getCodeByInstruction(instr.name)) {
+        switch (getCodeByInstruction(instr.name))
+        {
         case 0x0:
             instr.code = 0x0;
             break;
@@ -853,8 +935,10 @@ void Compiler::composing() {
     }	// for
 }
 
-void Compiler::checkNoOperands(const Instruction& instr) {
-    if (instr.operandLeft != "" || instr.operandRight != "") {
+void Compiler::checkNoOperands(const Instruction& instr)
+{
+    if (instr.operandLeft != "" || instr.operandRight != "")
+    {
         // write error
         //        stringstream s;
         //        s << "Error at line " << instr.lineNumber << ": Doesn't expect operands. Line: " << instr.line << endl;
@@ -863,8 +947,10 @@ void Compiler::checkNoOperands(const Instruction& instr) {
     }
 }
 
-void Compiler::checkNoRightOperand(const Instruction& instr) {
-    if (instr.operandRight != "") {
+void Compiler::checkNoRightOperand(const Instruction& instr)
+{
+    if (instr.operandRight != "")
+    {
         // write error
         //        stringstream s;
         //        s << "Error at line " << instr.lineNumber << ": Doesn't expect right operand. Line: " << instr.line << endl;
@@ -873,15 +959,19 @@ void Compiler::checkNoRightOperand(const Instruction& instr) {
     }
 }
 
-void Compiler::checkLeftOperandPair(const Instruction& instr) {
+void Compiler::checkLeftOperandPair(const Instruction& instr)
+{
     /*
      *  Check left operand
      *  it can be:
      *  - Pair
      */
-    if (regex_match(instr.operandLeft, rOpPair)) {
+    if (regex_match(instr.operandLeft, rOpPair))
+    {
         // Ok, Nothing to do
-    } else {
+    }
+    else
+    {
         // write error
         //        stringstream s;
         //        s << "Error at line " << instr.lineNumber << ": Bad format of left operand. Pair expected. Line: "
@@ -891,15 +981,19 @@ void Compiler::checkLeftOperandPair(const Instruction& instr) {
     }
 }
 
-void Compiler::checkLeftOperandRegister(const Instruction& instr) {
+void Compiler::checkLeftOperandRegister(const Instruction& instr)
+{
     /*
      *  Check left operand
      *  it can be:
      *  - Pair
      */
-    if (regex_match(instr.operandLeft, rOpRegister)) {
+    if (regex_match(instr.operandLeft, rOpRegister))
+    {
         // Ok, Nothing to do
-    } else {
+    }
+    else
+    {
 
         // write error
         //        stringstream s;
@@ -910,7 +1004,8 @@ void Compiler::checkLeftOperandRegister(const Instruction& instr) {
     }
 }
 
-void Compiler::checkLeftOperandCondition(Instruction& instr) {
+void Compiler::checkLeftOperandCondition(Instruction& instr)
+{
     /*
      *  Check left operand
      *  It can be:
@@ -924,13 +1019,19 @@ void Compiler::checkLeftOperandCondition(Instruction& instr) {
      *  If else it should throw an error to the error stream
      */
     if (regex_match(instr.operandLeft, rOpBin) || regex_match(instr.operandLeft, rOpHex)
-            || regex_match(instr.operandLeft, rOpDec)) {
+            || regex_match(instr.operandLeft, rOpDec))
+    {
         // Ok, Nothing to do
-    } else if (regex_match(instr.operandLeft, rOpLabel)) {
+    }
+    else if (regex_match(instr.operandLeft, rOpLabel))
+    {
         std::string c = getConstByLabel(instr.operandLeft);
-        if (c != "") {
+        if (c != "")
+        {
             instr.operandLeft = c;
-        } else {
+        }
+        else
+        {
             // write error
             //            stringstream s;
             //            s << "Error at line " << instr.lineNumber << ": Unknown constant " << instr.name << " . Line: "
@@ -938,9 +1039,13 @@ void Compiler::checkLeftOperandCondition(Instruction& instr) {
             //            errList->addItem(QString::fromStdString(s.str()));
             errors.push_back( { instr.lineNumber,  "Unknown constant \"" + instr.name + "\".", instr.line} );
         }
-    } else if (regex_match(instr.operandLeft, rOpExpr)) {
+    }
+    else if (regex_match(instr.operandLeft, rOpExpr))
+    {
         // TODO Value Expression
-    } else {
+    }
+    else
+    {
         // write error
         //        stringstream s;
         //        s << "Error at line " << instr.lineNumber << ": Bad format of left operand. Line: " << instr.line << endl;
@@ -949,7 +1054,8 @@ void Compiler::checkLeftOperandCondition(Instruction& instr) {
     }
 }
 
-void Compiler::checkRightOperandAddress(Instruction& instr) {
+void Compiler::checkRightOperandAddress(Instruction& instr)
+{
     /*
      * Check right operand
      * It can be:
@@ -962,22 +1068,32 @@ void Compiler::checkRightOperandAddress(Instruction& instr) {
      */
 
     if (regex_match(instr.operandRight, rOpBin) || regex_match(instr.operandRight, rOpHex)
-            || regex_match(instr.operandRight, rOpDec)) {
+            || regex_match(instr.operandRight, rOpDec))
+    {
         // Ok, Nothing to do
-    } else if (regex_match(instr.operandRight, rOpLabel)) {
+    }
+    else if (regex_match(instr.operandRight, rOpLabel))
+    {
         int c = getAddressByLabel(instr.operandRight);
-        if (c != -1) {
+        if (c != -1)
+        {
             instr.operandRight = std::to_string(c);
-        } else {
+        }
+        else
+        {
             // write error
             //            stringstream s;
             //            s << "Error at line " << instr.lineNumber << ": Unknown label. Line: " << instr.line << endl;
             //            errList->addItem(QString::fromStdString(s.str()));
             errors.push_back( { instr.lineNumber,  "Unknown label.", instr.line} );
         }
-    } else if (regex_match(instr.operandRight, rOpExpr)) {
+    }
+    else if (regex_match(instr.operandRight, rOpExpr))
+    {
         // TODO Value Expression
-    } else {
+    }
+    else
+    {
         // write error
         //        stringstream s;
         //        s << "Error at line " << instr.lineNumber << ": Bad format of right operand. Line: " << instr.line << endl;
@@ -985,7 +1101,9 @@ void Compiler::checkRightOperandAddress(Instruction& instr) {
         errors.push_back( { instr.lineNumber,  "Bad format of right operand.", instr.line} );
     }
 }
-void Compiler::checkLeftOperandData(Instruction& instr) {
+
+void Compiler::checkLeftOperandData(Instruction& instr)
+{
     /*
      *  Check right operand
      *  it can be:
@@ -997,13 +1115,19 @@ void Compiler::checkLeftOperandData(Instruction& instr) {
      */
 
     if (regex_match(instr.operandLeft, rOpBin) || regex_match(instr.operandLeft, rOpHex)
-            || regex_match(instr.operandLeft, rOpDec)) {
+            || regex_match(instr.operandLeft, rOpDec))
+    {
         // Ok, Nothing to do
-    } else if (regex_match(instr.operandLeft, rOpLabel)) {
+    }
+    else if (regex_match(instr.operandLeft, rOpLabel))
+    {
         std::string c = getConstByLabel(instr.operandLeft);
-        if (c != "") {
+        if (c != "")
+        {
             instr.operandLeft = c;
-        } else {
+        }
+        else
+        {
             // write error
             //            stringstream s;
             //            s << "Error at line " << instr.lineNumber << ": Unknown constant " << instr.name << " . Line: "
@@ -1011,9 +1135,13 @@ void Compiler::checkLeftOperandData(Instruction& instr) {
             //            errList->addItem(QString::fromStdString(s.str()));
             errors.push_back( { instr.lineNumber,  "Unknown constant \"" + instr.name + "\".", instr.line} );
         }
-    } else if (regex_match(instr.operandLeft, rOpExpr)) {
+    }
+    else if (regex_match(instr.operandLeft, rOpExpr))
+    {
         // TODO Evaluate expression
-    } else {
+    }
+    else
+    {
         // write error
         //        stringstream s;
         //        s << "Error at line " << instr.lineNumber << ": Bad format of left operand. Line: " << instr.line << endl;
@@ -1022,7 +1150,8 @@ void Compiler::checkLeftOperandData(Instruction& instr) {
     }
 }
 
-void Compiler::checkRightOperandData(Instruction& instr) {
+void Compiler::checkRightOperandData(Instruction& instr)
+{
     /*
      *  Check right operand
      *  it can be:
@@ -1034,13 +1163,19 @@ void Compiler::checkRightOperandData(Instruction& instr) {
      */
 
     if (regex_match(instr.operandRight, rOpBin) || regex_match(instr.operandRight, rOpHex)
-            || regex_match(instr.operandRight, rOpDec)) {
+            || regex_match(instr.operandRight, rOpDec))
+    {
         // Ok, Nothing to do
-    } else if (regex_match(instr.operandRight, rOpLabel)) {
+    }
+    else if (regex_match(instr.operandRight, rOpLabel))
+    {
         std::string c = getConstByLabel(instr.operandRight);
-        if (c != "") {
+        if (c != "")
+        {
             instr.operandRight = c;
-        } else {
+        }
+        else
+        {
             // write error
             //            stringstream s;
             //            s << "Error at line " << instr.lineNumber << ": Unknown constant " << instr.name << " . Line: "
@@ -1048,9 +1183,13 @@ void Compiler::checkRightOperandData(Instruction& instr) {
             //            errList->addItem(QString::fromStdString(s.str()));
             errors.push_back( { instr.lineNumber,  "Unknown constant \"" + instr.name + "\".", instr.line} );
         }
-    } else if (regex_match(instr.operandRight, rOpExpr)) {
+    }
+    else if (regex_match(instr.operandRight, rOpExpr))
+    {
         // TODO Evaluate expression
-    } else {
+    }
+    else
+    {
         // write error
         //        stringstream s;
         //        s << "Error at line " << instr.lineNumber << ": Bad format of right operand. Line: " << instr.line << endl;
@@ -1059,7 +1198,8 @@ void Compiler::checkRightOperandData(Instruction& instr) {
     }
 }
 
-void Compiler::checkLeftOperandAddress(Instruction& instr) {
+void Compiler::checkLeftOperandAddress(Instruction& instr)
+{
     /*
      * Check left operand
      * It can be:
@@ -1072,22 +1212,32 @@ void Compiler::checkLeftOperandAddress(Instruction& instr) {
      */
 
     if (regex_match(instr.operandLeft, rOpBin) || regex_match(instr.operandLeft, rOpHex)
-            || regex_match(instr.operandLeft, rOpDec)) {
+            || regex_match(instr.operandLeft, rOpDec))
+    {
         // Ok, Nothing to do
-    } else if (regex_match(instr.operandLeft, rOpLabel)) {
+    }
+    else if (regex_match(instr.operandLeft, rOpLabel))
+    {
         int c = getAddressByLabel(instr.operandLeft);
-        if (c != -1) {
+        if (c != -1)
+        {
             instr.operandLeft = std::to_string(c);
-        } else {
+        }
+        else
+        {
             // write error
             //            stringstream s;
             //            s << "Error at line " << instr.lineNumber << ": Unknown label. Line: " << instr.line << endl;
             //            errList->addItem(QString::fromStdString(s.str()));
             errors.push_back( { instr.lineNumber,  "Unknown label.", instr.line} );
         }
-    } else if (regex_match(instr.operandLeft, rOpExpr)) {
+    }
+    else if (regex_match(instr.operandLeft, rOpExpr))
+    {
         // TODO Value Expression
-    } else {
+    }
+    else
+    {
         // write error
         //        stringstream s;
         //        s << "Error at line " << instr.lineNumber << ": Bad format of left operand. Line: " << instr.line << endl;
@@ -1096,9 +1246,11 @@ void Compiler::checkLeftOperandAddress(Instruction& instr) {
     }
 }
 
-int Compiler::register2int(const std::string& name) const {
+int Compiler::register2int(const std::string& name) const
+{
     std::string t = name;
-    if (!t.empty() && regex_match(name, rOpRegister)) {
+    if (!t.empty() && regex_match(name, rOpRegister))
+    {
         t.erase(0, 1);
 
         //		int n = stoi(t);
@@ -1110,9 +1262,11 @@ int Compiler::register2int(const std::string& name) const {
     return -1;
 }
 
-int Compiler::pair2int(const std::string& name) const {
+int Compiler::pair2int(const std::string& name) const
+{
     string t = name;
-    if (!t.empty() && regex_match(name, rOpPair)) {
+    if (!t.empty() && regex_match(name, rOpPair))
+    {
         t.erase(0, 1);
 
         //		int n = stoi(t);
@@ -1124,18 +1278,21 @@ int Compiler::pair2int(const std::string& name) const {
     return -1;
 }
 
-int Compiler::condition2int(const std::string& cond) const {
-    if(cond.empty()) {
+int Compiler::condition2int(const std::string& cond) const
+{
+    if(cond.empty())
+    {
         return -1;
     }
-
 
     //	return stoi(cond);
     return QString::fromStdString(cond).toInt(); // TODO QString to std::string
 }
 
-int Compiler::address2int(const std::string& addr) const {
-    if(addr.empty()) {
+int Compiler::address2int(const std::string& addr) const
+{
+    if(addr.empty())
+    {
         return -1;
     }
 
@@ -1143,8 +1300,10 @@ int Compiler::address2int(const std::string& addr) const {
     return QString::fromStdString(addr).toInt(); // TODO QString to std::string
 }
 
-int Compiler::dec2int(const std::string& dec) const {
-    if (dec.empty()) {
+int Compiler::dec2int(const std::string& dec) const
+{
+    if (dec.empty())
+    {
         return -1;
     }
 
@@ -1152,31 +1311,38 @@ int Compiler::dec2int(const std::string& dec) const {
     return QString::fromStdString(dec).toInt(); // TODO QString to std::string
 }
 
-int Compiler::to4bit(const int& op) const {
+int Compiler::to4bit(const int& op) const
+{
     return (op % 0x10);
 }
 
-int Compiler::to8bit(const int& op) const {
+int Compiler::to8bit(const int& op) const
+{
     return (op % 0x100);
 }
 
-int Compiler::to12bit(const int& op) const {
+int Compiler::to12bit(const int& op) const
+{
     return (op % 0x1000);
 }
 
-int Compiler::to4bitStrong(const int& op) const {
+int Compiler::to4bitStrong(const int& op) const
+{
     return (op & 0xF);
 }
 
-int Compiler::to8bitStrong(const int& op) const {
+int Compiler::to8bitStrong(const int& op) const
+{
     return (op & 0xFF);
 }
 
-int Compiler::to12bitStrong(const int& op) const {
+int Compiler::to12bitStrong(const int& op) const
+{
     return (op & 0xFFF);
 }
 
-void Compiler::toCompile() {
+void Compiler::toCompile()
+{
     int address = 0; // Address of the current line (command)
     int lineNumber = 0;
 
@@ -1185,7 +1351,8 @@ void Compiler::toCompile() {
      * Parsing and saving to tables
      */
 
-    for (std::string& line : code) { // TODO Maybe line is const ??
+    for (std::string& line : code)  // TODO Maybe line is const ??
+    {
         std::string currentLine = line;
 
         std::string label;
@@ -1228,10 +1395,12 @@ void Compiler::toCompile() {
      */
     outputfile.open(output, ios::binary | ios::out);
 
-    if (outputfile.is_open()) {
-
-        for (const Instruction& i : instructionTable) {
-            if (i.code & 0xFF00) {
+    if (outputfile.is_open())
+    {
+        for (const Instruction& i : instructionTable)
+        {
+            if (i.code & 0xFF00)
+            {
                 outputfile << (char) ((i.code & 0xFF00) >> 8);
             }
 
@@ -1240,7 +1409,9 @@ void Compiler::toCompile() {
         }
 
         outputfile.close();
-    } else {
+    }
+    else
+    {
         throw "File was not created";
     }
 
@@ -1255,7 +1426,8 @@ vector<unsigned int> Compiler::getCompiledCode() const
 {
     std::vector<unsigned int> compiledCode;
 
-    for (const Instruction& ins : instructionTable) {
+    for (const Instruction& ins : instructionTable)
+    {
         compiledCode.push_back(ins.code);
     }
 

@@ -4,7 +4,8 @@
 #include<string>
 #include "error.h"
 
-class ICompiler {
+class ICompiler
+{
 public:
     virtual void toCompile() = 0;
     virtual std::vector<Error> getErrors() const = 0;
