@@ -16,7 +16,7 @@ class ProcessorWidget : public QTreeWidget
     Q_OBJECT
 
 public:
-    explicit ProcessorWidget(QWidget *parent = 0);
+    Q_DECL_DEPRECATED explicit ProcessorWidget(QWidget *parent = 0);
 
 signals:
 

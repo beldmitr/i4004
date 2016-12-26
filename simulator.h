@@ -5,8 +5,6 @@
 #include <string>
 #include <memory>
 
-#include "GUI/delegategui.h"
-
 #include "rom.h"
 #include "pram.h"
 #include "dram.h"
@@ -21,8 +19,6 @@
 class Simulator
 {
 private:
-    std::shared_ptr<DelegateGUI> delegate;
-
     std::shared_ptr<ROM> rom;
     std::shared_ptr<PRAM> pram;
     std::shared_ptr<DRAM> dram;
@@ -78,7 +74,7 @@ private:
     void DCL();
 
 public:
-    Simulator(std::shared_ptr<DelegateGUI> delegate);
+    Simulator();
 
     void setCode(std::vector<unsigned int> compiledCode);
     void step();

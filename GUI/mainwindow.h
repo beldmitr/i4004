@@ -48,7 +48,6 @@ private:
     // FIXME What about delete these pointers, man, or make them smart?
     std::shared_ptr<Compiler> compiler;
     std::shared_ptr<Simulator> simulator;
-    std::shared_ptr<DelegateGUI> delegate;
 
     QString filename;
     QString outputname;

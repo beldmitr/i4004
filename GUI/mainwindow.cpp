@@ -306,12 +306,6 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent)
 
     // connects
     connect(editor, SIGNAL(textChanged()), this, SLOT(setWindowTitleFilename()));
-
-    // delegate GUI
-    delegate = std::shared_ptr<DelegateGUI>(new DelegateGUI(std::shared_ptr<RomWidget>(romWidget),
-                                                            std::shared_ptr<DataRamWidgetN>(dramWidget),
-                                                            std::shared_ptr<ProgramRamWidget>(pramWidget),
-                                                            std::shared_ptr<ProcessorWidget>(cpuWidget)));
 }
 
 void MainWindow::createOutputFilename()
@@ -558,7 +552,6 @@ void MainWindow::runBuild()
 void MainWindow::compileRunBuild()
 {
     buildCode();
-    simulator.reset(new Simulator(delegate));
     simulator->setCode(compiler->getCompiledCode());
 }
 
@@ -567,7 +560,6 @@ void MainWindow::step()
     if (simulator)
     {
         simulator->step();
-        delegate->updateAllGui();
     }
     else
     {

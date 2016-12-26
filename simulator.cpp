@@ -1,14 +1,8 @@
 #include "simulator.h"
 
-Simulator::Simulator(std::shared_ptr<DelegateGUI> delegate)
+Simulator::Simulator()
     :rom(new ROM(16)), pram(new PRAM(16)),dram(new DRAM(8)), cpu(new CPU)
 {
-    this->delegate = delegate;
-
-    delegate->setCpu(cpu);
-    delegate->setRom(rom);
-    delegate->setPram(pram);
-    delegate->setDram(dram);
 }
 
 void Simulator::setCode(std::vector<unsigned int> compiledCode)
