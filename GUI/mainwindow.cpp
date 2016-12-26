@@ -552,6 +552,7 @@ void MainWindow::runBuild()
 void MainWindow::compileRunBuild()
 {
     buildCode();
+    simulator.reset(new Simulator());
     simulator->setCode(compiler->getCompiledCode());
 }
 
