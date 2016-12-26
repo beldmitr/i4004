@@ -52,16 +52,16 @@ private:
     QString filename;
     QString outputname;
 
-    QMenuBar* mainMenu;
-    AsmEditor* editor;
-    QMdiArea* mdi;
-    QStatusBar* statusBar;
+    std::shared_ptr<QMenuBar> mainMenu;
+    std::shared_ptr<AsmEditor> editor;
+    QMdiArea* mdi; // TODO make smart ptr, for now it doesn't work, program crashes after exiting
+    std::shared_ptr<QStatusBar> statusBar;
 
-    QToolBar* toolBarFile;
-    QToolBar* toolBarEdit;
-    QToolBar* toolBarBuild;
-    QToolBar* toolBarDebug;
-    QToolBar* toolBarMinimize;
+    std::shared_ptr<QToolBar> toolBarFile;
+    std::shared_ptr<QToolBar> toolBarEdit;
+    std::shared_ptr<QToolBar> toolBarBuild;
+    std::shared_ptr<QToolBar> toolBarDebug;
+    std::shared_ptr<QToolBar> toolBarMinimize;
 
 //    QDockWidget* dockProcessor;
 //    QDockWidget* dockRom;

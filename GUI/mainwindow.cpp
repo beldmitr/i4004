@@ -91,8 +91,8 @@ void MainWindow::createActions()
 
 void MainWindow::createMenu()
 {
-    mainMenu = new QMenuBar();
-    this->setMenuBar(mainMenu);
+    mainMenu = std::shared_ptr<QMenuBar>(new QMenuBar);
+    this->setMenuBar(mainMenu.get());
 
     QMenu *menuFile = mainMenu->addMenu("File");
     menuFile->addAction(actNew);
@@ -165,7 +165,7 @@ void MainWindow::createMenu()
 
 void MainWindow::createToolbars()
 {
-    toolBarMinimize = new QToolBar("Minimize");
+    toolBarMinimize = std::shared_ptr<QToolBar>(new QToolBar("Minimize"));
     for(QMdiSubWindow* w : mdi->subWindowList())
     {
         QIcon ico = w->windowIcon();
@@ -183,12 +183,12 @@ void MainWindow::createToolbars()
     toolBarMinimize->setFloatable(false);
     toolBarMinimize->setMovable(false);
 
-    toolBarFile = new QToolBar("File");
+    toolBarFile = std::shared_ptr<QToolBar>(new QToolBar("File"));
     toolBarFile->addAction(actNew);
     toolBarFile->addAction(actOpen);
     toolBarFile->addAction(actSave);
 
-    toolBarEdit = new QToolBar("Edit");
+    toolBarEdit = std::shared_ptr<QToolBar>(new QToolBar("Edit"));
     toolBarEdit->addAction(actUndo);
     toolBarEdit->addAction(actRedo);
     toolBarEdit->addSeparator();
@@ -199,22 +199,22 @@ void MainWindow::createToolbars()
     toolBarEdit->addSeparator();
     toolBarEdit->addAction(actSelectAll);
 
-    toolBarBuild = new QToolBar("Build");
+    toolBarBuild = std::shared_ptr<QToolBar>(new QToolBar("Build"));
     toolBarBuild->addAction(actCompile);
     toolBarBuild->addAction(actRun);
     toolBarBuild->addAction(actCompileRun);
 
-    toolBarDebug = new QToolBar("Debug");
+    toolBarDebug = std::shared_ptr<QToolBar>(new QToolBar("Debug"));
     toolBarDebug->addAction("Run");     // TODO action
     toolBarDebug->addAction("Stop");    // TODO action
     toolBarDebug->addAction(actStep);
     toolBarDebug->addAction("Reset");   // TODO action
 
-    this->addToolBar(toolBarFile);
-    this->addToolBar(toolBarEdit);
-    this->addToolBar(toolBarBuild);
-    this->addToolBar(toolBarDebug);
-    this->addToolBar(Qt::LeftToolBarArea, toolBarMinimize);
+    this->addToolBar(toolBarFile.get());
+    this->addToolBar(toolBarEdit.get());
+    this->addToolBar(toolBarBuild.get());
+    this->addToolBar(toolBarDebug.get());
+    this->addToolBar(Qt::LeftToolBarArea, toolBarMinimize.get());
 }
 
 void MainWindow::createSubWindows()
@@ -223,7 +223,7 @@ void MainWindow::createSubWindows()
     SubWindow* editorWindow = new SubWindow;
     SubWindow* ioWindow = new SubWindow;
 
-    editor = new AsmEditor;
+    editor = std::shared_ptr<AsmEditor>(new AsmEditor);
     iopanel = new IOPanel;
 
     editorWindow->setWindowTitle("Editor");
@@ -232,7 +232,7 @@ void MainWindow::createSubWindows()
     editorWindow->setWindowIcon(QIcon(":/Resources/icons/editor.png"));
     ioWindow->setWindowIcon(QIcon(":/Resources/icons/io.png"));
 
-    editorWindow->setWidget(editor);
+    editorWindow->setWidget(editor.get());
     ioWindow->setWidget(iopanel);
 
     mdi->addSubWindow(ioWindow);
@@ -293,11 +293,11 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent)
     createMenu();
     createToolbars();
 
-    statusBar = new QStatusBar();
+    statusBar = std::shared_ptr<QStatusBar>(new QStatusBar);
 
     // set widgets
     this->setCentralWidget(mdi);
-    this->setStatusBar(statusBar);
+    this->setStatusBar(statusBar.get());
 
     // form settings
     editor->setFocus();
@@ -305,7 +305,7 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent)
     this->resize(960, 640);
 
     // connects
-    connect(editor, SIGNAL(textChanged()), this, SLOT(setWindowTitleFilename()));
+    connect(editor.get(), SIGNAL(textChanged()), this, SLOT(setWindowTitleFilename()));
 }
 
 void MainWindow::createOutputFilename()
