@@ -2,19 +2,23 @@
 
 PRAM::PRAM(unsigned int pages) : pages(pages), bytesPerPage(256), maxPossiblePages(16)
 {
-    if (pages > maxPossiblePages) {
+    if (pages > maxPossiblePages)
+    {
         std::cerr << "Number of pages of Program RAM may be less than " << maxPossiblePages
                   << ". " << pages << " is too much pages." << std::endl;
         throw "Too big number of pages of Program RAM";
     }
 
-    for (unsigned int i = 0; i < pages * bytesPerPage; i++) {
+    for (unsigned int i = 0; i < pages * bytesPerPage; i++)
+    {
         table.push_back(0);
     }
 }
 
-int PRAM::getValue(unsigned int index) const {
-    if(index > pages * bytesPerPage) {
+int PRAM::getValue(unsigned int index) const
+{
+    if(index > pages * bytesPerPage)
+    {
         std::string msg;
         msg.append("Program RAM memory has ").append(std::to_string(pages * bytesPerPage))
                 .append(" bytes, so it is possible to read cells from 0 to ")
@@ -28,8 +32,10 @@ int PRAM::getValue(unsigned int index) const {
     return table[index];
 }
 
-void PRAM::setValue(unsigned int index, int value) {
-    if(index >= pages * bytesPerPage) {
+void PRAM::setValue(unsigned int index, int value)
+{
+    if(index >= pages * bytesPerPage)
+    {
         std::string msg;
         msg.append("Program RAM memory has ").append(std::to_string(pages * bytesPerPage))
                 .append(" bytes, so it is possible to write cells from 0 to ")
@@ -41,7 +47,8 @@ void PRAM::setValue(unsigned int index, int value) {
         return;
     }
 
-    if (value < 0 || value > 0xFF) {
+    if (value < 0 || value > 0xFF)
+    {
         std::cerr << "Program RAM is 8 byte memory, so it can be a 1B value [0x0 - 0xFF] at a cell. "
              << value << " will be reduced to 8 byte." << std::endl;
     }
@@ -71,7 +78,8 @@ void PRAM::clearPRam()
      * So It is better for us to assigne to a zero every value in table,
      * but do not delete that cells from the memory table
      */
-    for (unsigned int i = 0; i < pages * bytesPerPage; i++) {
+    for (unsigned int i = 0; i < pages * bytesPerPage; i++)
+    {
         table[i] = 0;
     }
 }
