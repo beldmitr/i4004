@@ -19,7 +19,6 @@ SOURCES += \
     GUI/memorytable.cpp \
     GUI/iopanel.cpp \
     GUI/chipdataram.cpp \
-    GUI/delegategui.cpp \
     main.cpp \
     compiler.cpp \
     error.cpp \
@@ -49,7 +48,6 @@ HEADERS += \
     GUI/memorytable.h \
     GUI/chipdataram.h \
     GUI/iopanel.h \
-    GUI/delegategui.h \
     compiler.h \
     error.h \
     simulator.h \
