@@ -9,7 +9,8 @@ MemoryTable::MemoryTable(QWidget *parent) : QTableWidget(parent)
     this->verticalHeader()->setStretchLastSection(true);
     for (int i=0; i < this->verticalHeader()->count(); i++)
     {
-        QTableWidgetItem* item = new QTableWidgetItem("0x" + QString::number(i * 16, 16));
+//        QTableWidgetItem* item = new QTableWidgetItem("0x" + QString::number(i * 16, 16));
+        QTableWidgetItem* item = new QTableWidgetItem(QString::number(i * 16, 16));
         this->setVerticalHeaderItem(i, item);
     }
 
@@ -17,7 +18,8 @@ MemoryTable::MemoryTable(QWidget *parent) : QTableWidget(parent)
     this->horizontalHeader()->setStretchLastSection(true);
     for (int i=0; i < this->horizontalHeader()->count(); i++)
     {
-        QTableWidgetItem* item = new QTableWidgetItem("0x" + QString::number(i, 16));
+//        QTableWidgetItem* item = new QTableWidgetItem("0x" + QString::number(i, 16));
+        QTableWidgetItem* item = new QTableWidgetItem(QString::number(i, 16));
         this->setHorizontalHeaderItem(i, item);
     }
 

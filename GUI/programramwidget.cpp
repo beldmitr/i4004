@@ -67,13 +67,15 @@ ProgramRamWidget::ProgramRamWidget(QWidget *parent) : QWidget(parent)
 
             for (int i=0; i<memory->verticalHeader()->count(); i++)
             {
-                memory->verticalHeaderItem(i)->setText("0x" + QString::number(i * 16, 16));
+//                memory->verticalHeaderItem(i)->setText("0x" + QString::number(i * 16, 16));
+                memory->verticalHeaderItem(i)->setText(QString::number(i * 16, 16));
             }
 
             scroll->setValue(row);
 
             selItem = memory->verticalHeaderItem(row);
-            selItem->setText("0x" + QString::number(row * 16 + column, 16));
+//            selItem->setText("0x" + QString::number(row * 16 + column, 16));
+            selItem->setText(QString::number(row * 16 + column, 16));
 
             setMemoryTitle(row);
         });
