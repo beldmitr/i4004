@@ -252,6 +252,11 @@ void MainWindow::createDocks()
 //    dockProc->setWidget(cpuWidget);
 //    this->addDockWidget(Qt::RightDockWidgetArea, dockProc);
 
+    QDockWidget* dockCpuWidget = new QDockWidget("CPU");
+    cpuWidget = new CpuWidget;
+    dockCpuWidget->setWidget(cpuWidget);
+    this->addDockWidget(Qt::BottomDockWidgetArea, dockCpuWidget);
+
     QDockWidget* dockResult = new QDockWidget("Compile Output");
     lstResult = new QListWidget;
     dockResult->setWidget(lstResult);
@@ -275,6 +280,7 @@ void MainWindow::createDocks()
     this->tabifyDockWidget(dockResult, dockDRam);
     this->tabifyDockWidget(dockDRam, dockRom);
     this->tabifyDockWidget(dockRom, dockPRam);
+    this->tabifyDockWidget(dockPRam, dockCpuWidget);
 }
 
 MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent)
@@ -306,6 +312,11 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent)
 
     // connects
     connect(editor.get(), SIGNAL(textChanged()), this, SLOT(setWindowTitleFilename()));
+}
+
+MainWindow::~MainWindow()
+{
+    delete(mdi);
 }
 
 void MainWindow::createOutputFilename()
