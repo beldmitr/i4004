@@ -32,7 +32,8 @@ SOURCES += \
     dataramchip.cpp \
     datarambank.cpp \
     mathexpr.cpp \
-    GUI/cpuwidget.cpp
+    GUI/cpuwidget.cpp \
+    GUI/stackwidget.cpp
 
 HEADERS += \
     GUI/mainwindow.h \
@@ -61,7 +62,8 @@ HEADERS += \
     datarambank.h \
     mathexpr.h \
     Interfaces/icompiler.h \
-    GUI/cpuwidget.h
+    GUI/cpuwidget.h \
+    GUI/stackwidget.h
 
 RESOURCES += \
     resources.qrc

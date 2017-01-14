@@ -280,7 +280,6 @@ void MainWindow::createDocks()
     this->tabifyDockWidget(dockResult, dockDRam);
     this->tabifyDockWidget(dockDRam, dockRom);
     this->tabifyDockWidget(dockRom, dockPRam);
-    this->tabifyDockWidget(dockPRam, dockCpuWidget);
 }
 
 MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent)
