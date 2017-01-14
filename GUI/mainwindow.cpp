@@ -247,10 +247,10 @@ void MainWindow::createDocks()
     this->setCorner(Qt::TopRightCorner, Qt::RightDockWidgetArea);
     this->setCorner(Qt::BottomRightCorner, Qt::RightDockWidgetArea);
 
-    QDockWidget* dockProc = new QDockWidget("Processor");
-    cpuWidget = new ProcessorWidget;
-    dockProc->setWidget(cpuWidget);
-    this->addDockWidget(Qt::RightDockWidgetArea, dockProc);
+//    QDockWidget* dockProc = new QDockWidget("Processor");
+//    cpuWidget = new ProcessorWidget;
+//    dockProc->setWidget(cpuWidget);
+//    this->addDockWidget(Qt::RightDockWidgetArea, dockProc);
 
     QDockWidget* dockResult = new QDockWidget("Compile Output");
     lstResult = new QListWidget;
