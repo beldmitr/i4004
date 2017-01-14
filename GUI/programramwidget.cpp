@@ -22,7 +22,7 @@ ProgramRamWidget::ProgramRamWidget(QWidget *parent) : QWidget(parent)
 
     for (int i = 0; i < 16; i++)
     {
-        comboTitle->addItem(QString("Page %1\t[0x%2 - 0x%3]\t")
+        comboTitle->addItem(QString("Page %1: [0x%2 - 0x%3]")
                             .arg(QString::number(i))
                             .arg(QString::number(256 * i, 16))
                             .arg(QString::number(256 * (i + 1) - 1, 16)));
