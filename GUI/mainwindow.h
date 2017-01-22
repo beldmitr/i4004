@@ -41,8 +41,6 @@
 #include "error.h"
 #include "simulator.h"
 
-//#include "processorwidget.h"
-
 class MainWindow : public QMainWindow
 {
     Q_OBJECT

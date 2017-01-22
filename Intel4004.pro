@@ -10,7 +10,6 @@ SOURCES += \
     GUI/dataramwidget.cpp \
     GUI/romwidget.cpp \
     GUI/programramwidget.cpp \
-    GUI/processorwidget.cpp \
     GUI/asmeditor.cpp \
     GUI/dataramwidgetn.cpp \
     GUI/subwindow.cpp \
@@ -39,7 +38,6 @@ HEADERS += \
     GUI/dataramwidget.h \
     GUI/romwidget.h \
     GUI/programramwidget.h \
-    GUI/processorwidget.h \
     GUI/asmeditor.h \
     GUI/dataramwidgetn.h \
     GUI/subwindow.h \
