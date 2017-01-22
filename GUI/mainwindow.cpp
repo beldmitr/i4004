@@ -221,21 +221,21 @@ void MainWindow::createSubWindows()
 {
 
     SubWindow* editorWindow = new SubWindow;
-    SubWindow* ioWindow = new SubWindow;
+//    SubWindow* ioWindow = new SubWindow;
 
     editor = new AsmEditor;
     iopanel = new IOPanel;
 
     editorWindow->setWindowTitle("Editor");
-    ioWindow->setWindowTitle("Input/Output");
+//    ioWindow->setWindowTitle("Input/Output");
 
     editorWindow->setWindowIcon(QIcon(":/Resources/icons/editor.png"));
-    ioWindow->setWindowIcon(QIcon(":/Resources/icons/io.png"));
+//    ioWindow->setWindowIcon(QIcon(":/Resources/icons/io.png"));
 
     editorWindow->setWidget(editor);
-    ioWindow->setWidget(iopanel);
+//    ioWindow->setWidget(iopanel);
 
-    mdi->addSubWindow(ioWindow);
+//    mdi->addSubWindow(ioWindow);
     mdi->addSubWindow(editorWindow);
 }
 
