@@ -10,6 +10,7 @@
 #include <QCheckBox>
 
 #include <memory>
+#include <vector>
 
 /*
  *  I want to make widget like this:
@@ -37,9 +38,20 @@ public:
     explicit CpuWidget(QWidget *parent = 0);
     virtual ~CpuWidget();
 
-    void createWidgetStack();
-    void createWidgetRegisters();
-    void createWidgetOther();
+    // Setters
+    void setStackPC(unsigned int value);
+    void setStackLevel1(unsigned int value);
+    void setStackLevel2(unsigned int value);
+    void setStackLevel3(unsigned int value);
+
+    void setRegisters(unsigned int index, unsigned int value);
+
+    void setAccumulator(unsigned int value);
+    void setCarry(bool value);
+    void setTest(bool value);
+    void setInstruction(QString value);
+    void setCycles(unsigned int value);
+
 
 private:
     std::shared_ptr<QGridLayout> layout;
@@ -57,39 +69,8 @@ private:
 
     std::shared_ptr<QGroupBox> gbRegisters;
     std::shared_ptr<QGridLayout> layoutRegisters;
-    std::shared_ptr<QLabel> lblR0;
-    std::shared_ptr<QLabel> lblR1;
-    std::shared_ptr<QLabel> lblR2;
-    std::shared_ptr<QLabel> lblR3;
-    std::shared_ptr<QLabel> lblR4;
-    std::shared_ptr<QLabel> lblR5;
-    std::shared_ptr<QLabel> lblR6;
-    std::shared_ptr<QLabel> lblR7;
-    std::shared_ptr<QLabel> lblR8;
-    std::shared_ptr<QLabel> lblR9;
-    std::shared_ptr<QLabel> lblR10;
-    std::shared_ptr<QLabel> lblR11;
-    std::shared_ptr<QLabel> lblR12;
-    std::shared_ptr<QLabel> lblR13;
-    std::shared_ptr<QLabel> lblR14;
-    std::shared_ptr<QLabel> lblR15;
-
-    std::shared_ptr<QTextEdit> edtR0;
-    std::shared_ptr<QTextEdit> edtR1;
-    std::shared_ptr<QTextEdit> edtR2;
-    std::shared_ptr<QTextEdit> edtR3;
-    std::shared_ptr<QTextEdit> edtR4;
-    std::shared_ptr<QTextEdit> edtR5;
-    std::shared_ptr<QTextEdit> edtR6;
-    std::shared_ptr<QTextEdit> edtR7;
-    std::shared_ptr<QTextEdit> edtR8;
-    std::shared_ptr<QTextEdit> edtR9;
-    std::shared_ptr<QTextEdit> edtR10;
-    std::shared_ptr<QTextEdit> edtR11;
-    std::shared_ptr<QTextEdit> edtR12;
-    std::shared_ptr<QTextEdit> edtR13;
-    std::shared_ptr<QTextEdit> edtR14;
-    std::shared_ptr<QTextEdit> edtR15;
+    std::vector<std::shared_ptr<QLabel>> lblR;
+    std::vector<std::shared_ptr<QTextEdit>> edtR;
 
     std::shared_ptr<QGroupBox> gbOther;
     std::shared_ptr<QGridLayout> layoutOther;
@@ -102,6 +83,11 @@ private:
     std::shared_ptr<QLabel> lblInstruction;
     std::shared_ptr<QLabel> lblCycles;
     std::shared_ptr<QTextEdit> edtCycles;
+
+    // Methods
+    void createWidgetStack();
+    void createWidgetRegisters();
+    void createWidgetOther();
 
 signals:
 

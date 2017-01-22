@@ -60,129 +60,33 @@ void CpuWidget::createWidgetRegisters()
     gbRegisters = std::make_shared<QGroupBox>("Registers");
     layoutRegisters = std::make_shared<QGridLayout>(gbRegisters.get());
 
-    lblR0 = std::make_shared<QLabel>("R00");
-    lblR1 = std::make_shared<QLabel>("R01");
-    lblR2 = std::make_shared<QLabel>("R02");
-    lblR3 = std::make_shared<QLabel>("R03");
-    lblR4 = std::make_shared<QLabel>("R04");
-    lblR5 = std::make_shared<QLabel>("R05");
-    lblR6 = std::make_shared<QLabel>("R06");
-    lblR7 = std::make_shared<QLabel>("R07");
-    lblR8 = std::make_shared<QLabel>("R08");
-    lblR9 = std::make_shared<QLabel>("R09");
-    lblR10 = std::make_shared<QLabel>("R10");
-    lblR11 = std::make_shared<QLabel>("R11");
-    lblR12 = std::make_shared<QLabel>("R12");
-    lblR13 = std::make_shared<QLabel>("R13");
-    lblR14 = std::make_shared<QLabel>("R14");
-    lblR15 = std::make_shared<QLabel>("R15");
+    for (int i = 0; i < 16; i++)
+    {
+        QString text = (i < 10) ?
+                    QString("0").append(QString::number(i))
+                  : QString::number(i);
+        lblR.push_back(std::make_shared<QLabel>(text));
+    }
 
-    edtR0 = std::make_shared<QTextEdit>();
-    edtR1 = std::make_shared<QTextEdit>();
-    edtR2 = std::make_shared<QTextEdit>();
-    edtR3 = std::make_shared<QTextEdit>();
-    edtR4 = std::make_shared<QTextEdit>();
-    edtR5 = std::make_shared<QTextEdit>();
-    edtR6 = std::make_shared<QTextEdit>();
-    edtR7 = std::make_shared<QTextEdit>();
-    edtR8 = std::make_shared<QTextEdit>();
-    edtR9 = std::make_shared<QTextEdit>();
-    edtR10 = std::make_shared<QTextEdit>();
-    edtR11 = std::make_shared<QTextEdit>();
-    edtR12 = std::make_shared<QTextEdit>();
-    edtR13 = std::make_shared<QTextEdit>();
-    edtR14 = std::make_shared<QTextEdit>();
-    edtR15 = std::make_shared<QTextEdit>();
+    for (int i = 0; i < 16; i++)
+    {
+        edtR.push_back(std::make_shared<QTextEdit>());
+    }
 
-    edtR0->setReadOnly(true);
-    edtR1->setReadOnly(true);
-    edtR2->setReadOnly(true);
-    edtR3->setReadOnly(true);
-    edtR4->setReadOnly(true);
-    edtR5->setReadOnly(true);
-    edtR6->setReadOnly(true);
-    edtR7->setReadOnly(true);
-    edtR8->setReadOnly(true);
-    edtR9->setReadOnly(true);
-    edtR10->setReadOnly(true);
-    edtR11->setReadOnly(true);
-    edtR12->setReadOnly(true);
-    edtR13->setReadOnly(true);
-    edtR14->setReadOnly(true);
-    edtR15->setReadOnly(true);
+    for (int i = 0; i < 16; i++)
+    {
+        edtR[i]->setReadOnly(true);
+        edtR[i]->setFixedHeight(50);
+        edtR[i]->setFixedWidth(50);
+    }
 
-    edtR0->setFixedHeight(50);
-    edtR0->setFixedWidth(50);
-    edtR1->setFixedHeight(50);
-    edtR1->setFixedWidth(50);
-    edtR2->setFixedHeight(50);
-    edtR2->setFixedWidth(50);
-    edtR3->setFixedHeight(50);
-    edtR3->setFixedWidth(50);
-    edtR4->setFixedHeight(50);
-    edtR4->setFixedWidth(50);
-    edtR5->setFixedHeight(50);
-    edtR5->setFixedWidth(50);
-    edtR6->setFixedHeight(50);
-    edtR6->setFixedWidth(50);
-    edtR7->setFixedHeight(50);
-    edtR7->setFixedWidth(50);
-    edtR8->setFixedHeight(50);
-    edtR8->setFixedWidth(50);
-    edtR9->setFixedHeight(50);
-    edtR9->setFixedWidth(50);
-    edtR10->setFixedHeight(50);
-    edtR10->setFixedWidth(50);
-    edtR11->setFixedHeight(50);
-    edtR11->setFixedWidth(50);
-    edtR12->setFixedHeight(50);
-    edtR12->setFixedWidth(50);
-    edtR13->setFixedHeight(50);
-    edtR13->setFixedWidth(50);
-    edtR14->setFixedHeight(50);
-    edtR14->setFixedWidth(50);
-    edtR15->setFixedHeight(50);
-    edtR15->setFixedWidth(50);
-
-    layoutRegisters->addWidget(lblR0.get(), 0, 0);
-    layoutRegisters->addWidget(lblR1.get(), 0, 1);
-    layoutRegisters->addWidget(edtR0.get(), 0, 2);
-    layoutRegisters->addWidget(edtR1.get(), 0, 3);
-
-    layoutRegisters->addWidget(lblR2.get(), 1, 0);
-    layoutRegisters->addWidget(lblR3.get(), 1, 1);
-    layoutRegisters->addWidget(edtR2.get(), 1, 2);
-    layoutRegisters->addWidget(edtR3.get(), 1, 3);
-
-    layoutRegisters->addWidget(lblR4.get(), 2, 0);
-    layoutRegisters->addWidget(lblR5.get(), 2, 1);
-    layoutRegisters->addWidget(edtR4.get(), 2, 2);
-    layoutRegisters->addWidget(edtR5.get(), 2, 3);
-
-    layoutRegisters->addWidget(lblR6.get(), 3, 0);
-    layoutRegisters->addWidget(lblR7.get(), 3, 1);
-    layoutRegisters->addWidget(edtR6.get(), 3, 2);
-    layoutRegisters->addWidget(edtR7.get(), 3, 3);
-
-    layoutRegisters->addWidget(lblR8.get(), 0, 4);
-    layoutRegisters->addWidget(lblR9.get(), 0, 5);
-    layoutRegisters->addWidget(edtR8.get(), 0, 6);
-    layoutRegisters->addWidget(edtR9.get(), 0, 7);
-
-    layoutRegisters->addWidget(lblR10.get(), 1, 4);
-    layoutRegisters->addWidget(lblR11.get(), 1, 5);
-    layoutRegisters->addWidget(edtR10.get(), 1, 6);
-    layoutRegisters->addWidget(edtR11.get(), 1, 7);
-
-    layoutRegisters->addWidget(lblR12.get(), 2, 4);
-    layoutRegisters->addWidget(lblR13.get(), 2, 5);
-    layoutRegisters->addWidget(edtR12.get(), 2, 6);
-    layoutRegisters->addWidget(edtR13.get(), 2, 7);
-
-    layoutRegisters->addWidget(lblR14.get(), 3, 4);
-    layoutRegisters->addWidget(lblR15.get(), 3, 5);
-    layoutRegisters->addWidget(edtR14.get(), 3, 6);
-    layoutRegisters->addWidget(edtR15.get(), 3, 7);
+    for (int i = 0; i < 16; i+=2)
+    {
+        layoutRegisters->addWidget((lblR[i]).get(),   (i/2) % 4, (i/8) * 8 + 0);
+        layoutRegisters->addWidget((lblR[i+1]).get(), (i/2) % 4, (i/8) * 8 + 1);
+        layoutRegisters->addWidget((edtR[i]).get(),   (i/2) % 4, (i/8) * 8 + 2);
+        layoutRegisters->addWidget((edtR[i+1]).get(), (i/2) % 4, (i/8) * 8 + 3);
+    }
 
     layout->addWidget(gbRegisters.get(), 0, 1);
 }
@@ -227,24 +131,52 @@ void CpuWidget::createWidgetOther()
     layout->addWidget(gbOther.get(), 1, 0, 1, 2);
 }
 
+void CpuWidget::setStackPC(unsigned int value)
+{
+    edtPC->setText(QString::number(value, 16));
+}
 
+void CpuWidget::setStackLevel1(unsigned int value)
+{
+    edtLevel1->setText(QString::number(value, 16));
+}
 
+void CpuWidget::setStackLevel2(unsigned int value)
+{
+    edtLevel2->setText(QString::number(value, 16));
+}
 
+void CpuWidget::setStackLevel3(unsigned int value)
+{
+    edtLevel3->setText(QString::number(value, 16));
+}
 
+void CpuWidget::setRegisters(unsigned int index, unsigned int value)
+{
+    edtR[index]->setText(QString::number(value, 16));
+}
 
+void CpuWidget::setAccumulator(unsigned int value)
+{
+    edtAccumulator->setText(QString::number(value, 16));
+}
 
+void CpuWidget::setCarry(bool value)
+{
+    cbxCarry->setChecked(value);
+}
 
+void CpuWidget::setTest(bool value)
+{
+    cbxTest->setChecked(value);
+}
 
+void CpuWidget::setInstruction(QString value)
+{
+    lblInstruction->setText(value);
+}
 
-
-
-
-
-
-
-
-
-
-
-
-
+void CpuWidget::setCycles(unsigned int value)
+{
+    edtCycles->setText(QString::number(value, 16));
+}
