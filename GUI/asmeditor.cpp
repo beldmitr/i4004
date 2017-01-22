@@ -21,6 +21,11 @@ AsmEditor::AsmEditor(QWidget *parent) : QTextEdit(parent)
 
 }
 
+AsmEditor::~AsmEditor()
+{
+
+}
+
 
 void AsmEditor::paintEvent(QPaintEvent* e)
 {

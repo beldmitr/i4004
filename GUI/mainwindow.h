@@ -55,7 +55,7 @@ private:
     QString outputname;
 
     std::shared_ptr<QMenuBar> mainMenu;
-    std::shared_ptr<AsmEditor> editor;
+    AsmEditor* editor; // TODO make smart ptr, for now it doesn't work, program crashes after exiting
     QMdiArea* mdi; // TODO make smart ptr, for now it doesn't work, program crashes after exiting
     std::shared_ptr<QStatusBar> statusBar;
 

@@ -223,7 +223,7 @@ void MainWindow::createSubWindows()
     SubWindow* editorWindow = new SubWindow;
     SubWindow* ioWindow = new SubWindow;
 
-    editor = std::shared_ptr<AsmEditor>(new AsmEditor);
+    editor = new AsmEditor;
     iopanel = new IOPanel;
 
     editorWindow->setWindowTitle("Editor");
@@ -232,7 +232,7 @@ void MainWindow::createSubWindows()
     editorWindow->setWindowIcon(QIcon(":/Resources/icons/editor.png"));
     ioWindow->setWindowIcon(QIcon(":/Resources/icons/io.png"));
 
-    editorWindow->setWidget(editor.get());
+    editorWindow->setWidget(editor);
     ioWindow->setWidget(iopanel);
 
     mdi->addSubWindow(ioWindow);
@@ -310,12 +310,14 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent)
     this->resize(960, 640);
 
     // connects
-    connect(editor.get(), SIGNAL(textChanged()), this, SLOT(setWindowTitleFilename()));
+    connect(editor, SIGNAL(textChanged()), this, SLOT(setWindowTitleFilename()));
 }
 
 MainWindow::~MainWindow()
 {
     delete(mdi);
+    delete(cpuWidget);
+//    delete(editor); // FIXME delete this pointer, but for now it makes an error and segmentation fault
 }
 
 void MainWindow::createOutputFilename()
