@@ -22,6 +22,7 @@ private:
 
 public:
     explicit AsmEditor(QWidget *parent = 0);
+    ~AsmEditor();
 
 signals:
 

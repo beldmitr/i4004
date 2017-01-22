@@ -223,7 +223,7 @@ void MainWindow::createSubWindows()
     SubWindow* editorWindow = new SubWindow;
     SubWindow* ioWindow = new SubWindow;
 
-    editor = std::shared_ptr<AsmEditor>(new AsmEditor);
+    editor = new AsmEditor;
     iopanel = new IOPanel;
 
     editorWindow->setWindowTitle("Editor");
@@ -232,7 +232,7 @@ void MainWindow::createSubWindows()
     editorWindow->setWindowIcon(QIcon(":/Resources/icons/editor.png"));
     ioWindow->setWindowIcon(QIcon(":/Resources/icons/io.png"));
 
-    editorWindow->setWidget(editor.get());
+    editorWindow->setWidget(editor);
     ioWindow->setWidget(iopanel);
 
     mdi->addSubWindow(ioWindow);
@@ -247,10 +247,15 @@ void MainWindow::createDocks()
     this->setCorner(Qt::TopRightCorner, Qt::RightDockWidgetArea);
     this->setCorner(Qt::BottomRightCorner, Qt::RightDockWidgetArea);
 
-    QDockWidget* dockProc = new QDockWidget("Processor");
-    cpuWidget = new ProcessorWidget;
-    dockProc->setWidget(cpuWidget);
-    this->addDockWidget(Qt::RightDockWidgetArea, dockProc);
+//    QDockWidget* dockProc = new QDockWidget("Processor");
+//    cpuWidget = new ProcessorWidget;
+//    dockProc->setWidget(cpuWidget);
+//    this->addDockWidget(Qt::RightDockWidgetArea, dockProc);
+
+    QDockWidget* dockCpuWidget = new QDockWidget("CPU");
+    cpuWidget = new CpuWidget;
+    dockCpuWidget->setWidget(cpuWidget);
+    this->addDockWidget(Qt::BottomDockWidgetArea, dockCpuWidget);
 
     QDockWidget* dockResult = new QDockWidget("Compile Output");
     lstResult = new QListWidget;
@@ -305,7 +310,14 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent)
     this->resize(960, 640);
 
     // connects
-    connect(editor.get(), SIGNAL(textChanged()), this, SLOT(setWindowTitleFilename()));
+    connect(editor, SIGNAL(textChanged()), this, SLOT(setWindowTitleFilename()));
+}
+
+MainWindow::~MainWindow()
+{
+    delete(mdi);
+    delete(cpuWidget);
+//    delete(editor); // FIXME delete this pointer, but for now it makes an error and segmentation fault
 }
 
 void MainWindow::createOutputFilename()

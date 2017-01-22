@@ -34,12 +34,14 @@
 #include "dataramwidget.h"
 #include "romwidget.h"
 #include "compiler.h"
-#include "processorwidget.h"
+#include "cpuwidget.h"
 #include "iopanel.h"
 #include "subwindow.h"
 #include "dataramwidgetn.h"
 #include "error.h"
 #include "simulator.h"
+
+//#include "processorwidget.h"
 
 class MainWindow : public QMainWindow
 {
@@ -53,7 +55,7 @@ private:
     QString outputname;
 
     std::shared_ptr<QMenuBar> mainMenu;
-    std::shared_ptr<AsmEditor> editor;
+    AsmEditor* editor; // TODO make smart ptr, for now it doesn't work, program crashes after exiting
     QMdiArea* mdi; // TODO make smart ptr, for now it doesn't work, program crashes after exiting
     std::shared_ptr<QStatusBar> statusBar;
 
@@ -72,8 +74,9 @@ private:
 
     ProgramRamWidget* pramWidget;
     RomWidget* romWidget;
-    ProcessorWidget* cpuWidget;
+//    ProcessorWidget* cpuWidget;
 //    QTabWidget* tabDRam;
+    CpuWidget* cpuWidget;
     QListWidget* lstResult;
     DataRamWidgetN* dramWidget;
     IOPanel* iopanel;
@@ -117,6 +120,7 @@ private:
     
 public:
     explicit MainWindow(QWidget *parent = 0);
+    ~MainWindow();
 
 signals:
 

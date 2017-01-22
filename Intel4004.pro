@@ -19,8 +19,6 @@ SOURCES += \
     GUI/memorytable.cpp \
     GUI/iopanel.cpp \
     GUI/chipdataram.cpp \
-    GUI/cpumodel.cpp \
-    GUI/cpuview.cpp \
     main.cpp \
     compiler.cpp \
     error.cpp \
@@ -33,7 +31,8 @@ SOURCES += \
     dataramregister.cpp \
     dataramchip.cpp \
     datarambank.cpp \
-    mathexpr.cpp
+    mathexpr.cpp \
+    GUI/cpuwidget.cpp
 
 HEADERS += \
     GUI/mainwindow.h \
@@ -49,8 +48,6 @@ HEADERS += \
     GUI/memorytable.h \
     GUI/chipdataram.h \
     GUI/iopanel.h \
-    GUI/cpumodel.h \
-    GUI/cpuview.h \
     compiler.h \
     error.h \
     simulator.h \
@@ -63,7 +60,8 @@ HEADERS += \
     dataramchip.h \
     datarambank.h \
     mathexpr.h \
-    Interfaces/icompiler.h
+    Interfaces/icompiler.h \
+    GUI/cpuwidget.h
 
 RESOURCES += \
     resources.qrc
