@@ -108,6 +108,8 @@ void CpuWidget::createWidgetOther()
 
     edtAccumulator->setReadOnly(true);
     edtCycles->setReadOnly(true);
+    cbxCarry->setCheckable(false);
+    cbxTest->setCheckable(false);
 
     edtAccumulator->setFixedHeight(50);
     edtAccumulator->setFixedWidth(50);
