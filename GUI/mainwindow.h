@@ -57,27 +57,27 @@ private:
     QMdiArea* mdi; // TODO make smart ptr, for now it doesn't work, program crashes after exiting
     std::shared_ptr<QStatusBar> statusBar;
 
+    SubWindow* editorWindow;
+    SubWindow* ioWindow;
+
     std::shared_ptr<QToolBar> toolBarFile;
     std::shared_ptr<QToolBar> toolBarEdit;
     std::shared_ptr<QToolBar> toolBarBuild;
     std::shared_ptr<QToolBar> toolBarDebug;
     std::shared_ptr<QToolBar> toolBarMinimize;
 
-//    QDockWidget* dockProcessor;
-//    QDockWidget* dockRom;
-//    QDockWidget* dockPRam;
-//    QDockWidget* dockDRam;
-//    QDockWidget* dockResults;
-//    QDockWidget* dockIO;
-
-    ProgramRamWidget* pramWidget;
-    RomWidget* romWidget;
-//    ProcessorWidget* cpuWidget;
-//    QTabWidget* tabDRam;
-    CpuWidget* cpuWidget;
-    QListWidget* lstResult;
-    DataRamWidgetN* dramWidget;
+    ProgramRamWidget* pramWidget; // TODO make smart ptr, for now it doesn't work, program crashes after exiting
+    RomWidget* romWidget; // TODO make smart ptr, for now it doesn't work, program crashes after exiting
+    CpuWidget* cpuWidget; // TODO make smart ptr, for now it doesn't work, program crashes after exiting
+    QListWidget* lstResult; // TODO make smart ptr, for now it doesn't work, program crashes after exiting
+    DataRamWidgetN* dramWidget; // TODO make smart ptr, for now it doesn't work, program crashes after exiting
     IOPanel* iopanel;
+
+    std::shared_ptr<QDockWidget> dockCpuWidget;
+    std::shared_ptr<QDockWidget> dockResult;
+    std::shared_ptr<QDockWidget> dockDRam;
+    std::shared_ptr<QDockWidget> dockRom;
+    std::shared_ptr<QDockWidget> dockPRam;
 
     QAction* actNew;
     QAction* actOpen;

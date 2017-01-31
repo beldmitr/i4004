@@ -220,12 +220,12 @@ void MainWindow::createToolbars()
 void MainWindow::createSubWindows()
 {
 
-    SubWindow* editorWindow = new SubWindow;
-    SubWindow* ioWindow = new SubWindow;
+    editorWindow = new SubWindow;
+    ioWindow = new SubWindow;
+
 
     editor = new AsmEditor;
-    iopanel = new IOPanel;
-
+//    iopanel = new IOPanel;
     editorWindow->setWindowTitle("Editor");
     ioWindow->setWindowTitle("Input/Output");
 
@@ -247,34 +247,34 @@ void MainWindow::createDocks()
     this->setCorner(Qt::TopRightCorner, Qt::RightDockWidgetArea);
     this->setCorner(Qt::BottomRightCorner, Qt::RightDockWidgetArea);
 
-    QDockWidget* dockCpuWidget = new QDockWidget("CPU");
+    dockCpuWidget = std::shared_ptr<QDockWidget>(new QDockWidget("CPU"));
     cpuWidget = new CpuWidget;
     dockCpuWidget->setWidget(cpuWidget);
-    this->addDockWidget(Qt::BottomDockWidgetArea, dockCpuWidget);
+    this->addDockWidget(Qt::BottomDockWidgetArea, dockCpuWidget.get());
 
-    QDockWidget* dockResult = new QDockWidget("Compile Output");
+    dockResult = std::shared_ptr<QDockWidget>(new QDockWidget("Compile Output"));
     lstResult = new QListWidget;
     dockResult->setWidget(lstResult);
-    this->addDockWidget(Qt::BottomDockWidgetArea, dockResult);
+    this->addDockWidget(Qt::BottomDockWidgetArea, dockResult.get());
 
-    QDockWidget* dockDRam = new QDockWidget("Data RAM");
+    dockDRam = std::shared_ptr<QDockWidget>(new QDockWidget("Data RAM"));
     dramWidget = new DataRamWidgetN;
     dockDRam->setWidget(dramWidget);
-    this->addDockWidget(Qt::BottomDockWidgetArea, dockDRam);
+    this->addDockWidget(Qt::BottomDockWidgetArea, dockDRam.get());
 
-    QDockWidget* dockRom = new QDockWidget("ROM");
+    dockRom = std::shared_ptr<QDockWidget>(new QDockWidget("ROM"));
     romWidget = new RomWidget;
     dockRom->setWidget(romWidget);
-    this->addDockWidget(Qt::BottomDockWidgetArea, dockRom);
+    this->addDockWidget(Qt::BottomDockWidgetArea, dockRom.get());
 
-    QDockWidget* dockPRam = new QDockWidget("Program RAM");
+    dockPRam = std::shared_ptr<QDockWidget>(new QDockWidget("Program RAM"));
     pramWidget = new ProgramRamWidget;
     dockPRam->setWidget(pramWidget);
-    this->addDockWidget(Qt::BottomDockWidgetArea, dockPRam);
+    this->addDockWidget(Qt::BottomDockWidgetArea, dockPRam.get());
 
-    this->tabifyDockWidget(dockResult, dockDRam);
-    this->tabifyDockWidget(dockDRam, dockRom);
-    this->tabifyDockWidget(dockRom, dockPRam);
+    this->tabifyDockWidget(dockResult.get(), dockDRam.get());
+    this->tabifyDockWidget(dockDRam.get(), dockRom.get());
+    this->tabifyDockWidget(dockRom.get(), dockPRam.get());
 }
 
 MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent)
@@ -312,7 +312,14 @@ MainWindow::~MainWindow()
 {
     delete(mdi);
     delete(cpuWidget);
+    delete(lstResult);
+    delete(dramWidget);
+    delete(romWidget);
+    delete(pramWidget);
+
+//    delete(ioWindow); // FIXME delete this pointer, but for now it makes an error
 //    delete(editor); // FIXME delete this pointer, but for now it makes an error and segmentation fault
+//    delete(editorWindow); // FIXME delete this pointer, but for now it makes an error
 }
 
 void MainWindow::createOutputFilename()
