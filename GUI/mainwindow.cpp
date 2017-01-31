@@ -226,15 +226,15 @@ void MainWindow::createSubWindows()
     editor = new AsmEditor;
 //    iopanel = new IOPanel;
     editorWindow->setWindowTitle("Editor");
-//    ioWindow->setWindowTitle("Input/Output");
+    ioWindow->setWindowTitle("Input/Output");
 
     editorWindow->setWindowIcon(QIcon(":/Resources/icons/editor.png"));
-//    ioWindow->setWindowIcon(QIcon(":/Resources/icons/io.png"));
+    ioWindow->setWindowIcon(QIcon(":/Resources/icons/io.png"));
 
     editorWindow->setWidget(editor);
 //    ioWindow->setWidget(iopanel);
 
-//    mdi->addSubWindow(ioWindow);
+    mdi->addSubWindow(ioWindow);
     mdi->addSubWindow(editorWindow);
 }
 
@@ -245,11 +245,6 @@ void MainWindow::createDocks()
 
     this->setCorner(Qt::TopRightCorner, Qt::RightDockWidgetArea);
     this->setCorner(Qt::BottomRightCorner, Qt::RightDockWidgetArea);
-
-    dockCpuWidget = std::shared_ptr<QDockWidget>(new QDockWidget("CPU"));
-    cpuWidget = new CpuWidget;
-    dockCpuWidget->setWidget(cpuWidget);
-    this->addDockWidget(Qt::BottomDockWidgetArea, dockCpuWidget.get());
 
     dockResult = std::shared_ptr<QDockWidget>(new QDockWidget("Compile Output"));
     lstResult = new QListWidget;
@@ -274,6 +269,31 @@ void MainWindow::createDocks()
     this->tabifyDockWidget(dockResult.get(), dockDRam.get());
     this->tabifyDockWidget(dockDRam.get(), dockRom.get());
     this->tabifyDockWidget(dockRom.get(), dockPRam.get());
+
+    dockCpuWidget = std::shared_ptr<QDockWidget>(new QDockWidget("CPU"));
+    cpuWidget = new CpuWidget;
+    dockCpuWidget->setWidget(cpuWidget);
+    this->addDockWidget(Qt::BottomDockWidgetArea, dockCpuWidget.get());
+
+    QSizePolicy sizePolicy = dockCpuWidget->sizePolicy();
+    sizePolicy.setHorizontalPolicy(QSizePolicy::Maximum);
+    dockCpuWidget->setSizePolicy(sizePolicy);
+
+    sizePolicy = dockResult->sizePolicy();
+    sizePolicy.setHorizontalPolicy(QSizePolicy::Minimum);
+    dockResult->setSizePolicy(sizePolicy);
+
+    sizePolicy = dockDRam->sizePolicy();
+    sizePolicy.setHorizontalPolicy(QSizePolicy::Minimum);
+    dockDRam->setSizePolicy(sizePolicy);
+
+    sizePolicy = dockRom->sizePolicy();
+    sizePolicy.setHorizontalPolicy(QSizePolicy::Minimum);
+    dockRom->setSizePolicy(sizePolicy);
+
+    sizePolicy = dockPRam->sizePolicy();
+    sizePolicy.setHorizontalPolicy(QSizePolicy::Minimum);
+    dockPRam->setSizePolicy(sizePolicy);
 }
 
 MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent)
