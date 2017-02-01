@@ -121,7 +121,7 @@ private:
     
 public:
     explicit MainWindow(QWidget *parent = 0);
-    ~MainWindow();
+    virtual ~MainWindow();
 
 signals:
 
