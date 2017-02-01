@@ -3,90 +3,103 @@
 void MainWindow::createActions()
 {
     // Actions File
-    actNew = new QAction(tr("&New"), this);
+    actNew = std::shared_ptr<QAction>(new QAction(tr("&New"), this));
     actNew->setIcon(QIcon(":/Resources/icons/new.png"));
     actNew->setShortcut(QKeySequence::New);
-    connect(actNew, SIGNAL(triggered(bool)), this, SLOT(newFile()));
+    connect(actNew.get(), SIGNAL(triggered(bool)), this, SLOT(newFile()));
 
-    actOpen = new QAction(tr("&Open"), this);
+    actOpen = std::shared_ptr<QAction>(new QAction(tr("&Open"), this));
     actOpen->setIcon(QIcon(":/Resources/icons/open.png"));
     actOpen->setShortcut(QKeySequence::Open);
-    connect(actOpen, SIGNAL(triggered(bool)), this, SLOT(openFile()));
+    connect(actOpen.get(), SIGNAL(triggered(bool)), this, SLOT(openFile()));
 
-    actSave = new QAction(tr("&Save"), this);
+    actSave = std::shared_ptr<QAction>(new QAction(tr("&Save"), this));
     actSave->setIcon(QIcon(":/Resources/icons/save.png"));
     actSave->setShortcut(QKeySequence::Save);
-    connect(actSave, SIGNAL(triggered(bool)), this, SLOT(saveFile()));
+    connect(actSave.get(), SIGNAL(triggered(bool)), this, SLOT(saveFile()));
 
-    actSaveAs = new QAction(tr("Save As..."), this);
+    actSaveAs = std::shared_ptr<QAction>(new QAction(tr("Save As..."), this));
     actSaveAs->setIcon(QIcon(":/Resources/icons/saveas.png"));
     actSaveAs->setShortcut(QKeySequence::SaveAs);
-    connect(actSaveAs, SIGNAL(triggered(bool)), this, SLOT(saveAsFile()));
+    connect(actSaveAs.get(), SIGNAL(triggered(bool)), this, SLOT(saveAsFile()));
 
-    actExit = new QAction(tr("E&xit"), this);
+    actExit = std::shared_ptr<QAction>(new QAction(tr("E&xit"), this));
     actExit->setIcon(QIcon(":/Resources/icons/exit.png"));
     actExit->setShortcut(tr("Ctrl+Q"));
-    connect(actExit, SIGNAL(triggered(bool)), this, SLOT(exitFile()));
+    connect(actExit.get(), SIGNAL(triggered(bool)), this, SLOT(exitFile()));
 
     // Actions Edit
-    actUndo = new QAction(tr("Undo"), this);
+    actUndo = std::shared_ptr<QAction>(new QAction(tr("Undo"), this));
     actUndo->setIcon(QIcon(":/Resources/icons/undo.png"));
     actUndo->setShortcut(QKeySequence::Undo);
-    connect(actUndo, SIGNAL(triggered(bool)), this, SLOT(undoEdit()));
+    connect(actUndo.get(), SIGNAL(triggered(bool)), this, SLOT(undoEdit()));
 
-    actRedo = new QAction(tr("Redo"), this);
+    actRedo = std::shared_ptr<QAction>(new QAction(tr("Redo"), this));
     actRedo->setIcon(QIcon(":/Resources/icons/redo.png"));
     actRedo->setShortcut(QKeySequence::Redo);
-    connect(actNew, SIGNAL(triggered(bool)), this, SLOT(redoEdit()));
+    connect(actRedo.get(), SIGNAL(triggered(bool)), this, SLOT(redoEdit()));
 
-    actCut = new QAction(tr("Cut"), this);
+    actCut = std::shared_ptr<QAction>(new QAction(tr("Cut"), this));
     actCut->setIcon(QIcon(":/Resources/icons/cut.png"));
     actCut->setShortcut(QKeySequence::Cut);
-    connect(actCut, SIGNAL(triggered(bool)), this, SLOT(cutEdit()));
+    connect(actCut.get(), SIGNAL(triggered(bool)), this, SLOT(cutEdit()));
 
-    actCopy = new QAction(tr("Copy"), this);
+    actCopy = std::shared_ptr<QAction>(new QAction(tr("Copy"), this));
     actCopy->setIcon(QIcon(":/Resources/icons/copy.png"));
     actCopy->setShortcut(QKeySequence::Copy);
-    connect(actCopy, SIGNAL(triggered(bool)), this, SLOT(copyEdit()));
+    connect(actCopy.get(), SIGNAL(triggered(bool)), this, SLOT(copyEdit()));
 
-    actPaste = new QAction(tr("Paste"), this);
+    actPaste = std::shared_ptr<QAction>(new QAction(tr("Paste"), this));
     actPaste->setIcon(QIcon(":/Resources/icons/paste.png"));
     actPaste->setShortcut(QKeySequence::Paste);
-    connect(actPaste, SIGNAL(triggered(bool)), this, SLOT(pasteEdit()));
+    connect(actPaste.get(), SIGNAL(triggered(bool)), this, SLOT(pasteEdit()));
 
-    actDelete = new QAction(tr("Delete"), this);
+    actDelete = std::shared_ptr<QAction>(new QAction(tr("Delete"), this));
     actDelete->setIcon(QIcon(":/Resources/icons/delete.png"));
     actDelete->setShortcut(QKeySequence::Delete);
-    connect(actDelete, SIGNAL(triggered(bool)), this, SLOT(deleteEdit()));
+    connect(actDelete.get(), SIGNAL(triggered(bool)), this, SLOT(deleteEdit()));
 
-    actSelectAll = new QAction(tr("Select All"), this);
+    actSelectAll = std::shared_ptr<QAction>(new QAction(tr("Select All"), this));
     actSelectAll->setIcon(QIcon(":/Resources/icons/selectall.png"));
     actSelectAll->setShortcut(QKeySequence::SelectAll);
-    connect(actSelectAll, SIGNAL(triggered(bool)), this, SLOT(selectAllEdit()));
+    connect(actSelectAll.get(), SIGNAL(triggered(bool)), this, SLOT(selectAllEdit()));
 
     // Actions Build
-    actCompile = new QAction(tr("Compile"), this);
+    actCompile = std::shared_ptr<QAction>(new QAction(tr("Compile"), this));
     actCompile->setIcon(QIcon(":/Resources/icons/compile.png"));
     actCompile->setShortcut(tr("Ctrl+B"));
     actCompile->setDisabled(true);
-    connect(actCompile, SIGNAL(triggered(bool)), this, SLOT(compileBuild()));
+    connect(actCompile.get(), SIGNAL(triggered(bool)), this, SLOT(compileBuild()));
 
-    actRun = new QAction(tr("Run"), this);
+    actRun = std::shared_ptr<QAction>(new QAction(tr("Run"), this));
     actRun->setIcon(QIcon(":/Resources/icons/run.png"));
     actRun->setShortcut(tr("F5"));
     actRun->setDisabled(true);
-    connect(actRun, SIGNAL(triggered(bool)), this, SLOT(runBuild()));
+    connect(actRun.get(), SIGNAL(triggered(bool)), this, SLOT(runBuild()));
 
-    actCompileRun = new QAction(tr("Compile and Run"), this);
+    actCompileRun = std::shared_ptr<QAction>(new QAction(tr("Compile and Run"), this));
     actCompileRun->setIcon(QIcon(":/Resources/icons/compile_run.png"));
     actCompileRun->setShortcut(tr("Ctrl+R"));
     actCompileRun->setDisabled(true);
-    connect(actCompileRun, SIGNAL(triggered(bool)), this, SLOT(compileRunBuild()));
+    connect(actCompileRun.get(), SIGNAL(triggered(bool)), this, SLOT(compileRunBuild()));
 
-    actStep = new QAction(tr("Step"), this);
-    actStep->setIcon(QIcon(":/Resources/icons/debug_step_over.png")); // TODO icon
-    //    actStep->setShortcut(tr("Ctrl+R"));   // TODO shortcut
-    connect(actStep, SIGNAL(triggered(bool)), this, SLOT(step()));
+    actResume = std::shared_ptr<QAction>(new QAction(tr("Resume"), this));
+    actResume->setIcon(QIcon(":/Resources/icons/debug_resume.png"));
+    actResume->setShortcut(tr("F8"));
+    connect(actResume.get(), SIGNAL(triggered(bool)), this, SLOT(debugResume()));
+
+    actStep = std::shared_ptr<QAction>(new QAction(tr("Step"), this));
+    actStep->setIcon(QIcon(":/Resources/icons/debug_step_over.png"));
+    actStep->setShortcut(tr("F10"));
+    connect(actStep.get(), SIGNAL(triggered(bool)), this, SLOT(debugStep()));
+
+    actStop = std::shared_ptr<QAction>(new QAction(tr("Stop"), this));
+    actStop->setIcon(QIcon(":/Resources/icons/debug_stop.png"));
+    connect(actStop.get(), SIGNAL(triggered(bool)), this, SLOT(debugStop()));
+
+    actReset = std::shared_ptr<QAction>(new QAction(tr("Reset"), this));
+    actReset->setIcon(QIcon(":/Resources/icons/debug_restart.png"));
+    connect(actReset.get(), SIGNAL(triggered(bool)), this, SLOT(debugReset()));
 }
 
 void MainWindow::createMenu()
@@ -95,30 +108,30 @@ void MainWindow::createMenu()
     this->setMenuBar(mainMenu.get());
 
     QMenu *menuFile = mainMenu->addMenu("File");
-    menuFile->addAction(actNew);
-    menuFile->addAction(actOpen);
+    menuFile->addAction(actNew.get());
+    menuFile->addAction(actOpen.get());
     menuFile->addSeparator();
-    menuFile->addAction(actSave);
-    menuFile->addAction(actSaveAs);
+    menuFile->addAction(actSave.get());
+    menuFile->addAction(actSaveAs.get());
     menuFile->addSeparator();
-    menuFile->addAction(actExit);
+    menuFile->addAction(actExit.get());
 
     QMenu *menuEdit = mainMenu->addMenu("Edit");
-    menuEdit->addAction(actUndo);
-    menuEdit->addAction(actRedo);
+    menuEdit->addAction(actUndo.get());
+    menuEdit->addAction(actRedo.get());
     menuEdit->addSeparator();
-    menuEdit->addAction(actCut);
-    menuEdit->addAction(actCopy);
-    menuEdit->addAction(actPaste);
-    menuEdit->addAction(actDelete);
+    menuEdit->addAction(actCut.get());
+    menuEdit->addAction(actCopy.get());
+    menuEdit->addAction(actPaste.get());
+    menuEdit->addAction(actDelete.get());
     menuEdit->addSeparator();
-    menuEdit->addAction(actSelectAll);
+    menuEdit->addAction(actSelectAll.get());
 
     QMenu *menuBuild = mainMenu->addMenu("Build");
-    menuBuild->addAction(actCompile);
-    menuBuild->addAction(actRun);
+    menuBuild->addAction(actCompile.get());
+    menuBuild->addAction(actRun.get());
     menuBuild->addSeparator();
-    menuBuild->addAction(actCompileRun);
+    menuBuild->addAction(actCompileRun.get());
 
     mainMenu->addMenu("Preferences");
 
@@ -184,31 +197,31 @@ void MainWindow::createToolbars()
     toolBarMinimize->setMovable(false);
 
     toolBarFile = std::shared_ptr<QToolBar>(new QToolBar("File"));
-    toolBarFile->addAction(actNew);
-    toolBarFile->addAction(actOpen);
-    toolBarFile->addAction(actSave);
+    toolBarFile->addAction(actNew.get());
+    toolBarFile->addAction(actOpen.get());
+    toolBarFile->addAction(actSave.get());
 
     toolBarEdit = std::shared_ptr<QToolBar>(new QToolBar("Edit"));
-    toolBarEdit->addAction(actUndo);
-    toolBarEdit->addAction(actRedo);
+    toolBarEdit->addAction(actUndo.get());
+    toolBarEdit->addAction(actRedo.get());
     toolBarEdit->addSeparator();
-    toolBarEdit->addAction(actCut);
-    toolBarEdit->addAction(actCopy);
-    toolBarEdit->addAction(actPaste);
-    toolBarEdit->addAction(actDelete);
+    toolBarEdit->addAction(actCut.get());
+    toolBarEdit->addAction(actCopy.get());
+    toolBarEdit->addAction(actPaste.get());
+    toolBarEdit->addAction(actDelete.get());
     toolBarEdit->addSeparator();
-    toolBarEdit->addAction(actSelectAll);
+    toolBarEdit->addAction(actSelectAll.get());
 
     toolBarBuild = std::shared_ptr<QToolBar>(new QToolBar("Build"));
-    toolBarBuild->addAction(actCompile);
-    toolBarBuild->addAction(actRun);
-    toolBarBuild->addAction(actCompileRun);
+    toolBarBuild->addAction(actCompile.get());
+    toolBarBuild->addAction(actRun.get());
+    toolBarBuild->addAction(actCompileRun.get());
 
     toolBarDebug = std::shared_ptr<QToolBar>(new QToolBar("Debug"));
-    toolBarDebug->addAction("Run");     // TODO action
-    toolBarDebug->addAction("Stop");    // TODO action
-    toolBarDebug->addAction(actStep);
-    toolBarDebug->addAction("Reset");   // TODO action
+    toolBarDebug->addAction(actResume.get());
+    toolBarDebug->addAction(actStop.get());
+    toolBarDebug->addAction(actStep.get());
+    toolBarDebug->addAction(actReset.get());
 
     this->addToolBar(toolBarFile.get());
     this->addToolBar(toolBarEdit.get());
@@ -589,7 +602,12 @@ void MainWindow::compileRunBuild()
     simulator->setCode(compiler->getCompiledCode());
 }
 
-void MainWindow::step()
+void MainWindow::debugResume()
+{
+
+}
+
+void MainWindow::debugStep()
 {
     if (simulator)
     {
@@ -600,6 +618,16 @@ void MainWindow::step()
         // TODO Exception
         std::cerr << "Can't make a step, because simulator was not created."  << std::endl;
     }
+}
+
+void MainWindow::debugStop()
+{
+
+}
+
+void MainWindow::debugReset()
+{
+
 }
 
 void MainWindow::closeEvent(QCloseEvent* event)

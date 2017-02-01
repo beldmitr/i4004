@@ -79,25 +79,28 @@ private:
     std::shared_ptr<QDockWidget> dockRom;
     std::shared_ptr<QDockWidget> dockPRam;
 
-    QAction* actNew;
-    QAction* actOpen;
-    QAction* actSave;
-    QAction* actSaveAs;
-    QAction* actExit;
+    std::shared_ptr<QAction> actNew;
+    std::shared_ptr<QAction> actOpen;
+    std::shared_ptr<QAction> actSave;
+    std::shared_ptr<QAction> actSaveAs;
+    std::shared_ptr<QAction> actExit;
 
-    QAction* actUndo;
-    QAction* actRedo;
-    QAction* actCut;
-    QAction* actCopy;
-    QAction* actPaste;
-    QAction* actDelete;
-    QAction* actSelectAll;
+    std::shared_ptr<QAction> actUndo;
+    std::shared_ptr<QAction> actRedo;
+    std::shared_ptr<QAction> actCut;
+    std::shared_ptr<QAction> actCopy;
+    std::shared_ptr<QAction> actPaste;
+    std::shared_ptr<QAction> actDelete;
+    std::shared_ptr<QAction> actSelectAll;
 
-    QAction* actCompile;
-    QAction* actRun;
-    QAction* actCompileRun;
+    std::shared_ptr<QAction> actCompile;
+    std::shared_ptr<QAction> actRun;
+    std::shared_ptr<QAction> actCompileRun;
 
-    QAction* actStep;
+    std::shared_ptr<QAction> actResume;
+    std::shared_ptr<QAction> actStep;
+    std::shared_ptr<QAction> actStop;
+    std::shared_ptr<QAction> actReset;
 
     fstream file;
 
@@ -141,7 +144,10 @@ private slots:
     void runBuild();
     void compileRunBuild();
 
-    void step();
+    void debugResume();
+    void debugStep();
+    void debugStop();
+    void debugReset();
 
     void setWindowTitleFilename();
 
