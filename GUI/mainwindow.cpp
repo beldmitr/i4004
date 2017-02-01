@@ -84,7 +84,7 @@ void MainWindow::createActions()
     connect(actCompileRun, SIGNAL(triggered(bool)), this, SLOT(compileRunBuild()));
 
     actStep = new QAction(tr("Step"), this);
-    //    actStep->setIcon(QIcon(":/Resources/icons/step.png")); // TODO icon
+    actStep->setIcon(QIcon(":/Resources/icons/debug_step_over.png")); // TODO icon
     //    actStep->setShortcut(tr("Ctrl+R"));   // TODO shortcut
     connect(actStep, SIGNAL(triggered(bool)), this, SLOT(step()));
 }

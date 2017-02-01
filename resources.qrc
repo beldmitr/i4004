@@ -24,5 +24,9 @@
         <file>Resources/components/led.png</file>
         <file>Resources/icons/editor.png</file>
         <file>Resources/icons/io.png</file>
+        <file>Resources/icons/debug_resume.png</file>
+        <file>Resources/icons/debug_step_over.png</file>
+        <file>Resources/icons/debug_stop.png</file>
+        <file>Resources/icons/debug_restart.png</file>
     </qresource>
 </RCC>
