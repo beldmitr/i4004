@@ -189,3 +189,11 @@ void RomWidget::write(std::vector<unsigned int> instructions)
         j++;
     }
 }
+
+void RomWidget::wheelEvent(QWheelEvent *event)
+{
+    int p = event->delta() / 120; // +1 when scroll up, -1 when down
+    int newValue = scroll->value() - p;
+
+    scroll->setValue(newValue);
+}

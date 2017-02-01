@@ -46,6 +46,10 @@ public:
 signals:
 
 public slots:
+
+    // QWidget interface
+protected:
+    void wheelEvent(QWheelEvent *event);
 };
 
 #endif // ROMWIDGET_H
