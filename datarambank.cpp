@@ -8,6 +8,11 @@ DataRAMBank::DataRAMBank() : length(4)
     }
 }
 
+DataRAMBank::~DataRAMBank()
+{
+    // delete or finalize here something
+}
+
 std::shared_ptr<DataRAMChip> DataRAMBank::getDataRAMChip(int index)
 {
     if (index < 0 || index > length-1)

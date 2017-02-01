@@ -9,6 +9,7 @@ class ioListComponents : public QListWidget
     Q_OBJECT
 public:
     explicit ioListComponents(QWidget *parent = 0);
+    virtual ~ioListComponents();
 
 protected:
      void mousePressEvent(QMouseEvent * event) Q_DECL_OVERRIDE;

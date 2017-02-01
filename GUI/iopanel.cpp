@@ -43,6 +43,11 @@ IOPanel::IOPanel(QWidget *parent) : QWidget(parent)
     layout->addWidget(splitter);
 }
 
+IOPanel::~IOPanel()
+{
+    // delete or finalize here something
+}
+
 ioWidget* IOPanel::getIOWidget()
 {
     return viewArea;

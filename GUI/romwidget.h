@@ -38,6 +38,7 @@ private:
 
 public:
     explicit RomWidget(QWidget *parent = 0);
+    virtual ~RomWidget();
 
     void clear();
     void write(std::vector<unsigned int> instructions);

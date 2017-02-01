@@ -22,6 +22,11 @@ ROM::ROM(unsigned int pages)
 
 }
 
+ROM::~ROM()
+{
+    // delete or finalize here something
+}
+
 unsigned int ROM::getValue(unsigned int index) const
 {
     if(index > pages * bytesPerPage)

@@ -19,6 +19,11 @@ CPU::CPU()
 
 }
 
+CPU::~CPU()
+{
+    // delete or finalize here something
+}
+
 int CPU::getAcc() const
 {
     return acc;

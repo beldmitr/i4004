@@ -17,6 +17,7 @@ private:
 
 public:
     PRAM(unsigned int pages);
+    virtual ~PRAM();
 
     void clearPRam();
     int getValue(unsigned int index) const;

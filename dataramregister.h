@@ -15,6 +15,7 @@ private:
 
 public:
     DataRAMRegister();
+    virtual ~DataRAMRegister();
 
     void setCharacter(int index, int value);
     int getCharacter(int index) const;

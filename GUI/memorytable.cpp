@@ -39,6 +39,11 @@ MemoryTable::MemoryTable(QWidget *parent) : QTableWidget(parent)
     this->setSelectionMode(QAbstractItemView::SingleSelection);
 }
 
+MemoryTable::~MemoryTable()
+{
+    // delete or finalize here something
+}
+
 void MemoryTable::wheelEvent(QWheelEvent* event)
 {
     int p = event->delta()/120; // +1 when scroll up, -1 when down

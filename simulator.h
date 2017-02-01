@@ -75,6 +75,7 @@ private:
 
 public:
     Simulator();
+    virtual ~Simulator();
 
     void setCode(std::vector<unsigned int> compiledCode);
     void step();

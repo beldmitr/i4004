@@ -14,6 +14,8 @@ private:
 
 public:
     DataRAMBank();
+    virtual ~DataRAMBank();
+
     std::shared_ptr<DataRAMChip> getDataRAMChip(int index);
 };
 

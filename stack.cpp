@@ -8,6 +8,11 @@ Stack::Stack():size(3), actualPointer(0)
     }
 }
 
+Stack::~Stack()
+{
+    // delete or finalize here something
+}
+
 void Stack::write(int address)
 {
     /*

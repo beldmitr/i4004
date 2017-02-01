@@ -69,7 +69,6 @@ ChipDataRam::ChipDataRam(QWidget *parent) : QWidget(parent)
         outputLayout->setAlignment(output, Qt::AlignHCenter);
     }
 
-
     // add to in layout
     inLayout->addWidget(memTable);
     inLayout->addWidget(statTable);
@@ -77,4 +76,9 @@ ChipDataRam::ChipDataRam(QWidget *parent) : QWidget(parent)
 
     // add to layout
     layout->addWidget(inFrame);
+}
+
+ChipDataRam::~ChipDataRam()
+{
+    // delete or finalize here something
 }

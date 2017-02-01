@@ -15,6 +15,7 @@ private:
 
 public:
     explicit MemoryTable(QWidget *parent = 0);
+    virtual ~MemoryTable();
 
 signals:
 

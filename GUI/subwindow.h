@@ -19,6 +19,7 @@ private:
 
 public:
     explicit SubWindow(QWidget *parent = 0);
+    virtual ~SubWindow();
 
 signals:
 

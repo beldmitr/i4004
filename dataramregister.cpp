@@ -11,6 +11,11 @@ DataRAMRegister::DataRAMRegister() : charactersLength(16), statusLength(4)
     }
 }
 
+DataRAMRegister::~DataRAMRegister()
+{
+    // delete or finalize here something
+}
+
 void DataRAMRegister::setCharacter(int index, int value)
 {
     if (index < 0 || index > charactersLength) {

@@ -5,6 +5,11 @@ Simulator::Simulator()
 {
 }
 
+Simulator::~Simulator()
+{
+    // delete or finalize here something
+}
+
 void Simulator::setCode(std::vector<unsigned int> compiledCode)
 {
     rom->flashRom(compiledCode);

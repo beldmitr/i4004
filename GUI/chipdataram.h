@@ -14,6 +14,7 @@ class ChipDataRam : public QWidget
     Q_OBJECT
 public:
     explicit ChipDataRam(QWidget *parent = 0);
+    virtual ~ChipDataRam();
 
 signals:
 

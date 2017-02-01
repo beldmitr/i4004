@@ -26,6 +26,7 @@ private:
 
 public:
     explicit ProgramRamWidget(QWidget *parent = 0);
+    virtual ~ProgramRamWidget();
 
 signals:
 

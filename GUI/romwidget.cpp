@@ -107,7 +107,12 @@ RomWidget::RomWidget(QWidget *parent) : QWidget(parent)
         [=](int index)
         {
             scroll->setValue(index * 16);
-        });
+    });
+}
+
+RomWidget::~RomWidget()
+{
+    // delete or finalize here something
 }
 
 void RomWidget::setMemoryTitle(int value)

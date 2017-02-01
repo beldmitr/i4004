@@ -11,6 +11,7 @@ CpuWidget::CpuWidget(QWidget *parent) : QWidget(parent)
 
 CpuWidget::~CpuWidget()
 {
+    // delete or finalize here something
 }
 
 void CpuWidget::createWidgetStack()

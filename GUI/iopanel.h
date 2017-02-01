@@ -27,6 +27,7 @@ private:
 
 public:
     explicit IOPanel(QWidget *parent = 0);
+    virtual ~IOPanel();
 
     ioWidget* getIOWidget();
 

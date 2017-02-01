@@ -99,6 +99,11 @@ DataRamWidgetN::DataRamWidgetN(QWidget *parent) : QWidget(parent)
 
 }
 
+DataRamWidgetN::~DataRamWidgetN()
+{
+    // delete or finalize here something
+}
+
 void DataRamWidgetN::wheelEvent(QWheelEvent* event)
 {
     int p = event->delta() / 120; // +1 when scroll up, -1 when down

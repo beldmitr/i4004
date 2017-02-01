@@ -13,8 +13,10 @@ private:
     int output;
 
     const int length;
+
 public:
     DataRAMChip();
+    virtual ~DataRAMChip();
 
     std::shared_ptr<DataRAMRegister> getDataRAMRegister(int index);
     int getOutput() const;

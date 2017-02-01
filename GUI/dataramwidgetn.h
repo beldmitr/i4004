@@ -28,7 +28,7 @@ private:
 
 public:
     explicit DataRamWidgetN(QWidget *parent = 0);
-
+    virtual ~DataRamWidgetN();
 
 signals:
 

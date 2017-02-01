@@ -83,6 +83,7 @@ void MainWindow::createActions()
     actCompileRun->setDisabled(true);
     connect(actCompileRun.get(), SIGNAL(triggered(bool)), this, SLOT(compileRunBuild()));
 
+    // Actions Debug
     actResume = std::shared_ptr<QAction>(new QAction(tr("Resume"), this));
     actResume->setIcon(QIcon(":/Resources/icons/debug_resume.png"));
     actResume->setShortcut(tr("F8"));
@@ -104,10 +105,12 @@ void MainWindow::createActions()
 
 void MainWindow::createMenu()
 {
+    // Create main menu
     mainMenu = std::shared_ptr<QMenuBar>(new QMenuBar);
     this->setMenuBar(mainMenu.get());
 
-    QMenu *menuFile = mainMenu->addMenu("File");
+    // Create menu File
+    menuFile = std::shared_ptr<QMenu>(mainMenu->addMenu("File"));
     menuFile->addAction(actNew.get());
     menuFile->addAction(actOpen.get());
     menuFile->addSeparator();
@@ -116,7 +119,8 @@ void MainWindow::createMenu()
     menuFile->addSeparator();
     menuFile->addAction(actExit.get());
 
-    QMenu *menuEdit = mainMenu->addMenu("Edit");
+    // Create menu Edit
+    menuEdit = std::shared_ptr<QMenu>(mainMenu->addMenu("Edit"));
     menuEdit->addAction(actUndo.get());
     menuEdit->addAction(actRedo.get());
     menuEdit->addSeparator();
@@ -127,29 +131,32 @@ void MainWindow::createMenu()
     menuEdit->addSeparator();
     menuEdit->addAction(actSelectAll.get());
 
-    QMenu *menuBuild = mainMenu->addMenu("Build");
+    // Create menu Build
+    menuBuild = std::shared_ptr<QMenu>(mainMenu->addMenu("Build"));
     menuBuild->addAction(actCompile.get());
     menuBuild->addAction(actRun.get());
     menuBuild->addSeparator();
     menuBuild->addAction(actCompileRun.get());
 
+    // Create menu Preferences
     mainMenu->addMenu("Preferences");
 
+    // Create menu Windows
+    menuWindows = std::shared_ptr<QMenu>(mainMenu->addMenu("Windows"));
+    nextWindow = std::shared_ptr<QAction>(new QAction("Next window", this));
+    connect(nextWindow.get(), SIGNAL(triggered(bool)), mdi, SLOT(activateNextSubWindow()));
+    menuWindows->addAction(nextWindow.get());
 
-    QMenu* menuWindows = mainMenu->addMenu("Windows");
-    QAction* nextWindow = new QAction("Next window", this);
-    connect(nextWindow, SIGNAL(triggered(bool)), mdi, SLOT(activateNextSubWindow()));
-    menuWindows->addAction(nextWindow);
-
-    QAction* prevWindow = new QAction("Previous window", this);
-    connect(prevWindow, SIGNAL(triggered(bool)), mdi, SLOT(activatePreviousSubWindow()));
-    menuWindows->addAction(prevWindow);
+    prevWindow = std::shared_ptr<QAction>(new QAction("Previous window", this));
+    connect(prevWindow.get(), SIGNAL(triggered(bool)), mdi, SLOT(activatePreviousSubWindow()));
+    menuWindows->addAction(prevWindow.get());
 
     menuWindows->addSeparator();
 
     for(QMdiSubWindow* w : mdi->subWindowList())
     {
         QAction* act = new QAction(w->windowTitle(), this);
+        listWindowsMenuBtn.push_back(act);
         connect(act, SIGNAL(triggered(bool)), w, SLOT(show()));
         connect(act, SIGNAL(triggered(bool)), w, SLOT(setFocus()));
         menuWindows->addAction(act);
@@ -157,22 +164,23 @@ void MainWindow::createMenu()
 
     menuWindows->addSeparator();
 
-    QAction* minimizeAll = new QAction("Minimize all", this);
+    minimizeAll = std::shared_ptr<QAction>(new QAction("Minimize all", this));
     for(QMdiSubWindow* w : mdi->subWindowList())
     {
-        connect(minimizeAll, SIGNAL(triggered(bool)), w, SLOT(showMinimized()));
+        connect(minimizeAll.get(), SIGNAL(triggered(bool)), w, SLOT(showMinimized()));
     }
-    menuWindows->addAction(minimizeAll);
+    menuWindows->addAction(minimizeAll.get());
 
-    QAction* showWindows = new QAction("Show windows", this);
+    showWindows = std::shared_ptr<QAction>(new QAction("Show windows", this));
     for(QMdiSubWindow* w : mdi->subWindowList())
     {
-        connect(showWindows, SIGNAL(triggered(bool)), w, SLOT(showNormal()));
+        connect(showWindows.get(), SIGNAL(triggered(bool)), w, SLOT(showNormal()));
     }
-    connect(showWindows, SIGNAL(triggered(bool)), mdi, SLOT(tileSubWindows()));
+    connect(showWindows.get(), SIGNAL(triggered(bool)), mdi, SLOT(tileSubWindows()));
 
-    menuWindows->addAction(showWindows);
+    menuWindows->addAction(showWindows.get());
 
+    // Create menu Help
     mainMenu->addMenu("Help");
 }
 
@@ -185,6 +193,7 @@ void MainWindow::createToolbars()
         QString title = w->windowTitle();
 
         QAction* act = new QAction(ico, title, this);
+        listWindowsToolbarBtn.push_back(act);
         act->setToolTip("Show " + title);
 
         connect(act, SIGNAL(triggered(bool)), w, SLOT(show()));
@@ -352,6 +361,16 @@ MainWindow::~MainWindow()
 //    delete(ioWindow); // FIXME delete this pointer, but for now it makes an error
 //    delete(editor); // FIXME delete this pointer, but for now it makes an error and segmentation fault
 //    delete(editorWindow); // FIXME delete this pointer, but for now it makes an error
+
+    for (QAction* a : listWindowsMenuBtn)
+    {
+        delete(a);
+    }
+
+    for (QAction* a : listWindowsToolbarBtn)
+    {
+        delete(a);
+    }
 }
 
 void MainWindow::createOutputFilename()

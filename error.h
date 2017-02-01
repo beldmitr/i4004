@@ -14,6 +14,7 @@ public:
 
 public:
     Error(int line, string text, string command);
+    virtual ~Error();
 };
 
 #endif // ERROR_H

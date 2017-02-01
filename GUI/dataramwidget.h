@@ -39,6 +39,7 @@ private:
 
 public:
     explicit DataRamWidget(QWidget *parent = 0);
+    virtual ~DataRamWidget();
 
 protected:
     void paintEvent(QPaintEvent* event);

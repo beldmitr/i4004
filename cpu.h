@@ -34,7 +34,7 @@ private:
 
 public:
     CPU();
-
+    virtual ~CPU();
 
     int getAcc() const;
     void setAcc(unsigned int value);

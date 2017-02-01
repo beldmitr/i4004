@@ -124,6 +124,11 @@ DataRamWidget::DataRamWidget(QWidget *parent) : QWidget(parent)
     connect(scroll, SIGNAL(valueChanged(int)), this, SLOT(raiseTab(int)));
 }
 
+DataRamWidget::~DataRamWidget()
+{
+    // delete or finalize here something
+}
+
 void DataRamWidget::paintEvent(QPaintEvent* /* event */)
 {
 

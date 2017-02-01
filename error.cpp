@@ -4,3 +4,8 @@ Error::Error(int line, string text, string command): line(line), text(text), com
 {
 
 }
+
+Error::~Error()
+{
+    // delete or finalize here something
+}

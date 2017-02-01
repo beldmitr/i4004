@@ -21,6 +21,7 @@ class Stack
 
 public:
     Stack();
+    virtual ~Stack();
 
     void write(int address);
     int read();

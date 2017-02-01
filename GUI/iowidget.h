@@ -17,6 +17,7 @@ class ioWidget : public QScrollArea
     Q_OBJECT
 public:
     explicit ioWidget(QWidget *parent = 0);
+    virtual ~ioWidget();
 
 protected:
     void dragEnterEvent(QDragEnterEvent *event) Q_DECL_OVERRIDE;

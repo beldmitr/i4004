@@ -57,6 +57,11 @@ private:
     QMdiArea* mdi; // TODO make smart ptr, for now it doesn't work, program crashes after exiting
     std::shared_ptr<QStatusBar> statusBar;
 
+    std::shared_ptr<QMenu> menuFile;
+    std::shared_ptr<QMenu> menuEdit;
+    std::shared_ptr<QMenu> menuBuild;
+    std::shared_ptr<QMenu> menuWindows;
+
     SubWindow* editorWindow;
     SubWindow* ioWindow;
 
@@ -101,6 +106,25 @@ private:
     std::shared_ptr<QAction> actStep;
     std::shared_ptr<QAction> actStop;
     std::shared_ptr<QAction> actReset;
+
+    std::shared_ptr<QAction> nextWindow;
+    std::shared_ptr<QAction> prevWindow;
+    std::shared_ptr<QAction> minimizeAll;
+    std::shared_ptr<QAction> showWindows;
+
+    /*
+     * This is list of buttons, in Windows in main menu, like Input/Output or Editor.
+     * They are created dynamically in a function and must be deleted at the end.
+     * So they are in this vector and are deleted after in deconstructor
+     */
+    std::vector<QAction*> listWindowsMenuBtn;
+
+    /*
+     * This is list of buttons with windows in a toolbar, like Input/Output or Editor.
+     * They are created dynamically in a function and must be deleted at the end.
+     * So they are in this vector and are deleted after in deconstructor
+     */
+    std::vector<QAction*> listWindowsToolbarBtn;
 
     fstream file;
 

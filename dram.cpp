@@ -8,6 +8,11 @@ DRAM::DRAM(int bankNumber) : length(bankNumber)
     }
 }
 
+DRAM::~DRAM()
+{
+    // delete or finalize here something
+}
+
 std::shared_ptr<DataRAMBank> DRAM::getDataRAMBank(int index)
 {
     if (index < 0 || index > length)

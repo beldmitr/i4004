@@ -8,6 +8,11 @@ DataRAMChip::DataRAMChip():output(0),length(4)
     }
 }
 
+DataRAMChip::~DataRAMChip()
+{
+    // delete or finalize here something
+}
+
 std::shared_ptr<DataRAMRegister> DataRAMChip::getDataRAMRegister(int index)
 {
     if (index < 0 || index > length-1)

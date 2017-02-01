@@ -23,7 +23,7 @@ AsmEditor::AsmEditor(QWidget *parent) : QTextEdit(parent)
 
 AsmEditor::~AsmEditor()
 {
-
+    // delete or finalize here something
 }
 
 

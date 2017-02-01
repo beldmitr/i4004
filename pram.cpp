@@ -15,6 +15,11 @@ PRAM::PRAM(unsigned int pages) : pages(pages), bytesPerPage(256), maxPossiblePag
     }
 }
 
+PRAM::~PRAM()
+{
+    // delete or finalize here something
+}
+
 int PRAM::getValue(unsigned int index) const
 {
     if(index > pages * bytesPerPage)

@@ -3,7 +3,12 @@
 ioWidget::ioWidget(QWidget *parent) : QScrollArea(parent)
 {
     setAcceptDrops(true);
-//    std::cout << parent->objectName().toStdString() << "\n";
+    //    std::cout << parent->objectName().toStdString() << "\n";
+}
+
+ioWidget::~ioWidget()
+{
+    // delete or finalize here something
 }
 
 void ioWidget::dragEnterEvent(QDragEnterEvent *event)

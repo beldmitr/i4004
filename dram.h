@@ -15,6 +15,8 @@ private:
 
 public:
     DRAM(int bankNumber);
+    virtual ~DRAM();
+
     std::shared_ptr<DataRAMBank> getDataRAMBank(int index);
 };
 

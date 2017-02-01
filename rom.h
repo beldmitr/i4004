@@ -19,11 +19,12 @@ private:
 
 public:
     ROM(unsigned int pages);
+    virtual ~ROM();
+
     void clearRom();
     void flashRom(std::vector<unsigned int> compiledCode);
 
     unsigned int getValue(unsigned int index) const;
-
 
     int getIO(unsigned int page) const;
     void setIO(unsigned int page, int value);

@@ -86,3 +86,8 @@ ProgramRamWidget::ProgramRamWidget(QWidget *parent) : QWidget(parent)
             scroll->setValue(index * 16);
         });
 }
+
+ProgramRamWidget::~ProgramRamWidget()
+{
+    // delete or finalize here something
+}
