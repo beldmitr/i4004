@@ -5,9 +5,8 @@
 
 class LED : public QImage
 {
-    Q_OBJECT
 public:
-    explicit LED(QWidget *parent = 0);
+    explicit LED();
     virtual ~LED();
 
 signals:
