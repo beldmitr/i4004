@@ -28,5 +28,12 @@
         <file>Resources/icons/debug_step_over.png</file>
         <file>Resources/icons/debug_stop.png</file>
         <file>Resources/icons/debug_restart.png</file>
+        <file>Resources/components/LedBlue.png</file>
+        <file>Resources/components/LedGreen.png</file>
+        <file>Resources/components/LedOrange.png</file>
+        <file>Resources/components/LedPink.png</file>
+        <file>Resources/components/LedRed.png</file>
+        <file>Resources/components/LedWhite.png</file>
+        <file>Resources/components/LedYellow.png</file>
     </qresource>
 </RCC>
