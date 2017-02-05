@@ -245,6 +245,9 @@ void MainWindow::createSubWindows()
     editorWindow = new SubWindow;
     ioWindow = new SubWindow;
 
+    Button* butt = new Button;
+    ioWindow->setWidget(butt);
+
     editor = new AsmEditor;
 //    iopanel = new IOPanel;
     editorWindow->setWindowTitle("Editor");

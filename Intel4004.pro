@@ -32,7 +32,8 @@ SOURCES += \
     datarambank.cpp \
     mathexpr.cpp \
     GUI/cpuwidget.cpp \
-    GUI/led.cpp
+    GUI/led.cpp \
+    GUI/button.cpp
 
 HEADERS += \
     GUI/mainwindow.h \
@@ -61,7 +62,8 @@ HEADERS += \
     mathexpr.h \
     Interfaces/icompiler.h \
     GUI/cpuwidget.h \
-    GUI/led.h
+    GUI/led.h \
+    GUI/button.h
 
 RESOURCES += \
     resources.qrc

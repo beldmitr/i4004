@@ -41,6 +41,8 @@
 #include "error.h"
 #include "simulator.h"
 
+#include "button.h"
+
 class MainWindow : public QMainWindow
 {
     Q_OBJECT
