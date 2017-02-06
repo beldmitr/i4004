@@ -6,7 +6,7 @@ MemoryTable::MemoryTable(QWidget *parent) : QTableWidget(parent)
     this->setColumnCount(COLUMNS);
 
     this->verticalHeader()->setSectionResizeMode(QHeaderView::Stretch);
-    this->verticalHeader()->setStretchLastSection(true);
+    this->verticalHeader()->setStretchLastSection(false);
     for (int i=0; i < this->verticalHeader()->count(); i++)
     {
 //        QTableWidgetItem* item = new QTableWidgetItem("0x" + QString::number(i * 16, 16));
@@ -15,7 +15,7 @@ MemoryTable::MemoryTable(QWidget *parent) : QTableWidget(parent)
     }
 
     this->horizontalHeader()->setSectionResizeMode(QHeaderView::Stretch);
-    this->horizontalHeader()->setStretchLastSection(true);
+    this->horizontalHeader()->setStretchLastSection(false);
     for (int i=0; i < this->horizontalHeader()->count(); i++)
     {
 //        QTableWidgetItem* item = new QTableWidgetItem("0x" + QString::number(i, 16));
