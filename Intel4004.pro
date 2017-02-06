@@ -33,7 +33,8 @@ SOURCES += \
     mathexpr.cpp \
     GUI/cpuwidget.cpp \
     GUI/led.cpp \
-    GUI/button.cpp
+    GUI/button.cpp \
+    GUI/iowidgetn.cpp
 
 HEADERS += \
     GUI/mainwindow.h \
@@ -63,7 +64,8 @@ HEADERS += \
     Interfaces/icompiler.h \
     GUI/cpuwidget.h \
     GUI/led.h \
-    GUI/button.h
+    GUI/button.h \
+    GUI/iowidgetn.h
 
 RESOURCES += \
     resources.qrc

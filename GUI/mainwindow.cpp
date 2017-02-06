@@ -245,6 +245,9 @@ void MainWindow::createSubWindows()
     editorWindow = new SubWindow;
     ioWindow = new SubWindow;
 
+    io = new IOWidgetN;
+    ioWindow->setWidget(io);
+
     editor = new AsmEditor;
 //    iopanel = new IOPanel;
     editorWindow->setWindowTitle("Editor");
@@ -358,6 +361,7 @@ MainWindow::~MainWindow()
     delete(romWidget);
     delete(pramWidget);
 
+//    delete(io); // FIXME delete this pointer, but for now it makes an error
 //    delete(ioWindow); // FIXME delete this pointer, but for now it makes an error
 //    delete(editor); // FIXME delete this pointer, but for now it makes an error and segmentation fault
 //    delete(editorWindow); // FIXME delete this pointer, but for now it makes an error

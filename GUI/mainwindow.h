@@ -41,6 +41,8 @@
 #include "error.h"
 #include "simulator.h"
 
+#include "iowidgetn.h"
+
 class MainWindow : public QMainWindow
 {
     Q_OBJECT
@@ -53,8 +55,6 @@ private:
     QString outputname;
 
     std::shared_ptr<QMenuBar> mainMenu;
-    AsmEditor* editor; // TODO make smart ptr, for now it doesn't work, program crashes after exiting
-    QMdiArea* mdi; // TODO make smart ptr, for now it doesn't work, program crashes after exiting
     std::shared_ptr<QStatusBar> statusBar;
 
     std::shared_ptr<QMenu> menuFile;
@@ -62,8 +62,11 @@ private:
     std::shared_ptr<QMenu> menuBuild;
     std::shared_ptr<QMenu> menuWindows;
 
-    SubWindow* editorWindow;
-    SubWindow* ioWindow;
+    QMdiArea* mdi; // TODO make smart ptr, for now it doesn't work, program crashes after exiting
+    SubWindow* editorWindow; // TODO delete this pointer, but for now it makes an error
+    SubWindow* ioWindow; // TODO delete this pointer, but for now it makes an error
+    AsmEditor* editor; // TODO make smart ptr, for now it doesn't work, program crashes after exiting
+    IOWidgetN* io;  // TODO delete this pointer, but for now it makes an error
 
     std::shared_ptr<QToolBar> toolBarFile;
     std::shared_ptr<QToolBar> toolBarEdit;
