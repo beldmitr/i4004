@@ -28,7 +28,7 @@ ChipDataRam::ChipDataRam(QWidget *parent) : QWidget(parent)
     }
     for (int i=0; i < memTable->horizontalHeader()->count(); i++)
     {
-        QTableWidgetItem* item = new QTableWidgetItem("0x" + QString::number(i, 16));
+        QTableWidgetItem* item = new QTableWidgetItem(QString::number(i, 16));
         memTable->setHorizontalHeaderItem(i, item);
     }
 
@@ -39,7 +39,7 @@ ChipDataRam::ChipDataRam(QWidget *parent) : QWidget(parent)
     statTable->horizontalHeader()->setStretchLastSection(false);
     for (int i=0; i < statTable->horizontalHeader()->count(); i++)
     {
-        QTableWidgetItem* item = new QTableWidgetItem("0x" + QString::number(i, 16));
+        QTableWidgetItem* item = new QTableWidgetItem(QString::number(i, 16));
         statTable->setHorizontalHeaderItem(i, item);
     }
 
