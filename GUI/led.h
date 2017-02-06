@@ -2,8 +2,9 @@
 #define LED_H
 
 #include <QImage>
+#include <QLabel>
 
-class LED : public QImage
+class LED : public QLabel
 {
 public:
     enum class Color
@@ -20,13 +21,19 @@ public:
     explicit LED(LED::Color color);
     virtual ~LED();
 
-    void on();
-    void off();
+    void setTurnOn(bool light = true);
+    void scaled(double scale = 1);
 
     Color getColor() const;
     bool getIsOn() const;
 
+    void setColor(LED::Color color);
+
+    void update();
+
 private:
+    QImage image;
+
     QString filenameOn;
     QString filenameOff;
 

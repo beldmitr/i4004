@@ -1,10 +1,30 @@
 #include "led.h"
 
-LED::LED(LED::Color color) : QImage()
+void LED::update()
 {
+    this->setPixmap(QPixmap::fromImage(image));
+}
+
+LED::LED(LED::Color color) : QLabel()
+{
+    this->setAutoFillBackground(true);
+
     this->color = color;
     this->isOn = false;
+    this->filenameOff = ":/Resources/components/LedWhite.png";
 
+    setColor(color);
+
+    setTurnOn(isOn);
+}
+
+LED::~LED()
+{
+    // delete here something
+}
+
+void LED::setColor(LED::Color color)
+{
     switch(color)
     {
         case Color::NONE:
@@ -30,26 +50,34 @@ LED::LED(LED::Color color) : QImage()
             break;
     }
 
-    this->load(filenameOn);
+    image.load(filenameOn);
 
-    this->filenameOff = ":/Resources/components/LedWhite.png";
+    update();
 }
 
-LED::~LED()
+void LED::setTurnOn(bool light)
 {
-    // delete here something
+    if (light)
+    {
+        this->isOn = true;
+        image.load(filenameOn);
+    }
+    else
+    {
+        this->isOn = true;
+        image.load(filenameOff);
+    }
+
+    update();
 }
 
-void LED::on()
+void LED::scaled(double scale)
 {
-    this->isOn = true;
-    this->load(filenameOn);
-}
+    QSize size = image.size();
 
-void LED::off()
-{
-    this->isOn = true;
-    this->load(filenameOff);
+    image = image.scaled(size * scale, Qt::KeepAspectRatio);
+
+    this->setPixmap(QPixmap::fromImage(image));
 }
 
 LED::Color LED::getColor() const
