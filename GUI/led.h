@@ -39,6 +39,7 @@ private:
 
     Color color;
     bool isOn;
+    double scale;
 
 signals:
 
