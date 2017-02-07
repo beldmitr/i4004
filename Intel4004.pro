@@ -34,7 +34,8 @@ SOURCES += \
     GUI/cpuwidget.cpp \
     GUI/led.cpp \
     GUI/button.cpp \
-    GUI/iowidgetn.cpp
+    GUI/iowidgetn.cpp \
+    GUI/coloredcombobox.cpp
 
 HEADERS += \
     GUI/mainwindow.h \
@@ -65,7 +66,8 @@ HEADERS += \
     GUI/cpuwidget.h \
     GUI/led.h \
     GUI/button.h \
-    GUI/iowidgetn.h
+    GUI/iowidgetn.h \
+    GUI/coloredcombobox.h
 
 RESOURCES += \
     resources.qrc

@@ -10,6 +10,7 @@
 
 #include "button.h"
 #include "led.h"
+#include "coloredcombobox.h"
 
 class IOWidgetN : public QWidget
 {
