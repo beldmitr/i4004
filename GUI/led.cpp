@@ -9,7 +9,8 @@ LED::LED(LED::Color color) : QLabel()
     this->scale = 1.0;
     this->filenameOff = ":/Resources/components/LedWhite.png";
 
-    emit changed(); // send event
+    // Factly this method draws the element
+    update();
 }
 
 LED::~LED()
@@ -19,7 +20,6 @@ LED::~LED()
 
 void LED::update()
 {
-    std::cout << "update" << std::endl;
     // update color
     switch(color)
     {
@@ -61,7 +61,7 @@ void LED::update()
 
     image = image.scaled(size * scale, Qt::KeepAspectRatio);
 
-    // redraw
+    // draw the image
     this->setPixmap(QPixmap::fromImage(image));
 }
 

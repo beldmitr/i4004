@@ -21,8 +21,6 @@ public:
 private:
     std::shared_ptr<QGridLayout> layout;
 
-
-
     std::shared_ptr<LED> led0;
 
 private slots:
