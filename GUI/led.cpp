@@ -82,7 +82,6 @@ void LED::setColor(QString color)
     {
         filenameOn = ":/Resources/components/LedOrange.png";
         this->color = LED::Color::ORANGE;
-        std::cout << "ORANGEEE" << std::endl;
     } else if (color == "Yellow")
     {
         filenameOn = ":/Resources/components/LedYellow.png";

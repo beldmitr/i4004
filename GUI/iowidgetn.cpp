@@ -7,11 +7,12 @@ IOWidgetN::IOWidgetN() : QWidget()
     led0 = std::shared_ptr<LED>(new LED(LED::Color::BLUE));
     layout->addWidget(led0.get(), 1, 0);
 
-    ColoredComboBox* cbColored = new ColoredComboBox;
-    layout->addWidget(cbColored, 0, 0);
+    cbColored = std::shared_ptr<ColoredComboBox>(new ColoredComboBox);
+    layout->addWidget(cbColored.get(), 0, 0);
 
+    connect(cbColored.get(), SIGNAL(activated(QString)), this, SLOT(changeLedColor(QString)));
     connect(led0.get(), SIGNAL(changed()), this, SLOT(update()));
-    connect(cbColored, SIGNAL(currentIndexChanged(QString)), this, SLOT(changeLedColor(QString)));
+
 
     led0->setScale(0.25);
     led0->setTurnOn(true);

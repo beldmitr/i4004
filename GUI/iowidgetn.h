@@ -24,6 +24,8 @@ private:
 
     std::shared_ptr<LED> led0;
 
+    std::shared_ptr<ColoredComboBox> cbColored;
+
 private slots:
     void update();
     void changeLedColor(QString color);
