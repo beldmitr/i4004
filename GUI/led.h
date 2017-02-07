@@ -1,11 +1,15 @@
 #ifndef LED_H
 #define LED_H
 
+#include <QObject>
 #include <QImage>
 #include <QLabel>
 
+#include <iostream>
+
 class LED : public QLabel
 {
+    Q_OBJECT
 public:
     enum class Color
     {
@@ -42,6 +46,7 @@ private:
     double scale;
 
 signals:
+    void changed();
 
 public slots:
 };

@@ -6,12 +6,10 @@ LED::LED(LED::Color color) : QLabel()
 
     this->color = color;
     this->isOn = false;
-    scale = 1.0;
+    this->scale = 1.0;
     this->filenameOff = ":/Resources/components/LedWhite.png";
 
-    setColor(color);
-
-    setTurnOn(isOn);
+    emit changed(); // send event
 }
 
 LED::~LED()
@@ -21,19 +19,8 @@ LED::~LED()
 
 void LED::update()
 {
-    setColor(color);
-
-    setTurnOn(isOn);
-
-    scaled(scale);
-
-    this->setPixmap(QPixmap::fromImage(image));
-}
-
-void LED::setColor(LED::Color color)
-{
-    this->color = color;
-
+    std::cout << "update" << std::endl;
+    // update color
     switch(color)
     {
         case Color::NONE:
@@ -59,16 +46,8 @@ void LED::setColor(LED::Color color)
             break;
     }
 
-    setTurnOn(isOn);
-
-    scaled(scale);
-}
-
-void LED::setTurnOn(bool light)
-{
-    this->isOn = light;
-
-    if (light)
+    // update turnOn
+    if (isOn)
     {
         image.load(filenameOn);
     }
@@ -76,15 +55,35 @@ void LED::setTurnOn(bool light)
     {
         image.load(filenameOff);
     }
+
+    // update scale
+    QSize size = image.size();
+
+    image = image.scaled(size * scale, Qt::KeepAspectRatio);
+
+    // redraw
+    this->setPixmap(QPixmap::fromImage(image));
+}
+
+void LED::setColor(LED::Color color)
+{
+    this->color = color;
+
+    emit changed(); // send event
+}
+
+void LED::setTurnOn(bool light)
+{
+    this->isOn = light;
+
+    emit changed(); // send event
 }
 
 void LED::scaled(double scale)
 {
     this->scale = scale;
 
-    QSize size = image.size();
-
-    image = image.scaled(size * scale, Qt::KeepAspectRatio);
+    emit changed(); // send event
 }
 
 LED::Color LED::getColor() const
