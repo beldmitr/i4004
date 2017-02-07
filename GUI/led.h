@@ -5,6 +5,8 @@
 #include <QImage>
 #include <QLabel>
 
+#include <iostream>
+
 class LED : public QLabel
 {
     Q_OBJECT
@@ -24,12 +26,13 @@ public:
     virtual ~LED();
 
     void setTurnOn(bool light = true);
-    void scaled(double scale = 1);
+    void setScale(double scale = 1);
 
     Color getColor() const;
     bool getIsOn() const;
 
     void setColor(LED::Color color);
+    void setColor(QString color);
 
     void update();
 

@@ -26,6 +26,7 @@ private:
 
 private slots:
     void update();
+    void changeLedColor(QString color);
 
 };
 

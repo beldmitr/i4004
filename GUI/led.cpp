@@ -72,6 +72,42 @@ void LED::setColor(LED::Color color)
     emit changed(); // send event
 }
 
+void LED::setColor(QString color)
+{
+    if (color == "Red")
+    {
+        filenameOn = ":/Resources/components/LedRed.png";
+        this->color = LED::Color::RED;
+    } else if (color == "Orange")
+    {
+        filenameOn = ":/Resources/components/LedOrange.png";
+        this->color = LED::Color::ORANGE;
+        std::cout << "ORANGEEE" << std::endl;
+    } else if (color == "Yellow")
+    {
+        filenameOn = ":/Resources/components/LedYellow.png";
+        this->color = LED::Color::YELLOW;
+    } else if (color == "Green")
+    {
+        filenameOn = ":/Resources/components/LedGreen.png";
+        this->color = LED::Color::GREEN;
+    } else if (color == "Blue")
+    {
+        filenameOn = ":/Resources/components/LedBlue.png";
+        this->color = LED::Color::BLUE;
+    } else if (color == "Pink")
+    {
+        filenameOn = ":/Resources/components/LedPink.png";
+        this->color = LED::Color::PINK;
+    } else
+    {
+        filenameOn = ":/Resources/components/LedWhite.png";
+        this->color = LED::Color::NONE;
+    }
+
+    emit changed(); // send event
+}
+
 void LED::setTurnOn(bool light)
 {
     this->isOn = light;
@@ -79,7 +115,7 @@ void LED::setTurnOn(bool light)
     emit changed(); // send event
 }
 
-void LED::scaled(double scale)
+void LED::setScale(double scale)
 {
     this->scale = scale;
 
