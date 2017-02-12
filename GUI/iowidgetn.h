@@ -7,10 +7,12 @@
 #include <QComboBox>
 
 #include <memory>
+#include <vector>
 
 #include "button.h"
 #include "led.h"
 #include "coloredcombobox.h"
+#include "chooseiowidget.h"
 
 class IOWidgetN : public QWidget
 {
@@ -22,9 +24,9 @@ public:
 private:
     std::shared_ptr<QGridLayout> layout;
 
-    std::shared_ptr<LED> led0;
-
-    std::shared_ptr<ColoredComboBox> cbColored;
+    std::vector<ColoredComboBox*> comboBoxes;
+    std::vector<LED*> leds;
+    std::vector<ChooseIOWidget*> chooseIOs;
 
 private slots:
     void update();

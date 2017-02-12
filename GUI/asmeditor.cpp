@@ -8,6 +8,11 @@
 
 AsmEditor::AsmEditor(QWidget *parent) : QTextEdit(parent)
 {
+    // Making minimal size according to screen resolution
+    QDesktopWidget desktop;
+    QRect rect = desktop.availableGeometry(desktop.primaryScreen());
+    this->setMinimumSize(rect.size() / 4);
+
 //    QTextFrame* frame = this->document()->rootFrame();
 //    QTextFrameFormat f;
 

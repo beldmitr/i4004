@@ -2,6 +2,7 @@
 
 LED::LED(LED::Color color) : QLabel()
 {
+    this->setAlignment(Qt::AlignCenter);
     this->setAutoFillBackground(true);
 
     this->color = color;
@@ -58,7 +59,6 @@ void LED::update()
 
     // update scale
     QSize size = image.size();
-
     image = image.scaled(size * scale, Qt::KeepAspectRatio);
 
     // draw the image

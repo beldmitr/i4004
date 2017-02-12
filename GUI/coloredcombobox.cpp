@@ -1,7 +1,10 @@
 #include "coloredcombobox.h"
 
-ColoredComboBox::ColoredComboBox() : QComboBox()
+// TODO Change pink color to magenta or darkMagenta
+ColoredComboBox::ColoredComboBox(LED* led) : QComboBox()
 {
+    this->led = led;
+
     QStringList itemList;
     itemList << tr("Blue") << tr("Green") << tr("Orange") << tr("Pink") << tr("Red") << tr("Yellow");
 
@@ -17,4 +20,10 @@ ColoredComboBox::ColoredComboBox() : QComboBox()
 ColoredComboBox::~ColoredComboBox()
 {
     // delete here something
+    led = nullptr;
+}
+
+LED* ColoredComboBox::getLed() const
+{
+    return led;
 }

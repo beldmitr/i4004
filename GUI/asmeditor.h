@@ -1,6 +1,7 @@
 #ifndef ASMEDITOR_H
 #define ASMEDITOR_H
 
+#include <QDesktopWidget>
 #include <QWidget>
 #include <QTextEdit>
 #include <QPainter>

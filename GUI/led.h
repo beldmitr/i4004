@@ -5,6 +5,8 @@
 #include <QImage>
 #include <QLabel>
 
+#include <memory>
+
 class LED : public QLabel
 {
     Q_OBJECT

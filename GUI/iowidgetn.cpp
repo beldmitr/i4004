@@ -1,34 +1,63 @@
 #include "iowidgetn.h"
 
+// TODO change numbers to constants !!!
+// TODO Change pictures of LED, because leds on that pictures have got different positions
+// TODO Remove the legs on LED, they are too long or join them to ground or power and show this on the pictures
 IOWidgetN::IOWidgetN() : QWidget()
 {
     layout = std::shared_ptr<QGridLayout>(new QGridLayout(this));
 
-    led0 = std::shared_ptr<LED>(new LED(LED::Color::BLUE));
-    layout->addWidget(led0.get(), 1, 0);
+    for (int i = 0; i < 8; i++)
+    {
+        LED* led = new LED(LED::Color::BLUE);
+        ColoredComboBox* comboBoxColored = new ColoredComboBox(led);
+        ChooseIOWidget* chooseIO = new ChooseIOWidget;
 
-    cbColored = std::shared_ptr<ColoredComboBox>(new ColoredComboBox);
-    layout->addWidget(cbColored.get(), 0, 0);
+        connect(comboBoxColored, SIGNAL(activated(QString)), this, SLOT(changeLedColor(QString)));
+        connect(led, SIGNAL(changed()), this, SLOT(update()));
 
-    connect(cbColored.get(), SIGNAL(activated(QString)), this, SLOT(changeLedColor(QString)));
-    connect(led0.get(), SIGNAL(changed()), this, SLOT(update()));
+        comboBoxes.push_back(comboBoxColored);
+        leds.push_back(led);
+        chooseIOs.push_back(chooseIO);
 
+        led->setScale(0.5);
+        led->setTurnOn(true);
 
-    led0->setScale(0.25);
-    led0->setTurnOn(true);
+        layout->addWidget(comboBoxColored, 0, i);
+        layout->addWidget(led, 1, i);
+        layout->addWidget(chooseIO, 2, i);
+    }
 }
 
 IOWidgetN::~IOWidgetN()
 {
     // delete here something
+
+    for (ColoredComboBox* comboBox : comboBoxes)
+    {
+        delete (comboBox);
+    }
+
+    for (LED* led : leds)
+    {
+        delete (led);
+    }
+
+    for (ChooseIOWidget* chooseIO : chooseIOs)
+    {
+        delete (chooseIO);
+    }
 }
 
 void IOWidgetN::update()
 {
-    led0->update();
+    for (LED* led : leds)
+    {
+        led->update();
+    }
 }
 
 void IOWidgetN::changeLedColor(QString color)
 {
-    led0->setColor(color);
+    ((ColoredComboBox*)QObject::sender())->getLed()->setColor(color);
 }

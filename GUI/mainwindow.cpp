@@ -327,7 +327,9 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent)
 
     // create components
     mdi = new QMdiArea;
-    mdi->tileSubWindows();
+//    mdi->tileSubWindows();
+    mdi->cascadeSubWindows();
+
     mdi->setHorizontalScrollBarPolicy(Qt::ScrollBarAsNeeded);
     mdi->setVerticalScrollBarPolicy(Qt::ScrollBarAsNeeded);
 
