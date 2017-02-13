@@ -244,23 +244,43 @@ void MainWindow::createSubWindows()
 
     editorWindow = new SubWindow;
     ioWindow = new SubWindow;
+    ioSevenSegmentWindow = new SubWindow;
 
     io = new IOWidgetN;
     ioWindow->setWidget(io);
 
     editor = new AsmEditor;
-//    iopanel = new IOPanel;
+    editorWindow->setWidget(editor);
+
+    sevenSegmentPanel = new SevenSegmentPanel;
+    ioSevenSegmentWindow->setWidget(sevenSegmentPanel);
+
+
     editorWindow->setWindowTitle("Editor");
     ioWindow->setWindowTitle("Input/Output");
+    ioSevenSegmentWindow->setWindowTitle("Seven segment panel");
 
     editorWindow->setWindowIcon(QIcon(":/Resources/icons/editor.png"));
     ioWindow->setWindowIcon(QIcon(":/Resources/icons/io.png"));
+    ioSevenSegmentWindow->setWindowIcon(QIcon(":/Resources/icons/SevenSegment.png"));
 
-    editorWindow->setWidget(editor);
-//    ioWindow->setWidget(iopanel);
-
-    mdi->addSubWindow(ioWindow);
     mdi->addSubWindow(editorWindow);
+    mdi->addSubWindow(ioWindow);
+    mdi->addSubWindow(ioSevenSegmentWindow);
+
+    connect(sevenSegmentPanel, &SevenSegmentPanel::changedSegmentCount, [=]() {
+        if (!ioSevenSegmentWindow->isMaximized())
+        {
+            ioSevenSegmentWindow->adjustSize();
+        }
+    });
+
+    connect(ioSevenSegmentWindow, &SubWindow::windowStateChanged, [=]() {
+        if (!ioSevenSegmentWindow->isMaximized() && !ioSevenSegmentWindow->isMinimized())
+        {
+            ioSevenSegmentWindow->adjustSize();
+        }
+    });
 }
 
 void MainWindow::createDocks()

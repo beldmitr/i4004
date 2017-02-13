@@ -35,5 +35,13 @@
         <file>Resources/components/LedRed.png</file>
         <file>Resources/components/LedWhite.png</file>
         <file>Resources/components/LedYellow.png</file>
+        <file>Resources/components/SevenSegment.png</file>
+        <file>Resources/icons/SevenSegment.png</file>
+        <file>Resources/components/SevenSegmentHorizontalOff.png</file>
+        <file>Resources/components/SevenSegmentHorizontalOn.png</file>
+        <file>Resources/components/SevenSegmentPointOff.png</file>
+        <file>Resources/components/SevenSegmentPointOn.png</file>
+        <file>Resources/components/SevenSegmentVerticalOff.png</file>
+        <file>Resources/components/SevenSegmentVerticalOn.png</file>
     </qresource>
 </RCC>

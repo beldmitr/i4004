@@ -1,5 +1,6 @@
 #include "iopanel.h"
 
+// TODO delete this old component
 IOPanel::IOPanel(QWidget *parent) : QWidget(parent)
 {
     // create components

@@ -36,7 +36,9 @@ SOURCES += \
     GUI/button.cpp \
     GUI/iowidgetn.cpp \
     GUI/coloredcombobox.cpp \
-    GUI/chooseiowidget.cpp
+    GUI/chooseiowidget.cpp \
+    GUI/sevensegmentio.cpp \
+    GUI/sevensegmentpanel.cpp
 
 HEADERS += \
     GUI/mainwindow.h \
@@ -69,7 +71,9 @@ HEADERS += \
     GUI/button.h \
     GUI/iowidgetn.h \
     GUI/coloredcombobox.h \
-    GUI/chooseiowidget.h
+    GUI/chooseiowidget.h \
+    GUI/sevensegmentio.h \
+    GUI/sevensegmentpanel.h
 
 RESOURCES += \
     resources.qrc

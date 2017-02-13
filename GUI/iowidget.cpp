@@ -1,5 +1,6 @@
 #include "iowidget.h"
 
+// TODO Delete this class, it is old, do nothing and is no need now
 ioWidget::ioWidget(QWidget *parent) : QScrollArea(parent)
 {
     setAcceptDrops(true);

@@ -1,0 +1,76 @@
+#include "sevensegmentpanel.h"
+
+SevenSegmentPanel::SevenSegmentPanel(QWidget *parent) : QWidget(parent)
+{
+    layout = new QGridLayout;
+    layout->setSizeConstraint(QLayout::SetMinimumSize);
+
+    countBox = new QComboBox;
+    for (int i = 1; i < 9; i++)
+    {
+        countBox->addItem(QString::number(i));
+    }
+
+    layout->addWidget(countBox, 0, 0);
+
+    init(8);
+
+    connect(countBox, SIGNAL(currentTextChanged(QString)), this, SLOT(spinnerChanged(QString)));
+
+    this->setLayout(layout);
+}
+
+SevenSegmentPanel::~SevenSegmentPanel()
+{
+    // delete here something
+}
+
+void SevenSegmentPanel::init(unsigned int countSegments)
+{
+    for (unsigned int i = 0; i < countSegments; i++)
+    {
+
+        SevenSegmentIO* sevenSegment = new SevenSegmentIO;
+        sevenSegment->setSizePolicy(QSizePolicy::Maximum, QSizePolicy::Maximum);
+        vectSevenSegment.push_back(sevenSegment);
+        if (i != 0)
+        {
+            sevenSegment->hide();
+        }
+        layout->addWidget(sevenSegment, 1, i);
+
+
+        QMenu* menu = new QMenu;
+        for (int j = 0; j < 8; j++)
+        {
+            ChooseIOWidget* chooser = new ChooseIOWidget;
+            vectChooser.push_back(chooser);
+
+            QWidgetAction* chooserAction = new QWidgetAction(this);
+            chooserAction->setDefaultWidget(chooser);
+            menu->addAction(chooserAction);
+        }
+
+        connect(sevenSegment, &SevenSegmentIO::clicked, [=](QMouseEvent* event) {
+            menu->exec(event->globalPos());
+        });
+    }
+}
+
+void SevenSegmentPanel::spinnerChanged(QString value)
+{
+    for (unsigned int i = 0; i < vectSevenSegment.size(); i++)
+    {
+        SevenSegmentIO* segment = vectSevenSegment[i];
+        segment->hide();
+    }
+
+    for (int i = 0; i < value.toInt(); i++)
+    {
+        SevenSegmentIO* segment = vectSevenSegment[i];
+        segment->show();
+    }
+
+    emit changedSegmentCount();
+
+}

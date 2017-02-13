@@ -16,5 +16,3 @@ void SubWindow::closeEvent(QCloseEvent* event)
     this->hide();
 }
 
-
-

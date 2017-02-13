@@ -3,6 +3,7 @@
 // TODO change numbers to constants !!!
 // TODO Change pictures of LED, because leds on that pictures have got different positions
 // TODO Remove the legs on LED, they are too long or join them to ground or power and show this on the pictures
+// TODO Rename it to LedPanel or something like this
 IOWidgetN::IOWidgetN() : QWidget()
 {
     layout = std::shared_ptr<QGridLayout>(new QGridLayout(this));

@@ -42,6 +42,7 @@
 #include "simulator.h"
 
 #include "iowidgetn.h"
+#include "sevensegmentpanel.h"
 
 class MainWindow : public QMainWindow
 {
@@ -65,8 +66,10 @@ private:
     QMdiArea* mdi; // TODO make smart ptr, for now it doesn't work, program crashes after exiting
     SubWindow* editorWindow; // TODO delete this pointer, but for now it makes an error
     SubWindow* ioWindow; // TODO delete this pointer, but for now it makes an error
+    SubWindow* ioSevenSegmentWindow; // TODO delete this pointer, but for now it makes an error
     AsmEditor* editor; // TODO make smart ptr, for now it doesn't work, program crashes after exiting
     IOWidgetN* io;  // TODO delete this pointer, but for now it makes an error
+    SevenSegmentPanel* sevenSegmentPanel; // TODO delete this pointer, but for now it makes an error
 
     std::shared_ptr<QToolBar> toolBarFile;
     std::shared_ptr<QToolBar> toolBarEdit;
@@ -79,7 +82,6 @@ private:
     CpuWidget* cpuWidget; // TODO make smart ptr, for now it doesn't work, program crashes after exiting
     QListWidget* lstResult; // TODO make smart ptr, for now it doesn't work, program crashes after exiting
     DataRamWidgetN* dramWidget; // TODO make smart ptr, for now it doesn't work, program crashes after exiting
-    IOPanel* iopanel;
 
     std::shared_ptr<QDockWidget> dockCpuWidget;
     std::shared_ptr<QDockWidget> dockResult;
