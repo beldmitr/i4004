@@ -6,12 +6,12 @@ SevenSegmentPanel::SevenSegmentPanel(QWidget *parent) : QWidget(parent)
     layout->setSizeConstraint(QLayout::SetMinimumSize);
 
     countBox = new QComboBox;
-    for (int i = 1; i < 9; i++)
-    {
-        countBox->addItem(QString::number(i));
-    }
-
     layout->addWidget(countBox, 0, 0);
+
+    QStringList items;
+    items << "1" << "2" << "4" << "8";
+    countBox->addItems(items);
+
 
     init(8);
 
