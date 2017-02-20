@@ -245,28 +245,29 @@ void MainWindow::createSubWindows()
     editorWindow = new SubWindow;
     ioWindow = new SubWindow;
     ioSevenSegmentWindow = new SubWindow;
+    SubWindow* ioButtonPanel = new SubWindow;
 
     io = new IOWidgetN;
     ioWindow->setWidget(io);
 
+
     editor = new AsmEditor;
     editorWindow->setWidget(editor);
+    editorWindow->setWindowTitle("Editor");
+    editorWindow->setWindowIcon(QIcon(":/Resources/icons/editor.png"));
 
     sevenSegmentPanel = new SevenSegmentPanel;
     ioSevenSegmentWindow->setWidget(sevenSegmentPanel);
 
 
-    editorWindow->setWindowTitle("Editor");
-    ioWindow->setWindowTitle("Input/Output");
-    ioSevenSegmentWindow->setWindowTitle("Seven segment panel");
+    ButtonPanel* buttonPanel = new ButtonPanel;
+    ioButtonPanel->setWidget(buttonPanel);
 
-    editorWindow->setWindowIcon(QIcon(":/Resources/icons/editor.png"));
-    ioWindow->setWindowIcon(QIcon(":/Resources/icons/io.png"));
-    ioSevenSegmentWindow->setWindowIcon(QIcon(":/Resources/icons/SevenSegment.png"));
 
     mdi->addSubWindow(editorWindow);
     mdi->addSubWindow(ioWindow);
     mdi->addSubWindow(ioSevenSegmentWindow);
+    mdi->addSubWindow(ioButtonPanel);
 
     connect(sevenSegmentPanel, &SevenSegmentPanel::changedSegmentCount, [=]() {
         if (!ioSevenSegmentWindow->isMaximized())

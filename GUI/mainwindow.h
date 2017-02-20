@@ -43,6 +43,7 @@
 
 #include "iowidgetn.h"
 #include "sevensegmentpanel.h"
+#include "buttonpanel.h"
 
 class MainWindow : public QMainWindow
 {

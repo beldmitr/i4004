@@ -7,7 +7,7 @@ SevenSegmentIO::SevenSegmentIO(QWidget *parent) : QLabel(parent)
 
     this->setAutoFillBackground(false);
 
-    scaled = 0.15;
+    scaled = 0.1;
 
     image.load(":/Resources/components/SevenSegment.png");
     image = image.scaled(image.size() * scaled);

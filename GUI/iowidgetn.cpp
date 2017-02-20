@@ -21,13 +21,16 @@ IOWidgetN::IOWidgetN() : QWidget()
         leds.push_back(led);
         chooseIOs.push_back(chooseIO);
 
-        led->setScale(0.5);
+        led->setScale(0.4);
         led->setTurnOn(true);
 
         layout->addWidget(comboBoxColored, 0, i);
         layout->addWidget(led, 1, i);
         layout->addWidget(chooseIO, 2, i);
     }
+
+    this->setWindowTitle("Input/Output");
+    this->setWindowIcon(QIcon(":/Resources/icons/io.png"));
 }
 
 IOWidgetN::~IOWidgetN()
