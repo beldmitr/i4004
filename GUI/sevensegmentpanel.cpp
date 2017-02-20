@@ -1,8 +1,9 @@
 #include "sevensegmentpanel.h"
 
+// TODO delete pointers
 SevenSegmentPanel::SevenSegmentPanel(QWidget *parent) : QWidget(parent)
 {
-    layout = new QGridLayout;
+    layout = new QGridLayout(this);
     layout->setSizeConstraint(QLayout::SetMinimumSize);
 
     countBox = new QComboBox;
@@ -16,7 +17,7 @@ SevenSegmentPanel::SevenSegmentPanel(QWidget *parent) : QWidget(parent)
 
     connect(countBox, SIGNAL(currentTextChanged(QString)), this, SLOT(spinnerChanged(QString)));
 
-    this->setLayout(layout);
+    countBox->setCurrentText("4");
 
     this->setWindowTitle("Seven segment panel");
     this->setWindowIcon(QIcon(":/Resources/icons/SevenSegment.png"));
@@ -35,10 +36,7 @@ void SevenSegmentPanel::init(unsigned int countSegments)
         SevenSegmentIO* sevenSegment = new SevenSegmentIO;
         sevenSegment->setSizePolicy(QSizePolicy::Maximum, QSizePolicy::Maximum);
         vectSevenSegment.push_back(sevenSegment);
-        if (i != 0)
-        {
-            sevenSegment->hide();
-        }
+        sevenSegment->hide();
         layout->addWidget(sevenSegment, 1, i);
 
 
@@ -74,5 +72,4 @@ void SevenSegmentPanel::spinnerChanged(QString value)
     }
 
     emit changedSegmentCount();
-
 }
