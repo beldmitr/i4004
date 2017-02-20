@@ -18,8 +18,6 @@
         <file>Resources/icons/saveas.png</file>
         <file>Resources/icons/selectall.png</file>
         <file>Resources/icons/undo.png</file>
-        <file>Resources/components/push_button.png</file>
-        <file>Resources/components/7segment.png</file>
         <file>Resources/components/button.png</file>
         <file>Resources/components/led.png</file>
         <file>Resources/icons/editor.png</file>
@@ -43,5 +41,6 @@
         <file>Resources/components/SevenSegmentPointOn.png</file>
         <file>Resources/components/SevenSegmentVerticalOff.png</file>
         <file>Resources/components/SevenSegmentVerticalOn.png</file>
+        <file>Resources/icons/button.png</file>
     </qresource>
 </RCC>
