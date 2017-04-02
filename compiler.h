@@ -130,8 +130,8 @@ private:
     int bin2int(const std::string&) const; //TODO
     int hex2int(const std::string&) const; //TODO
     int dec2int(const std::string&) const;
-    int to4bit(const int&) const; // WHATIS const int& , maybe only int ??
-    int to8bit(const int&) const; // WHATIS const int& , maybe only int ??
+    int to4bit(const int&) const; // FIXME what is const int& , maybe only int ??
+    int to8bit(const int&) const; // FIXME what is const int& , maybe only int ??
 	int to12bit(const int&) const;
 	int to4bitStrong(const int&) const;
 	int to8bitStrong(const int&) const;
@@ -142,9 +142,9 @@ public:
     explicit Compiler(const std::string& filename, const std::string& output);
 	virtual ~Compiler();
 
-	void toCompile();
-    vector<Error> getErrors() const;
-    vector<unsigned int> getCompiledCode() const;
+    virtual void toCompile();
+    virtual vector<Error> getErrors() const;
+    virtual vector<unsigned int> getCompiledCode() const;
 };
 
 #endif /* COMPILER_H_ */
