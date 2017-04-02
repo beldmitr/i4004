@@ -32,17 +32,15 @@
 #include "asmeditor.h"
 #include "editor.h"
 #include "programramwidget.h"
-#include "dataramwidget.h"
 #include "romwidget.h"
 #include "compiler.h"
 #include "cpuwidget.h"
-#include "iopanel.h"
 #include "subwindow.h"
 #include "dataramwidgetn.h"
 #include "error.h"
 #include "simulator.h"
 
-#include "iowidgetn.h"
+#include "ledpanel.h"
 #include "sevensegmentpanel.h"
 #include "buttonpanel.h"
 
@@ -70,7 +68,7 @@ private:
     SubWindow* ioWindow; // TODO delete this pointer, but for now it makes an error
     SubWindow* ioSevenSegmentWindow; // TODO delete this pointer, but for now it makes an error
     AsmEditor* editor; // TODO make smart ptr, for now it doesn't work, program crashes after exiting
-    IOWidgetN* io;  // TODO delete this pointer, but for now it makes an error
+    LEDPanel* io;  // TODO delete this pointer, but for now it makes an error
     SevenSegmentPanel* sevenSegmentPanel; // TODO delete this pointer, but for now it makes an error
 
     std::shared_ptr<QToolBar> toolBarFile;

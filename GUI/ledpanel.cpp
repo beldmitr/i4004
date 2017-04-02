@@ -1,10 +1,10 @@
-#include "iowidgetn.h"
+#include "ledpanel.h"
 
 // TODO change numbers to constants !!!
 // TODO Change pictures of LED, because leds on that pictures have got different positions
 // TODO Remove the legs on LED, they are too long or join them to ground or power and show this on the pictures
 // TODO Rename it to LedPanel or something like this
-IOWidgetN::IOWidgetN() : QWidget()
+LEDPanel::LEDPanel() : QWidget()
 {
     layout = std::shared_ptr<QGridLayout>(new QGridLayout(this));
 
@@ -33,7 +33,7 @@ IOWidgetN::IOWidgetN() : QWidget()
     this->setWindowIcon(QIcon(":/Resources/icons/io.png"));
 }
 
-IOWidgetN::~IOWidgetN()
+LEDPanel::~LEDPanel()
 {
     // delete here something
 
@@ -53,7 +53,7 @@ IOWidgetN::~IOWidgetN()
     }
 }
 
-void IOWidgetN::update()
+void LEDPanel::update()
 {
     for (LED* led : leds)
     {
@@ -61,7 +61,7 @@ void IOWidgetN::update()
     }
 }
 
-void IOWidgetN::changeLedColor(QString color)
+void LEDPanel::changeLedColor(QString color)
 {
     ((ColoredComboBox*)QObject::sender())->getLed()->setColor(color);
 }

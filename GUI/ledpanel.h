@@ -1,5 +1,5 @@
-#ifndef IOWIDGETN_H
-#define IOWIDGETN_H
+#ifndef LEDPANEL_H
+#define LEDPANEL_H
 
 #include <QObject>
 #include <QWidget>
@@ -14,12 +14,12 @@
 #include "coloredcombobox.h"
 #include "chooseiowidget.h"
 
-class IOWidgetN : public QWidget
+class LEDPanel : public QWidget
 {
     Q_OBJECT
 public:
-    explicit IOWidgetN();
-    virtual ~IOWidgetN();
+    explicit LEDPanel();
+    virtual ~LEDPanel();
 
 private:
     std::shared_ptr<QGridLayout> layout;
@@ -34,4 +34,4 @@ private slots:  /// TODO reduce it to "slots:" only, because "slots" means "priv
 
 };
 
-#endif // IOWIDGETN_H
+#endif // LEDPANEL_H

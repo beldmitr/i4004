@@ -247,7 +247,7 @@ void MainWindow::createSubWindows()
     ioSevenSegmentWindow = new SubWindow;
     SubWindow* ioButtonPanel = new SubWindow;
 
-    io = new IOWidgetN;
+    io = new LEDPanel;
     ioWindow->setWidget(io);
 
 

@@ -7,12 +7,16 @@ CONFIG += c++14
 
 SOURCES += \
     GUI/mainwindow.cpp \
+    GUI/dataramwidget.cpp \
     GUI/romwidget.cpp \
     GUI/programramwidget.cpp \
     GUI/asmeditor.cpp \
     GUI/dataramwidgetn.cpp \
     GUI/subwindow.cpp \
+    GUI/iowidget.cpp \
+    GUI/iolistcomponents.cpp \
     GUI/memorytable.cpp \
+    GUI/iopanel.cpp \
     GUI/chipdataram.cpp \
     main.cpp \
     compiler.cpp \
@@ -30,24 +34,28 @@ SOURCES += \
     GUI/cpuwidget.cpp \
     GUI/led.cpp \
     GUI/button.cpp \
-    GUI/iowidgetn.cpp \
     GUI/coloredcombobox.cpp \
     GUI/chooseiowidget.cpp \
     GUI/sevensegmentio.cpp \
     GUI/sevensegmentpanel.cpp \
     GUI/buttonpanel.cpp \
     GUI/editor.cpp \
-    GUI/highlighter.cpp
+    GUI/highlighter.cpp \
+    GUI/ledpanel.cpp
 
 HEADERS += \
     GUI/mainwindow.h \
+    GUI/dataramwidget.h \
     GUI/romwidget.h \
     GUI/programramwidget.h \
     GUI/asmeditor.h \
     GUI/dataramwidgetn.h \
     GUI/subwindow.h \
+    GUI/iowidget.h \
+    GUI/iolistcomponents.h \
     GUI/memorytable.h \
     GUI/chipdataram.h \
+    GUI/iopanel.h \
     compiler.h \
     error.h \
     simulator.h \
@@ -64,14 +72,14 @@ HEADERS += \
     GUI/cpuwidget.h \
     GUI/led.h \
     GUI/button.h \
-    GUI/iowidgetn.h \
     GUI/coloredcombobox.h \
     GUI/chooseiowidget.h \
     GUI/sevensegmentio.h \
     GUI/sevensegmentpanel.h \
     GUI/buttonpanel.h \
     GUI/editor.h \
-    GUI/highlighter.h
+    GUI/highlighter.h \
+    GUI/ledpanel.h
 
 RESOURCES += \
     resources.qrc
