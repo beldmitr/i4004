@@ -30,6 +30,7 @@
 #include <memory>
 
 #include "asmeditor.h"
+#include "editor.h"
 #include "programramwidget.h"
 #include "dataramwidget.h"
 #include "romwidget.h"

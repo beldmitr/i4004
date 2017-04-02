@@ -252,7 +252,8 @@ void MainWindow::createSubWindows()
 
 
     editor = new AsmEditor;
-    editorWindow->setWidget(editor);
+    Editor* edit = new Editor;
+    editorWindow->setWidget(edit);
     editorWindow->setWindowTitle("Editor");
     editorWindow->setWindowIcon(QIcon(":/Resources/icons/editor.png"));
 
