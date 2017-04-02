@@ -45,6 +45,7 @@
 #include "buttonpanel.h"
 
 #include "editorsubwindow.h"
+#include "ledsubwindow.h"
 
 class MainWindow : public QMainWindow
 {
@@ -66,10 +67,9 @@ private:
     std::shared_ptr<QMenu> menuWindows;
 
     std::shared_ptr<EditorSubWindow> editorSubWindow;
+    std::shared_ptr<LEDSubWindow> ledSubWindow;
 
     QMdiArea* mdi; // TODO make smart ptr, for now it doesn't work, program crashes after exiting
-   // SubWindow* editorWindow; // TODO delete this pointer, but for now it makes an error
-    SubWindow* ioWindow; // TODO delete this pointer, but for now it makes an error
     SubWindow* ioSevenSegmentWindow; // TODO delete this pointer, but for now it makes an error
     AsmEditor* editor; // TODO make smart ptr, for now it doesn't work, program crashes after exiting
     LEDPanel* io;  // TODO delete this pointer, but for now it makes an error

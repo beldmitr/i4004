@@ -241,17 +241,14 @@ void MainWindow::createToolbars()
 
 void MainWindow::createSubWindows()
 {
+    editor = new AsmEditor;
+
     editorSubWindow = std::shared_ptr<EditorSubWindow>(new EditorSubWindow);
-//    editorWindow = new SubWindow;
-    ioWindow = new SubWindow;
+    ledSubWindow = std::shared_ptr<LEDSubWindow>(new LEDSubWindow);
+
+
     ioSevenSegmentWindow = new SubWindow;
     SubWindow* ioButtonPanel = new SubWindow;
-
-    io = new LEDPanel;
-    ioWindow->setWidget(io);
-
-
-    editor = new AsmEditor;
 
     sevenSegmentPanel = new SevenSegmentPanel;
     ioSevenSegmentWindow->setWidget(sevenSegmentPanel);
@@ -262,7 +259,7 @@ void MainWindow::createSubWindows()
 
 
     mdi->addSubWindow(editorSubWindow.get());
-    mdi->addSubWindow(ioWindow);
+    mdi->addSubWindow(ledSubWindow.get());
     mdi->addSubWindow(ioSevenSegmentWindow);
     mdi->addSubWindow(ioButtonPanel);
 
@@ -382,9 +379,8 @@ MainWindow::~MainWindow()
     delete(pramWidget);
 
 //    delete(io); // FIXME delete this pointer, but for now it makes an error
-//    delete(ioWindow); // FIXME delete this pointer, but for now it makes an error
 //    delete(editor); // FIXME delete this pointer, but for now it makes an error and segmentation fault
-//    delete(editorWindow); // FIXME delete this pointer, but for now it makes an error
+
 
     for (QAction* a : listWindowsMenuBtn)
     {
