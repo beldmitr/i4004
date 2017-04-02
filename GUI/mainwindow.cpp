@@ -241,25 +241,17 @@ void MainWindow::createToolbars()
 
 void MainWindow::createSubWindows()
 {
-    editor = new AsmEditor;
+    editor = new AsmEditor; /// TODO Provide safe delete of this pointer and AsmEditor class at all
 
     editorSubWindow = std::shared_ptr<EditorSubWindow>(new EditorSubWindow);
     ledSubWindow = std::shared_ptr<LEDSubWindow>(new LEDSubWindow);
     sevenSegmentSubWindow = std::shared_ptr<SevenSegmentSubWindow>(new SevenSegmentSubWindow);
-
-
-    SubWindow* ioButtonPanel = new SubWindow;
-
-
-    ButtonPanel* buttonPanel = new ButtonPanel;
-    ioButtonPanel->setWidget(buttonPanel);
-
+    buttonSubWindow = std::shared_ptr<ButtonSubWindow>(new ButtonSubWindow);
 
     mdi->addSubWindow(editorSubWindow.get());
     mdi->addSubWindow(ledSubWindow.get());
     mdi->addSubWindow(sevenSegmentSubWindow.get());
-    mdi->addSubWindow(ioButtonPanel);
-
+    mdi->addSubWindow(buttonSubWindow.get());
 }
 
 void MainWindow::createDocks()

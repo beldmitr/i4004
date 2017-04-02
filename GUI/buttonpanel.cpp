@@ -13,9 +13,6 @@ ButtonPanel::ButtonPanel(QWidget *parent) : QWidget(parent)
         layout->addWidget(button, 0, i);
         layout->addWidget(chooseIO, 1, i);
     }
-
-    this->setWindowTitle("Button panel");
-    this->setWindowIcon(QIcon(":/Resources/icons/button.png"));
 }
 
 ButtonPanel::~ButtonPanel()

@@ -40,7 +40,8 @@ SOURCES += \
     GUI/ledpanel.cpp \
     GUI/editorsubwindow.cpp \
     GUI/ledsubwindow.cpp \
-    GUI/sevensegmentsubwindow.cpp
+    GUI/sevensegmentsubwindow.cpp \
+    GUI/buttonsubwindow.cpp
 
 HEADERS += \
     GUI/mainwindow.h \
@@ -77,7 +78,8 @@ HEADERS += \
     GUI/ledpanel.h \
     GUI/editorsubwindow.h \
     GUI/ledsubwindow.h \
-    GUI/sevensegmentsubwindow.h
+    GUI/sevensegmentsubwindow.h \
+    GUI/buttonsubwindow.h
 
 RESOURCES += \
     resources.qrc

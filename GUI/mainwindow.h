@@ -47,6 +47,7 @@
 #include "editorsubwindow.h"
 #include "ledsubwindow.h"
 #include "sevensegmentsubwindow.h"
+#include "buttonsubwindow.h"
 
 class MainWindow : public QMainWindow
 {
@@ -70,6 +71,7 @@ private:
     std::shared_ptr<EditorSubWindow> editorSubWindow;
     std::shared_ptr<LEDSubWindow> ledSubWindow;
     std::shared_ptr<SevenSegmentSubWindow> sevenSegmentSubWindow;
+    std::shared_ptr<ButtonSubWindow> buttonSubWindow;
 
     QMdiArea* mdi; // TODO make smart ptr, for now it doesn't work, program crashes after exiting
     AsmEditor* editor; // TODO make smart ptr, for now it doesn't work, program crashes after exiting
