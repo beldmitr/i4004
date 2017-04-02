@@ -7,3 +7,8 @@ ButtonSubWindow::ButtonSubWindow() : SubWindow()
     this->setWindowTitle("Button panel");
     this->setWindowIcon(QIcon(":/Resources/icons/button.png"));
 }
+
+ButtonSubWindow::~ButtonSubWindow()
+{
+
+}

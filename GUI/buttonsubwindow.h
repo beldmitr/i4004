@@ -14,6 +14,7 @@ class ButtonSubWindow : public SubWindow
     Q_OBJECT
 public:
     ButtonSubWindow();
+    virtual ~ButtonSubWindow();
 
 private:
     std::shared_ptr<ButtonPanel> buttonPanel;
