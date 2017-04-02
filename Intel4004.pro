@@ -7,16 +7,12 @@ CONFIG += c++14
 
 SOURCES += \
     GUI/mainwindow.cpp \
-    GUI/dataramwidget.cpp \
     GUI/romwidget.cpp \
     GUI/programramwidget.cpp \
     GUI/asmeditor.cpp \
     GUI/dataramwidgetn.cpp \
     GUI/subwindow.cpp \
-    GUI/iowidget.cpp \
-    GUI/iolistcomponents.cpp \
     GUI/memorytable.cpp \
-    GUI/iopanel.cpp \
     GUI/chipdataram.cpp \
     main.cpp \
     compiler.cpp \
@@ -45,17 +41,13 @@ SOURCES += \
 
 HEADERS += \
     GUI/mainwindow.h \
-    GUI/dataramwidget.h \
     GUI/romwidget.h \
     GUI/programramwidget.h \
     GUI/asmeditor.h \
     GUI/dataramwidgetn.h \
     GUI/subwindow.h \
-    GUI/iowidget.h \
-    GUI/iolistcomponents.h \
     GUI/memorytable.h \
     GUI/chipdataram.h \
-    GUI/iopanel.h \
     compiler.h \
     error.h \
     simulator.h \
