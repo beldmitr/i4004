@@ -53,7 +53,7 @@ class MainWindow : public QMainWindow
 {
     Q_OBJECT
 private:
-    // FIXME What about delete these pointers, man, or make them smart?
+    /// TODO Check for undeleted pointers
     std::shared_ptr<Compiler> compiler;
     std::shared_ptr<Simulator> simulator;
 
@@ -68,13 +68,12 @@ private:
     std::shared_ptr<QMenu> menuBuild;
     std::shared_ptr<QMenu> menuWindows;
 
+    std::shared_ptr<QMdiArea> mdi;
+
     std::shared_ptr<EditorSubWindow> editorSubWindow;
     std::shared_ptr<LEDSubWindow> ledSubWindow;
     std::shared_ptr<SevenSegmentSubWindow> sevenSegmentSubWindow;
     std::shared_ptr<ButtonSubWindow> buttonSubWindow;
-
-    QMdiArea* mdi; // TODO make smart ptr, for now it doesn't work, program crashes after exiting
-    AsmEditor* editor; // TODO make smart ptr, for now it doesn't work, program crashes after exiting
 
     std::shared_ptr<QToolBar> toolBarFile;
     std::shared_ptr<QToolBar> toolBarEdit;
@@ -82,17 +81,17 @@ private:
     std::shared_ptr<QToolBar> toolBarDebug;
     std::shared_ptr<QToolBar> toolBarMinimize;
 
-    ProgramRamWidget* pramWidget; // TODO make smart ptr, for now it doesn't work, program crashes after exiting
-    RomWidget* romWidget; // TODO make smart ptr, for now it doesn't work, program crashes after exiting
-    CpuWidget* cpuWidget; // TODO make smart ptr, for now it doesn't work, program crashes after exiting
-    QListWidget* lstResult; // TODO make smart ptr, for now it doesn't work, program crashes after exiting
-    DataRamWidgetN* dramWidget; // TODO make smart ptr, for now it doesn't work, program crashes after exiting
-
     std::shared_ptr<QDockWidget> dockCpuWidget;
     std::shared_ptr<QDockWidget> dockResult;
     std::shared_ptr<QDockWidget> dockDRam;
     std::shared_ptr<QDockWidget> dockRom;
     std::shared_ptr<QDockWidget> dockPRam;
+
+    std::shared_ptr<ProgramRamWidget> pramWidget;
+    std::shared_ptr<RomWidget> romWidget;
+    std::shared_ptr<CpuWidget> cpuWidget;
+    std::shared_ptr<QListWidget> lstResult;
+    std::shared_ptr<DataRamWidgetN> dramWidget;
 
     std::shared_ptr<QAction> actNew;
     std::shared_ptr<QAction> actOpen;

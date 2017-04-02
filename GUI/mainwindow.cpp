@@ -144,11 +144,11 @@ void MainWindow::createMenu()
     // Create menu Windows
     menuWindows = std::shared_ptr<QMenu>(mainMenu->addMenu("Windows"));
     nextWindow = std::shared_ptr<QAction>(new QAction("Next window", this));
-    connect(nextWindow.get(), SIGNAL(triggered(bool)), mdi, SLOT(activateNextSubWindow()));
+    connect(nextWindow.get(), SIGNAL(triggered(bool)), mdi.get(), SLOT(activateNextSubWindow()));
     menuWindows->addAction(nextWindow.get());
 
     prevWindow = std::shared_ptr<QAction>(new QAction("Previous window", this));
-    connect(prevWindow.get(), SIGNAL(triggered(bool)), mdi, SLOT(activatePreviousSubWindow()));
+    connect(prevWindow.get(), SIGNAL(triggered(bool)), mdi.get(), SLOT(activatePreviousSubWindow()));
     menuWindows->addAction(prevWindow.get());
 
     menuWindows->addSeparator();
@@ -176,7 +176,7 @@ void MainWindow::createMenu()
     {
         connect(showWindows.get(), SIGNAL(triggered(bool)), w, SLOT(showNormal()));
     }
-    connect(showWindows.get(), SIGNAL(triggered(bool)), mdi, SLOT(tileSubWindows()));
+    connect(showWindows.get(), SIGNAL(triggered(bool)), mdi.get(), SLOT(tileSubWindows()));
 
     menuWindows->addAction(showWindows.get());
 
@@ -241,7 +241,7 @@ void MainWindow::createToolbars()
 
 void MainWindow::createSubWindows()
 {
-    editor = new AsmEditor; /// TODO Provide safe delete of this pointer and AsmEditor class at all
+//    editor = new AsmEditor; /// TODO Provide safe delete of this pointer and AsmEditor class at all
 
     editorSubWindow = std::shared_ptr<EditorSubWindow>(new EditorSubWindow);
     ledSubWindow = std::shared_ptr<LEDSubWindow>(new LEDSubWindow);
@@ -263,23 +263,23 @@ void MainWindow::createDocks()
     this->setCorner(Qt::BottomRightCorner, Qt::RightDockWidgetArea);
 
     dockResult = std::shared_ptr<QDockWidget>(new QDockWidget("Compile Output"));
-    lstResult = new QListWidget;
-    dockResult->setWidget(lstResult);
+    lstResult = std::shared_ptr<QListWidget>(new QListWidget);
+    dockResult->setWidget(lstResult.get());
     this->addDockWidget(Qt::BottomDockWidgetArea, dockResult.get());
 
     dockDRam = std::shared_ptr<QDockWidget>(new QDockWidget("Data RAM"));
-    dramWidget = new DataRamWidgetN;
-    dockDRam->setWidget(dramWidget);
+    dramWidget = std::shared_ptr<DataRamWidgetN>(new DataRamWidgetN);
+    dockDRam->setWidget(dramWidget.get());
     this->addDockWidget(Qt::BottomDockWidgetArea, dockDRam.get());
 
     dockRom = std::shared_ptr<QDockWidget>(new QDockWidget("ROM"));
-    romWidget = new RomWidget;
-    dockRom->setWidget(romWidget);
+    romWidget = std::shared_ptr<RomWidget>(new RomWidget);
+    dockRom->setWidget(romWidget.get());
     this->addDockWidget(Qt::BottomDockWidgetArea, dockRom.get());
 
     dockPRam = std::shared_ptr<QDockWidget>(new QDockWidget("Program RAM"));
-    pramWidget = new ProgramRamWidget;
-    dockPRam->setWidget(pramWidget);
+    pramWidget = std::shared_ptr<ProgramRamWidget>(new ProgramRamWidget);
+    dockPRam->setWidget(pramWidget.get());
     this->addDockWidget(Qt::BottomDockWidgetArea, dockPRam.get());
 
     this->tabifyDockWidget(dockResult.get(), dockDRam.get());
@@ -287,8 +287,8 @@ void MainWindow::createDocks()
     this->tabifyDockWidget(dockRom.get(), dockPRam.get());
 
     dockCpuWidget = std::shared_ptr<QDockWidget>(new QDockWidget("CPU"));
-    cpuWidget = new CpuWidget;
-    dockCpuWidget->setWidget(cpuWidget);
+    cpuWidget = std::shared_ptr<CpuWidget>(new CpuWidget);
+    dockCpuWidget->setWidget(cpuWidget.get());
     this->addDockWidget(Qt::BottomDockWidgetArea, dockCpuWidget.get());
 
     QSizePolicy sizePolicy = dockCpuWidget->sizePolicy();
@@ -317,47 +317,36 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent)
     this->setWindowState(Qt::WindowMaximized);
 
     // create components
-    mdi = new QMdiArea;
+    mdi = std::shared_ptr<QMdiArea>(new QMdiArea);
 //    mdi->tileSubWindows();
     mdi->cascadeSubWindows();
 
     mdi->setHorizontalScrollBarPolicy(Qt::ScrollBarAsNeeded);
     mdi->setVerticalScrollBarPolicy(Qt::ScrollBarAsNeeded);
 
+    createActions();
     createDocks();
     createSubWindows();
-    createActions();
-    createMenu();
     createToolbars();
+    createMenu();
 
     statusBar = std::shared_ptr<QStatusBar>(new QStatusBar);
 
     // set widgets
-    this->setCentralWidget(mdi);
+    this->setCentralWidget(mdi.get());
     this->setStatusBar(statusBar.get());
 
     // form settings
-    editor->setFocus();
+//    editor->setFocus();
     setWindowTitleFilename();
     this->resize(960, 640);
 
     // connects
-    connect(editor, SIGNAL(textChanged()), this, SLOT(setWindowTitleFilename()));
+//    connect(editor, SIGNAL(textChanged()), this, SLOT(setWindowTitleFilename()));
 }
 
 MainWindow::~MainWindow()
 {
-    delete(mdi);
-    delete(cpuWidget);
-    delete(lstResult);
-    delete(dramWidget);
-    delete(romWidget);
-    delete(pramWidget);
-
-//    delete(io); // FIXME delete this pointer, but for now it makes an error
-//    delete(editor); // FIXME delete this pointer, but for now it makes an error and segmentation fault
-
-
     for (QAction* a : listWindowsMenuBtn)
     {
         delete(a);
@@ -379,20 +368,20 @@ void MainWindow::createOutputFilename()
 
 void MainWindow::setWindowTitleFilename()
 {
-    QString title;
+    QString title = "Intel4004";
 
-    if (editor->document()->isModified())
-    {
-        title = "*Intel4004";
-    }
-    else
-    {
-        title = "Intel4004";
-    }
-    if (!filename.isEmpty())
-    {
-        title.append(" - [").append(filename).append("]");
-    }
+//    if (editor->document()->isModified())
+//    {
+//        title = "*Intel4004";
+//    }
+//    else
+//    {
+//        title = "Intel4004";
+//    }
+//    if (!filename.isEmpty())
+//    {
+//        title.append(" - [").append(filename).append("]");
+//    }
     this->setWindowTitle(title);
 }
 
@@ -422,7 +411,7 @@ void MainWindow::readFile()
         }
 
         file.close();
-        editor->setPlainText(doc);
+//        editor->setPlainText(doc);
     }
     else
     {
@@ -437,7 +426,7 @@ void MainWindow::writeFile()
     if (file.is_open())
     {
         QStringList lines;
-        lines = editor->toPlainText().split("\n");
+//        lines = editor->toPlainText().split("\n");
 
         for (QString l : lines)
         {
@@ -459,10 +448,10 @@ void MainWindow::newFile()
     btn = QMessageBox::question(this, tr("New file"), tr("Do you want to start a new file?"));
     if (btn == QMessageBox::Yes)
     {
-        editor->clear();
+//        editor->clear();
         filename.clear();
 
-        editor->document()->setModified(false);
+//        editor->document()->setModified(false);
         setWindowTitleFilename();
 
         actCompile->setDisabled(true);
@@ -483,7 +472,7 @@ void MainWindow::openFile()
         createOutputFilename();
         readFile();
 
-        editor->document()->setModified(false);
+//        editor->document()->setModified(false);
         setWindowTitleFilename();
 
         actCompile->setDisabled(false);
@@ -500,7 +489,7 @@ void MainWindow::saveFile()
     }
     else
     {
-        editor->document()->setModified(false);
+//        editor->document()->setModified(false);
         writeFile();
     }
 
@@ -519,7 +508,7 @@ void MainWindow::saveAsFile()
         createOutputFilename();
         writeFile();
 
-        editor->document()->setModified(false);
+//        editor->document()->setModified(false);
         setWindowTitleFilename();
 
         actCompile->setDisabled(false);
@@ -535,37 +524,37 @@ void MainWindow::exitFile()
 
 void MainWindow::undoEdit()
 {
-    editor->undo();
+//    editor->undo();
 }
 
 void MainWindow::redoEdit()
 {
-    editor->redo();
+//    editor->redo();
 }
 
 void MainWindow::cutEdit()
 {
-    editor->cut();
+//    editor->cut();
 }
 
 void MainWindow::copyEdit()
 {
-    editor->copy();
+//    editor->copy();
 }
 
 void MainWindow::pasteEdit()
 {
-    editor->paste();
+//    editor->paste();
 }
 
 void MainWindow::deleteEdit()
 {
-    editor->textCursor().removeSelectedText();
+//    editor->textCursor().removeSelectedText();
 }
 
 void MainWindow::selectAllEdit()
 {
-    editor->selectAll();
+//    editor->selectAll();
 }
 
 void MainWindow::buildCode()
