@@ -28,9 +28,6 @@ LEDPanel::LEDPanel() : QWidget()
         layout->addWidget(led, 1, i);
         layout->addWidget(chooseIO, 2, i);
     }
-
-    this->setWindowTitle("Input/Output");
-    this->setWindowIcon(QIcon(":/Resources/icons/io.png"));
 }
 
 LEDPanel::~LEDPanel()

@@ -2,6 +2,7 @@
 #define LEDSUBWINDOW_H
 
 #include <QObject>
+#include <QIcon>
 
 #include <memory>
 

@@ -39,7 +39,8 @@ SOURCES += \
     GUI/highlighter.cpp \
     GUI/ledpanel.cpp \
     GUI/editorsubwindow.cpp \
-    GUI/ledsubwindow.cpp
+    GUI/ledsubwindow.cpp \
+    GUI/sevensegmentsubwindow.cpp
 
 HEADERS += \
     GUI/mainwindow.h \
@@ -75,7 +76,8 @@ HEADERS += \
     GUI/highlighter.h \
     GUI/ledpanel.h \
     GUI/editorsubwindow.h \
-    GUI/ledsubwindow.h
+    GUI/ledsubwindow.h \
+    GUI/sevensegmentsubwindow.h
 
 RESOURCES += \
     resources.qrc
