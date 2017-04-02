@@ -18,9 +18,6 @@ SevenSegmentPanel::SevenSegmentPanel(QWidget *parent) : QWidget(parent)
     connect(countBox, SIGNAL(currentTextChanged(QString)), this, SLOT(spinnerChanged(QString)));
 
     countBox->setCurrentText("4");
-
-    this->setWindowTitle("Seven segment panel");
-    this->setWindowIcon(QIcon(":/Resources/icons/SevenSegment.png"));
 }
 
 SevenSegmentPanel::~SevenSegmentPanel()

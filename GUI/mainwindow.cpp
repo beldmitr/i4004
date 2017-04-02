@@ -245,13 +245,10 @@ void MainWindow::createSubWindows()
 
     editorSubWindow = std::shared_ptr<EditorSubWindow>(new EditorSubWindow);
     ledSubWindow = std::shared_ptr<LEDSubWindow>(new LEDSubWindow);
+    sevenSegmentSubWindow = std::shared_ptr<SevenSegmentSubWindow>(new SevenSegmentSubWindow);
 
 
-    ioSevenSegmentWindow = new SubWindow;
     SubWindow* ioButtonPanel = new SubWindow;
-
-    sevenSegmentPanel = new SevenSegmentPanel;
-    ioSevenSegmentWindow->setWidget(sevenSegmentPanel);
 
 
     ButtonPanel* buttonPanel = new ButtonPanel;
@@ -260,22 +257,9 @@ void MainWindow::createSubWindows()
 
     mdi->addSubWindow(editorSubWindow.get());
     mdi->addSubWindow(ledSubWindow.get());
-    mdi->addSubWindow(ioSevenSegmentWindow);
+    mdi->addSubWindow(sevenSegmentSubWindow.get());
     mdi->addSubWindow(ioButtonPanel);
 
-    connect(sevenSegmentPanel, &SevenSegmentPanel::changedSegmentCount, [=]() {
-        if (!ioSevenSegmentWindow->isMaximized())
-        {
-            ioSevenSegmentWindow->adjustSize();
-        }
-    });
-
-    connect(ioSevenSegmentWindow, &SubWindow::windowStateChanged, [=]() {
-        if (!ioSevenSegmentWindow->isMaximized() && !ioSevenSegmentWindow->isMinimized())
-        {
-            ioSevenSegmentWindow->adjustSize();
-        }
-    });
 }
 
 void MainWindow::createDocks()
