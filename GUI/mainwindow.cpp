@@ -241,8 +241,8 @@ void MainWindow::createToolbars()
 
 void MainWindow::createSubWindows()
 {
-
-    editorWindow = new SubWindow;
+    editorSubWindow = std::shared_ptr<EditorSubWindow>(new EditorSubWindow);
+//    editorWindow = new SubWindow;
     ioWindow = new SubWindow;
     ioSevenSegmentWindow = new SubWindow;
     SubWindow* ioButtonPanel = new SubWindow;
@@ -252,10 +252,6 @@ void MainWindow::createSubWindows()
 
 
     editor = new AsmEditor;
-    Editor* edit = new Editor;
-    editorWindow->setWidget(edit);
-    editorWindow->setWindowTitle("Editor");
-    editorWindow->setWindowIcon(QIcon(":/Resources/icons/editor.png"));
 
     sevenSegmentPanel = new SevenSegmentPanel;
     ioSevenSegmentWindow->setWidget(sevenSegmentPanel);
@@ -265,7 +261,7 @@ void MainWindow::createSubWindows()
     ioButtonPanel->setWidget(buttonPanel);
 
 
-    mdi->addSubWindow(editorWindow);
+    mdi->addSubWindow(editorSubWindow.get());
     mdi->addSubWindow(ioWindow);
     mdi->addSubWindow(ioSevenSegmentWindow);
     mdi->addSubWindow(ioButtonPanel);
