@@ -19,17 +19,17 @@ class Stack
      *
      */
 
+private:
+    const int size; // Size of the Stack
+    int actualPointer;
+    std::vector<int> registers;
+
 public:
     Stack();
     virtual ~Stack();
 
     void write(int address);
     int read();
-
-private:
-    const int size; // Size of the Stack
-    int actualPointer;
-    std::vector<int> registers;
 
 };
 

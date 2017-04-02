@@ -12,15 +12,14 @@
 class ChooseIOWidget : public QWidget
 {
     Q_OBJECT
-public:
-    explicit ChooseIOWidget(QWidget *parent = 0);
-    virtual ~ChooseIOWidget();
-
 private:
     std::shared_ptr<QVBoxLayout> layout;
     std::shared_ptr<QPushButton> button;
     std::shared_ptr<QMenu> menuButton;
 
+public:
+    explicit ChooseIOWidget(QWidget *parent = 0);
+    virtual ~ChooseIOWidget();
 
 signals:
 

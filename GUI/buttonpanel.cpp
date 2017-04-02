@@ -7,7 +7,7 @@ ButtonPanel::ButtonPanel(QWidget *parent) : QWidget(parent)
 
     for (int i = 0; i < 8; i++)
     {
-        Button* button = new Button;
+        Button* button = new Button;    /// TODO what about deleting these pointers or make them smart
         ChooseIOWidget* chooseIO = new ChooseIOWidget;
 
         layout->addWidget(button, 0, i);

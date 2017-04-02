@@ -34,6 +34,42 @@
 class CpuWidget : public QWidget
 {
     Q_OBJECT
+private:
+    std::shared_ptr<QGridLayout> layout;
+
+    std::shared_ptr<QGroupBox> gbStack; // gb means GroupBox
+    std::shared_ptr<QGridLayout> layoutStack;
+    std::shared_ptr<QLabel> lblPC;  // lbl means Label
+    std::shared_ptr<QLabel> lblLevel1;
+    std::shared_ptr<QLabel> lblLevel2;
+    std::shared_ptr<QLabel> lblLevel3;
+    std::shared_ptr<QTextEdit> edtPC;   // edt means Edit
+    std::shared_ptr<QTextEdit> edtLevel1;
+    std::shared_ptr<QTextEdit> edtLevel2;
+    std::shared_ptr<QTextEdit> edtLevel3;
+
+    std::shared_ptr<QGroupBox> gbRegisters;
+    std::shared_ptr<QGridLayout> layoutRegisters;
+    std::vector<std::shared_ptr<QLabel>> lblR;
+    std::vector<std::shared_ptr<QTextEdit>> edtR;
+
+    std::shared_ptr<QGroupBox> gbOther;
+    std::shared_ptr<QGridLayout> layoutOther;
+    std::shared_ptr<QLabel> lblAccumulator;
+    std::shared_ptr<QTextEdit> edtAccumulator;
+    std::shared_ptr<QLabel> lblCarry;
+    std::shared_ptr<QCheckBox> cbxCarry;    // cbx means CheckBox
+    std::shared_ptr<QLabel> lblTest;
+    std::shared_ptr<QCheckBox> cbxTest;
+    std::shared_ptr<QLabel> lblInstruction;
+    std::shared_ptr<QLabel> lblCycles;
+    std::shared_ptr<QTextEdit> edtCycles;
+
+    // Methods
+    void createWidgetStack();
+    void createWidgetRegisters();
+    void createWidgetOther();
+
 public:
     explicit CpuWidget(QWidget *parent = 0);
     virtual ~CpuWidget();
@@ -51,43 +87,6 @@ public:
     void setTest(bool value);
     void setInstruction(QString value);
     void setCycles(unsigned int value);
-
-
-private:
-    std::shared_ptr<QGridLayout> layout;
-
-    std::shared_ptr<QGroupBox> gbStack;
-    std::shared_ptr<QGridLayout> layoutStack;
-    std::shared_ptr<QLabel> lblPC;
-    std::shared_ptr<QLabel> lblLevel1;
-    std::shared_ptr<QLabel> lblLevel2;
-    std::shared_ptr<QLabel> lblLevel3;
-    std::shared_ptr<QTextEdit> edtPC;
-    std::shared_ptr<QTextEdit> edtLevel1;
-    std::shared_ptr<QTextEdit> edtLevel2;
-    std::shared_ptr<QTextEdit> edtLevel3;
-
-    std::shared_ptr<QGroupBox> gbRegisters;
-    std::shared_ptr<QGridLayout> layoutRegisters;
-    std::vector<std::shared_ptr<QLabel>> lblR;
-    std::vector<std::shared_ptr<QTextEdit>> edtR;
-
-    std::shared_ptr<QGroupBox> gbOther;
-    std::shared_ptr<QGridLayout> layoutOther;
-    std::shared_ptr<QLabel> lblAccumulator;
-    std::shared_ptr<QTextEdit> edtAccumulator;
-    std::shared_ptr<QLabel> lblCarry;
-    std::shared_ptr<QCheckBox> cbxCarry;
-    std::shared_ptr<QLabel> lblTest;
-    std::shared_ptr<QCheckBox> cbxTest;
-    std::shared_ptr<QLabel> lblInstruction;
-    std::shared_ptr<QLabel> lblCycles;
-    std::shared_ptr<QTextEdit> edtCycles;
-
-    // Methods
-    void createWidgetStack();
-    void createWidgetRegisters();
-    void createWidgetOther();
 
 signals:
 

@@ -20,7 +20,7 @@ class RomWidget : public QWidget
 {
     Q_OBJECT
 private:
-    QGroupBox* memoryGB;
+    QGroupBox* memoryGB;    /// TODO make smart_ptr or delete
     QVBoxLayout* layout;
     QScrollBar* scroll;
     QHBoxLayout* memLayout;

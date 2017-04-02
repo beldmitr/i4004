@@ -18,7 +18,7 @@ private:
     int test;
     int cycles;
     QString operation;
-    Stack* stack;
+    Stack* stack;   /// TODO make smart pointer
     std::vector<unsigned int> registers;
     int dcl; // chooses memory bank (0-7)
 
@@ -49,9 +49,9 @@ public:
     Stack* getStack() const;
     void setStack(const Stack &value);
     unsigned int getRegisterAt(unsigned int index) const;
-    void setRegisters(unsigned int index, unsigned int value);
+    void setRegisters(unsigned int index, unsigned int value);  /// TODO maybe rename to setRegisterAt
     unsigned int getPairAt(unsigned int index) const;
-    void setPairs(unsigned int index, unsigned int value);
+    void setPairs(unsigned int index, unsigned int value);  /// TODO maybe rename to setPairAt
     int getPC() const;
     void setPC(unsigned int value);
     int getDcl() const;

@@ -28,7 +28,7 @@ private:
     std::vector<LED*> leds;
     std::vector<ChooseIOWidget*> chooseIOs;
 
-private slots:
+private slots:  /// TODO reduce it to "slots:" only, because "slots" means "private slots". Check this and reduce
     void update();
     void changeLedColor(QString color);
 

@@ -15,10 +15,11 @@ public:
     explicit ColoredComboBox(LED* led);
     virtual ~ColoredComboBox();
 
-    LED* getLed() const;
+    LED* getLed() const;    /// TODO make it return smart ptr ??
 
 private:
-    LED* led; // I didn't create this pointer, so I don't have to delete it. I assign it only threw a parameter in a constructor
+    // I didn't create this pointer with keyword new, so I don't have to delete it. I assign it only threw a parameter in a constructor
+    LED* led; /// TODO maybe make it smart ??
 
 };
 

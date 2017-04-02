@@ -3,14 +3,15 @@
 
 #include <string>
 
-using namespace std;
+using namespace std;    /// TODO delete using namespace std
 
+/// TODO Implement this class or understand why do we need it
 class Error
 {
-public:
+public: /// TODO maybe better to make it private ??
     const int line;
-    const string text;
-    const string command;
+    const string text;  /// TODO maybe to do it "const std::string&" ??
+    const string command;   /// TODO maybe to do it "const std::string&" ??
 
 public:
     Error(int line, string text, string command);

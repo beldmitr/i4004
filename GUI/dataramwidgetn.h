@@ -17,14 +17,14 @@
 
 #include "chipdataram.h"
 
-using namespace std;
+using namespace std;    /// TODO remove std
 
 class DataRamWidgetN : public QWidget
 {
     Q_OBJECT
 private:
-    QScrollBar* scrollBar;
-    vector<ChipDataRam*> chips;
+    QScrollBar* scrollBar;  /// TODO smart_ptr or delete it
+    vector<ChipDataRam*> chips; /// TODO smart_ptr or delete it
 
 public:
     explicit DataRamWidgetN(QWidget *parent = 0);

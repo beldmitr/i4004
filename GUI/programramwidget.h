@@ -14,7 +14,7 @@ class ProgramRamWidget : public QWidget
 {
     Q_OBJECT
 private:
-    QComboBox* comboTitle;
+    QComboBox* comboTitle;  /// TODO smart_ptr or delete
     QGroupBox* memoryGB;
     QVBoxLayout* layout;
     QScrollBar* scroll;

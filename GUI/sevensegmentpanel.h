@@ -18,19 +18,20 @@
 class SevenSegmentPanel : public QWidget
 {
     Q_OBJECT
+
+private:
+    QGridLayout* layout;    /// TODO smart ptr
+
+    QComboBox* countBox;    /// TODO smart ptr
+
+    std::vector<SevenSegmentIO*> vectSevenSegment;  /// TODO smart ptr
+    std::vector<ChooseIOWidget*> vectChooser;   /// TODO smart ptr
+
+    void init(unsigned int countSegments);
+
 public:
     explicit SevenSegmentPanel(QWidget *parent = 0);
     virtual ~SevenSegmentPanel();
-
-private:
-    QGridLayout* layout;
-
-    QComboBox* countBox;
-
-    std::vector<SevenSegmentIO*> vectSevenSegment;
-    std::vector<ChooseIOWidget*> vectChooser;
-
-    void init(unsigned int countSegments);
 
 signals:
     void changedSegmentCount();
