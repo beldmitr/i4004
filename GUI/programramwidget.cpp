@@ -3,7 +3,7 @@
 
 void ProgramRamWidget::setMemoryTitle(int value)
 {
-    // Uncomment this if you want a "Page Z [0xZZZ - 0xZZZ]" as a title of a GroupBox
+    /// Uncomment this if you want a "Page Z [0xZZZ - 0xZZZ]" as a title of a GroupBox
 //    memoryGB->setTitle("Page " + QString::number(value / 16) +
 //                       " [ 0x" + QString::number(256 * (value / 16), 16) + " - 0x" +
 //                       QString::number(256 * ((value / 16) + 1) - 1, 16) + " ]");
