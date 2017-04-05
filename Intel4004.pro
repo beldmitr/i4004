@@ -10,7 +10,6 @@ SOURCES += \
     GUI/romwidget.cpp \
     GUI/programramwidget.cpp \
     GUI/asmeditor.cpp \
-    GUI/dataramwidgetn.cpp \
     GUI/subwindow.cpp \
     GUI/memorytable.cpp \
     GUI/chipdataram.cpp \
@@ -41,14 +40,14 @@ SOURCES += \
     GUI/editorsubwindow.cpp \
     GUI/ledsubwindow.cpp \
     GUI/sevensegmentsubwindow.cpp \
-    GUI/buttonsubwindow.cpp
+    GUI/buttonsubwindow.cpp \
+    GUI/dataramwidget.cpp
 
 HEADERS += \
     GUI/mainwindow.h \
     GUI/romwidget.h \
     GUI/programramwidget.h \
     GUI/asmeditor.h \
-    GUI/dataramwidgetn.h \
     GUI/subwindow.h \
     GUI/memorytable.h \
     GUI/chipdataram.h \
@@ -79,7 +78,8 @@ HEADERS += \
     GUI/editorsubwindow.h \
     GUI/ledsubwindow.h \
     GUI/sevensegmentsubwindow.h \
-    GUI/buttonsubwindow.h
+    GUI/buttonsubwindow.h \
+    GUI/dataramwidget.h
 
 RESOURCES += \
     resources.qrc

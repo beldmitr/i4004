@@ -19,7 +19,7 @@
 
 using namespace std;    /// TODO remove std
 
-class DataRamWidgetN : public QWidget
+class DataRamWidget : public QWidget
 {
     Q_OBJECT
 private:
@@ -27,8 +27,8 @@ private:
     vector<ChipDataRam*> chips; /// TODO smart_ptr or delete it
 
 public:
-    explicit DataRamWidgetN(QWidget *parent = 0);
-    virtual ~DataRamWidgetN();
+    explicit DataRamWidget(QWidget *parent = 0);
+    virtual ~DataRamWidget();
 
 signals:
 

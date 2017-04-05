@@ -36,7 +36,7 @@
 #include "compiler.h"
 #include "cpuwidget.h"
 #include "subwindow.h"
-#include "dataramwidgetn.h"
+#include "dataramwidget.h"
 #include "error.h"
 #include "simulator.h"
 
@@ -91,7 +91,7 @@ private:
     std::shared_ptr<RomWidget> romWidget;
     std::shared_ptr<CpuWidget> cpuWidget;
     std::shared_ptr<QListWidget> lstResult;
-    std::shared_ptr<DataRamWidgetN> dramWidget;
+    std::shared_ptr<DataRamWidget> dramWidget;
 
     std::shared_ptr<QAction> actNew;
     std::shared_ptr<QAction> actOpen;

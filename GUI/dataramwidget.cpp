@@ -1,6 +1,6 @@
-#include "dataramwidgetn.h"
+#include "dataramwidget.h"
 
-DataRamWidgetN::DataRamWidgetN(QWidget *parent) : QWidget(parent)
+DataRamWidget::DataRamWidget(QWidget *parent) : QWidget(parent)
 {
     this->setAutoFillBackground(true);
 //    this->setStyleSheet("DataRamWidgetN { border: 1px solid black }");
@@ -99,12 +99,12 @@ DataRamWidgetN::DataRamWidgetN(QWidget *parent) : QWidget(parent)
 
 }
 
-DataRamWidgetN::~DataRamWidgetN()
+DataRamWidget::~DataRamWidget()
 {
     // delete or finalize here something
 }
 
-void DataRamWidgetN::wheelEvent(QWheelEvent* event)
+void DataRamWidget::wheelEvent(QWheelEvent* event)
 {
     int p = event->delta() / 120; // +1 when scroll up, -1 when down
     int newValue = scrollBar->value() - p;

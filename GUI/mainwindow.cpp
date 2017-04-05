@@ -268,7 +268,7 @@ void MainWindow::createDocks()
     this->addDockWidget(Qt::BottomDockWidgetArea, dockResult.get());
 
     dockDRam = std::shared_ptr<QDockWidget>(new QDockWidget("Data RAM"));
-    dramWidget = std::shared_ptr<DataRamWidgetN>(new DataRamWidgetN);
+    dramWidget = std::shared_ptr<DataRamWidget>(new DataRamWidget);
     dockDRam->setWidget(dramWidget.get());
     this->addDockWidget(Qt::BottomDockWidgetArea, dockDRam.get());
 
