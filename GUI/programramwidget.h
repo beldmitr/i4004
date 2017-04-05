@@ -8,19 +8,22 @@
 #include <QScrollBar>
 #include <QComboBox>
 
+#include <memory>
+
 #include "memorytable.h"
 
 class ProgramRamWidget : public QWidget
 {
     Q_OBJECT
 private:
-    QComboBox* comboTitle;  /// TODO smart_ptr or delete
-    QGroupBox* memoryGB;
-    QVBoxLayout* layout;
-    QScrollBar* scroll;
-    QHBoxLayout* memLayout;
-
-    QTableWidgetItem* selItem;
+    std::shared_ptr<QVBoxLayout> layout;
+    std::shared_ptr<QHBoxLayout> titleLayout;
+    std::shared_ptr<QComboBox> comboTitle;
+    std::shared_ptr<QHBoxLayout> mainLayout;
+    std::shared_ptr<QScrollBar> scroll;
+    std::shared_ptr<QGroupBox> memoryGB;
+    std::shared_ptr<QHBoxLayout> memLayout;
+    std::shared_ptr<MemoryTable> memory;
 
     void setMemoryTitle(int value);
 
