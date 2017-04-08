@@ -20,9 +20,9 @@ class SevenSegmentPanel : public QWidget
     Q_OBJECT
 
 private:
-    QGridLayout* layout;    /// TODO smart ptr
+    std::shared_ptr<QGridLayout> layout;
 
-    QComboBox* countBox;    /// TODO smart ptr
+    std::shared_ptr<QComboBox> countBox;
 
     std::vector<SevenSegmentIO*> vectSevenSegment;  /// TODO smart ptr
     std::vector<ChooseIOWidget*> vectChooser;   /// TODO smart ptr

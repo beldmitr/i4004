@@ -2,7 +2,7 @@
 
 CPU::CPU()
 {
-    stack = new Stack;
+    stack = std::shared_ptr<Stack>(new Stack);
     PC = 0;
     acc = 0;
     carry = 0;
@@ -100,7 +100,7 @@ void CPU::setOperation(const QString &value)
 
 Stack* CPU::getStack() const
 {
-    return stack;
+    return stack.get();
 }
 
 unsigned int CPU::getRegisterAt(unsigned int index) const

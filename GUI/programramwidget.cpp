@@ -72,6 +72,7 @@ ProgramRamWidget::ProgramRamWidget(QWidget *parent) : QWidget(parent)
 
             scroll->setValue(row);
 
+            // I don't create this pointer with new, so I don't need to delete it
             QTableWidgetItem* selItem = memory->verticalHeaderItem(row);
             selItem->setText(QString::number(row * 16 + column, 16));
             /*

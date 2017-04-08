@@ -17,8 +17,8 @@ LEDPanel::LEDPanel() : QWidget()
         connect(comboBoxColored, SIGNAL(activated(QString)), this, SLOT(changeLedColor(QString)));
         connect(led, SIGNAL(changed()), this, SLOT(update()));
 
-        comboBoxes.push_back(comboBoxColored);
         leds.push_back(led);
+        comboBoxes.push_back(comboBoxColored);
         chooseIOs.push_back(chooseIO);
 
         led->setScale(0.4);

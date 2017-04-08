@@ -5,6 +5,7 @@
 
 #include <iostream>
 #include <vector>
+#include <memory>
 
 #include "stack.h"
 
@@ -18,7 +19,7 @@ private:
     int test;
     int cycles;
     QString operation;
-    Stack* stack;   /// TODO make smart pointer
+    std::shared_ptr<Stack> stack;
     std::vector<unsigned int> registers;
     int dcl; // chooses memory bank (0-7)
 

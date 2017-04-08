@@ -1,13 +1,13 @@
 #include "sevensegmentpanel.h"
 
-// TODO delete pointers
+/// TODO delete pointers
 SevenSegmentPanel::SevenSegmentPanel(QWidget *parent) : QWidget(parent)
 {
-    layout = new QGridLayout(this);
+    layout = std::shared_ptr<QGridLayout>(new QGridLayout(this));
     layout->setSizeConstraint(QLayout::SetMinimumSize);
 
-    countBox = new QComboBox;
-    layout->addWidget(countBox, 0, 0);
+    countBox = std::shared_ptr<QComboBox>(new QComboBox);
+    layout->addWidget(countBox.get(), 0, 0);
 
     QStringList items;
     items << "1" << "2" << "4" << "8";
@@ -15,7 +15,7 @@ SevenSegmentPanel::SevenSegmentPanel(QWidget *parent) : QWidget(parent)
 
     init(8);
 
-    connect(countBox, SIGNAL(currentTextChanged(QString)), this, SLOT(spinnerChanged(QString)));
+    connect(countBox.get(), SIGNAL(currentTextChanged(QString)), this, SLOT(spinnerChanged(QString)));
 
     countBox->setCurrentText("4");
 }

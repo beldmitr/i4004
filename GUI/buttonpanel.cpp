@@ -1,5 +1,6 @@
 #include "buttonpanel.h"
 
+/// TODO delete pointers
 ButtonPanel::ButtonPanel(QWidget *parent) : QWidget(parent)
 {
     layout = std::shared_ptr<QGridLayout>(new QGridLayout(this));

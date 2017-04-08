@@ -4,6 +4,7 @@
 #include <vector>
 #include <iostream>
 #include <memory>
+
 #include "datarambank.h"
 
 class DRAM

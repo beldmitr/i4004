@@ -4,10 +4,10 @@ RomWidget::RomWidget(QWidget *parent) : QWidget(parent)
 {
     this->setAutoFillBackground(true);
 
-    layout = new QVBoxLayout(this);
+    layout = std::shared_ptr<QVBoxLayout>(new QVBoxLayout(this));
 
-    QHBoxLayout* titleLayout = new QHBoxLayout;
-    comboTitle = new QComboBox;
+    titleLayout = std::shared_ptr<QHBoxLayout>(new QHBoxLayout);
+    comboTitle = std::shared_ptr<QComboBox>(new QComboBox);
 
     for (int i = 0; i < 16; i++)
     {
@@ -17,18 +17,18 @@ RomWidget::RomWidget(QWidget *parent) : QWidget(parent)
                             .arg(QString::number(256 * (i + 1) - 1, 16)));
     }
 
-    titleLayout->addWidget(comboTitle);
+    titleLayout->addWidget(comboTitle.get());
     titleLayout->addStretch();
 
-    QHBoxLayout* mainLayout = new QHBoxLayout;
+    mainLayout = std::shared_ptr<QHBoxLayout>(new QHBoxLayout);
 
-    scroll = new QScrollBar();
+    scroll = std::shared_ptr<QScrollBar>(new QScrollBar);
 
-    memoryGB = new QGroupBox;
-    memLayout = new QHBoxLayout(memoryGB);
+    memoryGB = std::shared_ptr<QGroupBox>(new QGroupBox);
+    memLayout = std::shared_ptr<QHBoxLayout>(new QHBoxLayout(memoryGB.get()));
 
-    memory = new MemoryTable;
-    memLayout->addWidget(memory);
+    memory = std::shared_ptr<MemoryTable>(new MemoryTable);
+    memLayout->addWidget(memory.get());
 
     for (int j=0; j<16; j++)
     {
@@ -65,15 +65,14 @@ RomWidget::RomWidget(QWidget *parent) : QWidget(parent)
     scroll->setMaximum(255);
     setMemoryTitle(0);
 
-    mainLayout->addWidget(memoryGB);
-    mainLayout->addWidget(scroll);
+    mainLayout->addWidget(memoryGB.get());
+    mainLayout->addWidget(scroll.get());
 
-    layout->addLayout(titleLayout);
-    layout->addLayout(mainLayout);
+    layout->addLayout(titleLayout.get());
+    layout->addLayout(mainLayout.get());
 
     // connects
-
-    connect(scroll, &QScrollBar::valueChanged,
+    connect(scroll.get(), &QScrollBar::valueChanged,
         [=](int value)
         {
             memory->setCurrentCell(value, memory->currentColumn());
@@ -81,7 +80,7 @@ RomWidget::RomWidget(QWidget *parent) : QWidget(parent)
             setIOGroupBoxVisible(value);
         });
 
-    connect(memory, &QTableWidget::itemSelectionChanged,
+    connect(memory.get(), &QTableWidget::itemSelectionChanged,
         [=]()
         {
             int row = memory->currentRow();
@@ -103,7 +102,7 @@ RomWidget::RomWidget(QWidget *parent) : QWidget(parent)
             setIOGroupBoxVisible(row);
         });
 
-    connect(comboTitle, static_cast<void (QComboBox::*)(int)>(&QComboBox::activated),
+    connect(comboTitle.get(), static_cast<void (QComboBox::*)(int)>(&QComboBox::activated),
         [=](int index)
         {
             scroll->setValue(index * 16);

@@ -3,16 +3,16 @@
 DataRamWidget::DataRamWidget(QWidget *parent) : QWidget(parent)
 {
     this->setAutoFillBackground(true);
-//    this->setStyleSheet("DataRamWidgetN { border: 1px solid black }");
+    this->setStyleSheet("DataRamWidget { border: 1px solid black }");
 
-    QVBoxLayout* layout = new QVBoxLayout(this);
+    layout = std::shared_ptr<QVBoxLayout>(new QVBoxLayout(this));
 
-    QHBoxLayout* titleLayout = new QHBoxLayout;
-    QHBoxLayout* memLayout = new QHBoxLayout;
+    titleLayout = std::shared_ptr<QHBoxLayout>(new QHBoxLayout);
+    memLayout = std::shared_ptr<QHBoxLayout>(new QHBoxLayout);
 
-    QComboBox* comboTitle = new QComboBox;
+    comboTitle = std::shared_ptr<QComboBox>(new QComboBox);
 
-    scrollBar = new QScrollBar;
+    scrollBar = std::shared_ptr<QScrollBar>(new QScrollBar);
 
     // Add Banks and Chips items to ComboBox
     for (int i = 0; i < 8; i++)
@@ -35,7 +35,7 @@ DataRamWidget::DataRamWidget(QWidget *parent) : QWidget(parent)
     scrollBar->setMaximum(8*4 - 1); // must be the same as a count of items in ComboBox
 
     // Title layout
-    titleLayout->addWidget(comboTitle);
+    titleLayout->addWidget(comboTitle.get());
     titleLayout->addStretch();
 
     for(int i = 0; i < 8; i++)
@@ -56,16 +56,15 @@ DataRamWidget::DataRamWidget(QWidget *parent) : QWidget(parent)
         }
     }
 
-    memLayout->addWidget(scrollBar);
-
+    memLayout->addWidget(scrollBar.get());
 
     // add to main layout
-    layout->addLayout(titleLayout);
-    layout->addLayout(memLayout);
+    layout->addLayout(titleLayout.get());
+    layout->addLayout(memLayout.get());
 
     // connects
 
-    connect(comboTitle, static_cast<void (QComboBox::*)(int)>(&QComboBox::currentIndexChanged),
+    connect(comboTitle.get(), static_cast<void (QComboBox::*)(int)>(&QComboBox::currentIndexChanged),
         [=](int index)
         {
             int i = index / 5; // bank
@@ -82,7 +81,7 @@ DataRamWidget::DataRamWidget(QWidget *parent) : QWidget(parent)
             gb->show();
         });
 
-    connect(scrollBar, &QScrollBar::valueChanged,
+    connect(scrollBar.get(), &QScrollBar::valueChanged,
         [=](int value)
         {
             comboTitle->setCurrentIndex(value + value / 4);
@@ -95,13 +94,14 @@ DataRamWidget::DataRamWidget(QWidget *parent) : QWidget(parent)
             ChipDataRam* gb = chips.at(value);
             gb->show();
         });
-
-
 }
 
 DataRamWidget::~DataRamWidget()
 {
-    // delete or finalize here something
+    for (ChipDataRam* chip : chips)
+    {
+        delete(chip);
+    }
 }
 
 void DataRamWidget::wheelEvent(QWheelEvent* event)
@@ -109,15 +109,5 @@ void DataRamWidget::wheelEvent(QWheelEvent* event)
     int p = event->delta() / 120; // +1 when scroll up, -1 when down
     int newValue = scrollBar->value() - p;
 
-
-
     scrollBar->setValue(newValue);
-
-//    int row = this->currentRow() - p;
-//    if (row < 0)
-//        row = 0;
-//    if (row >= ROWS-1)
-//        row = ROWS-1;
-
-//    this->setCurrentCell(row, this->currentColumn());
 }

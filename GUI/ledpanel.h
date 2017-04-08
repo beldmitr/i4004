@@ -9,7 +9,6 @@
 #include <memory>
 #include <vector>
 
-#include "button.h"
 #include "led.h"
 #include "coloredcombobox.h"
 #include "chooseiowidget.h"
@@ -28,7 +27,7 @@ private:
     std::vector<LED*> leds;
     std::vector<ChooseIOWidget*> chooseIOs;
 
-private slots:  /// TODO reduce it to "slots:" only, because "slots" means "private slots". Check this and reduce
+private slots:
     void update();
     void changeLedColor(QString color);
 

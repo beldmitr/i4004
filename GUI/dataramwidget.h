@@ -14,17 +14,21 @@
 #include <QWheelEvent>
 
 #include <vector>
+#include <memory>
 
 #include "chipdataram.h"
 
-using namespace std;    /// TODO remove std
 
 class DataRamWidget : public QWidget
 {
     Q_OBJECT
 private:
-    QScrollBar* scrollBar;  /// TODO smart_ptr or delete it
-    vector<ChipDataRam*> chips; /// TODO smart_ptr or delete it
+    std::shared_ptr<QVBoxLayout> layout;
+    std::shared_ptr<QHBoxLayout> titleLayout;
+    std::shared_ptr<QHBoxLayout> memLayout;
+    std::shared_ptr<QComboBox> comboTitle;
+    std::shared_ptr<QScrollBar> scrollBar;
+    std::vector<ChipDataRam*> chips;
 
 public:
     explicit DataRamWidget(QWidget *parent = 0);

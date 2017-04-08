@@ -13,6 +13,7 @@
 #include <QComboBox>
 
 #include <vector>
+#include <memory>
 
 #include "memorytable.h"
 
@@ -20,14 +21,17 @@ class RomWidget : public QWidget
 {
     Q_OBJECT
 private:
-    QGroupBox* memoryGB;    /// TODO make smart_ptr or delete
-    QVBoxLayout* layout;
-    QScrollBar* scroll;
-    QHBoxLayout* memLayout;
-    QGroupBox* activeIOGroupBox;
-    QComboBox* comboTitle;
+    std::shared_ptr<QGroupBox> memoryGB;    /// TODO make smart_ptr or delete
+    std::shared_ptr<QVBoxLayout> layout;
+    std::shared_ptr<QScrollBar> scroll;
+    std::shared_ptr<QHBoxLayout> memLayout;
+    QGroupBox* activeIOGroupBox; /// TODO wtf ????
+    std::shared_ptr<QComboBox> comboTitle;
+    std::shared_ptr<QHBoxLayout> titleLayout;
+    std::shared_ptr<QHBoxLayout> mainLayout;
 
-    MemoryTable* memory;
+
+    std::shared_ptr<MemoryTable> memory;
 
     QTableWidgetItem* selItem;
     int lastRow = 0;
