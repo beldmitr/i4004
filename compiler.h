@@ -127,12 +127,12 @@ private:
     int pair2int(const std::string&) const;
     int condition2int(const std::string&) const;
     int address2int(const std::string&) const;
-    int bin2int(const std::string&) const; //TODO
-    int hex2int(const std::string&) const; //TODO
+    int bin2int(const std::string&) const; //TODO bin2int
+    int hex2int(const std::string&) const; //TODO hex2int
     int dec2int(const std::string&) const;
-    int to4bit(const int&) const; // FIXME what is const int& , maybe only int ??
-    int to8bit(const int&) const; // FIXME what is const int& , maybe only int ??
-	int to12bit(const int&) const;
+    int to4bit(int) const;
+    int to8bit(int) const;
+    int to12bit(int) const;
 	int to4bitStrong(const int&) const;
 	int to8bitStrong(const int&) const;
 	int to12bitStrong(const int&) const;

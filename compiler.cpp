@@ -1187,6 +1187,7 @@ void Compiler::checkRightOperandData(Instruction& instr)
     else if (regex_match(instr.operandRight, rOpExpr))
     {
         // TODO Evaluate expression
+        std::cout << instr.operandRight << std::endl;
     }
     else
     {
@@ -1311,17 +1312,17 @@ int Compiler::dec2int(const std::string& dec) const
     return QString::fromStdString(dec).toInt(); // TODO QString to std::string
 }
 
-int Compiler::to4bit(const int& op) const
+int Compiler::to4bit(int op) const
 {
     return (op % 0x10);
 }
 
-int Compiler::to8bit(const int& op) const
+int Compiler::to8bit(int op) const
 {
     return (op % 0x100);
 }
 
-int Compiler::to12bit(const int& op) const
+int Compiler::to12bit(int op) const
 {
     return (op % 0x1000);
 }

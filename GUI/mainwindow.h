@@ -29,7 +29,6 @@
 #include <iostream>
 #include <memory>
 
-#include "asmeditor.h"
 #include "editor.h"
 #include "programramwidget.h"
 #include "romwidget.h"
