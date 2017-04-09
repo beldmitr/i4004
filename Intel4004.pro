@@ -9,7 +9,6 @@ SOURCES += \
     GUI/mainwindow.cpp \
     GUI/romwidget.cpp \
     GUI/programramwidget.cpp \
-    GUI/asmeditor.cpp \
     GUI/subwindow.cpp \
     GUI/memorytable.cpp \
     GUI/chipdataram.cpp \
@@ -47,7 +46,6 @@ HEADERS += \
     GUI/mainwindow.h \
     GUI/romwidget.h \
     GUI/programramwidget.h \
-    GUI/asmeditor.h \
     GUI/subwindow.h \
     GUI/memorytable.h \
     GUI/chipdataram.h \

@@ -3,6 +3,7 @@
 
 #include <QObject>
 #include <QIcon>
+#include <QTextEdit>
 
 #include <memory>
 
@@ -15,6 +16,8 @@ class EditorSubWindow : public SubWindow
 public:
     explicit EditorSubWindow();
     virtual ~EditorSubWindow();
+
+    QTextEdit* getTextEditor();
 
 private:
     std::shared_ptr<Editor> editor;

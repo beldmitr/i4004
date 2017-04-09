@@ -13,3 +13,8 @@ EditorSubWindow::~EditorSubWindow()
 {
 
 }
+
+QTextEdit*EditorSubWindow::getTextEditor()
+{
+    return editor->getTextEditor();
+}

@@ -22,6 +22,8 @@ public:
     explicit Editor(QWidget *parent = 0);
     virtual ~Editor();
 
+    QTextEdit* getTextEditor();
+
 private:
     std::shared_ptr<QHBoxLayout> layout;
     std::shared_ptr<QFrame> panel;

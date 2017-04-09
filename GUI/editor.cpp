@@ -38,6 +38,11 @@ Editor::~Editor()
     // delete here something or finalize
 }
 
+QTextEdit* Editor::getTextEditor()
+{
+    return edit.get();
+}
+
 void Editor::highlightKeywords()
 {
 
