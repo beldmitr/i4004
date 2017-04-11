@@ -1,11 +1,11 @@
 #include "params.h"
 
-std::shared_ptr<Operand> Params::getLeft() const
+std::shared_ptr<Instruction::Operand> Instruction::Params::getLeft() const
 {
     return left;
 }
 
-std::shared_ptr<Operand> Params::getRight() const
+std::shared_ptr<Instruction::Operand> Instruction::Params::getRight() const
 {
     return right;
 }
