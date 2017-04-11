@@ -24,7 +24,7 @@ SOURCES += \
     dataramregister.cpp \
     dataramchip.cpp \
     datarambank.cpp \
-    mathexpr.cpp \
+    Utils/mathexpr.cpp \
     GUI/cpuwidget.cpp \
     GUI/led.cpp \
     GUI/button.cpp \
@@ -40,7 +40,17 @@ SOURCES += \
     GUI/ledsubwindow.cpp \
     GUI/sevensegmentsubwindow.cpp \
     GUI/buttonsubwindow.cpp \
-    GUI/dataramwidget.cpp
+    GUI/dataramwidget.cpp \
+    Utils/number.cpp \
+    Utils/line.cpp \
+    Utils/convert.cpp \
+    Instruction/instruction.cpp \
+    Instruction/label.cpp \
+    Instruction/command.cpp \
+    Instruction/commandset.cpp \
+    Utils/string.cpp \
+    Instruction/params.cpp \
+    Instruction/operand.cpp
 
 HEADERS += \
     GUI/mainwindow.h \
@@ -60,7 +70,7 @@ HEADERS += \
     dataramregister.h \
     dataramchip.h \
     datarambank.h \
-    mathexpr.h \
+    Utils/mathexpr.h \
     Interfaces/icompiler.h \
     GUI/cpuwidget.h \
     GUI/led.h \
@@ -77,7 +87,18 @@ HEADERS += \
     GUI/ledsubwindow.h \
     GUI/sevensegmentsubwindow.h \
     GUI/buttonsubwindow.h \
-    GUI/dataramwidget.h
+    GUI/dataramwidget.h \
+    Utils/number.h \
+    utils.h \
+    Utils/line.h \
+    Utils/convert.h \
+    Instruction/instruction.h \
+    Instruction/label.h \
+    Instruction/command.h \
+    Instruction/commandset.h \
+    Utils/string.h \
+    Instruction/params.h \
+    Instruction/operand.h
 
 RESOURCES += \
     resources.qrc

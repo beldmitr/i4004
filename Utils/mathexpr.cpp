@@ -1,6 +1,6 @@
 #include "mathexpr.h"
 
-int MathExpr::evaluate(const std::string& infix)
+int Utils::MathExpr::evaluate(const std::string& infix)
 {
 
     std::vector<std::string> eq = infixToPostfix(infix);
@@ -75,12 +75,114 @@ int MathExpr::evaluate(const std::string& infix)
     return std::stoi(strStack.top());
 }
 
-bool MathExpr::isNumber(const std::string& s)
+int Utils::MathExpr::evaluateWithConstants(const std::string& infix, std::map<std::string, int>& tableConstants)
+{
+    std::vector<std::string> eq = infixToPostfix(infix);
+
+    if (eq.size() == 1 && isNumber(eq[0]))
+    {
+        return stoi(eq[0]);
+    }
+
+    if (eq.size() == 1 && isConstant(eq[0]))
+    {
+        return getNumberByConst(eq[0], tableConstants);
+    }
+
+    if (eq.size() < 3
+            || !isOperation(eq[eq.size() - 1])
+            || (!isNumber(eq[0]) && !isNumber(eq[1]) && !isConstant(eq[0]) && !isConstant(eq[1])))
+    {
+        throw "Wrong postfix notation";
+    }
+
+    std::stack<std::string> strStack;
+
+    for (const std::string& s : eq)
+    {
+        if (isNumber(s))
+        {
+            strStack.push(s);
+        }
+
+        if (isConstant(s))
+        {
+           strStack.push(std::to_string(getNumberByConst(s, tableConstants)));
+        }
+
+        if (isOperation(s))
+        {
+            if (strStack.size() < 2)
+            {
+                throw "Wrong postfix equation";
+            }
+
+            int op2 = std::stoi(strStack.top());
+            strStack.pop();
+            int op1 = std::stoi(strStack.top());
+            strStack.pop();
+
+            /*
+             * Here is not switch, because c++ can't work in switch with std::string, only with int.
+             * Maybe to resolve this using hash.
+             * TODO Maybe to do this code better, using f.e. switch
+             */
+            if (s.compare("+") == 0)
+            {
+                strStack.push(std::to_string(op1 + op2));
+            }
+            else if (s.compare("-") == 0)
+            {
+                strStack.push(std::to_string(op1 - op2));
+            }
+            else if (s.compare("*") == 0)
+            {
+                strStack.push(std::to_string(op1 * op2));
+            }
+            else if (s.compare("/") == 0)
+            {
+                if (op2 == 0)
+                {
+                    std::string msg = "";
+                    msg.append("Dividing to zero in ").append(infix);
+                    throw msg;
+                }
+                strStack.push(std::to_string(op1 / op2));
+            }
+            else
+            {
+                std::string msg = "";
+                msg.append("Unknown operator ").append(s).append(" in infix equaton");
+                throw msg;
+            }
+        }
+    }
+
+    return std::stoi(strStack.top());
+}
+
+int Utils::MathExpr::getNumberByConst(const std::string& key, std::map<std::string, int>& tableConstants)
+{
+    if (tableConstants.find(key) == tableConstants.end())
+    {
+        std::string msg = "Wrong constant " + key;
+        throw msg;
+    }
+
+    return tableConstants[key];
+}
+
+bool Utils::MathExpr::isConstant(const std::string& s)
+{
+    return std::regex_match(s, std::regex("[_]*[A-Z|a-z][_|0-9|A-Z|a-z]*"));
+}
+
+bool Utils::MathExpr::isNumber(const std::string& s)
 {
     return std::regex_match(s, std::regex("[0-9]+"));
 }
 
-bool MathExpr::isOperation(const std::string &s)
+bool Utils::MathExpr::isOperation(const std::string &s)
 {
     // TODO Maybe to do more elegance with regex
     return ((s.compare("+") == 0)
@@ -89,7 +191,7 @@ bool MathExpr::isOperation(const std::string &s)
             || (s.compare("/") == 0));
 }
 
-bool MathExpr::isParenthesis(const std::string &s)
+bool Utils::MathExpr::isParenthesis(const std::string &s)
 {
     return ((s.compare("(") == 0)
             || (s.compare(")") == 0));
@@ -124,7 +226,7 @@ bool MathExpr::isParenthesis(const std::string &s)
  * 4. When the input expression has been completely processed, check the stack.
  *    Any operators still on the stack can be removed and appended to the end of the output list.
  */
-std::vector<std::string> MathExpr::infixToPostfix(const std::string &infix)
+std::vector<std::string> Utils::MathExpr::infixToPostfix(const std::string &infix)
 {
     std::vector<std::string> eq = equationToVector(infix);
     std::vector<std::string> result;
@@ -135,7 +237,7 @@ std::vector<std::string> MathExpr::infixToPostfix(const std::string &infix)
     {
         std::string s = eq[i];
 
-        if (isNumber(s))
+        if (isNumber(s) || isConstant(s))
         {
             result.push_back(s);
         }
@@ -174,7 +276,7 @@ std::vector<std::string> MathExpr::infixToPostfix(const std::string &infix)
     return result;
 }
 
-int MathExpr::operatorPriority(const std::string &op)
+int Utils::MathExpr::operatorPriority(const std::string &op)
 {
     if (op.compare("*") == 0 || op.compare("/") == 0)
     {
@@ -193,21 +295,24 @@ int MathExpr::operatorPriority(const std::string &op)
 }
 
 // split an equation to vector. f.e. 2+3 - 1* 4/3 => to vector with elements {2,+,3,-,1,*,4,/,3}
-std::vector<std::string> MathExpr::equationToVector(const std::string &infix)
+std::vector<std::string> Utils::MathExpr::equationToVector(const std::string &infix)
 {
     std::vector<std::string> result;
 
     for (std::string::const_iterator it = infix.begin(); it != infix.end(); ++it)
     {
-        if (isNumber(std::string(1, *it)) && !result.empty() && isNumber(result.back()))
+        if ((isNumber(std::string(1, *it)) || isConstant(std::string(1, *it)))
+                && !result.empty()
+                && (isNumber(result.back()) || isConstant(result.back())))
         {
             std::string &last = result.back();
             last.append(std::string(1, *it));
 
         }
         else if (isNumber(std::string(1, *it))
-                   || isParenthesis(std::string(1, *it))
-                   || isOperation(std::string(1, *it)))
+                 || isConstant(std::string(1, *it))
+                 || isParenthesis(std::string(1, *it))
+                 || isOperation(std::string(1, *it)))
         {
             result.push_back(std::string(1, *it));
         }

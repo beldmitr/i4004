@@ -46,7 +46,7 @@ void Simulator::step()
     evalCommand(code);
 }
 
-// TESTME evalCommand
+/// TODO TESTME evalCommand
 void Simulator::evalCommand(int command)
 {
     if ((command & 0xFFFF) == 0x0000) // NOP

@@ -1,7 +1,7 @@
 #ifndef ICOMPILER_H
 #define ICOMPILER_H
 
-#include<string>
+//#include<string>
 #include "error.h"
 
 class ICompiler

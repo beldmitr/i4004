@@ -19,76 +19,6 @@ Compiler::Compiler(const std::string& filename, const std::string& output)
 
     this->output = output;
 
-    // Templates
-    rLabel = "[[:alpha:]][[:alnum:]]{2,}(,)";
-    rInstruction = "[[:alpha:]]{2,}[[:alnum:]]?";
-    rOperand = "([[:blank:]]+[[:print:]]+[[:blank:]]*)(,)?([[:blank:]]+[[:print:]]+[[:blank:]]*)?";
-    rComment = "/[[:print:]]*";
-
-    /*
-     *  rOpExpr not exact, always should be controlled on other regex.
-     *  If it is not a pair, register, label and so on, only in this case we say, that it is a mathematical expression.
-     *  In other case we says, that it is not an expression
-     *  For example:
-     *  If rOpExpr equals true and other regex are false, we say that it is an expression.
-     *  If rOpExpr equals true and for example rOpPair is true, then rOpPair has greater priority and we say that it is a pair.
-     */
-    rOpExpr = "([*]?[+-]?[[:alnum:]]+)+";
-    rOpPair = "[Pp][0-7]";
-    rOpRegister = "[Rr]([0-9]|(1[0-6]))";
-    rOpHex = "([0-F]+H)|([0-f]+H)|([0-F]+h)|([0-f]+h)";
-    rOpBin = "([01]+B)|([01]b)";
-    rOpDec = "[0-9]+";
-    rOpLabel = "[[:alpha:]][[:alnum:]]{2,}";
-
-    set.push_back( { "NOP", 0x0 });
-    set.push_back( { "JCN", 0x1000 });
-    set.push_back( { "FIM", 0x2000 });
-    set.push_back( { "SRC", 0x21 });
-    set.push_back( { "FIN", 0x30 });
-    set.push_back( { "JIN", 0x31 });
-    set.push_back( { "JUN", 0x4000 });
-    set.push_back( { "JMS", 0x5000 });
-    set.push_back( { "INC", 0x60 });
-    set.push_back( { "ISZ", 0x7000 });
-    set.push_back( { "ADD", 0x80 });
-    set.push_back( { "SUB", 0x90 });
-    set.push_back( { "LD", 0xA0 });
-    set.push_back( { "XCH", 0xB0 });
-    set.push_back( { "BBL", 0xC0 });
-    set.push_back( { "LDM", 0xD0 });
-    set.push_back( { "WRM", 0xE0 });
-    set.push_back( { "WMP", 0xE1 });
-    set.push_back( { "WRR", 0xE2 });
-    set.push_back( { "WR0", 0xE4 });
-    set.push_back( { "WR1", 0xE5 });
-    set.push_back( { "WR2", 0xE6 });
-    set.push_back( { "WR3", 0xE7 });
-    set.push_back( { "SBM", 0xE8 });
-    set.push_back( { "RDM", 0xE9 });
-    set.push_back( { "RDR", 0xEA });
-    set.push_back( { "ADM", 0xEB });
-    set.push_back( { "RD0", 0xEC });
-    set.push_back( { "RD1", 0xED });
-    set.push_back( { "RD2", 0xEE });
-    set.push_back( { "RD3", 0xEF });
-    set.push_back( { "CLB", 0xF0 });
-    set.push_back( { "CLC", 0xF1 });
-    set.push_back( { "IAC", 0xF2 });
-    set.push_back( { "CMC", 0xF3 });
-    set.push_back( { "CMA", 0xF4 });
-    set.push_back( { "RAL", 0xF5 });
-    set.push_back( { "RAR", 0xF6 });
-    set.push_back( { "TCC", 0xF7 });
-    set.push_back( { "DAC", 0xF8 });
-    set.push_back( { "TCS", 0xF9 });
-    set.push_back( { "STC", 0xFA });
-    set.push_back( { "DAA", 0xFB });
-    set.push_back( { "KBP", 0xFC });
-    set.push_back( { "DCL", 0xFD });
-    // TODO 46. command ???
-    // TODO check numbers of instructions, (for example if 0xFD equals to DCL command, so make a test)
-
     sourcefile.open(filename.c_str(), ios::in);
 
     if (sourcefile.is_open())
@@ -104,8 +34,8 @@ Compiler::Compiler(const std::string& filename, const std::string& output)
     else
     {
         sourcefile.close();
-        cout << "File " << filename << " wasn't open" << endl; // TODO after an implementing an exception, delete this cout
-        throw "File was not opened"; // TODO throw exception file wasn't open
+        std::string msg = "File " + filename + " can't be open.";
+        throw msg;
     }
 
 }
@@ -115,39 +45,12 @@ Compiler::~Compiler()
     sourcefile.close();
 }
 
-Compiler::Instruction::Instruction(std::string name, std::string operandLeft,std::string operandRight,
+Compiler::Instruct::Instruct(std::string name, std::string operandLeft,std::string operandRight,
                                    std::string line, int lineNumber, int code)
     : name(name), operandLeft(operandLeft), operandRight(operandRight),
       line(line), lineNumber(lineNumber), code(code)
 {
 
-}
-
-std::string Compiler::trimStrong(const std::string& text)
-{
-    return regex_replace(text, regex("([[:space:]]{1})"), "");
-}
-
-std::string Compiler::trim(const std::string& text)
-{
-
-    string res = regex_replace(text, regex("([[:space:]]+)"), " ");
-    if (res.empty() || strcmp(res.c_str(), " ") == 0)
-    {
-        return "";
-    }
-
-    if (res.at(0) == ' ')
-    {
-        res.erase(0, 1);
-    }
-
-    if (res.at(res.length() - 1) == ' ')
-    {
-        res.erase(res.length() - 1, 1);
-    }
-
-    return res;
 }
 
 std::string Compiler::getConstByLabel(const std::string& label)
@@ -156,11 +59,11 @@ std::string Compiler::getConstByLabel(const std::string& label)
     {
         if (label == c.label)
         {
-            if (regex_match(c.constant, rOpDec) || regex_match(c.constant, rOpBin) || regex_match(c.constant, rOpHex))
+            if (Utils::Number::isNumber(c.constant))
             {
                 return c.constant;
             }
-            else if (regex_match(c.constant, rOpLabel) && !c.constant.empty())
+            else if (Instruction::Operand::isLabel(c.constant) && !c.constant.empty())
             {
                 return getConstByLabel(c.constant);
             }
@@ -173,19 +76,6 @@ std::string Compiler::getConstByLabel(const std::string& label)
     //    errList->addItem(QString::fromStdString(s.str()));
     //    errors.push_back({-1, "Can't resolve label value ", label});
     return "";
-}
-
-int Compiler::getInstructionLength(const std::string& name)
-{
-    for (const InstructionSet& instr : set)
-    {
-        if (instr.mnemonic == name)
-        {
-            return (instr.code & 0xFF00) ? 2 : 1;
-        }
-    }
-
-    return 0;
 }
 
 int Compiler::getAddressByLabel(const std::string& label)
@@ -214,32 +104,6 @@ bool Compiler::checkLabelExist(const std::string& label)
     for (const Constants& c : constantsTable)
     {
         if (label == c.label)
-        {
-            return true;
-        }
-    }
-
-    return false;
-}
-
-int Compiler::getCodeByInstruction(const std::string& instr)
-{
-    for (const InstructionSet& i : set)
-    {
-        if (instr == i.mnemonic)
-        {
-            return i.code;
-        }
-    }
-
-    return -1;
-}
-
-bool Compiler::isInstruction(const std::string& name) const
-{
-    for (const InstructionSet& i : set)
-    {
-        if (i.mnemonic == name)
         {
             return true;
         }
@@ -293,7 +157,7 @@ void Compiler::saveToTables(const std::string& line, const std::string& label,
         //        s << "Error at line " << lineNumber << ": Instruction expected, but left operand was acquired (1). Line: "
         //                << trim(line) << endl;
         //        errList->addItem(QString::fromStdString(s.str()));
-        errors.push_back( { lineNumber,  "Instruction expected, but left operand was acquired (1).", trim(line)} );
+        errors.push_back( { lineNumber,  "Instruction expected, but left operand was acquired (1).", Utils::String::trim(line)} );
     }
     else if (label == "" && instruction == "" && operandLeft != "" && operandRight == "")
     {
@@ -306,7 +170,7 @@ void Compiler::saveToTables(const std::string& line, const std::string& label,
         //        s << "Error at line " << lineNumber << ": Instruction expected, but right operand was acquired (2). Line: "
         //                << trim(line) << endl;
         //        errList->addItem(QString::fromStdString(s.str()));
-        errors.push_back( { lineNumber,  "Instruction expected, but right operand was acquired (2).", trim(line)} );
+        errors.push_back( { lineNumber,  "Instruction expected, but right operand was acquired (2).", Utils::String::trim(line)} );
     }
     else if (label == "" && instruction == "" && operandLeft != "" && operandRight != "")
     {
@@ -319,7 +183,7 @@ void Compiler::saveToTables(const std::string& line, const std::string& label,
         //        s << "Error at line " << lineNumber << ": Instruction expected, but both operands was acquired (3). Line: "
         //                << trim(line) << endl; // TODO Delete this cout
         //        errList->addItem(QString::fromStdString(s.str()));
-        errors.push_back( { lineNumber,  "Instruction expected, but both operands was acquired (3).", trim(line)} );
+        errors.push_back( { lineNumber,  "Instruction expected, but both operands was acquired (3).", Utils::String::trim(line)} );
     }
     else if (label == "" && instruction != "" && operandLeft == "" && operandRight == "")
     {
@@ -331,7 +195,7 @@ void Compiler::saveToTables(const std::string& line, const std::string& label,
          * 	So it only writes the command to the instructionTable
          */
 
-        instructionTable.push_back( { instruction, operandLeft, operandRight, trim(line), lineNumber, -1 });
+        instructionTable.push_back( { instruction, operandLeft, operandRight, Utils::String::trim(line), lineNumber, -1 });
     }
     else if (label == "" && instruction != "" && operandLeft == "" && operandRight != "")
     {
@@ -344,7 +208,7 @@ void Compiler::saveToTables(const std::string& line, const std::string& label,
         //        stringstream s;
         //        s << "Error at line " << lineNumber << ": Left operand acquired (5). Line: " << trim(line) << endl;
         //        errList->addItem(QString::fromStdString(s.str()));
-        errors.push_back( { lineNumber,  "Left operand acquired (5).", trim(line)} );
+        errors.push_back( { lineNumber,  "Left operand acquired (5).", Utils::String::trim(line)} );
     }
     else if (label == "" && instruction != "" && operandLeft != "" && operandRight == "")
     {
@@ -356,7 +220,7 @@ void Compiler::saveToTables(const std::string& line, const std::string& label,
          * 	So it only writes the command to the instructionTable
          */
 
-        instructionTable.push_back( { instruction, operandLeft, operandRight, trim(line), lineNumber, -1 });
+        instructionTable.push_back( { instruction, operandLeft, operandRight, Utils::String::trim(line), lineNumber, -1 });
     }
     else if (label == "" && instruction != "" && operandLeft != "" && operandRight != "")
     {
@@ -368,7 +232,7 @@ void Compiler::saveToTables(const std::string& line, const std::string& label,
          * 	So it only writes the command to the instructionTable
          */
 
-        instructionTable.push_back( { instruction, operandLeft, operandRight, trim(line), lineNumber, -1 });
+        instructionTable.push_back( { instruction, operandLeft, operandRight, Utils::String::trim(line), lineNumber, -1 });
     }
     else if (label != "" && instruction == "" && operandLeft == "" && operandRight == "")
     {
@@ -380,7 +244,7 @@ void Compiler::saveToTables(const std::string& line, const std::string& label,
         //        stringstream s;
         //        s << "Error at line " << lineNumber << ": Label to an empty line (8). Line: " << trim(line) << endl;
         //        errList->addItem(QString::fromStdString(s.str()));
-        errors.push_back( { lineNumber,  "Label to an empty line (8).", trim(line)} );
+        errors.push_back( { lineNumber,  "Label to an empty line (8).", Utils::String::trim(line)} );
     }
     else if (label != "" && instruction == "" && operandLeft == "" && operandRight != "")
     {
@@ -392,7 +256,7 @@ void Compiler::saveToTables(const std::string& line, const std::string& label,
         //        stringstream s;
         //        s << "Error at line " << lineNumber << ": Label to right operand (9). Line: " << trim(line) << endl;
         //        errList->addItem(QString::fromStdString(s.str()));
-        errors.push_back( { lineNumber,  "Label to right operand (9).", trim(line)} );
+        errors.push_back( { lineNumber,  "Label to right operand (9).", Utils::String::trim(line)} );
     }
     else if (label != "" && instruction == "" && operandLeft != "" && operandRight == "")
     {
@@ -418,7 +282,7 @@ void Compiler::saveToTables(const std::string& line, const std::string& label,
         //        stringstream s;
         //        s << "Error at line " << lineNumber << ": Label to both operands (B). Line: " << trim(line) << endl;
         //        errList->addItem(QString::fromStdString(s.str()));
-        errors.push_back( { lineNumber,  "Label to both operands (B).", trim(line)} );
+        errors.push_back( { lineNumber,  "Label to both operands (B).", Utils::String::trim(line)} );
     }
     else if (label != "" && instruction != "" && operandLeft == "" && operandRight == "")
     {
@@ -432,7 +296,7 @@ void Compiler::saveToTables(const std::string& line, const std::string& label,
          */
 
         labelsTable.push_back( { label, address });
-        instructionTable.push_back( { instruction, operandLeft, operandRight, trim(line), lineNumber, -1 });
+        instructionTable.push_back( { instruction, operandLeft, operandRight, Utils::String::trim(line), lineNumber, -1 });
     }
     else if (label != "" && instruction != "" && operandLeft == "" && operandRight != "")
     {
@@ -445,7 +309,7 @@ void Compiler::saveToTables(const std::string& line, const std::string& label,
         //        stringstream s;
         //        s << "Error at line " << lineNumber << ": Expected left operand (D). Line: " << trim(line) << endl;
         //        errList->addItem(QString::fromStdString(s.str()));
-        errors.push_back( { lineNumber,  "Expected left operand (D).", trim(line)} );
+        errors.push_back( { lineNumber,  "Expected left operand (D).", Utils::String::trim(line)} );
     }
     else if (label != "" && instruction != "" && operandLeft != "" && operandRight == "")
     {
@@ -459,7 +323,7 @@ void Compiler::saveToTables(const std::string& line, const std::string& label,
          */
 
         labelsTable.push_back( { label, address });
-        instructionTable.push_back( { instruction, operandLeft, operandRight, trim(line), lineNumber, -1 });
+        instructionTable.push_back( { instruction, operandLeft, operandRight, Utils::String::trim(line), lineNumber, -1 });
     }
     else if (label != "" && instruction != "" && operandLeft != "" && operandRight != "")
     {
@@ -473,7 +337,7 @@ void Compiler::saveToTables(const std::string& line, const std::string& label,
          */
 
         labelsTable.push_back( { label, address });
-        instructionTable.push_back( { instruction, operandLeft, operandRight, trim(line), lineNumber, -1 });
+        instructionTable.push_back( { instruction, operandLeft, operandRight, Utils::String::trim(line), lineNumber, -1 });
     }
     else
     {
@@ -486,7 +350,7 @@ void Compiler::saveToTables(const std::string& line, const std::string& label,
         //        stringstream s;
         //        s << "Error at line " << lineNumber << ": Unexpected error. Line: " << trim(line) << endl;
         //        errList->addItem(QString::fromStdString(s.str()));
-        errors.push_back( { lineNumber,  "Unexpected error.", trim(line)} );
+        errors.push_back( { lineNumber,  "Unexpected error.", Utils::String::trim(line)} );
     }
 }
 
@@ -494,24 +358,25 @@ void Compiler::parseLine(std::string& line, std::string& label, std::string& ins
                          std::string& operand, std::string& operandLeft, std::string& operandRight,
                          const int& lineNumber)
 {
-    std::string currentLine = trim(line);
+    std::string currentLine = Utils::String::trim(line);
     smatch m;
     // Find and delete from line a comment, if it exists
-    if (regex_search(line, m, rComment))
+
+    if (Utils::Assembler::Line::searchComment(line, m))
     {
         line = m.prefix().str();	// We don't need a comment in ObjectCode, so only delete it
     }
 
     // Parse a label
-    if (regex_search(line, m, rLabel))
+    if (Utils::Assembler::Line::searchLabel(line, m))
     {
-        label = trimStrong(m[0]);	// A label on a line
+        label = Utils::String::trimStrong(m[0]);	// A label on a line
         label = regex_replace(label, regex("(,)"), "");	// Delete "," from label
         line = m.suffix().str();
 
         std::string prefix = m.prefix().str();
         // Check if something is by left side of a label. If it is, then this is error
-        if (!trimStrong(prefix).empty())
+        if (!Utils::String::trimStrong(prefix).empty())
         {
             // write error
             //            stringstream s;
@@ -539,31 +404,31 @@ void Compiler::parseLine(std::string& line, std::string& label, std::string& ins
      *  It resolve constants with expression
      *  Label, 23+AAA
      */
-    if (regex_search(line, m, rOpExpr) && !isInstruction(m[0]))
+    if (Instruction::Operand::searchMathExpression(line, m) && !Instruction::CommandSet::isCommand(m[0])) // TODO maybe do this better, I don't like this logic, why I check isExistCommand??
     {
-        operandLeft = trimStrong(m[0]);
+        operandLeft = Utils::String::trimStrong(m[0]);
         return;
     }
 
     // Parse an instruction
-    if (regex_search(line, m, rInstruction))
+    if (Utils::Assembler::Line::searchInstruction(line, m))
     {
-        instruction = trimStrong(m[0]);	// An instruction on a line
+        instruction = Utils::String::trimStrong(m[0]);	// An instruction on a line
         line = m.suffix().str();
     }
 
     // Parse operand(s)
-    if (regex_search(line, m, rOperand))
+    if (Utils::Assembler::Line::searchOperand(line, m))
     {
         operand = m[0];	//	Operand
         line = m.suffix().str();
 
         // Divide operand to left and right, if they exist
-        operandLeft = trimStrong(operand);
+        operandLeft = Utils::String::trimStrong(operand);
         if (regex_search(operand, m, regex("(,)")))
         {
-            operandLeft = trimStrong(m.prefix().str());
-            operandRight = trimStrong(m.suffix().str());
+            operandLeft = Utils::String::trimStrong(m.prefix().str());
+            operandRight = Utils::String::trimStrong(m.suffix().str());
         }
     }
 
@@ -571,7 +436,7 @@ void Compiler::parseLine(std::string& line, std::string& label, std::string& ins
      * If line is not empty, that means, that compiler couldn't resolve something,
      * so we should to throw an error to the error stream
      */
-    if (!trimStrong(line).empty())
+    if (!Utils::String::trimStrong(line).empty())
     {
 
         // write error
@@ -584,23 +449,22 @@ void Compiler::parseLine(std::string& line, std::string& label, std::string& ins
 
 void Compiler::preprocessing()
 {
-
     // Evaluate constant labels
     for (Constants& c : constantsTable)
     {
-        if (regex_match(c.constant, rOpLabel))
+        if (Instruction::Operand::isLabel(c.constant))
         {
             c.constant = getConstByLabel(c.constant);
         }
     }
 
-    for (Instruction& instr : instructionTable)
+    for (Instruct& instr : instructionTable)
     {
         /*
          * Check instructions
          * if don't exist or if they have got wrong operands
          */
-        switch (getCodeByInstruction(instr.name))
+        switch (Instruction::CommandSet::getCommand(instr.name))
         {
         case 0x0:
             checkNoOperands(instr);
@@ -768,80 +632,80 @@ void Compiler::preprocessing()
 
 void Compiler::composing()
 {
-    for (Instruction& instr : instructionTable)
+    for (Instruct& instr : instructionTable)
     {
         int op1 = 0;
         int op2 = 0;
         /*
          * Compose instructions to object code
          */
-        switch (getCodeByInstruction(instr.name))
+        switch (Instruction::CommandSet::getCommand(instr.name))
         {
         case 0x0:
             instr.code = 0x0;
             break;
         case 0x1000: // Jump Conditional	JCN	0001CCCC	AAAAAAAA	condition, address
-            op1 = condition2int(instr.operandLeft);
-            op2 = address2int(instr.operandRight);
-            instr.code = ((0x1000 | (to4bit(op1) << 8)) | to8bit(op2)) & 0xFFFF;
+            op1 = Utils::Convert::condition2int(instr.operandLeft);
+            op2 = Utils::Convert::address2int(instr.operandRight);
+            instr.code = ((0x1000 | (Utils::Convert::to4bit(op1) << 8)) | Utils::Convert::to8bit(op2)) & 0xFFFF;
             break;
         case 0x2000: //Fetch Immediate	FIM	0010RRR0	DDDDDDDD	register pair, data
-            op1 = pair2int(instr.operandLeft);
-            op2 = dec2int(instr.operandRight);
-            instr.code = ((0x2000 | (op1 << 9)) | to8bit(op2)) & 0xFFFF;
+            op1 = Utils::Convert::pair2int(instr.operandLeft);
+            op2 = Utils::Convert::dec2int(instr.operandRight);
+            instr.code = ((0x2000 | (op1 << 9)) | Utils::Convert::to8bit(op2)) & 0xFFFF;    // TODO (op1 << 9) why 9 ??? why not 8 ???? check it
             break;
         case 0x21: //Send Register Control	SRC	0010RRR1	-	register pair
-            op1 = pair2int(instr.operandLeft);
+            op1 = Utils::Convert::pair2int(instr.operandLeft);
             instr.code = (0x21 | (op1 << 1)) & 0xFF;
             break;
         case 0x30: //Fetch Indirect	FIN	0011RRR0	-	register pair
-            op1 = pair2int(instr.operandLeft);
+            op1 = Utils::Convert::pair2int(instr.operandLeft);
             instr.code = (0x30 | (op1 << 1)) & 0xFF;
             break;
         case 0x31: //Jump Indirect	JIN	0011RRR1	-	register pair
-            op1 = pair2int(instr.operandLeft);
+            op1 = Utils::Convert::pair2int(instr.operandLeft);
             instr.code = (0x31 | (op1 << 1)) & 0xFF;
             break;
         case 0x4000: //Jump Unconditional	JUN	0100AAAA	AAAAAAAA	address
-            op1 = address2int(instr.operandLeft);
-            instr.code = (0x4000 | to12bit(op1)) & 0xFFFF;
+            op1 = Utils::Convert::address2int(instr.operandLeft);
+            instr.code = (0x4000 | Utils::Convert::to12bit(op1)) & 0xFFFF;
             break;
         case 0x5000: //Jump to Subroutine	JMS	0101AAAA	AAAAAAAA	address
-            op1 = address2int(instr.operandLeft);
-            instr.code = (0x5000 | to12bit(op1)) & 0xFFFF;
+            op1 = Utils::Convert::address2int(instr.operandLeft);
+            instr.code = (0x5000 | Utils::Convert::to12bit(op1)) & 0xFFFF;
             break;
         case 0x60: //Increment	INC	0110RRRR	-	register
-            op1 = register2int(instr.operandLeft);
+            op1 = Utils::Convert::register2int(instr.operandLeft);
             instr.code = (0x60 | op1) & 0xFF;
             break;
         case 0x7000: //Increment and Skip	ISZ	0111RRRR	AAAAAAAA	register, address
-            op1 = register2int(instr.operandLeft);
-            op2 = address2int(instr.operandRight);
-            instr.code = ((0x7000 | (op1 << 8)) | to8bit(op2)) & 0xFFFF;
+            op1 = Utils::Convert::register2int(instr.operandLeft);
+            op2 = Utils::Convert::address2int(instr.operandRight);
+            instr.code = ((0x7000 | (op1 << 8)) | Utils::Convert::to8bit(op2)) & 0xFFFF;
             break;
         case 0x80: //Add	ADD	1000RRRR	-	register
-            op1 = register2int(instr.operandLeft);
+            op1 = Utils::Convert::register2int(instr.operandLeft);
             instr.code = (0x80 | op1) & 0xFF;
             break;
         case 0x90: //Subtract	SUB	1001RRRR	-	register
-            op1 = register2int(instr.operandLeft);
+            op1 = Utils::Convert::register2int(instr.operandLeft);
             instr.code = (0x90 | op1) & 0xFF;
             break;
         case 0xA0: //Load	LD	1010RRRR	-	register
-            op1 = register2int(instr.operandLeft);
+            op1 = Utils::Convert::register2int(instr.operandLeft);
             instr.code = (0xA0 | op1) & 0xFF;
             break;
         case 0xB0: //Exchange	XCH	1011RRRR	-	register
-            op1 = register2int(instr.operandLeft);
+            op1 = Utils::Convert::register2int(instr.operandLeft);
             instr.code = (0xB0 | op1) & 0xFF;
             break;
         case 0xC0: //Branch Back and Load	BBL	1100DDDD	-	data
-            op1 = dec2int(instr.operandLeft);
-            instr.code = (0xC0 | to4bit(op1)) & 0xFF;
+            op1 = Utils::Convert::dec2int(instr.operandLeft);
+            instr.code = (0xC0 | Utils::Convert::to4bit(op1)) & 0xFF;
             break;
         case 0xD0: //Load Immediate	LDM	1101DDDD	-	data
-            op1 = dec2int(instr.operandLeft);
-            instr.code = (0xD0 | to4bit(op1)) & 0xFF;
+            op1 = Utils::Convert::dec2int(instr.operandLeft);
+            instr.code = (0xD0 | Utils::Convert::to4bit(op1)) & 0xFF;
             break;
         case 0xE0: //Write Main Memory	WRM	11100000	-	none
             instr.code = 0xE0;
@@ -935,7 +799,7 @@ void Compiler::composing()
     }	// for
 }
 
-void Compiler::checkNoOperands(const Instruction& instr)
+void Compiler::checkNoOperands(const Instruct& instr)
 {
     if (instr.operandLeft != "" || instr.operandRight != "")
     {
@@ -947,7 +811,7 @@ void Compiler::checkNoOperands(const Instruction& instr)
     }
 }
 
-void Compiler::checkNoRightOperand(const Instruction& instr)
+void Compiler::checkNoRightOperand(const Instruct& instr)
 {
     if (instr.operandRight != "")
     {
@@ -959,14 +823,14 @@ void Compiler::checkNoRightOperand(const Instruction& instr)
     }
 }
 
-void Compiler::checkLeftOperandPair(const Instruction& instr)
+void Compiler::checkLeftOperandPair(const Instruct& instr)
 {
     /*
      *  Check left operand
      *  it can be:
      *  - Pair
      */
-    if (regex_match(instr.operandLeft, rOpPair))
+    if (Instruction::Operand::isPair(instr.operandLeft))
     {
         // Ok, Nothing to do
     }
@@ -981,14 +845,14 @@ void Compiler::checkLeftOperandPair(const Instruction& instr)
     }
 }
 
-void Compiler::checkLeftOperandRegister(const Instruction& instr)
+void Compiler::checkLeftOperandRegister(const Instruct& instr)
 {
     /*
      *  Check left operand
      *  it can be:
-     *  - Pair
+     *  - Register
      */
-    if (regex_match(instr.operandLeft, rOpRegister))
+    if (Instruction::Operand::isRegister(instr.operandLeft))
     {
         // Ok, Nothing to do
     }
@@ -1004,7 +868,7 @@ void Compiler::checkLeftOperandRegister(const Instruction& instr)
     }
 }
 
-void Compiler::checkLeftOperandCondition(Instruction& instr)
+void Compiler::checkLeftOperandCondition(Instruct& instr)
 {
     /*
      *  Check left operand
@@ -1018,12 +882,11 @@ void Compiler::checkLeftOperandCondition(Instruction& instr)
      *
      *  If else it should throw an error to the error stream
      */
-    if (regex_match(instr.operandLeft, rOpBin) || regex_match(instr.operandLeft, rOpHex)
-            || regex_match(instr.operandLeft, rOpDec))
+    if (Utils::Number::isNumber(instr.operandLeft))
     {
         // Ok, Nothing to do
     }
-    else if (regex_match(instr.operandLeft, rOpLabel))
+    else if (Instruction::Operand::isLabel(instr.operandLeft))
     {
         std::string c = getConstByLabel(instr.operandLeft);
         if (c != "")
@@ -1040,7 +903,7 @@ void Compiler::checkLeftOperandCondition(Instruction& instr)
             errors.push_back( { instr.lineNumber,  "Unknown constant \"" + instr.name + "\".", instr.line} );
         }
     }
-    else if (regex_match(instr.operandLeft, rOpExpr))
+    else if (Instruction::Operand::isMathExpression(instr.operandLeft))
     {
         // TODO Value Expression
     }
@@ -1054,7 +917,7 @@ void Compiler::checkLeftOperandCondition(Instruction& instr)
     }
 }
 
-void Compiler::checkRightOperandAddress(Instruction& instr)
+void Compiler::checkRightOperandAddress(Instruct& instr)
 {
     /*
      * Check right operand
@@ -1067,12 +930,11 @@ void Compiler::checkRightOperandAddress(Instruction& instr)
      * - Expression
      */
 
-    if (regex_match(instr.operandRight, rOpBin) || regex_match(instr.operandRight, rOpHex)
-            || regex_match(instr.operandRight, rOpDec))
+    if (Utils::Number::isNumber(instr.operandRight))
     {
         // Ok, Nothing to do
     }
-    else if (regex_match(instr.operandRight, rOpLabel))
+    else if (Instruction::Operand::isLabel(instr.operandRight))
     {
         int c = getAddressByLabel(instr.operandRight);
         if (c != -1)
@@ -1088,7 +950,7 @@ void Compiler::checkRightOperandAddress(Instruction& instr)
             errors.push_back( { instr.lineNumber,  "Unknown label.", instr.line} );
         }
     }
-    else if (regex_match(instr.operandRight, rOpExpr))
+    else if (Instruction::Operand::isMathExpression(instr.operandRight))
     {
         // TODO Value Expression
     }
@@ -1102,7 +964,7 @@ void Compiler::checkRightOperandAddress(Instruction& instr)
     }
 }
 
-void Compiler::checkLeftOperandData(Instruction& instr)
+void Compiler::checkLeftOperandData(Instruct& instr)
 {
     /*
      *  Check right operand
@@ -1114,12 +976,11 @@ void Compiler::checkLeftOperandData(Instruction& instr)
      *  - Label (Const)
      */
 
-    if (regex_match(instr.operandLeft, rOpBin) || regex_match(instr.operandLeft, rOpHex)
-            || regex_match(instr.operandLeft, rOpDec))
+    if (Utils::Number::isNumber(instr.operandLeft))
     {
         // Ok, Nothing to do
     }
-    else if (regex_match(instr.operandLeft, rOpLabel))
+    else if (Instruction::Operand::isLabel(instr.operandLeft))
     {
         std::string c = getConstByLabel(instr.operandLeft);
         if (c != "")
@@ -1136,7 +997,7 @@ void Compiler::checkLeftOperandData(Instruction& instr)
             errors.push_back( { instr.lineNumber,  "Unknown constant \"" + instr.name + "\".", instr.line} );
         }
     }
-    else if (regex_match(instr.operandLeft, rOpExpr))
+    else if (Instruction::Operand::isMathExpression(instr.operandLeft))
     {
         // TODO Evaluate expression
     }
@@ -1150,7 +1011,7 @@ void Compiler::checkLeftOperandData(Instruction& instr)
     }
 }
 
-void Compiler::checkRightOperandData(Instruction& instr)
+void Compiler::checkRightOperandData(Instruct& instr)
 {
     /*
      *  Check right operand
@@ -1162,12 +1023,11 @@ void Compiler::checkRightOperandData(Instruction& instr)
      *  - Label (Const)
      */
 
-    if (regex_match(instr.operandRight, rOpBin) || regex_match(instr.operandRight, rOpHex)
-            || regex_match(instr.operandRight, rOpDec))
+    if (Utils::Number::isNumber(instr.operandRight))
     {
         // Ok, Nothing to do
     }
-    else if (regex_match(instr.operandRight, rOpLabel))
+    else if (Instruction::Operand::isLabel(instr.operandRight))
     {
         std::string c = getConstByLabel(instr.operandRight);
         if (c != "")
@@ -1184,7 +1044,7 @@ void Compiler::checkRightOperandData(Instruction& instr)
             errors.push_back( { instr.lineNumber,  "Unknown constant \"" + instr.name + "\".", instr.line} );
         }
     }
-    else if (regex_match(instr.operandRight, rOpExpr))
+    else if (Instruction::Operand::isMathExpression(instr.operandRight))
     {
         // TODO Evaluate expression
         std::cout << instr.operandRight << std::endl;
@@ -1199,7 +1059,7 @@ void Compiler::checkRightOperandData(Instruction& instr)
     }
 }
 
-void Compiler::checkLeftOperandAddress(Instruction& instr)
+void Compiler::checkLeftOperandAddress(Instruct& instr)
 {
     /*
      * Check left operand
@@ -1212,12 +1072,11 @@ void Compiler::checkLeftOperandAddress(Instruction& instr)
      * - Expression
      */
 
-    if (regex_match(instr.operandLeft, rOpBin) || regex_match(instr.operandLeft, rOpHex)
-            || regex_match(instr.operandLeft, rOpDec))
+    if (Utils::Number::isNumber(instr.operandLeft))
     {
         // Ok, Nothing to do
     }
-    else if (regex_match(instr.operandLeft, rOpLabel))
+    else if (Instruction::Operand::isLabel(instr.operandLeft))
     {
         int c = getAddressByLabel(instr.operandLeft);
         if (c != -1)
@@ -1233,7 +1092,7 @@ void Compiler::checkLeftOperandAddress(Instruction& instr)
             errors.push_back( { instr.lineNumber,  "Unknown label.", instr.line} );
         }
     }
-    else if (regex_match(instr.operandLeft, rOpExpr))
+    else if (Instruction::Operand::isMathExpression(instr.operandLeft))
     {
         // TODO Value Expression
     }
@@ -1245,101 +1104,6 @@ void Compiler::checkLeftOperandAddress(Instruction& instr)
         //        errList->addItem(QString::fromStdString(s.str()));
         errors.push_back( { instr.lineNumber,  "Bad format of left operand.", instr.line} );
     }
-}
-
-int Compiler::register2int(const std::string& name) const
-{
-    std::string t = name;
-    if (!t.empty() && regex_match(name, rOpRegister))
-    {
-        t.erase(0, 1);
-
-        //		int n = stoi(t);
-        int n = QString::fromStdString(t).toInt(); // TODO QString to std::string
-
-        return (n >= 0 && n <= 0xF) ? n : -1;
-    }
-
-    return -1;
-}
-
-int Compiler::pair2int(const std::string& name) const
-{
-    string t = name;
-    if (!t.empty() && regex_match(name, rOpPair))
-    {
-        t.erase(0, 1);
-
-        //		int n = stoi(t);
-        int n = QString::fromStdString(t).toInt(); // TODO QString to std::string
-
-        return (n >= 0 && n <= 7) ? n : -1;
-    }
-
-    return -1;
-}
-
-int Compiler::condition2int(const std::string& cond) const
-{
-    if(cond.empty())
-    {
-        return -1;
-    }
-
-    //	return stoi(cond);
-    return QString::fromStdString(cond).toInt(); // TODO QString to std::string
-}
-
-int Compiler::address2int(const std::string& addr) const
-{
-    if(addr.empty())
-    {
-        return -1;
-    }
-
-    //	return stoi(addr);
-    return QString::fromStdString(addr).toInt(); // TODO QString to std::string
-}
-
-int Compiler::dec2int(const std::string& dec) const
-{
-    if (dec.empty())
-    {
-        return -1;
-    }
-
-    //	return stoi(dec);
-    return QString::fromStdString(dec).toInt(); // TODO QString to std::string
-}
-
-int Compiler::to4bit(int op) const
-{
-    return (op % 0x10);
-}
-
-int Compiler::to8bit(int op) const
-{
-    return (op % 0x100);
-}
-
-int Compiler::to12bit(int op) const
-{
-    return (op % 0x1000);
-}
-
-int Compiler::to4bitStrong(const int& op) const
-{
-    return (op & 0xF);
-}
-
-int Compiler::to8bitStrong(const int& op) const
-{
-    return (op & 0xFF);
-}
-
-int Compiler::to12bitStrong(const int& op) const
-{
-    return (op & 0xFFF);
 }
 
 void Compiler::toCompile()
@@ -1368,7 +1132,7 @@ void Compiler::toCompile()
 
         saveToTables(currentLine, label, instruction, operandLeft, operandRight, lineNumber, address);
 
-        address += getInstructionLength(instruction);
+        address += Instruction::CommandSet::getLength(instruction);
 
     } // for
 
@@ -1398,7 +1162,7 @@ void Compiler::toCompile()
 
     if (outputfile.is_open())
     {
-        for (const Instruction& i : instructionTable)
+        for (const Instruct& i : instructionTable)
         {
             if (i.code & 0xFF00)
             {
@@ -1427,7 +1191,7 @@ vector<unsigned int> Compiler::getCompiledCode() const
 {
     std::vector<unsigned int> compiledCode;
 
-    for (const Instruction& ins : instructionTable)
+    for (const Instruct& ins : instructionTable)
     {
         compiledCode.push_back(ins.code);
     }
