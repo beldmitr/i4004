@@ -1,81 +1,82 @@
 #include "mathexpr.h"
 
+/// TODO test class and delete commented code
+//int Utils::MathExpr::evaluate(const std::string& infix)
+//{
+
+//    std::vector<std::string> eq = infixToPostfix(infix);
+
+//    if (eq.size() == 1 && isNumber(eq[0]))
+//    {
+//        return stoi(eq[0]);
+//    }
+
+//    if (eq.size() < 3 || !isOperation(eq[eq.size() - 1]) || (!isNumber(eq[0]) && !isNumber(eq[1])))
+//    {
+//        throw "Wrong postfix notation";
+//    }
+
+//    std::stack<std::string> strStack;
+
+//    for (const std::string& s : eq)
+//    {
+//        if (isNumber(s))
+//        {
+//            strStack.push(s);
+//        }
+
+//        if (isOperation(s))
+//        {
+//            if (strStack.size() < 2)
+//            {
+//                throw "Wrong postfix equation";
+//            }
+
+//            int op2 = std::stoi(strStack.top());
+//            strStack.pop();
+//            int op1 = std::stoi(strStack.top());
+//            strStack.pop();
+
+//            /*
+//             * Here is not switch, because c++ can't work in switch with std::string, only with int.
+//             * Maybe to resolve this using hash.
+//             * TODO Maybe to do this code better, using f.e. switch
+//             */
+//            if (s.compare("+") == 0)
+//            {
+//                strStack.push(std::to_string(op1 + op2));
+//            }
+//            else if (s.compare("-") == 0)
+//            {
+//                strStack.push(std::to_string(op1 - op2));
+//            }
+//            else if (s.compare("*") == 0)
+//            {
+//                strStack.push(std::to_string(op1 * op2));
+//            }
+//            else if (s.compare("/") == 0)
+//            {
+//                if (op2 == 0)
+//                {
+//                    std::string msg = "";
+//                    msg.append("Dividing to zero in ").append(infix);
+//                    throw msg;
+//                }
+//                strStack.push(std::to_string(op1 / op2));
+//            }
+//            else
+//            {
+//                std::string msg = "";
+//                msg.append("Unknown operator ").append(s).append(" in infix equaton");
+//                throw msg;
+//            }
+//        }
+//    }
+
+//    return std::stoi(strStack.top());
+//}
+
 int Utils::MathExpr::evaluate(const std::string& infix)
-{
-
-    std::vector<std::string> eq = infixToPostfix(infix);
-
-    if (eq.size() == 1 && isNumber(eq[0]))
-    {
-        return stoi(eq[0]);
-    }
-
-    if (eq.size() < 3 || !isOperation(eq[eq.size() - 1]) || (!isNumber(eq[0]) && !isNumber(eq[1])))
-    {
-        throw "Wrong postfix notation";
-    }
-
-    std::stack<std::string> strStack;
-
-    for (const std::string& s : eq)
-    {
-        if (isNumber(s))
-        {
-            strStack.push(s);
-        }
-
-        if (isOperation(s))
-        {
-            if (strStack.size() < 2)
-            {
-                throw "Wrong postfix equation";
-            }
-
-            int op2 = std::stoi(strStack.top());
-            strStack.pop();
-            int op1 = std::stoi(strStack.top());
-            strStack.pop();
-
-            /*
-             * Here is not switch, because c++ can't work in switch with std::string, only with int.
-             * Maybe to resolve this using hash.
-             * TODO Maybe to do this code better, using f.e. switch
-             */
-            if (s.compare("+") == 0)
-            {
-                strStack.push(std::to_string(op1 + op2));
-            }
-            else if (s.compare("-") == 0)
-            {
-                strStack.push(std::to_string(op1 - op2));
-            }
-            else if (s.compare("*") == 0)
-            {
-                strStack.push(std::to_string(op1 * op2));
-            }
-            else if (s.compare("/") == 0)
-            {
-                if (op2 == 0)
-                {
-                    std::string msg = "";
-                    msg.append("Dividing to zero in ").append(infix);
-                    throw msg;
-                }
-                strStack.push(std::to_string(op1 / op2));
-            }
-            else
-            {
-                std::string msg = "";
-                msg.append("Unknown operator ").append(s).append(" in infix equaton");
-                throw msg;
-            }
-        }
-    }
-
-    return std::stoi(strStack.top());
-}
-
-int Utils::MathExpr::evaluateWithConstants(const std::string& infix, std::map<std::string, int>& tableConstants)
 {
     std::vector<std::string> eq = infixToPostfix(infix);
 
@@ -86,7 +87,7 @@ int Utils::MathExpr::evaluateWithConstants(const std::string& infix, std::map<st
 
     if (eq.size() == 1 && isConstant(eq[0]))
     {
-        return getNumberByConst(eq[0], tableConstants);
+        return Instruction::LabelTable::getByName(eq[0]);
     }
 
     if (eq.size() < 3
@@ -107,7 +108,7 @@ int Utils::MathExpr::evaluateWithConstants(const std::string& infix, std::map<st
 
         if (isConstant(s))
         {
-           strStack.push(std::to_string(getNumberByConst(s, tableConstants)));
+           strStack.push(std::to_string(Instruction::LabelTable::getByName(s)));
         }
 
         if (isOperation(s))
@@ -159,17 +160,6 @@ int Utils::MathExpr::evaluateWithConstants(const std::string& infix, std::map<st
     }
 
     return std::stoi(strStack.top());
-}
-
-int Utils::MathExpr::getNumberByConst(const std::string& key, std::map<std::string, int>& tableConstants)
-{
-    if (tableConstants.find(key) == tableConstants.end())
-    {
-        std::string msg = "Wrong constant " + key;
-        throw msg;
-    }
-
-    return tableConstants[key];
 }
 
 bool Utils::MathExpr::isConstant(const std::string& s)

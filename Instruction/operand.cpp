@@ -29,22 +29,27 @@ Instruction::Operand::Operand(const std::string& operand)
     else if (Utils::Number::isNumber(operand))
     {
         isEmpty = false;
-//        code = Utils::Number::getNumber();
+        code = Utils::Number::getUInt(operand);
     }
     else if (isPair(operand))
     {
-
+        isEmpty = false;
+        code = Utils::Convert::pair2uint(operand);
     }
     else if (isRegister(operand))
     {
-
+        isEmpty = false;
+        code = Utils::Convert::register2uint(operand);
     }
     else if (isLabel(operand))
     {
-
+        isEmpty = false;
+         code = Instruction::LabelTable::getByName(operand);
     }
     else if (isMathExpression(operand))
     {
+        isEmpty = false;
+        code = Utils::MathExpr::evaluate(operand);
 
     }
     else

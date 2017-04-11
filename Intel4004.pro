@@ -50,7 +50,8 @@ SOURCES += \
     Instruction/commandset.cpp \
     Utils/string.cpp \
     Instruction/params.cpp \
-    Instruction/operand.cpp
+    Instruction/operand.cpp \
+    Instruction/labeltable.cpp
 
 HEADERS += \
     GUI/mainwindow.h \
@@ -98,7 +99,8 @@ HEADERS += \
     Instruction/commandset.h \
     Utils/string.h \
     Instruction/params.h \
-    Instruction/operand.h
+    Instruction/operand.h \
+    Instruction/labeltable.h
 
 RESOURCES += \
     resources.qrc

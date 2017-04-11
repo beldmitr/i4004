@@ -650,20 +650,20 @@ void Compiler::composing()
             instr.code = ((0x1000 | (Utils::Convert::to4bit(op1) << 8)) | Utils::Convert::to8bit(op2)) & 0xFFFF;
             break;
         case 0x2000: //Fetch Immediate	FIM	0010RRR0	DDDDDDDD	register pair, data
-            op1 = Utils::Convert::pair2int(instr.operandLeft);
+            op1 = Utils::Convert::pair2uint(instr.operandLeft);
             op2 = Utils::Convert::dec2int(instr.operandRight);
             instr.code = ((0x2000 | (op1 << 9)) | Utils::Convert::to8bit(op2)) & 0xFFFF;    // TODO (op1 << 9) why 9 ??? why not 8 ???? check it
             break;
         case 0x21: //Send Register Control	SRC	0010RRR1	-	register pair
-            op1 = Utils::Convert::pair2int(instr.operandLeft);
+            op1 = Utils::Convert::pair2uint(instr.operandLeft);
             instr.code = (0x21 | (op1 << 1)) & 0xFF;
             break;
         case 0x30: //Fetch Indirect	FIN	0011RRR0	-	register pair
-            op1 = Utils::Convert::pair2int(instr.operandLeft);
+            op1 = Utils::Convert::pair2uint(instr.operandLeft);
             instr.code = (0x30 | (op1 << 1)) & 0xFF;
             break;
         case 0x31: //Jump Indirect	JIN	0011RRR1	-	register pair
-            op1 = Utils::Convert::pair2int(instr.operandLeft);
+            op1 = Utils::Convert::pair2uint(instr.operandLeft);
             instr.code = (0x31 | (op1 << 1)) & 0xFF;
             break;
         case 0x4000: //Jump Unconditional	JUN	0100AAAA	AAAAAAAA	address
@@ -675,28 +675,28 @@ void Compiler::composing()
             instr.code = (0x5000 | Utils::Convert::to12bit(op1)) & 0xFFFF;
             break;
         case 0x60: //Increment	INC	0110RRRR	-	register
-            op1 = Utils::Convert::register2int(instr.operandLeft);
+            op1 = Utils::Convert::register2uint(instr.operandLeft);
             instr.code = (0x60 | op1) & 0xFF;
             break;
         case 0x7000: //Increment and Skip	ISZ	0111RRRR	AAAAAAAA	register, address
-            op1 = Utils::Convert::register2int(instr.operandLeft);
+            op1 = Utils::Convert::register2uint(instr.operandLeft);
             op2 = Utils::Convert::address2int(instr.operandRight);
             instr.code = ((0x7000 | (op1 << 8)) | Utils::Convert::to8bit(op2)) & 0xFFFF;
             break;
         case 0x80: //Add	ADD	1000RRRR	-	register
-            op1 = Utils::Convert::register2int(instr.operandLeft);
+            op1 = Utils::Convert::register2uint(instr.operandLeft);
             instr.code = (0x80 | op1) & 0xFF;
             break;
         case 0x90: //Subtract	SUB	1001RRRR	-	register
-            op1 = Utils::Convert::register2int(instr.operandLeft);
+            op1 = Utils::Convert::register2uint(instr.operandLeft);
             instr.code = (0x90 | op1) & 0xFF;
             break;
         case 0xA0: //Load	LD	1010RRRR	-	register
-            op1 = Utils::Convert::register2int(instr.operandLeft);
+            op1 = Utils::Convert::register2uint(instr.operandLeft);
             instr.code = (0xA0 | op1) & 0xFF;
             break;
         case 0xB0: //Exchange	XCH	1011RRRR	-	register
-            op1 = Utils::Convert::register2int(instr.operandLeft);
+            op1 = Utils::Convert::register2uint(instr.operandLeft);
             instr.code = (0xB0 | op1) & 0xFF;
             break;
         case 0xC0: //Branch Back and Load	BBL	1100DDDD	-	data

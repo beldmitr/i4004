@@ -16,12 +16,22 @@ int main (int argc, char* argv[])
 
     try
     {
-        Instruction::Instruction instruction("FIM", "P1, 236++6");
+//        Instruction::Instruction instruction("FIM", "P1, 0x111");
+        std::cout << Utils::Number::getUInt("1010B") << std::endl;
     }
     catch(std::string ex)
     {
         std::cout << ex << std::endl;
     }
+    catch(const char* ex)
+    {
+        std::cout << ex << std::endl;
+    }
+    catch(std::invalid_argument ex)
+    {
+        std::cout << ex.what() << std::endl;
+    }
+
 
     return 0;
 }

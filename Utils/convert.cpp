@@ -1,36 +1,43 @@
 #include "convert.h"
 
 /// TODO test this class and remove commented code
-int Utils::Convert::register2int(const std::string& str)
+/// TODO remove unused functions
+unsigned int Utils::Convert::register2uint(const std::string& str)
 {
-    std::string t = str;
-    if (!t.empty() && Instruction::Operand::isRegister(str))
+    /*
+     * FIXME expects only Rx or rx register, but not in reverse order
+     * Add this possibility
+     */
+    if (!str.empty() && Instruction::Operand::isRegister(str))
     {
-        t.erase(0, 1);
-
-                int n = stoi(t);
-//        int n = QString::fromStdString(t).toInt(); // TODO QString to std::string
-
-        return (n >= 0 && n <= 0xF) ? n : -1;
+        unsigned int result = stoi(str.substr(1, str.size()));
+        if (result < 0x10)  /// TODO magic number
+        {
+            return result;
+        }
     }
 
-    return -1;
+    std::string msg = "Convert::Register " + str + " is wrong";
+    throw msg;
 }
 
-int Utils::Convert::pair2int(const std::string& str)
+unsigned int Utils::Convert::pair2uint(const std::string& str)
 {
-    std::string t = str;
-    if (!t.empty() && Instruction::Operand::isPair(str))
+    /*
+     * FIXME expects only Px or px pair, but not in reverse order
+     * Add this possibility
+     */
+    if (!str.empty() && Instruction::Operand::isPair(str))
     {
-        t.erase(0, 1);
-
-                int n = stoi(t);
-//        int n = QString::fromStdString(t).toInt(); // TODO QString to std::string
-
-        return (n >= 0 && n <= 7) ? n : -1;
+        unsigned int result = stoi(str.substr(1, str.size()));
+        if (result < 8) /// TODO 8 is a magic number.
+        {
+            return result;
+        }
     }
 
-    return -1;
+    std::string msg = "Convert::Pair " + str + " is wrong";
+    throw msg;
 }
 
 int Utils::Convert::condition2int(const std::string& str)

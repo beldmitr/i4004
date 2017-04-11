@@ -11,8 +11,8 @@ namespace Utils
     class Convert
     {
     public:
-        static int register2int(const std::string& str);
-        static int pair2int(const std::string& str);
+        static unsigned int register2uint(const std::string& str);
+        static unsigned int pair2uint(const std::string& str);
         static int condition2int(const std::string& str);
         static int address2int(const std::string& str);
         static int bin2int(const std::string& str); //TODO bin2int

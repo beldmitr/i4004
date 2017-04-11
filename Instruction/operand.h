@@ -5,6 +5,7 @@
 #include <string>
 
 #include "utils.h"
+#include "Instruction/labeltable.h"
 
 namespace Instruction
 {

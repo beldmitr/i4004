@@ -6,7 +6,9 @@
 #include <string>
 #include <iostream>
 #include <regex>
-#include <map>
+
+
+#include "Instruction/labeltable.h"
 
 namespace Utils
 {
@@ -25,7 +27,7 @@ namespace Utils
 
     public:
         static int evaluate(const std::string &infix);
-        static int evaluateWithConstants(const std::string &infix, std::map<std::string, int>& tableConstants);
+//        static int evaluateWithConstants(const std::string &infix, std::map<std::string, int>& tableConstants);
 
     };
 }
