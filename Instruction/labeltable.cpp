@@ -2,7 +2,7 @@
 
 std::map<std::string, unsigned int> Instruction::LabelTable::table = std::map<std::string, unsigned int>();
 
-void Instruction::LabelTable::add(const Instruction::Label& label)
+void Instruction::LabelTable::add(const Label& label)
 {
     /// TODO make an exception if inserted data is not unique
     table.insert(std::pair<std::string, unsigned int>(label.getName(), label.getValue()));

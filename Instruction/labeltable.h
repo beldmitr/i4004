@@ -6,6 +6,8 @@
 
 #include "Instruction/label.h"
 
+class Label;
+
 namespace Instruction
 {
     class LabelTable
@@ -14,7 +16,7 @@ namespace Instruction
         static std::map<std::string, unsigned int> table;
 
     public:
-        static void add(const ::Instruction::Label& label);
+        static void add(const Label& label);
         static unsigned int getByName(const std::string& name);
         static void clear();
     };
