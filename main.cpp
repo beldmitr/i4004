@@ -2,8 +2,8 @@
 #include "GUI/mainwindow.h"
 
 #include <iostream>
-#include "utils.h"
-#include "Instruction/instruction.h"
+#include "Compiler/line.h"
+#include <regex>
 
 int main (int argc, char* argv[])
 {
@@ -16,8 +16,11 @@ int main (int argc, char* argv[])
 
     try
     {
-//        Instruction::Instruction instruction("FIM", "P1, 0x111");
-        std::cout << Utils::Number::getUInt("1010B") << std::endl;
+        Line* l = new Line("XCH R1	 // asda dd");
+        std::cout << std::hex << l->getCode() << std::endl;
+//        Line* l = new Line("I FIM bananas");
+
+//        std::cout << (char)CommandSet::getOperandType("JCN", 1) << std::endl;
     }
     catch(std::string ex)
     {

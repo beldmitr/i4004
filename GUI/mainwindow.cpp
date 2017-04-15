@@ -574,8 +574,8 @@ void MainWindow::buildCode()
 {
     saveFile();
     lstResult->clear();
-    compiler.reset(new Compiler(filename.toStdString(), outputname.toStdString()));
-    compiler->toCompile();
+//    compiler.reset(new Compiler(filename.toStdString(), outputname.toStdString()));
+//    compiler->toCompile();
 
     for (const Error& i : compiler->getErrors())
     {

@@ -42,16 +42,18 @@ SOURCES += \
     GUI/buttonsubwindow.cpp \
     GUI/dataramwidget.cpp \
     Utils/number.cpp \
-    Utils/line.cpp \
     Utils/convert.cpp \
-    Instruction/instruction.cpp \
-    Instruction/label.cpp \
-    Instruction/command.cpp \
-    Instruction/commandset.cpp \
+    Compiler/label.cpp \
+    Compiler/command.cpp \
+    Compiler/commandset.cpp \
     Utils/string.cpp \
-    Instruction/params.cpp \
-    Instruction/operand.cpp \
-    Instruction/labeltable.cpp
+    Compiler/params.cpp \
+    Compiler/operand.cpp \
+    Compiler/labeltable.cpp \
+    compilern.cpp \
+    Compiler/instruction.cpp \
+    Compiler/line.cpp \
+    Utils/searchresult.cpp
 
 HEADERS += \
     GUI/mainwindow.h \
@@ -90,17 +92,18 @@ HEADERS += \
     GUI/buttonsubwindow.h \
     GUI/dataramwidget.h \
     Utils/number.h \
-    utils.h \
-    Utils/line.h \
     Utils/convert.h \
-    Instruction/instruction.h \
-    Instruction/label.h \
-    Instruction/command.h \
-    Instruction/commandset.h \
+    Compiler/label.h \
+    Compiler/command.h \
+    Compiler/commandset.h \
     Utils/string.h \
-    Instruction/params.h \
-    Instruction/operand.h \
-    Instruction/labeltable.h
+    Compiler/params.h \
+    Compiler/operand.h \
+    Compiler/labeltable.h \
+    compilern.h \
+    Compiler/instruction.h \
+    Compiler/line.h \
+    Utils/searchresult.h
 
 RESOURCES += \
     resources.qrc

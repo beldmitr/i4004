@@ -76,7 +76,7 @@
 //    return std::stoi(strStack.top());
 //}
 
-int Utils::MathExpr::evaluate(const std::string& infix)
+int MathExpr::evaluate(const std::string& infix)
 {
     std::vector<std::string> eq = infixToPostfix(infix);
 
@@ -87,7 +87,7 @@ int Utils::MathExpr::evaluate(const std::string& infix)
 
     if (eq.size() == 1 && isConstant(eq[0]))
     {
-        return Instruction::LabelTable::getByName(eq[0]);
+        return LabelTable::getByName(eq[0]);
     }
 
     if (eq.size() < 3
@@ -108,7 +108,7 @@ int Utils::MathExpr::evaluate(const std::string& infix)
 
         if (isConstant(s))
         {
-           strStack.push(std::to_string(Instruction::LabelTable::getByName(s)));
+           strStack.push(std::to_string(LabelTable::getByName(s)));
         }
 
         if (isOperation(s))
@@ -162,17 +162,17 @@ int Utils::MathExpr::evaluate(const std::string& infix)
     return std::stoi(strStack.top());
 }
 
-bool Utils::MathExpr::isConstant(const std::string& s)
+bool MathExpr::isConstant(const std::string& s)
 {
     return std::regex_match(s, std::regex("[_]*[A-Z|a-z][_|0-9|A-Z|a-z]*"));
 }
 
-bool Utils::MathExpr::isNumber(const std::string& s)
+bool MathExpr::isNumber(const std::string& s)
 {
     return std::regex_match(s, std::regex("[0-9]+"));
 }
 
-bool Utils::MathExpr::isOperation(const std::string &s)
+bool MathExpr::isOperation(const std::string &s)
 {
     // TODO Maybe to do more elegance with regex
     return ((s.compare("+") == 0)
@@ -181,7 +181,7 @@ bool Utils::MathExpr::isOperation(const std::string &s)
             || (s.compare("/") == 0));
 }
 
-bool Utils::MathExpr::isParenthesis(const std::string &s)
+bool MathExpr::isParenthesis(const std::string &s)
 {
     return ((s.compare("(") == 0)
             || (s.compare(")") == 0));
@@ -216,7 +216,7 @@ bool Utils::MathExpr::isParenthesis(const std::string &s)
  * 4. When the input expression has been completely processed, check the stack.
  *    Any operators still on the stack can be removed and appended to the end of the output list.
  */
-std::vector<std::string> Utils::MathExpr::infixToPostfix(const std::string &infix)
+std::vector<std::string> MathExpr::infixToPostfix(const std::string &infix)
 {
     std::vector<std::string> eq = equationToVector(infix);
     std::vector<std::string> result;
@@ -266,7 +266,7 @@ std::vector<std::string> Utils::MathExpr::infixToPostfix(const std::string &infi
     return result;
 }
 
-int Utils::MathExpr::operatorPriority(const std::string &op)
+int MathExpr::operatorPriority(const std::string &op)
 {
     if (op.compare("*") == 0 || op.compare("/") == 0)
     {
@@ -285,7 +285,7 @@ int Utils::MathExpr::operatorPriority(const std::string &op)
 }
 
 // split an equation to vector. f.e. 2+3 - 1* 4/3 => to vector with elements {2,+,3,-,1,*,4,/,3}
-std::vector<std::string> Utils::MathExpr::equationToVector(const std::string &infix)
+std::vector<std::string> MathExpr::equationToVector(const std::string &infix)
 {
     std::vector<std::string> result;
 

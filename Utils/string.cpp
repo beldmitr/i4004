@@ -1,11 +1,11 @@
 #include "string.h"
 
-std::string Utils::String::trimStrong(const std::string& str)
+std::string String::trimStrong(const std::string& str)
 {
     return regex_replace(str, std::regex("([[:space:]]{1})"), "");
 }
 
-std::string Utils::String::trim(const std::string& str)
+std::string String::trim(const std::string& str)
 {
     std::string res = regex_replace(str, std::regex("([[:space:]]+)"), " ");
     if (res.empty() || strcmp(res.c_str(), " ") == 0)
@@ -26,7 +26,7 @@ std::string Utils::String::trim(const std::string& str)
     return res;
 }
 
-std::vector<std::string> Utils::String::divideBy(const std::string& str, const std::string& divider)
+std::vector<std::string> String::divideBy(const std::string& str, const std::string& divider)
 {
     std::vector<std::string> result;
     size_t beginPosition = 0;
@@ -42,4 +42,20 @@ std::vector<std::string> Utils::String::divideBy(const std::string& str, const s
     }
 
     return result;
+}
+
+SearchResult String::search(const std::string& where, std::regex pattern)
+{
+    std::smatch matchList;
+
+    if(regex_search(where, matchList, pattern))
+    {
+        std::string prefix = matchList.prefix();
+        std::string find = matchList[0];
+        std::string suffix = matchList.suffix();
+
+        return SearchResult(prefix, find, suffix);
+    }
+
+    return SearchResult();
 }

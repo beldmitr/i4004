@@ -8,10 +8,8 @@
 #include <regex>
 
 
-#include "Instruction/labeltable.h"
+#include "Compiler/labeltable.h"
 
-namespace Utils
-{
     class MathExpr
     {
     private:
@@ -30,5 +28,5 @@ namespace Utils
 //        static int evaluateWithConstants(const std::string &infix, std::map<std::string, int>& tableConstants);
 
     };
-}
+
 #endif // MATHEXPR_H
