@@ -59,5 +59,34 @@ unsigned int Number::getUInt(const std::string& str)
         std::string msg = "Number::Unknown type of a number " + str;
         throw msg;
     }
+}
 
+int Number::to4bit(int num)
+{
+    return (num % 0x10);
+}
+
+int Number::to8bit(int num)
+{
+    return (num % 0x100);
+}
+
+int Number::to12bit(int num)
+{
+    return (num % 0x1000);
+}
+
+int Number::to4bitStrong(int num)
+{
+    return (num & 0xF);
+}
+
+int Number::to8bitStrong(int num)
+{
+    return (num & 0xFF);
+}
+
+int Number::to12bitStrong(int num)
+{
+    return (num & 0xFFF);
 }

@@ -4,8 +4,8 @@
 #include <map>
 #include <string>
 
+#include "Compiler/number.h"
 #include "Utils/string.h"
-#include "Utils/number.h"
 
 class CommandSet
 {

@@ -24,7 +24,7 @@ SOURCES += \
     dataramregister.cpp \
     dataramchip.cpp \
     datarambank.cpp \
-    Utils/mathexpr.cpp \
+    Compiler/mathexpr.cpp \
     GUI/cpuwidget.cpp \
     GUI/led.cpp \
     GUI/button.cpp \
@@ -41,8 +41,7 @@ SOURCES += \
     GUI/sevensegmentsubwindow.cpp \
     GUI/buttonsubwindow.cpp \
     GUI/dataramwidget.cpp \
-    Utils/number.cpp \
-    Utils/convert.cpp \
+    Compiler/number.cpp \
     Compiler/label.cpp \
     Compiler/command.cpp \
     Compiler/commandset.cpp \
@@ -53,7 +52,9 @@ SOURCES += \
     compilern.cpp \
     Compiler/instruction.cpp \
     Compiler/line.cpp \
-    Utils/searchresult.cpp
+    Utils/searchresult.cpp \
+    Compiler/pair.cpp \
+    Compiler/register.cpp
 
 HEADERS += \
     GUI/mainwindow.h \
@@ -73,7 +74,7 @@ HEADERS += \
     dataramregister.h \
     dataramchip.h \
     datarambank.h \
-    Utils/mathexpr.h \
+    Compiler/mathexpr.h \
     Interfaces/icompiler.h \
     GUI/cpuwidget.h \
     GUI/led.h \
@@ -91,8 +92,7 @@ HEADERS += \
     GUI/sevensegmentsubwindow.h \
     GUI/buttonsubwindow.h \
     GUI/dataramwidget.h \
-    Utils/number.h \
-    Utils/convert.h \
+    Compiler/number.h \
     Compiler/label.h \
     Compiler/command.h \
     Compiler/commandset.h \
@@ -103,7 +103,9 @@ HEADERS += \
     compilern.h \
     Compiler/instruction.h \
     Compiler/line.h \
-    Utils/searchresult.h
+    Utils/searchresult.h \
+    Compiler/pair.h \
+    Compiler/register.h
 
 RESOURCES += \
     resources.qrc

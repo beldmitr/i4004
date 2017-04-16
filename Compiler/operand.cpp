@@ -1,10 +1,5 @@
 #include "operand.h"
 
-std::regex Operand::mathExpression = std::regex("([*]?[+-]?[[:alnum:]]+)+");
-std::regex Operand::pair = std::regex("[Pp][0-7]");
-std::regex Operand::reg = std::regex("[Rr]([0-9]|(1[0-6]))");
-std::regex Operand::label = std::regex("[[:alpha:]][[:alnum:]]{2,}");
-
 bool Operand::getIsEmpty() const
 {
     return isEmpty;
@@ -34,10 +29,10 @@ Operand::Operand(const std::string& operand, CommandSet::OperandType type)
             this->code = data2code(operand);
             break;
         case CommandSet::OperandType::PAIR:
-            this->code = pair2code(operand);
+            this->code = Pair::getUInt(operand);
             break;
         case CommandSet::OperandType::REGISTER:
-            this->code = register2code(operand);
+            this->code = Register::getUInt(operand);
             break;
         default:
             std::string msg = "Operand::Unknown type " + std::to_string((char)type) + " of the operand " + operand;
@@ -45,58 +40,38 @@ Operand::Operand(const std::string& operand, CommandSet::OperandType type)
     }
 }
 
-bool Operand::isPair(const std::string& str)
-{
-    return regex_match(str, pair);
-}
-
-bool Operand::isRegister(const std::string& str)
-{
-    return regex_match(str, reg);
-}
-
-bool Operand::isLabel(const std::string& str)
-{
-    return regex_match(str, label);
-}
-
-bool Operand::isMathExpression(const std::string& str)
-{
-    return regex_match(str, mathExpression) && !isPair(str) && !isRegister(str) && !isLabel(str);
-}
-
 unsigned int Operand::condition2code(const std::string& condition)
 {
-//    if (Number::isNumber(operand))
-//    {
-//        isEmpty = false;
-//        code = Number::getUInt(operand);
-//    }
-//    else if (isPair(operand))
-//    {
-//        isEmpty = false;
-//        code = Convert::pair2uint(operand);
-//    }
-//    else if (isRegister(operand))
-//    {
-//        isEmpty = false;
-//        code = Convert::register2uint(operand);
-//    }
-//    else if (isLabel(operand))
-//    {
-//        isEmpty = false;
-//         code = LabelTable::getByName(operand);
-//    }
-//    else if (isMathExpression(operand))
-//    {
-//        isEmpty = false;
-//        code = MathExpr::evaluate(operand);
-//    }
-//    else
-//    {
-//        std::string msg = "Operand::Wrong type of operand " + operand;
-//        throw msg;
-//    }
+    if (Number::isNumber(condition))
+    {
+        isEmpty = false;
+        code = Number::getUInt(condition);
+    }
+    else if (Pair::isPair(condition))
+    {
+        isEmpty = false;
+        code = Pair::getUInt(condition);
+    }
+    else if (Register::isRegister(condition))
+    {
+        isEmpty = false;
+        code = Register::getUInt(condition);
+    }
+    else if (Label::isLabel(condition))
+    {
+        isEmpty = false;
+         code = LabelTable::getByName(condition);
+    }
+    else if (MathExpr::isMathExpression(condition))
+    {
+        isEmpty = false;
+        code = MathExpr::evaluate(condition);
+    }
+    else
+    {
+        std::string msg = "Operand::Wrong type of condition " + condition;
+        throw msg;
+    }
 }
 
 unsigned int Operand::address2code(const std::string& address)
@@ -109,12 +84,5 @@ unsigned int Operand::data2code(const std::string& data)
 
 }
 
-unsigned int Operand::pair2code(const std::string& pair)
-{
 
-}
 
-unsigned int Operand::register2code(const std::__cxx11::string& reg)
-{
-
-}

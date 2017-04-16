@@ -16,8 +16,9 @@ int main (int argc, char* argv[])
 
     try
     {
-        Line* l = new Line("XCH R1	 // asda dd");
-        std::cout << std::hex << l->getCode() << std::endl;
+        std::cout << Pair::getUInt("7p") << std::endl;
+//        Line* l = new Line("XCH R1	 // asda dd");
+//        std::cout << std::hex << l->getCode() << std::endl;
 //        Line* l = new Line("I FIM bananas");
 
 //        std::cout << (char)CommandSet::getOperandType("JCN", 1) << std::endl;

@@ -4,10 +4,10 @@ std::map<std::string, std::string> CommandSet::set
 {
     { "NOP", "0000 0000" },
     { "JCN", "0001 CCCC AAAA AAAA" },
-    { "FIM", "0010 RRR0 DDDD DDDD" },
-    { "SRC", "0010 RRR1" },
-    { "FIN", "0011 RRR0" },
-    { "JIN", "0011 RRR1" },
+    { "FIM", "0010 PPP0 DDDD DDDD" },
+    { "SRC", "0010 PPP1" },
+    { "FIN", "0011 PPP0" },
+    { "JIN", "0011 PPP1" },
     { "JUN", "0100 AAAA AAAA AAAA" },
     { "JMS", "0101 AAAA AAAA AAAA" },
     { "INC", "0110 RRRR" },
@@ -68,7 +68,7 @@ unsigned int CommandSet::getCommand(const std::string& command)
 {
     std::string rule = getRule(command);
 
-    for (int i = 0; i < rule.length(); i++)
+    for (unsigned int i = 0; i < rule.length(); i++)
     {
         if (rule[i] != '0' && rule[i] != '1')
         {
@@ -95,7 +95,7 @@ unsigned int CommandSet::getNumberOperands(const std::string& command)
 
     unsigned int count = 0;
 
-    for (int i = 0; i < rule.length(); i++)
+    for (unsigned int i = 0; i < rule.length(); i++)
     {
         if (previousOperand == OperandType::NONE &&
                 (rule[i] == OperandType::CONDITION ||
@@ -107,7 +107,7 @@ unsigned int CommandSet::getNumberOperands(const std::string& command)
             previousOperand = (OperandType)rule[i];
             count += 1;
         }
-        else if (rule[i] != (unsigned int)previousOperand &&
+        else if (rule[i] != (int)previousOperand &&
                  (rule[i] == OperandType::CONDITION ||
                   rule[i] == OperandType::ADDRESS ||
                   rule[i] == OperandType::DATA ||
@@ -130,9 +130,9 @@ CommandSet::OperandType CommandSet::getOperandType(const std::string& command, u
 
     unsigned int actualOperandNumber = 0;
 
-    for (int i = 0; i < rule.length(); i++)
+    for (unsigned int i = 0; i < rule.length(); i++)
     {
-        if (rule[i] != (unsigned int)previousOperand &&
+        if (rule[i] != (int)previousOperand &&
                 (rule[i] == OperandType::CONDITION ||
                  rule[i] == OperandType::ADDRESS ||
                  rule[i] == OperandType::DATA ||
