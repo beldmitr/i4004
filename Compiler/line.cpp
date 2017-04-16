@@ -33,6 +33,13 @@ Line::Line(const std::string& line)
         this->label = std::shared_ptr<Label>(new Label(label.find, label.suffix));
         code = this->label->getValue();
 
+        if (!String::trim(label.prefix).empty())
+        {
+            std::string msg = "Line::There is an unknown parameter " + label.prefix
+                    + " in line " + String::trim(line);
+            throw msg;
+        }
+
         return;
     }
     else
@@ -50,8 +57,8 @@ Line::Line(const std::string& line)
     // here MUST be an empty parsedLine
     if (!String::trim(parsedLine).empty())
     {
-        std::string msg = "There is an unknown parameter " + String::trimStrong(parsedLine)
-                + "in line " + String::trim(line);
+        std::string msg = "Line::There is an unknown parameter " + String::trimStrong(parsedLine)
+                + " in line " + String::trim(line);
         throw msg;
     }
 

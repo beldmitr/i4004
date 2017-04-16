@@ -8,6 +8,9 @@
 #include "Compiler/register.h"
 #include "Compiler/commandset.h"
 #include "Compiler/labeltable.h"
+#include "Compiler/data.h"
+#include "Compiler/address.h"
+#include "Compiler/condition.h"
 
 class Operand
 {
@@ -16,13 +19,6 @@ private:
     bool isEmpty = true;
 public:
     Operand(const std::string& operand, CommandSet::OperandType type);
-
-
-
-
-    unsigned int condition2code(const std::string& condition);
-    unsigned int address2code(const std::string& address);
-    unsigned int data2code(const std::string& data);
 
     bool getIsEmpty() const;
     unsigned int getCode() const;

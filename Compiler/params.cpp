@@ -27,7 +27,7 @@ Params::Params(const std::string& command, const std::string& params)
 
     for (int i = 0; i < operand.size(); i++)
     {
-        std::string str = String::trimStrong(operand[i]);
+        std::string str = String::trimBeginEnd(operand[i]);
         CommandSet::OperandType type = CommandSet::getOperandType(command, i);
 
         operands.push_back(std::shared_ptr<Operand>(new Operand(str, type)));

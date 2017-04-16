@@ -59,3 +59,22 @@ SearchResult String::search(const std::string& where, std::regex pattern)
 
     return SearchResult();
 }
+
+std::string String::trimBeginEnd(const std::string& str)
+{
+    std::string result = str;
+    SearchResult begin = search(str, std::regex("^([[:space:]]+)"));
+
+    if (!begin.isEmpty())
+    {
+        result = begin.suffix;
+    }
+
+    SearchResult end = search(result, std::regex("([[:space:]]+)$"));
+    if (!end.isEmpty())
+    {
+        result = end.prefix;
+    }
+
+    return result;
+}

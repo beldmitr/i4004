@@ -3,7 +3,10 @@
 
 #include <iostream>
 #include "Compiler/line.h"
+#include "Compiler/labeltable.h"
 #include <regex>
+
+#include <map>
 
 int main (int argc, char* argv[])
 {
@@ -16,8 +19,16 @@ int main (int argc, char* argv[])
 
     try
     {
-        std::cout << Pair::getUInt("7p") << std::endl;
-//        Line* l = new Line("XCH R1	 // asda dd");
+        LabelTable::add(Label("a", 2));
+        LabelTable::add(Label("a", 3));
+
+        std::cout << LabelTable::getByName("a") << std::endl;
+
+
+//        std::string s = "    fgfgd  asd   asdasd    rrrrr       ";
+//        String::trimBeginEnd(s);
+//        std::cout << Pair::getUInt("7p") << std::endl;
+//        Line* l = new Line("FIM P1,2+a	 // asda dd");
 //        std::cout << std::hex << l->getCode() << std::endl;
 //        Line* l = new Line("I FIM bananas");
 

@@ -54,7 +54,10 @@ SOURCES += \
     Compiler/line.cpp \
     Utils/searchresult.cpp \
     Compiler/pair.cpp \
-    Compiler/register.cpp
+    Compiler/register.cpp \
+    Compiler/condition.cpp \
+    Compiler/address.cpp \
+    Compiler/data.cpp
 
 HEADERS += \
     GUI/mainwindow.h \
@@ -105,7 +108,10 @@ HEADERS += \
     Compiler/line.h \
     Utils/searchresult.h \
     Compiler/pair.h \
-    Compiler/register.h
+    Compiler/register.h \
+    Compiler/condition.h \
+    Compiler/address.h \
+    Compiler/data.h
 
 RESOURCES += \
     resources.qrc
