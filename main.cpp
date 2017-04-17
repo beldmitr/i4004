@@ -35,9 +35,10 @@ int main (int argc, char* argv[])
         new Line("CCC, BBB");
 
 
-        Line* l = new Line("ddd, LDM 12	 // asda dd");
-        std::cout << std::hex << l->getCode() << std::endl;
-//        Line* l = new Line("I FIM bananas");
+//        Line* l = new Line("ddd, ISZ R2,06	 // asda dd");
+//        std::cout << std::hex << l->getCode() << std::endl;
+        Line* l = new Line("Icc, FIM P3, -5"); ///BUG fix this bug
+                std::cout << std::hex << l->getCode() << std::endl;
 
 //        std::cout << (char)CommandSet::getOperandType("JCN", 1) << std::endl;
     }

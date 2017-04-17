@@ -30,6 +30,14 @@ unsigned int Register::getUInt(const std::string& str)
         }
     }
 
-    std::string msg = "Register::Register " + str + " is wrong";
+    std::string msg;
+    if (str.empty())
+    {
+        msg = "Register::Program expects a register";
+    }
+    else
+    {
+        msg = "Register::Register " + str + " is wrong";
+    }
     throw msg;
 }

@@ -2,9 +2,9 @@
 
 std::shared_ptr<Operand> Params::getOperand(unsigned int index) const
 {
-    if (index > operands.size())
+    if (index >= operands.size())
     {
-        std::string msg = "Params::There is no " + std::to_string(index) + " operand";
+        std::string msg = "Params::Program expects " + std::to_string(index + 1) + " operand";
         throw msg;
     }
 
@@ -13,9 +13,9 @@ std::shared_ptr<Operand> Params::getOperand(unsigned int index) const
 
 std::string Params::getOperandString(unsigned int index) const
 {
-    if (index > operands.size())
+    if (index >= operands.size())
     {
-        std::string msg = "Params::There is no " + std::to_string(index) + " operand";
+        std::string msg = "Params::Program expects " + std::to_string(index + 1) + " operand";
         throw msg;
     }
 
@@ -31,7 +31,7 @@ Params::Params(const std::string& command, const std::string& params)
         std::string msg = "Params::There are too much operands: ";
         for (std::string s : operand)
         {
-            msg = msg + String::trimStrong(s) + " ";
+            msg = msg + String::trimStrong(s) + ",";
         }
         throw msg;
     }
