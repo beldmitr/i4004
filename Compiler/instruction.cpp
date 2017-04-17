@@ -18,7 +18,41 @@ unsigned int Instruction::getCode() const
 
 void Instruction::combine()
 {
-    /// TODO
+    std::string name = this->command->getCommand();
+
+    std::string rule = CommandSet::getRule(name);
+    std::vector<CommandSet::OperandStruct> ruleOperands = CommandSet::getOperands(name);
+
+    unsigned int i = 0;
+    for (CommandSet::OperandStruct o : ruleOperands)
+    {
+        std::shared_ptr<Operand> operand = this->params->getOperand(i);
+        unsigned int operandCode = operand->getCode();
+
+        if (operandCode >> o.length)
+        {
+            std::string msg = "Operand " + this->getParams()->getOperandString(i)
+                    + " has too big size. Allowed only " + std::to_string(o.length) + " bits";
+            throw msg;
+        }
+
+        for (unsigned int j = 0; j < o.length; j++)
+        {
+            unsigned int position = rule.length() - o.position - 1 - j;
+            std::string bit = std::to_string(((1 << j) & operandCode) >> j);
+
+            std::string left = rule.substr(0, position);
+            std::string right = rule.substr(position + 1, rule.size() - 1);
+
+            rule = left.append(bit).append(right);
+        }
+
+        i++;
+    }
+
+    rule = "0b" + rule;
+
+    this->code = Number::getUInt(rule);
 }
 
 Instruction::Instruction(const std::string& command, const std::string& operands)

@@ -9,7 +9,7 @@ unsigned int Condition::getUInt(const std::string& str)
     }
     else if (Label::isLabel(str))
     {
-        return LabelTable::getByName(str);
+        return Constant::getByName(str);
     }
     else if (MathExpr::isMathExpression(str))
     {

@@ -11,6 +11,17 @@ std::shared_ptr<Operand> Params::getOperand(unsigned int index) const
     return operands[index];
 }
 
+std::string Params::getOperandString(unsigned int index) const
+{
+    if (index > operands.size())
+    {
+        std::string msg = "Params::There is no " + std::to_string(index) + " operand";
+        throw msg;
+    }
+
+    return operandsString[index];
+}
+
 Params::Params(const std::string& command, const std::string& params)
 {
     std::vector<std::string> operand = String::divideBy(params, ",");
@@ -30,6 +41,7 @@ Params::Params(const std::string& command, const std::string& params)
         std::string str = String::trimBeginEnd(operand[i]);
         CommandSet::OperandType type = CommandSet::getOperandType(command, i);
 
+        operandsString.push_back(str);
         operands.push_back(std::shared_ptr<Operand>(new Operand(str, type)));
     }
 }

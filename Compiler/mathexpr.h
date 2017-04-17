@@ -7,8 +7,10 @@
 #include <iostream>
 #include <regex>
 
-
-#include "Compiler/labeltable.h"
+#include "Compiler/constant.h"
+#include "Compiler/pair.h"
+#include "Compiler/register.h"
+#include "Compiler/label.h"
 
     class MathExpr
     {

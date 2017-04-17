@@ -21,7 +21,7 @@ int MathExpr::evaluate(const std::string& infix)
 
     if (eq.size() == 1 && isConstant(eq[0]))
     {
-        return LabelTable::getByName(eq[0]);
+        return Constant::getByName(eq[0]);
     }
 
     if (eq.size() < 3
@@ -42,7 +42,7 @@ int MathExpr::evaluate(const std::string& infix)
 
         if (isConstant(s))
         {
-           strStack.push(std::to_string(LabelTable::getByName(s)));
+           strStack.push(std::to_string(Constant::getByName(s)));
         }
 
         if (isOperation(s))

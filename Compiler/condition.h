@@ -4,7 +4,7 @@
 #include <string>
 
 #include "Compiler/number.h"
-#include "Compiler/labeltable.h"
+#include "Compiler/constant.h"
 #include "Compiler/mathexpr.h"
 
 class Condition

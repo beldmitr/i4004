@@ -5,7 +5,7 @@
 
 #include "Compiler/number.h"
 #include "Compiler/mathexpr.h"
-#include "Compiler/labeltable.h"
+#include "Compiler/constant.h"
 
 class Data
 {

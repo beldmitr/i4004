@@ -30,7 +30,11 @@ Line::Line(const std::string& line)
     SearchResult label = String::search(parsedLine, labelRegex);
     if (!label.isEmpty())
     {
-        this->label = std::shared_ptr<Label>(new Label(label.find, label.suffix));
+        std::string labelName = label.find;
+        labelName = labelName.substr(0, labelName.size() - 1);
+        std::string labelParam = String::trimBeginEnd(label.suffix);
+
+        this->label = std::shared_ptr<Label>(new Label(labelName, labelParam));
         code = this->label->getValue();
 
         if (!String::trim(label.prefix).empty())

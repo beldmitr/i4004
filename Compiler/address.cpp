@@ -1,7 +1,8 @@
 #include "address.h"
 
+unsigned int Address::actual = 0;
 
-unsigned int Address::getActual() const
+unsigned int Address::getActual()
 {
     return actual;
 }
@@ -23,7 +24,7 @@ unsigned int Address::getUInt(const std::string& addr)
     }
     else if (Label::isLabel(addr))
     {
-        return LabelTable::getByName(addr);
+        return Constant::getByName(addr);
     }
     else
     {

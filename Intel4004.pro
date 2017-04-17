@@ -48,7 +48,6 @@ SOURCES += \
     Utils/string.cpp \
     Compiler/params.cpp \
     Compiler/operand.cpp \
-    Compiler/labeltable.cpp \
     compilern.cpp \
     Compiler/instruction.cpp \
     Compiler/line.cpp \
@@ -57,7 +56,8 @@ SOURCES += \
     Compiler/register.cpp \
     Compiler/condition.cpp \
     Compiler/address.cpp \
-    Compiler/data.cpp
+    Compiler/data.cpp \
+    Compiler/constant.cpp
 
 HEADERS += \
     GUI/mainwindow.h \
@@ -102,7 +102,6 @@ HEADERS += \
     Utils/string.h \
     Compiler/params.h \
     Compiler/operand.h \
-    Compiler/labeltable.h \
     compilern.h \
     Compiler/instruction.h \
     Compiler/line.h \
@@ -111,7 +110,8 @@ HEADERS += \
     Compiler/register.h \
     Compiler/condition.h \
     Compiler/address.h \
-    Compiler/data.h
+    Compiler/data.h \
+    Compiler/constant.h
 
 RESOURCES += \
     resources.qrc

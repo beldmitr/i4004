@@ -3,7 +3,7 @@
 
 #include <string>
 #include "operand.h"
-#include "labeltable.h"
+#include "constant.h"
 #include "Utils/searchresult.h"
 
 #include "Compiler/mathexpr.h"

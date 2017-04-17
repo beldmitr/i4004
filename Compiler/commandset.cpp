@@ -122,6 +122,67 @@ unsigned int CommandSet::getNumberOperands(const std::string& command)
     return count;
 }
 
+std::vector<CommandSet::OperandStruct> CommandSet::getOperands(const std::string& command)
+{
+    std::vector<OperandStruct> result;
+
+    std::string rule = getRule(command);
+
+    std::reverse(rule.begin(), rule.end());
+
+    OperandType previousType = OperandType::NONE;
+
+    unsigned int position = 0;
+    unsigned int length = 0;
+
+    for (unsigned int i = 0; i < rule.size(); i++)
+    {
+        if (rule[i] == OperandType::CONDITION
+                || rule[i] == OperandType::ADDRESS
+                || rule[i] == OperandType::DATA
+                || rule[i] == OperandType::PAIR
+                || rule[i] == OperandType::REGISTER)
+        {
+            if (rule[i] != (int)previousType)
+            {
+                if (previousType != OperandType::NONE)
+                {
+                    result.push_back(OperandStruct(position, length, previousType));
+                    previousType = OperandType::NONE;
+                    length = 0;
+                }
+
+                position = i;
+                previousType = (OperandType)rule[i];
+                length++;
+            }
+            else
+            {
+                length++;
+            }
+        }
+        else
+        {
+            if (previousType != OperandType::NONE)
+            {
+                result.push_back(OperandStruct(position, length, previousType));
+                previousType = OperandType::NONE;
+                length = 0;
+            }
+        }
+    }
+
+    if (result.size() != getNumberOperands(command))
+    {
+        std::string msg = "CommandSet::Something wrong with OperandStruct";
+        throw msg;
+    }
+
+    std::reverse(result.begin(), result.end());
+
+    return result;
+}
+
 CommandSet::OperandType CommandSet::getOperandType(const std::string& command, unsigned int operandNumber)
 {
     std::string rule = getRule(command);

@@ -14,7 +14,7 @@ unsigned int Data::getUInt(const std::string& data)
     }
     else if (Label::isLabel(data))
     {
-        return LabelTable::getByName(data);
+        return Constant::getByName(data);
     }
     else
     {
