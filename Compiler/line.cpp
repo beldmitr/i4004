@@ -9,25 +9,41 @@ const std::regex Line::commentRegex = std::regex("/[[:print:]]*");
  * Line may be a Label or an Instruction
  */
 
-unsigned int Line::getCode() const
+std::shared_ptr<Instruction> Line::getInstruction() const
 {
-    return code;
+    if (instruction)
+    {
+        return instruction;
+    }
+    else if (label)
+    {
+        return label->getInstruction();
+    }
+    else
+    {
+        std::string msg = "Line::Wrong instruction";
+        throw msg;
+    }
+
 }
 
 Line::Line(const std::string& line)
 {
     std::string parsedLine = line;
 
-    // Parsing a comment
+    // search for
+    SearchResult label = String::search(parsedLine, labelRegex);
+    SearchResult command = String::search(parsedLine, commandRegex);
+    SearchResult params = String::search(parsedLine, paramsRegex);
     SearchResult comment = String::search(parsedLine, commentRegex);
+
+    // Parsing a comment
     if (!comment.isEmpty())
     {
         // we don't need a comment, so for next parsing we will take a line before a comment
         parsedLine = comment.prefix;
     }
 
-    // Parsing a label
-    SearchResult label = String::search(parsedLine, labelRegex);
     if (!label.isEmpty())
     {
         std::string labelName = label.find;
@@ -35,7 +51,6 @@ Line::Line(const std::string& line)
         std::string labelParam = String::trimBeginEnd(label.suffix);
 
         this->label = std::shared_ptr<Label>(new Label(labelName, labelParam));
-        code = this->label->getValue();
 
         if (!String::trim(label.prefix).empty())
         {
@@ -48,14 +63,17 @@ Line::Line(const std::string& line)
     }
     else
     {
-        SearchResult command = String::search(parsedLine, commandRegex);
+
         parsedLine = command.prefix + " " + command.suffix;
 
-        SearchResult params = String::search(parsedLine, paramsRegex);
+
         parsedLine = params.prefix + " " + params.suffix;
 
-        this->instruction = std::shared_ptr<Instruction>(new Instruction(command.find, params.find));
-        this->code = this->instruction->getCode();
+        this->instruction = std::shared_ptr<Instruction>(
+                    new Instruction(String::trimBeginEnd(command.find),
+                                    String::trimBeginEnd(params.find)));
+
+        Address::setActual(Address::getActual() + this->instruction->getCommand()->getLength());
     }
 
     // here MUST be an empty parsedLine

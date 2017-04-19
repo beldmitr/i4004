@@ -69,6 +69,13 @@ SearchResult String::search(const std::string& where, std::regex pattern)
     return SearchResult();
 }
 
+std::string String::replace(const std::string& where, std::regex what, const std::string& with)
+{
+    SearchResult s = search(where, what);
+
+    return s.prefix + with + s.suffix;
+}
+
 std::string String::trimBeginEnd(const std::string& str)
 {
     std::string result = str;

@@ -27,6 +27,9 @@ public:
      * and the suffix is "nas".
      */
     static SearchResult search(const std::string& where, std::regex pattern);
+
+    static std::string replace(const std::string& where, std::regex what, const std::string& with);
+
     static std::string trimBeginEnd(const std::string& str);
 };
 

@@ -7,13 +7,14 @@ unsigned int Condition::getUInt(const std::string& str)
     {
         return Number::getUInt(str);
     }
-    else if (Label::isLabel(str))
+    else if (Constant::isLabel(str))
     {
         return Constant::getByName(str);
     }
     else if (MathExpr::isMathExpression(str))
     {
-        return MathExpr::evaluate(str);
+        std::string s = Number::replaceNumbersWithDec(str);
+        return MathExpr::evaluate(s);
     }
     else
     {

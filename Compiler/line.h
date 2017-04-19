@@ -20,9 +20,6 @@ private:
     std::shared_ptr<Label> label;
     std::shared_ptr<Instruction> instruction;
 
-    unsigned int code;
-
-
 public:
     Line(const std::string& line);
 
@@ -30,7 +27,7 @@ public:
     static const std::regex commandRegex; // Template for instruction, it is not exect
     static const std::regex paramsRegex; // Template for operands, for both - left and right
     static const std::regex commentRegex; // Template for comments
-    unsigned int getCode() const;
+    std::shared_ptr<Instruction> getInstruction() const;
 };
 
 #endif // LINE_H

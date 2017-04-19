@@ -10,7 +10,8 @@
 #include "Compiler/constant.h"
 #include "Compiler/pair.h"
 #include "Compiler/register.h"
-#include "Compiler/label.h"
+#include "Compiler/number.h"
+#include "Compiler/address.h"
 
     class MathExpr
     {
@@ -25,10 +26,9 @@
          */
         static std::regex mathExpression;
 
-        /// TODO use standard isMethods
-        static bool isConstant(const std::string &s);
-        static bool isNumber(const std::string &s);
-        static bool isParenthesis(const std::string &s);
+        static bool isConstant(const std::string &s);   /// TODO use standard isConstant from Label or Constant class
+        static bool isParenthesis(const std::string &s);    /// TODO I dont need parentheses
+
         static bool isOperation(const std::string &s);
         static int operatorPriority(const std::string &op);
         static std::vector<std::string> infixToPostfix(const std::string &infix);

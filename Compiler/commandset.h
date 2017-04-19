@@ -45,17 +45,11 @@ public:
             const_cast<unsigned int&>(this->length) = length;
             const_cast<OperandType&>(this->type) = type;
         }
-
-        /// TODO delete this toString() method
-        std::string toString()
-        {
-            return "[[position : " + std::to_string(position) + "], [length : " + std::to_string(length) + "], [type : " + (char)type + "]]";
-        }
     };
 
     static bool isCommand(const std::string& command);
     static std::string getRule(const std::string& command);
-    static unsigned int getCommand(const std::string& command);
+    static unsigned int getCode(const std::string& command);
     static unsigned int getLength(const std::string& command);
 
     static unsigned int getNumberOperands(const std::string& command);

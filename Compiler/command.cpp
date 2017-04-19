@@ -1,8 +1,8 @@
 #include "command.h"
 
-std::string Command::getCommand() const
+std::string Command::getName() const
 {
-    return command;
+    return name;
 }
 
 unsigned int Command::getCode() const
@@ -17,6 +17,6 @@ unsigned int Command::getLength() const
 
 Command::Command(const std::string& command)
 {
-    this->code = CommandSet::getCommand(command);
-    this->command = command;
+    this->code = CommandSet::getCode(command);
+    this->name = command;
 }

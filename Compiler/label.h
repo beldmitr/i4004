@@ -2,8 +2,8 @@
 #define LABEL_H
 
 #include <string>
-#include "operand.h"
-#include "constant.h"
+#include "Compiler/operand.h"
+#include "Compiler/constant.h"
 #include "Utils/searchresult.h"
 
 #include "Compiler/mathexpr.h"
@@ -14,21 +14,6 @@
 class Label
 {
 private:
-    /*
-     * Check label in operand, do not be confused with regex label in Assembler::Line,
-     * which check or find a label in line.
-     * They are different:
-     *
-     * in line a label is with a comma, f.e.
-     *      ABC, 45
-     *      LABEL, FIM P1, 0x0
-     * BUT
-     * in an operand it is without comma, f.e.
-     *      FIM P2, ABC+2
-     *
-     */
-    static std::regex label;
-
     std::shared_ptr<Instruction> instruction;
 
     std::string name;
@@ -47,6 +32,7 @@ public:
 
     std::string getName() const;
     unsigned int getValue() const;
+    std::shared_ptr<Instruction> getInstruction() const;
 };
 
 

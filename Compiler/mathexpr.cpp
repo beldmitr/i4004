@@ -1,12 +1,13 @@
 #include "mathexpr.h"
 
+//std::regex MathExpr::mathExpression = std::regex("([+-]?[[:alnum:]]+)+");
 std::regex MathExpr::mathExpression = std::regex("([*]?[+-]?[[:alnum:]]+)+");
 
 /// TODO test class and delete commented code
 
 bool MathExpr::isMathExpression(const std::string& str)
 {
-    return regex_match(str, mathExpression) && !Pair::isPair(str) && !Register::isRegister(str) && !Label::isLabel(str);
+    return regex_match(str, mathExpression) && !Pair::isPair(str) && !Register::isRegister(str) && !Constant::isLabel(str);
 }
 
 
@@ -14,9 +15,9 @@ int MathExpr::evaluate(const std::string& infix)
 {
     std::vector<std::string> eq = infixToPostfix(infix);
 
-    if (eq.size() == 1 && isNumber(eq[0]))
+    if (eq.size() == 1 && Number::isDec(eq[0]))
     {
-        return stoi(eq[0]);
+        return Number::getUInt(eq[0]);
     }
 
     if (eq.size() == 1 && isConstant(eq[0]))
@@ -26,7 +27,7 @@ int MathExpr::evaluate(const std::string& infix)
 
     if (eq.size() < 3
             || !isOperation(eq[eq.size() - 1])
-            || (!isNumber(eq[0]) && !isNumber(eq[1]) && !isConstant(eq[0]) && !isConstant(eq[1])))
+            || (!Number::isDec(eq[0]) && !Number::isDec(eq[1]) && !isConstant(eq[0]) && !isConstant(eq[1])))
     {
         throw "Wrong postfix notation";
     }
@@ -35,7 +36,7 @@ int MathExpr::evaluate(const std::string& infix)
 
     for (const std::string& s : eq)
     {
-        if (isNumber(s))
+        if (Number::isDec(s))
         {
             strStack.push(s);
         }
@@ -101,18 +102,9 @@ bool MathExpr::isConstant(const std::string& s)
     return std::regex_match(s, std::regex("[_]*[A-Z|a-z][_|0-9|A-Z|a-z]*"));
 }
 
-bool MathExpr::isNumber(const std::string& s)
-{
-    return std::regex_match(s, std::regex("[0-9]+"));
-}
-
 bool MathExpr::isOperation(const std::string &s)
 {
-    // TODO Maybe to do more elegance with regex
-    return ((s.compare("+") == 0)
-            || (s.compare("-") == 0)
-            || (s.compare("*") == 0)
-            || (s.compare("/") == 0));
+    return ((s.compare("+") == 0) || (s.compare("-") == 0));
 }
 
 bool MathExpr::isParenthesis(const std::string &s)
@@ -161,7 +153,7 @@ std::vector<std::string> MathExpr::infixToPostfix(const std::string &infix)
     {
         std::string s = eq[i];
 
-        if (isNumber(s) || isConstant(s))
+        if (Number::isDec(s) || isConstant(s))
         {
             result.push_back(s);
         }
@@ -202,11 +194,7 @@ std::vector<std::string> MathExpr::infixToPostfix(const std::string &infix)
 
 int MathExpr::operatorPriority(const std::string &op)
 {
-    if (op.compare("*") == 0 || op.compare("/") == 0)
-    {
-        return 3; // Higher priority
-    }
-    else if (op.compare("+") == 0 || op.compare("-") == 0)
+    if (op.compare("+") == 0 || op.compare("-") == 0)
     {
         return 2;
     }
@@ -225,25 +213,28 @@ std::vector<std::string> MathExpr::equationToVector(const std::string &infix)
 
     for (std::string::const_iterator it = infix.begin(); it != infix.end(); ++it)
     {
-        if ((isNumber(std::string(1, *it)) || isConstant(std::string(1, *it)))
+        if ((Number::isDec(std::string(1, *it)) || isConstant(std::string(1, *it)))
                 && !result.empty()
-                && (isNumber(result.back()) || isConstant(result.back())))
+                && (Number::isDec(result.back()) || isConstant(result.back())))
         {
             std::string &last = result.back();
             last.append(std::string(1, *it));
 
         }
-        else if (isNumber(std::string(1, *it))
+        else if (Number::isDec(std::string(1, *it))
                  || isConstant(std::string(1, *it))
                  || isParenthesis(std::string(1, *it))
                  || isOperation(std::string(1, *it)))
         {
             result.push_back(std::string(1, *it));
         }
+        else if (*it == '*') // this is needed for actual address, f.e. *-5 means actual address minus 5 bytes
+        {
+            result.push_back(std::to_string(Address::getActual()));
+        }
         else if (*it == ' ' || *it == '\t' )
         {
             // ignore if it is a white symbol
-            // continue; // TODO check this continue;
         }
         else
         {

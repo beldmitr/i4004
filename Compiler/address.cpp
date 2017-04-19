@@ -20,9 +20,10 @@ unsigned int Address::getUInt(const std::string& addr)
     }
     else if (MathExpr::isMathExpression(addr))
     {
-        return MathExpr::evaluate(addr);
+        std::string s = Number::replaceNumbersWithDec(addr);
+        return MathExpr::evaluate(s);
     }
-    else if (Label::isLabel(addr))
+    else if (Constant::isLabel(addr))
     {
         return Constant::getByName(addr);
     }

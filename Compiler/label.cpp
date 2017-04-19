@@ -1,6 +1,9 @@
 #include "label.h"
 
-std::regex Label::label = std::regex("[[:alpha:]][[:alnum:]]{2,}");
+std::shared_ptr<Instruction> Label::getInstruction() const
+{
+    return instruction;
+}
 
 Label::Label(const std::string& name, unsigned int value)
 {
@@ -26,7 +29,7 @@ Label::Label(const std::string& name, const std::string& param)
         this->value = Number::getUInt(param);
         Constant::add(this->name, this->value);
     }
-    else if (Label::isLabel(param))
+    else if (Constant::isLabel(param))
     {
         this->value = Constant::getByName(param);
         Constant::add(this->name, this->value);
@@ -41,12 +44,6 @@ Label::Label(const std::string& name, const std::string& param)
         std::string msg = "Label::Wrong parameter " + param + " in label " + name;
         throw msg;
     }
-}
-
-
-bool Label::isLabel(const std::string& str)
-{
-    return regex_match(str, label);
 }
 
 std::string Label::getName() const

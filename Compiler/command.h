@@ -8,12 +8,12 @@
 class Command
 {
 private:
-    std::string command;
+    std::string name;
     unsigned int code;
 
 public:
-    Command(const std::string& command);
-    std::string getCommand() const;
+    Command(const std::string& name);
+    std::string getName() const;
     unsigned int getCode() const;
     unsigned int getLength() const;
 };

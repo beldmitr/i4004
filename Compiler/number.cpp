@@ -61,6 +61,41 @@ unsigned int Number::getUInt(const std::string& str)
     }
 }
 
+std::string Number::replaceNumbersWithDec(const std::string& str)
+{
+    std::string result = str;
+
+    SearchResult s = String::search(result, binPrefix);
+    while(!s.find.empty())
+    {
+        result = String::replace(result, binPrefix, std::to_string(getUInt(s.find)));
+        s = String::search(result, binPrefix);
+    }
+
+    s = String::search(result, binPostfix);
+    while(!s.find.empty())
+    {
+        result = String::replace(result, binPostfix, std::to_string(getUInt(s.find)));
+        s = String::search(result, binPostfix);
+    }
+
+    s = String::search(result, hexPrefix);
+    while(!s.find.empty())
+    {
+        result = String::replace(result, hexPrefix, std::to_string(getUInt(s.find)));
+        s = String::search(result, hexPrefix);
+    }
+
+    s = String::search(result, hexPostfix);
+    while(!s.find.empty())
+    {
+        result = String::replace(result, hexPostfix, std::to_string(getUInt(s.find)));
+        s = String::search(result, hexPostfix);
+    }
+
+    return result;
+}
+
 int Number::to4bit(int num)
 {
     return (num % 0x10);

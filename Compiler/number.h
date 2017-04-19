@@ -3,6 +3,8 @@
 
 #include <regex>
 
+#include "Utils/string.h"
+
 class Number
 {
 private:
@@ -20,6 +22,8 @@ public:
     static bool isHex(const std::string& str);
     static bool isNumber(const std::string& str);
     static unsigned int getUInt(const std::string& str);
+
+    static std::string replaceNumbersWithDec(const std::string& str); /// TODO it is needed for MathExpr, as they can't work with hex and bin numbers
 
     /// TODO Do I need all this stuff ????
     static int to4bit(int num);

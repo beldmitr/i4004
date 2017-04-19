@@ -10,9 +10,10 @@ unsigned int Data::getUInt(const std::string& data)
     }
     else if (MathExpr::isMathExpression(data))
     {
-        return MathExpr::evaluate(data);
+        std::string s = Number::replaceNumbersWithDec(data);
+        return MathExpr::evaluate(s);
     }
-    else if (Label::isLabel(data))
+    else if (Constant::isLabel(data))
     {
         return Constant::getByName(data);
     }

@@ -64,7 +64,7 @@ std::string CommandSet::getRule(const std::string& command)
     return String::trimStrong(set[command]);
 }
 
-unsigned int CommandSet::getCommand(const std::string& command)
+unsigned int CommandSet::getCode(const std::string& command)
 {
     std::string rule = getRule(command);
 
@@ -83,7 +83,7 @@ unsigned int CommandSet::getCommand(const std::string& command)
 
 unsigned int CommandSet::getLength(const std::string& command)
 {
-    int code = getCommand(command);
+    int code = getCode(command);
     return (code & 0xFF00) ? 2 : 1;
 }
 

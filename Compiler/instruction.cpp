@@ -18,7 +18,7 @@ unsigned int Instruction::getCode() const
 
 void Instruction::combine()
 {
-    std::string name = this->command->getCommand();
+    std::string name = this->command->getName();
 
     std::string rule = CommandSet::getRule(name);
     std::vector<CommandSet::OperandStruct> ruleOperands = CommandSet::getOperands(name);
