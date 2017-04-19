@@ -57,7 +57,8 @@ SOURCES += \
     Compiler/condition.cpp \
     Compiler/address.cpp \
     Compiler/data.cpp \
-    Compiler/constant.cpp
+    Compiler/constant.cpp \
+    Compiler/objectcode.cpp
 
 HEADERS += \
     GUI/mainwindow.h \
@@ -111,7 +112,8 @@ HEADERS += \
     Compiler/condition.h \
     Compiler/address.h \
     Compiler/data.h \
-    Compiler/constant.h
+    Compiler/constant.h \
+    Compiler/objectcode.h
 
 RESOURCES += \
     resources.qrc

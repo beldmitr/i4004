@@ -30,10 +30,7 @@ void CompilerN::compile(const std::string& inputFilename)
     // parse lines
     for (const std::string& l : lines)
     {
-        std::shared_ptr<Line> line = std::shared_ptr<Line>(new Line(l));
-
-        std::string commandName = line->getInstruction()->getCommand()->getName();
-
+        std::shared_ptr<Line>(new Line(l));
     }
 
 }
