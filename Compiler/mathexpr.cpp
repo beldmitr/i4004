@@ -230,7 +230,7 @@ std::vector<std::string> MathExpr::equationToVector(const std::string &infix)
         }
         else if (*it == '*') // this is needed for actual address, f.e. *-5 means actual address minus 5 bytes
         {
-            result.push_back(std::to_string(Address::getActual()));
+            result.push_back(std::to_string(ObjectCode::getProgramCounter()));
         }
         else if (*it == ' ' || *it == '\t' )
         {

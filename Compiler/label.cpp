@@ -22,7 +22,7 @@ Label::Label(const std::string& name, const std::string& param)
         instruction = std::shared_ptr<Instruction>(new Instruction(command.find, params.find));
         this->value = instruction->getCode();
 
-        Constant::add(this->name, Address::getActual());
+        Constant::add(this->name, ObjectCode::getProgramCounter());
     }
     else if (Number::isNumber(param))
     {

@@ -1,7 +1,24 @@
 #include "objectcode.h"
 
+ObjectCode::Endianness ObjectCode::endiannes = ObjectCode::Endianness::BigEndian;
 unsigned int ObjectCode::programCounter = 0;
 std::map<unsigned int, unsigned int> ObjectCode::table;
+
+void ObjectCode::writeBigEndian(unsigned int hiByte, unsigned int lowByte)
+{
+    table[programCounter] = hiByte;
+    programCounter += 1;
+    table[programCounter] = lowByte;
+    programCounter += 1;
+}
+
+void ObjectCode::writeLittleEndian(unsigned int hiByte, unsigned int lowByte)
+{
+    table[programCounter] = lowByte;
+    programCounter += 1;
+    table[programCounter] = hiByte;
+    programCounter += 1;
+}
 
 void ObjectCode::setProgramCounter(unsigned int address)
 {
@@ -21,8 +38,16 @@ void ObjectCode::write(unsigned int value)
     if (value & 0xFF00)
     {
         // divide to 2 bytes and write each byte on the needed address
-
-        /// TODO Decide: write in BigEndian or SmallEndian
+        unsigned int hiByte = (value & 0xFF00) >> 8;
+        unsigned int lowByte = (value & 0xFF);
+        if (endiannes == Endianness::BigEndian)
+        {
+            writeBigEndian(hiByte, lowByte);
+        }
+        else
+        {
+            writeLittleEndian(hiByte, lowByte);
+        }
 
     }
     else // write 1 byte length instruction
@@ -30,12 +55,14 @@ void ObjectCode::write(unsigned int value)
         table[programCounter] = value; // only write
         programCounter += 1;    // next instruction will be written into the next address
     }
-
-
-
 }
 
 std::map<unsigned int, unsigned int> ObjectCode::getTable()
 {
     return table;
+}
+
+unsigned int ObjectCode::getProgramCounter()
+{
+    return programCounter;
 }

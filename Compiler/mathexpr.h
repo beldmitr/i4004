@@ -7,6 +7,7 @@
 #include <iostream>
 #include <regex>
 
+#include "Compiler/objectcode.h"
 #include "Compiler/constant.h"
 #include "Compiler/pair.h"
 #include "Compiler/register.h"

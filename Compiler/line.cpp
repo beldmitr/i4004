@@ -75,7 +75,6 @@ Line::Line(const std::string& line)
 
     ObjectCode::write(instruction->getCode());
 
-
     // here MUST be an empty parsedLine
     assertNotEmptyLine(line, parsedLine);
 }

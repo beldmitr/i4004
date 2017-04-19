@@ -5,14 +5,24 @@
 
 class ObjectCode
 {
-private:
-    static unsigned int programCounter;
-    static std::map<unsigned int, unsigned int> table;
-
 public:
+    enum Endianness
+    {
+        BigEndian,
+        LittleEndian
+    };
     static void setProgramCounter(unsigned int address);
     static void write(unsigned int value);
     static std::map<unsigned int, unsigned int> getTable();
+    static unsigned int getProgramCounter();
+
+private:
+    static Endianness endiannes;
+    static unsigned int programCounter;
+    static std::map<unsigned int, unsigned int> table;
+
+    static void writeBigEndian(unsigned int hiByte, unsigned int lowByte);
+    static void writeLittleEndian(unsigned int hiByte, unsigned int lowByte);
 };
 
 #endif // OBJECTCODE_H

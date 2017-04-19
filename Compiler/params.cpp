@@ -36,7 +36,7 @@ Params::Params(const std::string& command, const std::string& params)
         throw msg;
     }
 
-    for (int i = 0; i < operand.size(); i++)
+    for (unsigned int i = 0; i < operand.size(); i++)
     {
         std::string str = String::trimBeginEnd(operand[i]);
         CommandSet::OperandType type = CommandSet::getOperandType(command, i);

@@ -1,17 +1,5 @@
 #include "address.h"
 
-unsigned int Address::actual = 0;
-
-unsigned int Address::getActual()
-{
-    return actual;
-}
-
-void Address::setActual(unsigned int addr)
-{
-    actual = addr;
-}
-
 unsigned int Address::getUInt(const std::string& addr)
 {
     if (Number::isNumber(addr))
