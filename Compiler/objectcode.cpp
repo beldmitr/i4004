@@ -32,8 +32,8 @@ void ObjectCode::setProgramCounter(unsigned int address)
 
 void ObjectCode::write(unsigned int value)
 {
-    // check if the number is less then 2 bytes
-    if (value & 0xFFFF)
+    // check, the number must be less then 2 bytes
+    if (value > 0xFFFF)
     {
         std::string msg = "ObjectCode::Value " + std::to_string(value) + " is too big.";
         throw msg;

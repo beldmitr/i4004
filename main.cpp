@@ -8,6 +8,8 @@
 
 #include <map>
 
+#include "compilern.h"
+
 int main (int argc, char* argv[])
 {
 //    QApplication app(argc, argv);
@@ -19,6 +21,10 @@ int main (int argc, char* argv[])
 
     try
     {
+        CompilerN* c = new CompilerN;
+        c->compile("D:/a.asm");
+        std::map<unsigned int, unsigned int> m = ObjectCode::getTable();
+
         Line l("= 256");
 //        std::cout << std::hex << l.getInstruction()->getCode() << std::endl;
     }

@@ -2,7 +2,7 @@
 
 CompilerN::CompilerN()
 {
-
+    // is empty
 }
 
 void CompilerN::compile(const std::string& inputFilename)
