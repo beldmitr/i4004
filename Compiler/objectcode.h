@@ -15,6 +15,7 @@ public:
     static void write(unsigned int value);
     static std::map<unsigned int, unsigned int> getTable();
     static unsigned int getProgramCounter();
+    static void reset();
 
 private:
     static Endianness endiannes;

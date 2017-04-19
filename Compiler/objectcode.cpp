@@ -22,6 +22,11 @@ void ObjectCode::writeLittleEndian(unsigned int hiByte, unsigned int lowByte)
 
 void ObjectCode::setProgramCounter(unsigned int address)
 {
+    if (address > 0xFFF)  /// TODO magic number
+    {
+        std::string msg = "ObjectCode::Address " + std::to_string(address) + " is too big. Allowed only 12 bit addresses";
+        throw msg;
+    }
     programCounter = address;
 }
 
@@ -55,6 +60,11 @@ void ObjectCode::write(unsigned int value)
         table[programCounter] = value; // only write
         programCounter += 1;    // next instruction will be written into the next address
     }
+
+    if (programCounter > 0xFFF)  /// TODO magic number
+    {
+        programCounter = 0;
+    }
 }
 
 std::map<unsigned int, unsigned int> ObjectCode::getTable()
@@ -65,4 +75,10 @@ std::map<unsigned int, unsigned int> ObjectCode::getTable()
 unsigned int ObjectCode::getProgramCounter()
 {
     return programCounter;
+}
+
+void ObjectCode::reset()
+{
+    programCounter = 0;
+    table.clear();
 }
