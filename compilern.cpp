@@ -32,6 +32,9 @@ void CompilerN::compile(const std::string& inputFilename)
         throw LogExceptions("Compiler", msg);
     }
 
+    // delete old error messages
+    errors.clear();
+
     // parse lines
     unsigned int row = 1;
     for (const std::string& l : lines)
@@ -42,6 +45,9 @@ void CompilerN::compile(const std::string& inputFilename)
         }
         catch(const CompilerException& ex)
         {
+            errors.push_back(std::shared_ptr<CompilerError>(new CompilerError(row, ex.what())));
+
+            /// TODO delete this std::cerr
             std::cerr << "Line " << row << ": Error " << ex.what() << std::endl;
             std::cerr << "\tFrom " << ex.who() << std::endl;
         }

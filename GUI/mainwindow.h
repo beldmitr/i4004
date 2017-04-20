@@ -36,7 +36,7 @@
 #include "cpuwidget.h"
 #include "subwindow.h"
 #include "dataramwidget.h"
-#include "error.h"
+#include "Compiler/compilererror.h"
 #include "simulator.h"
 
 #include "ledpanel.h"

@@ -8,6 +8,7 @@
 #include <memory>
 
 #include "Compiler/line.h"
+#include "Compiler/compilererror.h"
 #include "Exceptions/compilerexception.h"
 #include "Exceptions/logexceptions.h"
 
@@ -18,6 +19,8 @@ private:
     std::ofstream output;   /// TODO save a bin table somewhere or decide if I need this
 
     std::vector<std::string> lines;
+
+    std::vector<std::shared_ptr<CompilerError>> errors;
 
 public:
     CompilerN();

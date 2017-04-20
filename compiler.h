@@ -26,7 +26,7 @@
 
 
 // TODO delete unused headers
-class Compiler : public ICompiler {
+class Compiler  {
 private:
 //    // Nested classes
 //    class Constants {

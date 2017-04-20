@@ -2,13 +2,13 @@
 #define ICOMPILER_H
 
 //#include<string>
-#include "error.h"
+#include "compilererror.h"
 
 class ICompiler
 {
 public:
     virtual void toCompile() = 0;
-    virtual std::vector<Error> getErrors() const = 0;
+    virtual std::vector<CompilerError> getErrors() const = 0;
     virtual std::vector<unsigned int> getCompiledCode() const = 0;
 
 };

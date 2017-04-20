@@ -14,7 +14,6 @@ SOURCES += \
     GUI/chipdataram.cpp \
     main.cpp \
     compiler.cpp \
-    error.cpp \
     simulator.cpp \
     rom.cpp \
     pram.cpp \
@@ -60,7 +59,8 @@ SOURCES += \
     Compiler/constant.cpp \
     Compiler/objectcode.cpp \
     Exceptions/compilerexception.cpp \
-    Exceptions/logexceptions.cpp
+    Exceptions/logexceptions.cpp \
+    Compiler/compilererror.cpp
 
 HEADERS += \
     GUI/mainwindow.h \
@@ -70,7 +70,6 @@ HEADERS += \
     GUI/memorytable.h \
     GUI/chipdataram.h \
     compiler.h \
-    error.h \
     simulator.h \
     rom.h \
     pram.h \
@@ -117,7 +116,8 @@ HEADERS += \
     Compiler/constant.h \
     Compiler/objectcode.h \
     Exceptions/compilerexception.h \
-    Exceptions/logexceptions.h
+    Exceptions/logexceptions.h \
+    Compiler/compilererror.h
 
 RESOURCES += \
     resources.qrc
