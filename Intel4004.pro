@@ -59,7 +59,8 @@ SOURCES += \
     Compiler/data.cpp \
     Compiler/constant.cpp \
     Compiler/objectcode.cpp \
-    Exceptions/compilerexception.cpp
+    Exceptions/compilerexception.cpp \
+    Exceptions/logexceptions.cpp
 
 HEADERS += \
     GUI/mainwindow.h \
@@ -115,7 +116,8 @@ HEADERS += \
     Compiler/data.h \
     Compiler/constant.h \
     Compiler/objectcode.h \
-    Exceptions/compilerexception.h
+    Exceptions/compilerexception.h \
+    Exceptions/logexceptions.h
 
 RESOURCES += \
     resources.qrc

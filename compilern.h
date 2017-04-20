@@ -9,6 +9,7 @@
 
 #include "Compiler/line.h"
 #include "Exceptions/compilerexception.h"
+#include "Exceptions/logexceptions.h"
 
 class CompilerN
 {

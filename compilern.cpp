@@ -28,12 +28,12 @@ void CompilerN::compile(const std::string& inputFilename)
          * obviously we need a LogExceptions class,
          * which will collect not runtime compile errors
          */
-        std::string msg = "Compiler::File " + inputFilename + " can't be open.";
-        throw msg;
+        std::string msg = "File " + inputFilename + " can't be open.";
+        throw LogExceptions("Compiler", msg);
     }
 
     // parse lines
-    unsigned int row = 0;
+    unsigned int row = 1;
     for (const std::string& l : lines)
     {
         try
@@ -47,7 +47,6 @@ void CompilerN::compile(const std::string& inputFilename)
         }
         row++;
     }
-
 }
 
 std::map<unsigned int, unsigned int> CompilerN::getObjectCode()
