@@ -23,7 +23,19 @@ class Instruction;
 class Line
 {
 public:
-    Line(const std::string& line);
+    /**
+     * @brief Line  - parser for Line. The main aim of the class is
+     *                to find a Label or a pseudo instruction or an instruction,
+     *                create instanties of them and to send the rest of the parameter
+     *                line to the next classes, which will parse the rest of line on there level.
+     * @param line  - a text line
+     */
+    /*
+     * I exactly want here std::string, and NOT reference const std::string&,
+     * because I make some changes with the line: deleting white spaces
+     * and I don't want to make for this new variable.
+     */
+    Line(std::string line);
 
     static const std::regex labelRegex; // Template for Label
     static const std::regex commandRegex; // Template for instruction, it is not exect

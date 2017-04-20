@@ -6,7 +6,7 @@ const std::regex Line::paramsRegex = std::regex("([[:blank:]]+[[:print:]]+[[:bla
 const std::regex Line::commentRegex = std::regex("/[[:print:]]*");
 const std::regex Line::pseudoRegex = std::regex("[[:blank:]]*=[[:blank:]]+");
 
-Line::Line(const std::string& line)
+Line::Line(std::string line)
 {
     std::string parsedLine = line;
 

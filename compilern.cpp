@@ -38,6 +38,10 @@ void CompilerN::compile(const std::string& inputFilename)
         {
             std::cerr << ex << std::endl;
         }
+        catch(const char* ex)
+        {
+            std::cerr << ex << std::endl;
+        }
 
 
     }
