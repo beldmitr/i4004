@@ -56,8 +56,8 @@ unsigned int Number::getUInt(const std::string& str)
     }
     else
     {
-        std::string msg = "Number::Unknown type of a number " + str;
-        throw msg;
+        std::string msg = "Unknown type of a number " + str;
+        throw CompilerException("Number", msg);
     }
 }
 

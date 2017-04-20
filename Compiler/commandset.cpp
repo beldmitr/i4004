@@ -58,8 +58,8 @@ std::string CommandSet::getRule(const std::string& command)
 {
     if (set.find(command) == set.end())
     {
-        std::string msg = "CommandSet::Command " + command + " doesn't exist in CommandSet.";
-        throw msg;
+        std::string msg = "Command " + command + " doesn't exist in CommandSet.";
+        throw CompilerException("CommandSet", msg);
     }
     return String::trimStrong(set[command]);
 }
@@ -174,8 +174,8 @@ std::vector<CommandSet::OperandStruct> CommandSet::getOperands(const std::string
 
     if (result.size() != getNumberOperands(command))
     {
-        std::string msg = "CommandSet::Something wrong with OperandStruct";
-        throw msg;
+        std::string msg = "Something wrong with OperandStruct";
+        throw CompilerException("CommandSet", msg);
     }
 
     std::reverse(result.begin(), result.end());
@@ -212,8 +212,8 @@ CommandSet::OperandType CommandSet::getOperandType(const std::string& command, u
         }
     }
 
-    std::string msg = "CommandSet::There is no " + std::to_string(operandNumber) + " operand in a command " + command;
-    throw msg;
+    std::string msg = "There is no " + std::to_string(operandNumber) + " operand in a command " + command;
+    throw CompilerException("CommandSet", msg);
 }
 
 

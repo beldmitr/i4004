@@ -4,6 +4,8 @@
 #include <string>
 #include <regex>
 
+#include "Exceptions/compilerexception.h"
+
 class Register
 {
 private:

@@ -33,7 +33,7 @@ void Instruction::combine()
         {
             std::string msg = "Operand " + this->getParams()->getOperandString(i)
                     + " has too big size. Allowed only " + std::to_string(o.length) + " bits";
-            throw msg;
+            throw CompilerException("Instruction", msg);
         }
 
         for (unsigned int j = 0; j < o.length; j++)

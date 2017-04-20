@@ -7,6 +7,8 @@
 #include "Compiler/operand.h"
 #include "Utils/string.h"
 
+#include "Exceptions/compilerexception.h"
+
 class Operand;
 
 class Params

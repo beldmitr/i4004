@@ -7,6 +7,8 @@
 #include "Compiler/constant.h"
 #include "Compiler/mathexpr.h"
 
+#include "Exceptions/compilerexception.h"
+
 class Condition
 {
 public:

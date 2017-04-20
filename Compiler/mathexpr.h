@@ -14,6 +14,8 @@
 #include "Compiler/number.h"
 #include "Compiler/address.h"
 
+#include "Exceptions/compilerexception.h"
+
     class MathExpr
     {
     private:

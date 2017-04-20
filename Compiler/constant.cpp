@@ -9,9 +9,9 @@ void Constant::add(const std::string name, unsigned int value)
     /// TODO decide if labels can be rewritten or it is an error to reassign a new value to a label.
     if (isConstantExist(name))
     {
-        std::string msg = "Constant::Constant " + name + " is already defined. "
+        std::string msg = "Constant " + name + " is already defined. "
                 + name + "=" + std::to_string(table[name]);
-        throw msg;
+        throw CompilerException("Constant", msg);
     }
 
     table.insert({ name, value });
@@ -24,8 +24,8 @@ unsigned int Constant::getByName(const std::string& name)
         return table[name];
     }
 
-    std::string msg = "Constant::Constant " + name + " doesn't exist";
-    throw msg;
+    std::string msg = "Constant " + name + " doesn't exist";
+    throw CompilerException("Constant", msg);
 }
 
 void Constant::clear()

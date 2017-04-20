@@ -7,6 +7,8 @@
 #include "Compiler/mathexpr.h"
 #include "Compiler/constant.h"
 
+#include "Exceptions/compilerexception.h"
+
 class Data
 {
 public:

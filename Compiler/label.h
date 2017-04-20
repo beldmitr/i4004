@@ -11,6 +11,8 @@
 #include "Compiler/instruction.h"
 #include "Compiler/number.h"
 
+#include "Exceptions/compilerexception.h"
+
 class Label
 {
 private:

@@ -3,6 +3,8 @@
 
 #include <map>
 
+#include "Exceptions/compilerexception.h"
+
 class ObjectCode
 {
 public:

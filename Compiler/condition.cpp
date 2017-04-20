@@ -18,7 +18,7 @@ unsigned int Condition::getUInt(const std::string& str)
     }
     else
     {
-        std::string msg = "Condition::Wrong condition " + str;
-        throw msg;
+        std::string msg = "Wrong condition " + str;
+        throw CompilerException("Condition", msg);
     }
 }

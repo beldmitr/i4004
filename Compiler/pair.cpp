@@ -33,11 +33,11 @@ unsigned int Pair::getUInt(const std::string& str)
     std::string msg;
     if (str.empty())
     {
-        msg = "Pair::Program expects a pair";
+        msg = "Program expects a pair";
     }
     else
     {
-        msg = "Pair::Pair " + str + " is wrong";
+        msg = "Pair " + str + " is wrong";
     }
-    throw msg;
+    throw CompilerException("Pair", msg);;
 }

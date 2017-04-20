@@ -23,31 +23,34 @@ void CompilerN::compile(const std::string& inputFilename)
     }
     else
     {
+        /*
+         * TODO decide what to do with this exception,
+         * obviously we need a LogExceptions class,
+         * which will collect not runtime compile errors
+         */
         std::string msg = "Compiler::File " + inputFilename + " can't be open.";
         throw msg;
     }
 
     // parse lines
+    unsigned int row = 0;
     for (const std::string& l : lines)
     {
         try
         {
             std::shared_ptr<Line>(new Line(l));
         }
-        catch(const std::exception& ex)
+        catch(const CompilerException& ex)
         {
-            std::cerr << ex.what() << std::endl;
+            std::cerr << "Line " << row << ": Error " << ex.what() << std::endl;
+            std::cerr << "\tFrom " << ex.who() << std::endl;
         }
-//        catch(const std::string& ex)
-//        {
-//            std::cerr << ex << std::endl;
-//        }
-//        catch(const char* ex)
-//        {
-//            std::cerr << ex << std::endl;
-//        }
-
-
+        row++;
     }
 
+}
+
+std::map<unsigned int, unsigned int> CompilerN::getObjectCode()
+{
+    return ObjectCode::getTable();
 }

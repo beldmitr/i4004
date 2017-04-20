@@ -12,6 +12,8 @@
 #include "Compiler/address.h"
 #include "Compiler/condition.h"
 
+#include "Exceptions/compilerexception.h"
+
 class Operand
 {
 private:

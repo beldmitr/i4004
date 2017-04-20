@@ -41,8 +41,8 @@ Label::Label(const std::string& name, const std::string& param)
     }
     else
     {
-        std::string msg = "Label::Wrong parameter " + param + " in label " + name;
-        throw msg;
+        std::string msg = "Wrong parameter " + param + " in label " + name;
+        throw CompilerException("Label", msg);
     }
 }
 

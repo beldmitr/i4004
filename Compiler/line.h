@@ -9,6 +9,8 @@
 #include "Compiler/instruction.h"
 #include "Compiler/objectcode.h"
 
+#include "Exceptions/compilerexception.h"
+
 class Label;
 class Instruction;
 

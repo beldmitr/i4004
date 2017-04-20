@@ -24,8 +24,8 @@ void ObjectCode::setProgramCounter(unsigned int address)
 {
     if (address > 0xFFF)  /// TODO magic number
     {
-        std::string msg = "ObjectCode::Address " + std::to_string(address) + " is too big. Allowed only 12 bit addresses";
-        throw msg;
+        std::string msg = "Address " + std::to_string(address) + " is too big. Allowed only 12 bit addresses";
+        throw CompilerException("ObjectCode", msg);
     }
     programCounter = address;
 }
@@ -35,8 +35,8 @@ void ObjectCode::write(unsigned int value)
     // check, the number must be less then 2 bytes
     if (value > 0xFFFF)
     {
-        std::string msg = "ObjectCode::Value " + std::to_string(value) + " is too big.";
-        throw msg;
+        std::string msg = "Value " + std::to_string(value) + " is too big.";
+        throw CompilerException("ObjectCode", msg);
     }
 
     // write a 2 byte length instruction

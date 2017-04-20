@@ -19,7 +19,7 @@ unsigned int Data::getUInt(const std::string& data)
     }
     else
     {
-        std::string msg = "Data::There is wrong data " + data;
-        throw msg;
+        std::string msg = "There is wrong data " + data;
+        throw CompilerException("Data", msg);
     }
 }

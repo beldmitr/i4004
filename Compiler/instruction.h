@@ -7,6 +7,8 @@
 #include "command.h"
 #include "params.h"
 
+#include "Exceptions/compilerexception.h"
+
 class Params;
 
 class Instruction

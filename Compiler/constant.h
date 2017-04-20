@@ -5,6 +5,8 @@
 #include <string>
 #include <regex>
 
+#include "Exceptions/compilerexception.h"
+
 class Constant
 {
 private:

@@ -29,7 +29,7 @@ int MathExpr::evaluate(const std::string& infix)
             || !isOperation(eq[eq.size() - 1])
             || (!Number::isDec(eq[0]) && !Number::isDec(eq[1]) && !isConstant(eq[0]) && !isConstant(eq[1])))
     {
-        throw "Wrong postfix notation";
+        throw CompilerException("MathExpr", "Wrong postfix notation");
     }
 
     std::stack<std::string> strStack;
@@ -50,7 +50,7 @@ int MathExpr::evaluate(const std::string& infix)
         {
             if (strStack.size() < 2)
             {
-                throw "Wrong postfix equation";
+                throw CompilerException("MathExpr", "Wrong postfix equation");
             }
 
             int op2 = std::stoi(strStack.top());
@@ -71,25 +71,10 @@ int MathExpr::evaluate(const std::string& infix)
             {
                 strStack.push(std::to_string(op1 - op2));
             }
-            else if (s.compare("*") == 0)
-            {
-                strStack.push(std::to_string(op1 * op2));
-            }
-            else if (s.compare("/") == 0)
-            {
-                if (op2 == 0)
-                {
-                    std::string msg = "";
-                    msg.append("Dividing to zero in ").append(infix);
-                    throw msg;
-                }
-                strStack.push(std::to_string(op1 / op2));
-            }
             else
             {
-                std::string msg = "";
-                msg.append("Unknown operator ").append(s).append(" in infix equaton");
-                throw msg;
+                std::string msg = "Unknown operator " + s + " in infix equaton";
+                throw CompilerException("MathExpr", msg);
             }
         }
     }
@@ -238,15 +223,8 @@ std::vector<std::string> MathExpr::equationToVector(const std::string &infix)
         }
         else
         {
-            std::string msg = "";
-            msg.append("Wrong symbol \'").append(std::string(1, *it)).append("\' in equation ").append(infix);
-            /*
-             * NOTE
-             * The following throw statement throws an exception type "const std::string&",
-             * so to catch it DO NOT use catch(const char *), but USE:
-             * try { ... } catch (const std::string& e) { ... }
-             */
-            throw msg;
+            std::string msg = "Wrong symbol \"" + std::string(1, *it) + "\" in equation " + infix;
+            throw CompilerException("MathExpr", msg);
         }
     }
 

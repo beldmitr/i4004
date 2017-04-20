@@ -74,9 +74,9 @@ Line::Line(std::string line)
          */
         if (!String::trim(pseudo.prefix).empty())
         {
-            std::string msg = "Line::There is an unknown parameter " + pseudo.prefix
+            std::string msg = "There is an unknown parameter " + pseudo.prefix
                     + " in line " + String::trim(line);
-            throw msg;
+            throw CompilerException("Line", msg);
         }
         return;
     }
@@ -114,9 +114,9 @@ Line::Line(std::string line)
         // There should be nothing before a label
         if (!String::trim(label.prefix).empty())
         {
-            std::string msg = "Line::There is an unknown parameter " + label.prefix
+            std::string msg = "There is an unknown parameter " + label.prefix
                     + " in line " + String::trim(line);
-            throw msg;
+            throw CompilerException("Line", msg);
         }
 
         return;
@@ -134,9 +134,9 @@ Line::Line(std::string line)
     // Here should be nothing to left before a command, f.e.: asdasd FIM p0, 5. What is "asdasd"?
     if (!String::trim(command.prefix).empty())
     {
-        std::string msg = "Line::There is an unknown parameter " + command.prefix
+        std::string msg = "There is an unknown parameter " + command.prefix
                 + " in line " + String::trim(line);
-        throw msg;
+        throw CompilerException("Line", msg);
     }
 
     SearchResult params = String::search(parsedLine, paramsRegex);
@@ -151,9 +151,9 @@ Line::Line(std::string line)
     // there should be nothing to left from the parsed line
     if (!String::trim(parsedLine).empty())
     {
-        std::string msg = "Line::There is an unknown parameter " + parsedLine
+        std::string msg = "There is an unknown parameter " + parsedLine
                 + " in line " + String::trim(line);
-        throw msg;
+        throw CompilerException("Line", msg);
     }
     return;
 }

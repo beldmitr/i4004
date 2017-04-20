@@ -9,8 +9,8 @@ unsigned int Operand::getCode() const
 {
     if (isEmpty)
     {
-        std::string msg = "Operand::Operand is empty";
-        throw msg;
+        std::string msg = "Operand is empty";
+        throw CompilerException("Operand", msg);
     }
     return code;
 }
@@ -40,7 +40,7 @@ Operand::Operand(const std::string& operand, CommandSet::OperandType type)
             isEmpty = false;
             break;
         default:
-            std::string msg = "Operand::Unknown type " + std::to_string((char)type) + " of the operand " + operand;
-            throw msg;
+            std::string msg = "Unknown type " + std::to_string((char)type) + " of the operand " + operand;
+            throw CompilerException("Operand", msg);
     }
 }

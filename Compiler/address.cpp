@@ -17,7 +17,7 @@ unsigned int Address::getUInt(const std::string& addr)
     }
     else
     {
-        std::string msg = "Address::Address " + addr + " is wrong";
-        throw msg;
+        std::string msg = "Address " + addr + " is wrong";
+        throw CompilerException("Address", msg);
     }
 }

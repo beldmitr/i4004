@@ -4,8 +4,8 @@ std::shared_ptr<Operand> Params::getOperand(unsigned int index) const
 {
     if (index >= operands.size())
     {
-        std::string msg = "Params::Program expects " + std::to_string(index + 1) + " operand";
-        throw msg;
+        std::string msg = "Program expects " + std::to_string(index + 1) + " operand";
+        throw CompilerException("Params", msg);
     }
 
     return operands[index];
@@ -15,8 +15,8 @@ std::string Params::getOperandString(unsigned int index) const
 {
     if (index >= operands.size())
     {
-        std::string msg = "Params::Program expects " + std::to_string(index + 1) + " operand";
-        throw msg;
+        std::string msg = "Program expects " + std::to_string(index + 1) + " operand";
+        throw CompilerException("Params", msg);;
     }
 
     return operandsString[index];
@@ -28,12 +28,12 @@ Params::Params(const std::string& command, const std::string& params)
 
     if (operand.size() > CommandSet::getNumberOperands(command))
     {
-        std::string msg = "Params::There are too much operands: ";
+        std::string msg = "There are too much operands: ";
         for (std::string s : operand)
         {
             msg = msg + String::trimStrong(s) + ",";
         }
-        throw msg;
+        throw CompilerException("Params", msg);;
     }
 
     for (unsigned int i = 0; i < operand.size(); i++)

@@ -7,6 +7,8 @@
 #include "Compiler/number.h"
 #include "Utils/string.h"
 
+#include "Exceptions/compilerexception.h"
+
 class CommandSet
 {
 private:
