@@ -30,7 +30,16 @@ void CompilerN::compile(const std::string& inputFilename)
     // parse lines
     for (const std::string& l : lines)
     {
-        std::shared_ptr<Line>(new Line(l));
+        try
+        {
+            std::shared_ptr<Line>(new Line(l));
+        }
+        catch(const std::string& ex)
+        {
+            std::cerr << ex << std::endl;
+        }
+
+
     }
 
 }

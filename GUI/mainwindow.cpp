@@ -574,32 +574,32 @@ void MainWindow::buildCode()
 {
     saveFile();
     lstResult->clear();
-//    compiler.reset(new Compiler(filename.toStdString(), outputname.toStdString()));
-//    compiler->toCompile();
+    compiler.reset(new CompilerN(/*filename.toStdString(), outputname.toStdString()*/));
+    compiler->compile(filename.toStdString());
 
-    for (const Error& i : compiler->getErrors())
-    {
-        QString e;
-        if (i.line != -1)
-        {
-            e.append("Line ").append(QString::number(i.line));
-        }
-        e.append("\tCommand: ")
-                .append(QString::fromStdString(i.command))
-                .append("\t")
-                .append(QString::fromStdString(i.text))
-                .append("\n");
-        lstResult->addItem(e);
+//    for (const Error& i : compiler->getErrors())
+//    {
+//        QString e;
+//        if (i.line != -1)
+//        {
+//            e.append("Line ").append(QString::number(i.line));
+//        }
+//        e.append("\tCommand: ")
+//                .append(QString::fromStdString(i.command))
+//                .append("\t")
+//                .append(QString::fromStdString(i.text))
+//                .append("\n");
+//        lstResult->addItem(e);
 
-    }
+//    }
 
-    if(compiler->getErrors().empty())
-    {
-        lstResult->addItem("Project was compiled successfully.\n");
+//    if(compiler->getErrors().empty())
+//    {
+//        lstResult->addItem("Project was compiled successfully.\n");
 
-        romWidget->clear();
-//        romWidget->write(compiler->getCompiledCode());
-    }
+//        romWidget->clear();
+////        romWidget->write(compiler->getCompiledCode());
+//    }
 }
 
 void MainWindow::compileBuild()
@@ -616,7 +616,7 @@ void MainWindow::compileRunBuild()
 {
     buildCode();
     simulator.reset(new Simulator());
-    simulator->setCode(compiler->getCompiledCode());
+//    simulator->setCode(compiler->getCompiledCode());
 }
 
 void MainWindow::debugResume()

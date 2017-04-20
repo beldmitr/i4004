@@ -22,17 +22,6 @@ class Instruction;
  */
 class Line
 {
-private:
-
-    /**
-     * @brief assertNotEmptyLine - checks if a parsedLine after all parsers is empty,
-     *                             it must be empty, because in other case,
-     *                             there will be some unknown parameters
-     * @param line - original line is used for text message in exception
-     * @param parsedLine - a text, which have left after all parsing: unknown pararmeters
-     */
-    void assertNotEmptyLine(const std::string& line, std::string parsedLine);
-
 public:
     Line(const std::string& line);
 

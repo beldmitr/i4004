@@ -32,7 +32,7 @@
 #include "editor.h"
 #include "programramwidget.h"
 #include "romwidget.h"
-#include "compiler.h"
+#include "compilern.h"
 #include "cpuwidget.h"
 #include "subwindow.h"
 #include "dataramwidget.h"
@@ -53,7 +53,7 @@ class MainWindow : public QMainWindow
     Q_OBJECT
 private:
     /// TODO Check for undeleted pointers
-    std::shared_ptr<Compiler> compiler;
+    std::shared_ptr<CompilerN> compiler;
     std::shared_ptr<Simulator> simulator;
 
     QString filename;
