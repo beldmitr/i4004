@@ -34,14 +34,18 @@ void CompilerN::compile(const std::string& inputFilename)
         {
             std::shared_ptr<Line>(new Line(l));
         }
-        catch(const std::string& ex)
+        catch(const std::exception& ex)
         {
-            std::cerr << ex << std::endl;
+            std::cerr << ex.what() << std::endl;
         }
-        catch(const char* ex)
-        {
-            std::cerr << ex << std::endl;
-        }
+//        catch(const std::string& ex)
+//        {
+//            std::cerr << ex << std::endl;
+//        }
+//        catch(const char* ex)
+//        {
+//            std::cerr << ex << std::endl;
+//        }
 
 
     }
