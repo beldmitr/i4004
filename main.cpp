@@ -21,6 +21,8 @@ int main (int argc, char* argv[])
 
     CompilerN* c = new CompilerN;
     c->compile("D:/a.asm");
+    std::vector<unsigned int> v = c->getObjectCode();
+    c->saveObjectCode("D:/a.bin");
 
 
     return 0;

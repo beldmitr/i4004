@@ -8,7 +8,7 @@ CompilerN::CompilerN()
 void CompilerN::compile(const std::string& inputFilename)
 {
     // open and read source file
-    input.open(inputFilename.c_str(), std::ios::in);
+    std::ifstream input(inputFilename.c_str(), std::ios::in);
 
     if (input.is_open())
     {
@@ -23,14 +23,15 @@ void CompilerN::compile(const std::string& inputFilename)
     }
     else
     {
-        /*
-         * TODO decide what to do with this exception,
-         * obviously we need a LogExceptions class,
-         * which will collect not runtime compile errors
-         */
         std::string msg = "File " + inputFilename + " can't be open.";
         throw LogExceptions("Compiler", msg);
     }
+
+    // delete old code
+    ObjectCode::reset();
+
+    // delete old constant table
+    Constant::clear();
 
     // delete old error messages
     errors.clear();
@@ -55,7 +56,27 @@ void CompilerN::compile(const std::string& inputFilename)
     }
 }
 
-std::map<unsigned int, unsigned int> CompilerN::getObjectCode()
+std::vector<unsigned int> CompilerN::getObjectCode()
 {
     return ObjectCode::getTable();
+}
+
+void CompilerN::saveObjectCode(const std::string& outputFile)
+{
+    std::ofstream output(outputFile.c_str(), std::ios::out | std::ios::binary);
+
+    if (output.is_open())
+    {
+        for (unsigned int p : getObjectCode())
+        {
+            output.write(reinterpret_cast<const char*>(&p), 1);
+        }
+
+        output.close();
+    }
+    else
+    {
+        std::string msg = "File " + outputFile + " can't be open.";
+        throw LogExceptions("Compiler", msg);
+    }
 }

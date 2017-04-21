@@ -2,7 +2,7 @@
 
 ObjectCode::Endianness ObjectCode::endiannes = ObjectCode::Endianness::BigEndian;
 unsigned int ObjectCode::programCounter = 0;
-std::map<unsigned int, unsigned int> ObjectCode::table;
+std::vector<unsigned int> ObjectCode::table;
 
 void ObjectCode::writeBigEndian(unsigned int hiByte, unsigned int lowByte)
 {
@@ -67,7 +67,7 @@ void ObjectCode::write(unsigned int value)
     }
 }
 
-std::map<unsigned int, unsigned int> ObjectCode::getTable()
+std::vector<unsigned int> ObjectCode::getTable()
 {
     return table;
 }
@@ -81,4 +81,5 @@ void ObjectCode::reset()
 {
     programCounter = 0;
     table.clear();
+    table.resize(0x1000);
 }

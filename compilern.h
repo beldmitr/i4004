@@ -3,7 +3,6 @@
 
 #include <string>
 #include <vector>
-#include <map>
 #include <fstream>
 #include <memory>
 
@@ -15,18 +14,15 @@
 class CompilerN
 {
 private:
-    std::ifstream input;
-    std::ofstream output;   /// TODO save a bin table somewhere or decide if I need this
-
     std::vector<std::string> lines;
-
     std::vector<std::shared_ptr<CompilerError>> errors;
 
 public:
     CompilerN();
 
     void compile(const std::string& inputFilename);
-    std::map<unsigned int, unsigned int> getObjectCode();
+    std::vector<unsigned int> getObjectCode();
+    void saveObjectCode(const std::string& outputFile);
 };
 
 #endif // COMPILERN_H

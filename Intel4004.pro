@@ -13,7 +13,6 @@ SOURCES += \
     GUI/memorytable.cpp \
     GUI/chipdataram.cpp \
     main.cpp \
-    compiler.cpp \
     simulator.cpp \
     rom.cpp \
     pram.cpp \
@@ -69,7 +68,6 @@ HEADERS += \
     GUI/subwindow.h \
     GUI/memorytable.h \
     GUI/chipdataram.h \
-    compiler.h \
     simulator.h \
     rom.h \
     pram.h \
@@ -80,7 +78,6 @@ HEADERS += \
     dataramchip.h \
     datarambank.h \
     Compiler/mathexpr.h \
-    Interfaces/icompiler.h \
     GUI/cpuwidget.h \
     GUI/led.h \
     GUI/button.h \
