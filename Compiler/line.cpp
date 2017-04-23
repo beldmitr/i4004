@@ -126,10 +126,13 @@ Line::Line(std::string line)
      * Parsing an INSTRUCTION
      *
      * In this place, we think, that if there is no a comment or a pseudo or a label, this is an instruction.
-     * Because it should be something of these
+     * Because it should be something of this
      */
     SearchResult command = String::search(parsedLine, commandRegex); // find the command. FIM P0, 3 => FIM is command
-    parsedLine = command.suffix;
+    if (!command.isEmpty())
+    {
+        parsedLine = command.suffix;
+    }
 
     // Here should be nothing to left before a command, f.e.: asdasd FIM p0, 5. What is "asdasd"?
     if (!String::trim(command.prefix).empty())
@@ -140,21 +143,28 @@ Line::Line(std::string line)
     }
 
     SearchResult params = String::search(parsedLine, paramsRegex);
-    parsedLine = params.prefix + " " + params.suffix;   // there should be now nothing before params "P0, 3" and after it
+    if (!params.isEmpty())
+    {
+        parsedLine = params.prefix + " " + params.suffix;   // there should be now nothing before params "P0, 3" and after it
+    }
 
+    // there should be nothing to left from the parsed line
+    if (!String::trim(parsedLine).empty())
+    {
+        std::string msg = "There is an unknown parameter " + String::trimBeginEnd(parsedLine)
+                + " in line " + String::trim(line) + ". Command is expected";
+        throw CompilerException("Line", msg);
+    }
+
+
+    // create and execute the instruction
     std::shared_ptr<Instruction> instruction = std::shared_ptr<Instruction>(
                 new Instruction(String::trimBeginEnd(command.find),
                                 String::trimBeginEnd(params.find)));
 
     ObjectCode::write(instruction->getCode());
 
-    // there should be nothing to left from the parsed line
-    if (!String::trim(parsedLine).empty())
-    {
-        std::string msg = "There is an unknown parameter " + parsedLine
-                + " in line " + String::trim(line);
-        throw CompilerException("Line", msg);
-    }
+
     return;
 }
 

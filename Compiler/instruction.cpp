@@ -29,10 +29,13 @@ void Instruction::combine()
         std::shared_ptr<Operand> operand = this->params->getOperand(i);
         unsigned int operandCode = operand->getCode();
 
+        // It is all right in if condition. There must be right shift (>>).
         if (operandCode >> o.length)
         {
-            std::string msg = "Operand " + this->getParams()->getOperandString(i)
-                    + " has too big size. Allowed only " + std::to_string(o.length) + " bits";
+            std::string operandString = this->getParams()->getOperandString(i);
+            std::string msg = "Operand " + operandString + " has too big size: "
+                    + operandString + "=" + std::to_string(operandCode)
+                    + " (unsigned). It is allowed only " + std::to_string(o.length) + " bits.";
             throw CompilerException("Instruction", msg);
         }
 
@@ -61,6 +64,6 @@ Instruction::Instruction(const std::string& command, const std::string& operands
 
     this->params = std::shared_ptr<Params>(new Params(command, operands));
 
-    combine(); // combines command code and parameters codes
+    combine(); // combines command code and parameters' codes
 }
 

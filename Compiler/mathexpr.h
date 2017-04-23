@@ -7,6 +7,8 @@
 #include <iostream>
 #include <regex>
 
+//#include "Utils/searchresult.h"
+
 #include "Compiler/objectcode.h"
 #include "Compiler/constant.h"
 #include "Compiler/pair.h"
@@ -38,7 +40,7 @@
         static std::vector<std::string> equationToVector(const std::string &infix);
 
     public:
-        static int evaluate(const std::string &infix);
+        static int evaluate(std::string infix);
         static bool isMathExpression(const std::string& str);
 
     };

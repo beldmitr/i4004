@@ -13,15 +13,15 @@ SOURCES += \
     GUI/memorytable.cpp \
     GUI/chipdataram.cpp \
     main.cpp \
-    simulator.cpp \
-    rom.cpp \
-    pram.cpp \
-    dram.cpp \
-    cpu.cpp \
-    stack.cpp \
-    dataramregister.cpp \
-    dataramchip.cpp \
-    datarambank.cpp \
+    Simulator/simulator.cpp \
+    Simulator/rom.cpp \
+    Simulator/pram.cpp \
+    Simulator/dram.cpp \
+    Simulator/cpu.cpp \
+    Simulator/stack.cpp \
+    Simulator/dataramregister.cpp \
+    Simulator/dataramchip.cpp \
+    Simulator/datarambank.cpp \
     Compiler/mathexpr.cpp \
     GUI/cpuwidget.cpp \
     GUI/led.cpp \
@@ -46,7 +46,6 @@ SOURCES += \
     Utils/string.cpp \
     Compiler/params.cpp \
     Compiler/operand.cpp \
-    compilern.cpp \
     Compiler/instruction.cpp \
     Compiler/line.cpp \
     Utils/searchresult.cpp \
@@ -59,7 +58,8 @@ SOURCES += \
     Compiler/objectcode.cpp \
     Exceptions/compilerexception.cpp \
     Exceptions/logexceptions.cpp \
-    Compiler/compilererror.cpp
+    Compiler/compilererror.cpp \
+    Compiler/compiler.cpp
 
 HEADERS += \
     GUI/mainwindow.h \
@@ -68,15 +68,15 @@ HEADERS += \
     GUI/subwindow.h \
     GUI/memorytable.h \
     GUI/chipdataram.h \
-    simulator.h \
-    rom.h \
-    pram.h \
-    dram.h \
-    cpu.h \
-    stack.h \
-    dataramregister.h \
-    dataramchip.h \
-    datarambank.h \
+    Simulator/simulator.h \
+    Simulator/rom.h \
+    Simulator/pram.h \
+    Simulator/dram.h \
+    Simulator/cpu.h \
+    Simulator/stack.h \
+    Simulator/dataramregister.h \
+    Simulator/dataramchip.h \
+    Simulator/datarambank.h \
     Compiler/mathexpr.h \
     GUI/cpuwidget.h \
     GUI/led.h \
@@ -101,7 +101,6 @@ HEADERS += \
     Utils/string.h \
     Compiler/params.h \
     Compiler/operand.h \
-    compilern.h \
     Compiler/instruction.h \
     Compiler/line.h \
     Utils/searchresult.h \
@@ -114,7 +113,8 @@ HEADERS += \
     Compiler/objectcode.h \
     Exceptions/compilerexception.h \
     Exceptions/logexceptions.h \
-    Compiler/compilererror.h
+    Compiler/compilererror.h \
+    Compiler/compiler.h
 
 RESOURCES += \
     resources.qrc

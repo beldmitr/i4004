@@ -1,7 +1,6 @@
 #include "mathexpr.h"
 
-//std::regex MathExpr::mathExpression = std::regex("([+-]?[[:alnum:]]+)+");
-std::regex MathExpr::mathExpression = std::regex("([*]?[+-]?[[:alnum:]]+)+");
+std::regex MathExpr::mathExpression = std::regex("([(]*[)]*[[:blank:]]*[*]?[[:blank:]]*[+-]?[[:blank:]]*[[:alnum:]]*)+");
 
 /// TODO test class and delete commented code
 
@@ -11,8 +10,40 @@ bool MathExpr::isMathExpression(const std::string& str)
 }
 
 
-int MathExpr::evaluate(const std::string& infix)
+int MathExpr::evaluate(std::string infix)
 {
+    // CHECK SOME ERRORS
+    SearchResult error;
+    // check if is not expected an operation
+    error = String::search(infix, std::regex("[[:alnum:]]+[[:blank:]]+[[:alnum:]]+"));
+    if (!error.isEmpty())
+    {
+        std::string msg = "Expected operation + or - in \"" + error.find + "\" in expression " + infix;
+        throw CompilerException("MathExpr", msg);
+    }
+    // check if is there aren't an empty parenthesis
+    error = String::search(infix, std::regex("[(][[:blank:]]*[)]"));
+    if (!error.isEmpty())
+    {
+        std::string msg = "Empty parenthesis found in expression " + infix;
+        throw CompilerException("MathExpr", msg);
+    }
+    // check if is there aren't two operations sequently one by one, f.e 9 ++ 1 or 9 -- 1
+    error = String::search(infix, std::regex("[-+][[:blank:]]*[-+]"));
+    if (!error.isEmpty())
+    {
+        std::string msg = "Too much operations in expression " + infix + ". A value is expected";
+        throw CompilerException("MathExpr", msg);
+    }
+
+
+    // PREPARE an infix line
+    // delete white spaces
+    infix = String::trim(infix);
+    // replace hex and bin numbers with dec
+    infix = Number::replaceNumbersWithDec(infix);
+
+    // EVALUATING
     std::vector<std::string> eq = infixToPostfix(infix);
 
     if (eq.size() == 1 && Number::isDec(eq[0]))
@@ -25,11 +56,18 @@ int MathExpr::evaluate(const std::string& infix)
         return Constant::getByName(eq[0]);
     }
 
+    if (eq[eq.size() - 1] == "(")
+    {
+        throw CompilerException("MathExpr",
+                                "Wrong mathematical expression, a closing parenthesis \")\" is missing in line "
+                                + infix);
+    }
+
     if (eq.size() < 3
             || !isOperation(eq[eq.size() - 1])
             || (!Number::isDec(eq[0]) && !Number::isDec(eq[1]) && !isConstant(eq[0]) && !isConstant(eq[1])))
     {
-        throw CompilerException("MathExpr", "Wrong postfix notation");
+        throw CompilerException("MathExpr", "Wrong mathematical expression " + infix);
     }
 
     std::stack<std::string> strStack;
@@ -50,7 +88,25 @@ int MathExpr::evaluate(const std::string& infix)
         {
             if (strStack.size() < 2)
             {
-                throw CompilerException("MathExpr", "Wrong postfix equation");
+                if (s.compare("-") == 0)
+                {
+                    std::string previous = strStack.top();
+                    strStack.pop();
+                    strStack.push("-"+previous);
+                    strStack.push("0");
+                }
+                else if (s.compare("+") == 0)
+                {
+                    std::string previous = strStack.top();
+                    strStack.pop();
+                    strStack.push(previous);
+                    strStack.push("0");
+                }
+                else
+                {
+                    std::string msg = "Wrong operation " + s + " in line " + infix;
+                    throw CompilerException("MathExpr", msg);
+                }
             }
 
             int op2 = std::stoi(strStack.top());
@@ -58,11 +114,6 @@ int MathExpr::evaluate(const std::string& infix)
             int op1 = std::stoi(strStack.top());
             strStack.pop();
 
-            /*
-             * Here is not switch, because c++ can't work in switch with std::string, only with int.
-             * Maybe to resolve this using hash.
-             * TODO Maybe to do this code better, using f.e. switch
-             */
             if (s.compare("+") == 0)
             {
                 strStack.push(std::to_string(op1 + op2));
@@ -73,7 +124,7 @@ int MathExpr::evaluate(const std::string& infix)
             }
             else
             {
-                std::string msg = "Unknown operator " + s + " in infix equaton";
+                std::string msg = "Unknown operator " + s + " in line " + infix;
                 throw CompilerException("MathExpr", msg);
             }
         }
@@ -94,8 +145,7 @@ bool MathExpr::isOperation(const std::string &s)
 
 bool MathExpr::isParenthesis(const std::string &s)
 {
-    return ((s.compare("(") == 0)
-            || (s.compare(")") == 0));
+    return ((s.compare("(") == 0) || (s.compare(")") == 0));
 }
 
 /*
@@ -148,12 +198,24 @@ std::vector<std::string> MathExpr::infixToPostfix(const std::string &infix)
         }
         else if (s.compare(")") == 0)
         {
-            std::string t = strStack.top();
+            std::string t;
+            if (strStack.empty())
+            {
+                std::string msg = "Wrong parenthesis in line " + infix;
+                throw CompilerException("MathExpr", msg);
+            }
+            t = strStack.top();
             strStack.pop();
             while (t.compare("(") != 0)
             {
                 result.push_back(t);
+                if (strStack.empty())
+                {
+                    std::string msg = "Wrong parenthesis in line " + infix;
+                    throw CompilerException("MathExpr", msg);
+                }
                 t = strStack.top();
+
                 strStack.pop();
             }
         }
@@ -219,11 +281,11 @@ std::vector<std::string> MathExpr::equationToVector(const std::string &infix)
         }
         else if (*it == ' ' || *it == '\t' )
         {
-            // ignore if it is a white symbol
+            // in other case ignore this white symbol
         }
         else
         {
-            std::string msg = "Wrong symbol \"" + std::string(1, *it) + "\" in equation " + infix;
+            std::string msg = "Wrong symbol \"" + std::string(1, *it) + "\" in line " + infix;
             throw CompilerException("MathExpr", msg);
         }
     }

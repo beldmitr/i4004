@@ -1,11 +1,11 @@
-#include "compilern.h"
+#include "compiler.h"
 
-CompilerN::CompilerN()
+Compiler::Compiler()
 {
     // is empty
 }
 
-void CompilerN::compile(const std::string& inputFilename)
+void Compiler::compile(const std::string& inputFilename)
 {
     // open and read source file
     std::ifstream input(inputFilename.c_str(), std::ios::in);
@@ -56,12 +56,12 @@ void CompilerN::compile(const std::string& inputFilename)
     }
 }
 
-std::vector<unsigned int> CompilerN::getObjectCode()
+std::vector<unsigned int> Compiler::getObjectCode()
 {
     return ObjectCode::getTable();
 }
 
-void CompilerN::saveObjectCode(const std::string& outputFile)
+void Compiler::saveObjectCode(const std::string& outputFile)
 {
     std::ofstream output(outputFile.c_str(), std::ios::out | std::ios::binary);
 

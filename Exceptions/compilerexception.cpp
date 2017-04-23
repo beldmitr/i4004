@@ -1,7 +1,7 @@
 #include "compilerexception.h"
 
 CompilerException::CompilerException(const std::string& who,
-                                     const std::string& what) : std::runtime_error(message)
+                                     const std::string& what) : std::runtime_error(what)
 {
     parent = who;
     message = what;

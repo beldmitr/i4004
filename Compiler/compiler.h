@@ -1,5 +1,5 @@
-#ifndef COMPILERN_H
-#define COMPILERN_H
+#ifndef COMPILER_H
+#define COMPILER_H
 
 #include <string>
 #include <vector>
@@ -11,18 +11,18 @@
 #include "Exceptions/compilerexception.h"
 #include "Exceptions/logexceptions.h"
 
-class CompilerN
+class Compiler
 {
 private:
     std::vector<std::string> lines;
     std::vector<std::shared_ptr<CompilerError>> errors;
 
 public:
-    CompilerN();
+    Compiler();
 
     void compile(const std::string& inputFilename);
     std::vector<unsigned int> getObjectCode();
     void saveObjectCode(const std::string& outputFile);
 };
 
-#endif // COMPILERN_H
+#endif // COMPILER_H

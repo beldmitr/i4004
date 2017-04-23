@@ -212,8 +212,14 @@ CommandSet::OperandType CommandSet::getOperandType(const std::string& command, u
         }
     }
 
-    std::string msg = "There is no " + std::to_string(operandNumber) + " operand in a command " + command;
-    throw CompilerException("CommandSet", msg);
+    unsigned int count = getNumberOperands(command);
+    if (operandNumber > count - 1)
+    {
+        std::string msg = "Command " + command + " expects " + std::to_string(count) + " operands";
+        throw CompilerException("CommandSet", msg);
+    }
+
+    return OperandType::NONE;
 }
 
 

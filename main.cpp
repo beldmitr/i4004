@@ -8,7 +8,7 @@
 
 #include <map>
 
-#include "compilern.h"
+#include "Compiler/compiler.h"
 
 int main (int argc, char* argv[])
 {
@@ -19,11 +19,11 @@ int main (int argc, char* argv[])
 
     //    return app.exec();
 
-    CompilerN* c = new CompilerN;
+    Compiler* c = new Compiler;
     c->compile("D:/a.asm");
-    std::vector<unsigned int> v = c->getObjectCode();
     c->saveObjectCode("D:/a.bin");
 
+    int a = 9 + + 1;
 
     return 0;
 }

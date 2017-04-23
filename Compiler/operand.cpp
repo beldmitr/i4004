@@ -19,6 +19,13 @@ Operand::Operand(const std::string& operand, CommandSet::OperandType type)
 {
     switch(type)
     {
+        case CommandSet::OperandType::NONE:
+            if (!operand.empty())
+            {
+                std::string msg = "It is not expected an operand. But " + operand + " occurs.";
+                throw CompilerException("Operand", msg);
+            }
+            return;
         case CommandSet::OperandType::CONDITION:
             this->code = Condition::getUInt(operand);
             isEmpty = false;

@@ -26,16 +26,6 @@ Params::Params(const std::string& command, const std::string& params)
 {
     std::vector<std::string> operand = String::divideBy(params, ",");
 
-    if (operand.size() > CommandSet::getNumberOperands(command))
-    {
-        std::string msg = "There are too much operands: ";
-        for (std::string s : operand)
-        {
-            msg = msg + String::trimStrong(s) + ",";
-        }
-        throw CompilerException("Params", msg);;
-    }
-
     for (unsigned int i = 0; i < operand.size(); i++)
     {
         std::string str = String::trimBeginEnd(operand[i]);

@@ -22,6 +22,8 @@ Label::Label(const std::string& name, const std::string& param)
         instruction = std::shared_ptr<Instruction>(new Instruction(command.find, params.find));
         this->value = instruction->getCode();
 
+        ObjectCode::write(this->value);
+
         Constant::add(this->name, ObjectCode::getProgramCounter());
     }
     else if (Number::isNumber(param))
@@ -37,6 +39,11 @@ Label::Label(const std::string& name, const std::string& param)
     else if (MathExpr::isMathExpression(param))
     {
         this->value = MathExpr::evaluate(param);
+        Constant::add(this->name, this->value);
+    }
+    else if (String::trimBeginEnd(param).compare("*") == 0)
+    {
+        this->value = ObjectCode::getProgramCounter();
         Constant::add(this->name, this->value);
     }
     else

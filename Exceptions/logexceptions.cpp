@@ -1,6 +1,7 @@
 #include "logexceptions.h"
 
-LogExceptions::LogExceptions(const std::string& who, const std::string& what) : std::runtime_error(message)
+LogExceptions::LogExceptions(const std::string& who,
+                             const std::string& what) : std::runtime_error(what)
 {
     parent = who;
     message = what;

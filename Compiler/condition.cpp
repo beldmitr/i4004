@@ -13,8 +13,7 @@ unsigned int Condition::getUInt(const std::string& str)
     }
     else if (MathExpr::isMathExpression(str))
     {
-        std::string s = Number::replaceNumbersWithDec(str);
-        return MathExpr::evaluate(s);
+        return MathExpr::evaluate(str);
     }
     else
     {
