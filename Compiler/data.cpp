@@ -12,7 +12,7 @@ unsigned int Data::getUInt(const std::string& data)
     {
         return MathExpr::evaluate(data);
     }
-    else if (Constant::isLabel(data))
+    else if (Constant::isConstant(data))
     {
         return Constant::getByName(data);
     }

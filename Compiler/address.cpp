@@ -14,7 +14,7 @@ unsigned int Address::getUInt(const std::string& addr)
     {
         return MathExpr::evaluate(addr);
     }
-    else if (Constant::isLabel(addr))
+    else if (Constant::isConstant(addr))
     {
         return Constant::getByName(addr);
     }

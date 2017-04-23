@@ -7,7 +7,7 @@ unsigned int Condition::getUInt(const std::string& str)
     {
         return Number::getUInt(str);
     }
-    else if (Constant::isLabel(str))
+    else if (Constant::isConstant(str))
     {
         return Constant::getByName(str);
     }

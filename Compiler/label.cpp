@@ -31,7 +31,7 @@ Label::Label(const std::string& name, const std::string& param)
         this->value = Number::getUInt(param);
         Constant::add(this->name, this->value);
     }
-    else if (Constant::isLabel(param))
+    else if (Constant::isConstant(param))
     {
         this->value = Constant::getByName(param);
         Constant::add(this->name, this->value);

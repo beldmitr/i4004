@@ -3,6 +3,7 @@
 
 #include <string>
 
+/// WARNING For now this class is not used
 class CompilerError
 {
 public:

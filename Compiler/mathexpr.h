@@ -31,8 +31,9 @@
          */
         static std::regex mathExpression;
 
-        static bool isConstant(const std::string &s);   /// TODO use standard isConstant from Label or Constant class
-        static bool isParenthesis(const std::string &s);    /// TODO I dont need parentheses
+        // Do not change this isConstant with Constant::isConstant
+        static bool isConstant(const std::string &s);
+        static bool isParenthesis(const std::string &s);
 
         static bool isOperation(const std::string &s);
         static int operatorPriority(const std::string &op);

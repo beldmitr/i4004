@@ -6,7 +6,7 @@ std::regex MathExpr::mathExpression = std::regex("([(]*[)]*[[:blank:]]*[*]?[[:bl
 
 bool MathExpr::isMathExpression(const std::string& str)
 {
-    return regex_match(str, mathExpression) && !Pair::isPair(str) && !Register::isRegister(str) && !Constant::isLabel(str);
+    return regex_match(str, mathExpression) && !Pair::isPair(str) && !Register::isRegister(str) && !Constant::isConstant(str);
 }
 
 
@@ -54,6 +54,24 @@ int MathExpr::evaluate(std::string infix)
     if (eq.size() == 1 && isConstant(eq[0]))
     {
         return Constant::getByName(eq[0]);
+    }
+
+    if (eq.size() == 2 && Number::isNumber(eq[0]) && isOperation(eq[1]))
+    {
+        if (eq[1] == "-")
+        {
+            return (0 - Number::getUInt(eq[0]));
+        }
+        else if (eq[1] == "+")
+        {
+            return Number::getUInt(eq[0]);
+        }
+        else
+        {
+            std::string msg = "Wrong expression " + infix;
+            throw CompilerException("MathExpr", msg);
+        }
+
     }
 
     if (eq[eq.size() - 1] == "(")

@@ -1,6 +1,6 @@
 #include "constant.h"
 
-std::regex Constant::label = std::regex("[[:alpha:]][[:alnum:]]{2,}");
+std::regex Constant::constant = std::regex("[[:alpha:]][[:alnum:]]{2,}");
 
 std::map<std::string, unsigned int> Constant::table = std::map<std::string, unsigned int>();
 
@@ -38,7 +38,7 @@ bool Constant::isConstantExist(const std::string& name)
     return (table.find(name) != table.end());
 }
 
-bool Constant::isLabel(const std::string& str)
+bool Constant::isConstant(const std::string& str)
 {
-    return regex_match(str, label);
+    return regex_match(str, constant);
 }
