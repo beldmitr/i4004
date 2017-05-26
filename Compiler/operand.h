@@ -4,15 +4,10 @@
 #include <regex>
 #include <string>
 
-#include "Compiler/pair.h"
-#include "Compiler/register.h"
 #include "Compiler/commandset.h"
-#include "Compiler/constant.h"
 #include "Compiler/data.h"
-#include "Compiler/address.h"
 #include "Compiler/condition.h"
 
-#include "Exceptions/compilerexception.h"
 
 class Operand
 {

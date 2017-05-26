@@ -12,12 +12,12 @@
 
 int main (int argc, char* argv[])
 {
-    //    QApplication app(argc, argv);
+//        QApplication app(argc, argv);
 
-    //    MainWindow parent;
-    //    parent.show();
+//        MainWindow parent;
+//        parent.show();
 
-    //    return app.exec();
+//        return app.exec();
 
     Compiler* c = new Compiler;
     c->compile("D:/a.asm");

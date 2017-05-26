@@ -29,19 +29,13 @@
 #include <iostream>
 #include <memory>
 
-#include "editor.h"
-#include "programramwidget.h"
-#include "romwidget.h"
 #include "Compiler/compiler.h"
-#include "cpuwidget.h"
-#include "subwindow.h"
-#include "dataramwidget.h"
-#include "Compiler/compilererror.h"
 #include "Simulator/simulator.h"
 
-#include "ledpanel.h"
-#include "sevensegmentpanel.h"
-#include "buttonpanel.h"
+#include "programramwidget.h"
+#include "romwidget.h"
+#include "cpuwidget.h"
+#include "dataramwidget.h"
 
 #include "editorsubwindow.h"
 #include "ledsubwindow.h"

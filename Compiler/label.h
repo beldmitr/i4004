@@ -2,7 +2,6 @@
 #define LABEL_H
 
 #include <string>
-#include "Compiler/operand.h"
 #include "Compiler/constant.h"
 #include "Utils/searchresult.h"
 
@@ -10,8 +9,6 @@
 #include "Compiler/line.h"
 #include "Compiler/instruction.h"
 #include "Compiler/number.h"
-
-#include "Exceptions/compilerexception.h"
 
 class Label
 {
