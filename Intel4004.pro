@@ -59,7 +59,8 @@ SOURCES += \
     Exceptions/compilerexception.cpp \
     Exceptions/logexceptions.cpp \
     Compiler/compilererror.cpp \
-    Compiler/compiler.cpp
+    Compiler/compiler.cpp \
+    i4004.cpp
 
 HEADERS += \
     GUI/mainwindow.h \
@@ -114,7 +115,8 @@ HEADERS += \
     Exceptions/compilerexception.h \
     Exceptions/logexceptions.h \
     Compiler/compilererror.h \
-    Compiler/compiler.h
+    Compiler/compiler.h \
+    i4004.h
 
 RESOURCES += \
     resources.qrc
