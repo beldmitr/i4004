@@ -9,6 +9,7 @@
 
 #include "subwindow.h"
 #include "editor.h"
+#include "highlighter.h"
 
 class EditorSubWindow : public SubWindow
 {
@@ -21,6 +22,7 @@ public:
 
 private:
     std::shared_ptr<Editor> editor;
+    std::shared_ptr<Highlighter> highliter;
 };
 
 #endif // EDITORSUBWINDOW_H

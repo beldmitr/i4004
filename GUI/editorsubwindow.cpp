@@ -3,6 +3,7 @@
 EditorSubWindow::EditorSubWindow() : SubWindow()
 {
     editor = std::shared_ptr<Editor>(new Editor);
+    highliter = std::shared_ptr<Highlighter>(new Highlighter(editor->getTextEditor()->document()));
 
     this->setWidget(editor.get());
     this->setWindowTitle("Editor");

@@ -11,8 +11,6 @@
 
 #include <QDesktopWidget>
 
-#include <QStringList>
-
 #include <memory>
 
 class Editor : public QWidget
@@ -29,14 +27,7 @@ private:
     std::shared_ptr<QFrame> panel;
     std::shared_ptr<QTextEdit> edit;
 
-    QStringList keywordsInstruction;
-    QStringList keywordsRegisters;
-    QStringList keywordsPairs;
-
 signals:
-
-public slots:
-    void highlightKeywords();
 
     // QWidget interface
 protected:
