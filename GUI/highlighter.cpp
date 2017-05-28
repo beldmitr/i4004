@@ -18,10 +18,11 @@ Highlighter::~Highlighter()
 void Highlighter::highlightBlock(const QString &text)
 {
     // Pseudo highliting
-    //    QTextCharFormat formatPseudo;
-    //    formatPseudo.setForeground(QColor("#dd5500"));
-    //    QString patternPseudo = "\\b(*|=)\\b";
-    //    highlight(text, formatPseudo, patternPseudo, false);
+    QTextCharFormat formatPseudo;
+    formatPseudo.setFontWeight(QFont::Bold);
+    formatPseudo.setForeground(Qt::darkBlue);
+    QString patternPseudo = "[=*]";
+    highlight(text, formatPseudo, patternPseudo, false);
 
     // Numbers highliting
     QTextCharFormat formatNumbers;
