@@ -80,7 +80,7 @@ QString Highlighter::makePattern(const QStringList &list)
         pattern.append("(\\b").append(s).append("\\b)|");
     }
     pattern.remove(pattern.length()-1, 1);  // delete the last | from pattern
-    std::cout << pattern.toStdString() << std::endl;
+
     return pattern;
 }
 
