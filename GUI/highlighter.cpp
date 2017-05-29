@@ -69,10 +69,10 @@ void Highlighter::highlightBlock(const QString &text)
 
 QString Highlighter::makePattern(const QStringList &list)
 {
-    QString pattern = " ";
+    QString pattern;
     if (list.isEmpty())
     {
-        return pattern;
+        return " ";
     }
 
     for (QString s : list)
@@ -80,7 +80,7 @@ QString Highlighter::makePattern(const QStringList &list)
         pattern.append("(\\b").append(s).append("\\b)|");
     }
     pattern.remove(pattern.length()-1, 1);  // delete the last | from pattern
-
+    std::cout << pattern.toStdString() << std::endl;
     return pattern;
 }
 
