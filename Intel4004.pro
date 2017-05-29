@@ -60,7 +60,8 @@ SOURCES += \
     Exceptions/logexceptions.cpp \
     Compiler/compilererror.cpp \
     Compiler/compiler.cpp \
-    i4004.cpp
+    i4004.cpp \
+    GUI/autocompleter.cpp
 
 HEADERS += \
     GUI/mainwindow.h \
@@ -116,7 +117,8 @@ HEADERS += \
     Exceptions/logexceptions.h \
     Compiler/compilererror.h \
     Compiler/compiler.h \
-    i4004.h
+    i4004.h \
+    GUI/autocompleter.h
 
 RESOURCES += \
     resources.qrc
