@@ -337,13 +337,13 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent)
     this->setStatusBar(statusBar.get());
 
     // form settings
-    QTextEdit* textEditor = this->editorSubWindow->getTextEditor();
-    textEditor->setFocus();
-    setWindowTitleFilename();
-    this->resize(960, 640);
+//    QTextEdit* textEditor = this->editorSubWindow->getTextEditor();
+//    textEditor->setFocus();
+//    setWindowTitleFilename();
+//    this->resize(960, 640);
 
-    // connects
-    connect(textEditor, SIGNAL(textChanged()), this, SLOT(setWindowTitleFilename()));
+//    // connects
+//    connect(textEditor, SIGNAL(textChanged()), this, SLOT(setWindowTitleFilename()));
 }
 
 MainWindow::~MainWindow()
@@ -370,20 +370,20 @@ void MainWindow::createOutputFilename()
 void MainWindow::setWindowTitleFilename()
 {
     QString title = "Intel4004";
-    QTextEdit* textEditor = this->editorSubWindow->getTextEditor();
+//    QTextEdit* textEditor = this->editorSubWindow->getTextEditor();
 
-    if (textEditor->document()->isModified())
-    {
-        title = "*Intel4004";
-    }
-    else
-    {
-        title = "Intel4004";
-    }
-    if (!filename.isEmpty())
-    {
-        title.append(" - [").append(filename).append("]");
-    }
+//    if (textEditor->document()->isModified())
+//    {
+//        title = "*Intel4004";
+//    }
+//    else
+//    {
+//        title = "Intel4004";
+//    }
+//    if (!filename.isEmpty())
+//    {
+//        title.append(" - [").append(filename).append("]");
+//    }
     this->setWindowTitle(title);
 }
 
@@ -413,8 +413,8 @@ void MainWindow::readFile()
         }
 
         file.close();
-        QTextEdit* textEditor = this->editorSubWindow->getTextEditor();
-        textEditor->setPlainText(doc);
+//        QTextEdit* textEditor = this->editorSubWindow->getTextEditor();
+//        textEditor->setPlainText(doc);
     }
     else
     {
@@ -428,13 +428,13 @@ void MainWindow::writeFile()
 
     if (file.is_open())
     {
-        QTextEdit* textEditor = this->editorSubWindow->getTextEditor();
-        QStringList lines = textEditor->toPlainText().split("\n");
+//        QTextEdit* textEditor = this->editorSubWindow->getTextEditor();
+//        QStringList lines = textEditor->toPlainText().split("\n");
 
-        for (QString l : lines)
-        {
-            file << l.toStdString() << "\n";
-        }
+//        for (QString l : lines)
+//        {
+//            file << l.toStdString() << "\n";
+//        }
 
         file.close();
     }
@@ -450,16 +450,14 @@ void MainWindow::newFile()
     QMessageBox::StandardButton btn = QMessageBox::question(this, tr("New file"), tr("Do you want to start a new file?"));
     if (btn == QMessageBox::Yes)
     {
-        QTextEdit* textEditor = this->editorSubWindow->getTextEditor();
-        textEditor->clear();
-        filename.clear();
+        this->editorSubWindow->clearEditor();
+        this->filename.clear();
 
-        textEditor->document()->setModified(false);
         setWindowTitleFilename();
 
-        actCompile->setDisabled(true);
-        actRun->setDisabled(true);
-        actCompileRun->setDisabled(true);
+//        actCompile->setDisabled(true);
+//        actRun->setDisabled(true);
+//        actCompileRun->setDisabled(true);
     }
 }
 
@@ -475,8 +473,8 @@ void MainWindow::openFile()
         createOutputFilename();
         readFile();
 
-        QTextEdit* textEditor = this->editorSubWindow->getTextEditor();
-        textEditor->document()->setModified(false);
+//        QTextEdit* textEditor = this->editorSubWindow->getTextEditor();
+//        textEditor->document()->setModified(false);
         setWindowTitleFilename();
 
         actCompile->setDisabled(false);
@@ -493,8 +491,8 @@ void MainWindow::saveFile()
     }
     else
     {
-        QTextEdit* textEditor = this->editorSubWindow->getTextEditor();
-        textEditor->document()->setModified(false);
+//        QTextEdit* textEditor = this->editorSubWindow->getTextEditor();
+//        textEditor->document()->setModified(false);
         writeFile();
     }
 
@@ -513,8 +511,8 @@ void MainWindow::saveAsFile()
         createOutputFilename();
         writeFile();
 
-        QTextEdit* textEditor = this->editorSubWindow->getTextEditor();
-        textEditor->document()->setModified(false);
+//        QTextEdit* textEditor = this->editorSubWindow->getTextEditor();
+//        textEditor->document()->setModified(false);
         setWindowTitleFilename();
 
         actCompile->setDisabled(false);
@@ -530,44 +528,44 @@ void MainWindow::exitFile()
 
 void MainWindow::undoEdit()
 {
-    QTextEdit* textEditor = this->editorSubWindow->getTextEditor();
-    textEditor->undo();
+//    QTextEdit* textEditor = this->editorSubWindow->getTextEditor();
+//    textEditor->undo();
 }
 
 void MainWindow::redoEdit()
 {
-    QTextEdit* textEditor = this->editorSubWindow->getTextEditor();
-    textEditor->redo();
+//    QTextEdit* textEditor = this->editorSubWindow->getTextEditor();
+//    textEditor->redo();
 }
 
 void MainWindow::cutEdit()
 {
-    QTextEdit* textEditor = this->editorSubWindow->getTextEditor();
-    textEditor->cut();
+//    QTextEdit* textEditor = this->editorSubWindow->getTextEditor();
+//    textEditor->cut();
 }
 
 void MainWindow::copyEdit()
 {
-    QTextEdit* textEditor = this->editorSubWindow->getTextEditor();
-    textEditor->copy();
+//    QTextEdit* textEditor = this->editorSubWindow->getTextEditor();
+//    textEditor->copy();
 }
 
 void MainWindow::pasteEdit()
 {
-    QTextEdit* textEditor = this->editorSubWindow->getTextEditor();
-    textEditor->paste();
+//    QTextEdit* textEditor = this->editorSubWindow->getTextEditor();
+//    textEditor->paste();
 }
 
 void MainWindow::deleteEdit()
 {
-    QTextEdit* textEditor = this->editorSubWindow->getTextEditor();
-    textEditor->textCursor().removeSelectedText();
+//    QTextEdit* textEditor = this->editorSubWindow->getTextEditor();
+//    textEditor->textCursor().removeSelectedText();
 }
 
 void MainWindow::selectAllEdit()
 {
-    QTextEdit* textEditor = this->editorSubWindow->getTextEditor();
-    textEditor->selectAll();
+//    QTextEdit* textEditor = this->editorSubWindow->getTextEditor();
+//    textEditor->selectAll();
 }
 
 void MainWindow::buildCode()

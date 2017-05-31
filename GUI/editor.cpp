@@ -7,18 +7,30 @@ Editor::Editor(QWidget *parent) : QWidget(parent)
     layout->setSpacing(0);
 
     panel = std::shared_ptr<QFrame>(new QFrame);
-    edit = std::shared_ptr<QTextEdit>(new QTextEdit);
+    text = std::shared_ptr<QTextEdit>(new QTextEdit);
+
+    highliter = std::shared_ptr<Highlighter>(new Highlighter(text->document()));
 
     // Making minimal size according to screen resolution
     QDesktopWidget desktop;
     QRect rect = desktop.availableGeometry(desktop.primaryScreen());
-    edit->setMinimumSize(rect.size() / 4);
+    text->setMinimumSize(rect.size() / 4);
 
     panel->setMinimumWidth(100);
     panel->setCursor(Qt::PointingHandCursor);
 
     layout->addWidget(panel.get());
-    layout->addWidget(edit.get());
+    layout->addWidget(text.get());
+
+    connect(text.get(), &QTextEdit::textChanged,
+            [=](){
+                emit onTextChanged();
+            });
+
+    connect(text.get(), &QTextEdit::cursorPositionChanged,
+            [=](){
+                emit onCursorPositionChanged();
+            });
 }
 
 Editor::~Editor()
@@ -26,11 +38,11 @@ Editor::~Editor()
     // delete here something or finalize
 }
 
-QTextEdit* Editor::getTextEditor()
+void Editor::clear()
 {
-    return edit.get();
+    this->text->clear();
+    this->text->document()->setModified(false);
 }
-
 
 void Editor::resizeEvent(QResizeEvent* event)
 {

@@ -9,7 +9,6 @@
 
 #include "subwindow.h"
 #include "editor.h"
-#include "highlighter.h"
 
 class EditorSubWindow : public SubWindow
 {
@@ -18,11 +17,14 @@ public:
     explicit EditorSubWindow();
     virtual ~EditorSubWindow();
 
-    QTextEdit* getTextEditor();
+    void clearEditor();
 
 private:
     std::shared_ptr<Editor> editor;
-    std::shared_ptr<Highlighter> highliter;
+
+signals:
+    void onTextChanged();
+    void onCursorPositionChanged();
 };
 
 #endif // EDITORSUBWINDOW_H

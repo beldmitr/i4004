@@ -13,6 +13,8 @@
 
 #include <memory>
 
+#include "highlighter.h"
+
 class Editor : public QWidget
 {
     Q_OBJECT
@@ -20,14 +22,18 @@ public:
     explicit Editor(QWidget *parent = 0);
     virtual ~Editor();
 
-    QTextEdit* getTextEditor();
+    void clear();
 
 private:
     std::shared_ptr<QHBoxLayout> layout;
     std::shared_ptr<QFrame> panel;
-    std::shared_ptr<QTextEdit> edit;
+    std::shared_ptr<QTextEdit> text;
+
+    std::shared_ptr<Highlighter> highliter;
 
 signals:
+    void onTextChanged();
+    void onCursorPositionChanged();
 
     // QWidget interface
 protected:
