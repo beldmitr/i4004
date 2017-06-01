@@ -245,12 +245,12 @@ void MainWindow::createSubWindows()
 
     editorSubWindow = std::shared_ptr<EditorSubWindow>(new EditorSubWindow);
     ledSubWindow = std::shared_ptr<LEDSubWindow>(new LEDSubWindow);
-    sevenSegmentSubWindow = std::shared_ptr<SevenSegmentSubWindow>(new SevenSegmentSubWindow);
+//    sevenSegmentSubWindow = std::shared_ptr<SevenSegmentSubWindow>(new SevenSegmentSubWindow);
     buttonSubWindow = std::shared_ptr<ButtonSubWindow>(new ButtonSubWindow);
 
     mdi->addSubWindow(editorSubWindow.get());
     mdi->addSubWindow(ledSubWindow.get());
-    mdi->addSubWindow(sevenSegmentSubWindow.get());
+//    mdi->addSubWindow(sevenSegmentSubWindow.get());
     mdi->addSubWindow(buttonSubWindow.get());
 }
 
@@ -572,8 +572,8 @@ void MainWindow::buildCode()
 {
     saveFile();
     lstResult->clear();
-    compiler.reset(new Compiler(/*filename.toStdString(), outputname.toStdString()*/));
-    compiler->compile(filename.toStdString());
+//    compiler.reset(new Compiler(/*filename.toStdString(), outputname.toStdString()*/));
+//    compiler->compile(filename.toStdString());
 
 //    for (const Error& i : compiler->getErrors())
 //    {
@@ -613,7 +613,7 @@ void MainWindow::runBuild()
 void MainWindow::compileRunBuild()
 {
     buildCode();
-    simulator.reset(new Simulator());
+//    simulator.reset(new Simulator());
 //    simulator->setCode(compiler->getCompiledCode());
 }
 
@@ -624,15 +624,15 @@ void MainWindow::debugResume()
 
 void MainWindow::debugStep()
 {
-    if (simulator)
-    {
-        simulator->step();
-    }
-    else
-    {
-        // TODO Exception
-        std::cerr << "Can't make a step, because simulator was not created."  << std::endl;
-    }
+//    if (simulator)
+//    {
+//        simulator->step();
+//    }
+//    else
+//    {
+//        // TODO Exception
+//        std::cerr << "Can't make a step, because simulator was not created."  << std::endl;
+//    }
 }
 
 void MainWindow::debugStop()

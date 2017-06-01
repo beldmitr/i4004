@@ -42,5 +42,6 @@
         <file>Resources/components/SevenSegmentVerticalOff.png</file>
         <file>Resources/components/SevenSegmentVerticalOn.png</file>
         <file>Resources/icons/button.png</file>
+        <file>Resources/icons/led.png</file>
     </qresource>
 </RCC>

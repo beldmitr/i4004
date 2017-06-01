@@ -24,7 +24,6 @@ SOURCES += \
     Simulator/datarambank.cpp \
     Compiler/mathexpr.cpp \
     GUI/cpuwidget.cpp \
-    GUI/led.cpp \
     GUI/button.cpp \
     GUI/coloredcombobox.cpp \
     GUI/chooseiowidget.cpp \
@@ -33,7 +32,6 @@ SOURCES += \
     GUI/buttonpanel.cpp \
     GUI/editor.cpp \
     GUI/highlighter.cpp \
-    GUI/ledpanel.cpp \
     GUI/editorsubwindow.cpp \
     GUI/ledsubwindow.cpp \
     GUI/sevensegmentsubwindow.cpp \
@@ -61,7 +59,9 @@ SOURCES += \
     Compiler/compilererror.cpp \
     Compiler/compiler.cpp \
     i4004.cpp \
-    GUI/autocompleter.cpp
+    GUI/autocompleter.cpp \
+    GUI/ledimage.cpp \
+    GUI/ledn.cpp
 
 HEADERS += \
     GUI/mainwindow.h \
@@ -81,7 +81,6 @@ HEADERS += \
     Simulator/datarambank.h \
     Compiler/mathexpr.h \
     GUI/cpuwidget.h \
-    GUI/led.h \
     GUI/button.h \
     GUI/coloredcombobox.h \
     GUI/chooseiowidget.h \
@@ -90,7 +89,6 @@ HEADERS += \
     GUI/buttonpanel.h \
     GUI/editor.h \
     GUI/highlighter.h \
-    GUI/ledpanel.h \
     GUI/editorsubwindow.h \
     GUI/ledsubwindow.h \
     GUI/sevensegmentsubwindow.h \
@@ -118,7 +116,9 @@ HEADERS += \
     Compiler/compilererror.h \
     Compiler/compiler.h \
     i4004.h \
-    GUI/autocompleter.h
+    GUI/autocompleter.h \
+    GUI/ledimage.h \
+    GUI/ledn.h
 
 RESOURCES += \
     resources.qrc

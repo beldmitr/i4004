@@ -2,12 +2,17 @@
 #define LEDSUBWINDOW_H
 
 #include <QObject>
+#include <QWidget>
 #include <QIcon>
 
 #include <memory>
+#include <vector>
+
+#include <QHBoxLayout>
 
 #include "subwindow.h"
-#include "ledpanel.h"
+#include "ledn.h"
+
 
 class LEDSubWindow : public SubWindow
 {
@@ -17,7 +22,9 @@ public:
     virtual ~LEDSubWindow();
 
 private:
-    std::shared_ptr<LEDPanel> ledPanel;
+    std::shared_ptr<QWidget> centralWidget;
+    std::shared_ptr<QHBoxLayout> layout;
+    std::vector<LedN*> leds;
 };
 
 #endif // LEDSUBWINDOW_H

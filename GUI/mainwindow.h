@@ -28,9 +28,7 @@
 #include <sstream>
 #include <iostream>
 #include <memory>
-
-#include "Compiler/compiler.h"
-#include "Simulator/simulator.h"
+#include <fstream>
 
 #include "programramwidget.h"
 #include "romwidget.h"
@@ -39,7 +37,7 @@
 
 #include "editorsubwindow.h"
 #include "ledsubwindow.h"
-#include "sevensegmentsubwindow.h"
+//#include "sevensegmentsubwindow.h"
 #include "buttonsubwindow.h"
 
 class MainWindow : public QMainWindow
@@ -47,8 +45,6 @@ class MainWindow : public QMainWindow
     Q_OBJECT
 private:
     /// TODO Check for undeleted pointers
-    std::shared_ptr<Compiler> compiler;
-    std::shared_ptr<Simulator> simulator;
 
     QString filename;
     QString outputname;
@@ -65,7 +61,7 @@ private:
 
     std::shared_ptr<EditorSubWindow> editorSubWindow;
     std::shared_ptr<LEDSubWindow> ledSubWindow;
-    std::shared_ptr<SevenSegmentSubWindow> sevenSegmentSubWindow;
+//    std::shared_ptr<SevenSegmentSubWindow> sevenSegmentSubWindow;
     std::shared_ptr<ButtonSubWindow> buttonSubWindow;
 
     std::shared_ptr<QToolBar> toolBarFile;
