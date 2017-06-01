@@ -12,7 +12,7 @@ LEDSubWindow::LEDSubWindow() : SubWindow()
 
     for (int i = 0; i < 8; i++)
     {
-        LedN* led = new LedN();
+        Led* led = new Led();
         layout->addWidget(led);
         leds.push_back(led);
     }
@@ -21,7 +21,7 @@ LEDSubWindow::LEDSubWindow() : SubWindow()
 
 LEDSubWindow::~LEDSubWindow()
 {
-    for (LedN* led : leds)
+    for (Led* led : leds)
     {
         delete (led);
     }

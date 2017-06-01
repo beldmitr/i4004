@@ -1,5 +1,5 @@
-#ifndef LEDN_H
-#define LEDN_H
+#ifndef LED_H
+#define LED_H
 
 #include <QObject>
 #include <QWidget>
@@ -12,11 +12,11 @@
 #include "coloredcombobox.h"
 #include "chooseiowidget.h"
 
-class LedN : public QWidget
+class Led : public QWidget
 {
     Q_OBJECT
 public:
-    explicit LedN(QWidget *parent = 0);
+    explicit Led(QWidget *parent = 0);
 
 private:
     std::shared_ptr<LedImage> ledImage;
@@ -34,4 +34,4 @@ private slots:
 public slots:
 };
 
-#endif // LEDN_H
+#endif // LED_H

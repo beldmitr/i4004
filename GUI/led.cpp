@@ -1,6 +1,6 @@
-#include "ledn.h"
+#include "led.h"
 
-LedN::LedN(QWidget *parent) : QWidget(parent)
+Led::Led(QWidget *parent) : QWidget(parent)
 {
     ledImage = std::shared_ptr<LedImage>(new LedImage);
     coloredComboBox = std::shared_ptr<ColoredComboBox>(new ColoredComboBox);
@@ -17,7 +17,7 @@ LedN::LedN(QWidget *parent) : QWidget(parent)
 //    connect(connector.get(),SIGNAL(change...), this, SLOT(...do something on changed));
 }
 
-void LedN::coloredComboboxChanged(QString color)
+void Led::coloredComboboxChanged(QString color)
 {
     ledImage->setColor(color);
 }

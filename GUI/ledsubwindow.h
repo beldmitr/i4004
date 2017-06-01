@@ -11,7 +11,7 @@
 #include <QHBoxLayout>
 
 #include "subwindow.h"
-#include "ledn.h"
+#include "led.h"
 
 
 class LEDSubWindow : public SubWindow
@@ -24,7 +24,7 @@ public:
 private:
     std::shared_ptr<QWidget> centralWidget;
     std::shared_ptr<QHBoxLayout> layout;
-    std::vector<LedN*> leds;
+    std::vector<Led*> leds;
 };
 
 #endif // LEDSUBWINDOW_H

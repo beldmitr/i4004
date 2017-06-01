@@ -61,7 +61,7 @@ SOURCES += \
     i4004.cpp \
     GUI/autocompleter.cpp \
     GUI/ledimage.cpp \
-    GUI/ledn.cpp
+    GUI/led.cpp
 
 HEADERS += \
     GUI/mainwindow.h \
@@ -118,7 +118,7 @@ HEADERS += \
     i4004.h \
     GUI/autocompleter.h \
     GUI/ledimage.h \
-    GUI/ledn.h
+    GUI/led.h
 
 RESOURCES += \
     resources.qrc
