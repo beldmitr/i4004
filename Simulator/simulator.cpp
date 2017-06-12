@@ -3,6 +3,7 @@
 Simulator::Simulator(const Compiler& compiler)
     :rom(new ROM(16)), pram(new PRAM(16)),dram(new DRAM(8)), cpu(new CPU)
 {
+    this->compiler = &compiler;
 }
 
 Simulator::~Simulator()

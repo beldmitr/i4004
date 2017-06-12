@@ -20,6 +20,8 @@
 class Simulator
 {
 private:
+    const Compiler* compiler;
+
     std::shared_ptr<ROM> rom;
     std::shared_ptr<PRAM> pram;
     std::shared_ptr<DRAM> dram;

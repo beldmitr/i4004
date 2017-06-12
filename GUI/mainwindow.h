@@ -129,6 +129,10 @@ private:
 
     fstream file;
 
+    const Compiler* compiler;   // I do not create this pointer here, so I don't it delete now
+    const Simulator* simulator; // I do not create this pointer here, so I don't it delete now
+
+
     // Methods
     void createActions();
     void createMenu();

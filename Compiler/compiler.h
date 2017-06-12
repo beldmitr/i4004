@@ -21,7 +21,7 @@ private:
     std::vector<std::shared_ptr<CompilerError>> errors;
 
 public:
-    explicit Compiler();
+    Compiler();
 
     void compile(const std::string& inputFilename);
     std::vector<unsigned int> getObjectCode();
