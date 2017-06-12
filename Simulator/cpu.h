@@ -1,6 +1,7 @@
 #ifndef CPU_H
 #define CPU_H
 
+#include <QObject>
 #include <QString>
 
 #include <iostream>
@@ -10,8 +11,9 @@
 #include "stack.h"
 
 /// TESTME test all cpu class how does it works
-class CPU
+class CPU : public QObject
 {
+    Q_OBJECT
 private:
     int PC;
     int acc;
@@ -59,6 +61,9 @@ public:
     void setDcl(unsigned int value);
     int getSrc() const;
     void setSrc(unsigned int value);
+
+signals:
+    void onCpuChanged();
 };
 
 #endif // CPU_H

@@ -24,7 +24,6 @@ private:
 
 signals:
     void onTextChanged();
-    void onCursorPositionChanged();
 };
 
 #endif // EDITORSUBWINDOW_H

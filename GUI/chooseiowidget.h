@@ -8,6 +8,7 @@
 #include <QMenu>
 
 #include <memory>
+#include <iostream>
 
 class ChooseIOWidget : public QWidget
 {
@@ -22,6 +23,7 @@ public:
     virtual ~ChooseIOWidget();
 
 signals:
+//    void connectionChanged(QAction* action);
 
 public slots:
 };

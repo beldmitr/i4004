@@ -312,7 +312,7 @@ void MainWindow::createDocks()
     dockPRam->setSizePolicy(sizePolicy);
 }
 
-MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent)
+MainWindow::MainWindow(const Compiler& compiler, const Simulator& simulator, QWidget *parent) : QMainWindow(parent)
 {
     this->setWindowState(Qt::WindowMaximized);
 

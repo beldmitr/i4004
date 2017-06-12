@@ -1,14 +1,17 @@
 #ifndef DRAM_H
 #define DRAM_H
 
+#include <QObject>
+
 #include <vector>
 #include <iostream>
 #include <memory>
 
 #include "datarambank.h"
 
-class DRAM
+class DRAM : public QObject
 {
+    Q_OBJECT
 private:
     std::vector<std::shared_ptr<DataRAMBank>> banks;
 

@@ -14,7 +14,10 @@ Led::Led(QWidget *parent) : QWidget(parent)
     ledImage->light(true);
 
     connect(coloredComboBox.get(),SIGNAL(activated(QString)), this, SLOT(coloredComboboxChanged(QString)));
-//    connect(connector.get(),SIGNAL(change...), this, SLOT(...do something on changed));
+//    connect(connector.get(), &ChooseIOWidget::connectionChanged,
+//    [=](QAction* action){
+//        std::cout << action->text().toStdString() << " clicked" << std::endl;
+//    });
 }
 
 void Led::coloredComboboxChanged(QString color)

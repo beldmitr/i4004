@@ -1,6 +1,6 @@
 #include "compiler.h"
 
-Compiler::Compiler()
+Compiler::Compiler() : QObject()
 {
     // is empty
 }
@@ -54,6 +54,8 @@ void Compiler::compile(const std::string& inputFilename)
         }
         row++;
     }
+
+    emit onCompiled();
 }
 
 std::vector<unsigned int> Compiler::getObjectCode()

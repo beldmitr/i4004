@@ -5,6 +5,7 @@
 #include <string>
 #include <memory>
 
+#include "Compiler/compiler.h"
 #include "rom.h"
 #include "pram.h"
 #include "dram.h"
@@ -74,7 +75,7 @@ private:
     void DCL();
 
 public:
-    Simulator();
+    Simulator(const Compiler& compiler);
     virtual ~Simulator();
 
     void setCode(std::vector<unsigned int> compiledCode);

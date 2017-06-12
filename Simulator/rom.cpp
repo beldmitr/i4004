@@ -1,7 +1,7 @@
 #include "rom.h"
 
-ROM::ROM(unsigned int pages)
-    : pages(pages)
+ROM::ROM(unsigned int pages) : QObject(),
+    pages(pages)
 {    
     if (pages > maxPossiblePages)
     {
@@ -66,6 +66,8 @@ void ROM::setValue(unsigned int index, int value)
     }
 
     table[index] = value & 0xFF;
+
+    emit onRomChanged();
 }
 
 void ROM::clearRom()
@@ -87,6 +89,8 @@ void ROM::clearRom()
     {
         io[i] = 0;
     }
+
+    emit onRomChanged();
 }
 
 void ROM::flashRom(std::vector<unsigned int> compiledCode)
@@ -134,73 +138,9 @@ void ROM::flashRom(std::vector<unsigned int> compiledCode)
             addr += 1;
         }
     }
-}
 
-//void ROM::flashRom(std::vector<unsigned int> compiledCode)
-//{
-//    int addr = 0;
-//    bool isInstruction = true;
-//    for (int code : compiledCode)
-//    {
-//        /*
-//         * If this byte is an instruction, then look for length of this instruction.
-//         * Because 2 byte instructions can't be cutted between 2 pages:
-//         * first byte at one page and the second byte at the next page.
-//         *
-//         * There are 5 instructons, which are 2 byte long:
-//         * JCN - 0001 CCCC AAAA AAAA
-//         * FIM - 0010 RRR0 DDDD DDDD
-//         * JUN - 0100 AAAA AAAA AAAA
-//         * JMS - 0101 AAAA AAAA AAAA
-//         * ISZ - 0111 RRRR AAAA AAAA
-//         *
-//         * So before to save them to ROM we should to check if the place of saveing has got enaugh bytes.
-//         * And the 2 byte long instruction won't be cutted by 2 pages after flashing it to ROM.
-//         *
-//         * So, we look if this is an instruction, look a length of it and if there is enough place.
-//         * If it is enaugh, just write it as is, if not enought, place a NOP (0x0) instruction
-//         * and write a 2 byte instruction at a new page.
-//         */
-//        if (isInstruction) // if this is an instruction
-//        {
-//            // if length == 2
-//            if (((code & 0xF0) == 0x10)           // 0001 CCCC - hi byte of JCN
-//                    || ((code & 0xF1) == 0x20)    // 0010 RRR0 - hi byte of FIM
-//                    || ((code & 0xF0) == 0x40)    // 0100 AAAA - hi byte of JUN
-//                    || ((code & 0xF0) == 0x50)    // 0101 AAAA - hi byte of JMS
-//                    || ((code & 0xF0) == 0x70))   // 0111 RRRR - hi byte of ISZ
-//            {
-//                // if it is place enaugh in a ROM
-//                if ((bytesPerPage - addr % bytesPerPage) >= 2)
-//                {
-//                    setValue(addr, code);
-//                    addr += 1;
-//                    isInstruction = false; // next byte will be with a data
-//                }
-//                else // if not enaugh place
-//                {
-//                    setValue(addr, 0x0); // Write a NOP
-//                    addr += 1;
-//                    setValue(addr, code); // Write a high byte of the instruction to new page
-//                    addr += 1;
-//                    isInstruction = false; // next byte will be with a data
-//                }
-//            }
-//            else  // if length == 1
-//            {
-//                setValue(addr, code); // write as it is
-//                addr += 1;
-//                isInstruction = true; // next byte will be an instruction
-//            }
-//        }
-//        else // if byte is a data
-//        {
-//            setValue(addr, code);
-//            addr += 1;
-//            isInstruction = true; // next byte will be an instruction
-//        }
-//    }
-//}
+    //  We do not need here "emit onRomChanged();", because it is emitted in setValue method
+}
 
 int ROM::getIO(unsigned int page) const
 {
@@ -235,4 +175,6 @@ void ROM::setIO(unsigned int page, int value)
     }
 
     io[page] = value & 0xF;
+
+    emit onRomChanged();
 }

@@ -1,6 +1,6 @@
 #include "dataramchip.h"
 
-DataRAMChip::DataRAMChip():output(0),length(4)
+DataRAMChip::DataRAMChip() : QObject()
 {
     for (int i = 0; i < length; i++)
     {
@@ -40,4 +40,6 @@ void DataRAMChip::setOutput(int value)
     }
 
     output = value;
+
+    emit onDramChipChanged();
 }

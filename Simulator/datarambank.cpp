@@ -1,6 +1,6 @@
 #include "datarambank.h"
 
-DataRAMBank::DataRAMBank() : length(4)
+DataRAMBank::DataRAMBank() : QObject()
 {
     for (int i = 0; i < length; i++)
     {

@@ -1,11 +1,14 @@
 #ifndef STACK_H
 #define STACK_H
 
+#include <QObject>
+
 #include <vector>
 #include <iostream>
 
-class Stack
+class Stack : public QObject
 {
+    Q_OBJECT
     /*
      * The stack consists of three 12-bit registers used to hold addresses of program instructions.
      * Since progra~s are always run in ROM or program RAM, the stack registers will always
@@ -20,8 +23,8 @@ class Stack
      */
 
 private:
-    const int size; // Size of the Stack
-    int actualPointer;
+    const int size = 3; // Size of the Stack
+    int actualPointer = 0;
     std::vector<int> registers;
 
 public:
@@ -30,6 +33,9 @@ public:
 
     void write(int address);
     int read();
+
+signals:
+    void onStackChanged();
 
 };
 

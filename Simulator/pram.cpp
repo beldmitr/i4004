@@ -1,6 +1,7 @@
 #include "pram.h"
 
-PRAM::PRAM(unsigned int pages) : pages(pages), bytesPerPage(256), maxPossiblePages(16)
+PRAM::PRAM(unsigned int pages) : QObject(),
+    pages(pages)
 {
     if (pages > maxPossiblePages)
     {
@@ -73,6 +74,8 @@ void PRAM::setValue(unsigned int index, int value)
      * is in a one page and the next byte of instruction is at the next page.
      */
     table[index] = value & 0xFF; // FIXME: explaining is close above
+
+    emit onPramChanged();
 }
 
 void PRAM::clearPRam()
@@ -87,4 +90,6 @@ void PRAM::clearPRam()
     {
         table[i] = 0;
     }
+
+    emit onPramChanged();
 }

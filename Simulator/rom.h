@@ -1,12 +1,15 @@
 #ifndef ROM_H
 #define ROM_H
 
+#include <QObject>
+
 #include <vector>
 #include <iostream>
 #include <string>
 
-class ROM
+class ROM : public QObject
 {
+    Q_OBJECT
 private:
     unsigned int pages;
     const unsigned int bytesPerPage = 256;
@@ -28,6 +31,9 @@ public:
 
     int getIO(unsigned int page) const;
     void setIO(unsigned int page, int value);
+
+signals:
+    void onRomChanged();
 };
 
 #endif // ROM_H

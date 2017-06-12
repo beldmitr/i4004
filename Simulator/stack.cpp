@@ -1,6 +1,6 @@
 #include "stack.h"
 
-Stack::Stack():size(3), actualPointer(0)
+Stack::Stack() : QObject()
 {
     for (int i = 0; i < size; i++)
     {
@@ -41,6 +41,8 @@ void Stack::write(int address)
         std::cerr << "Stack overflowed after writing." << std::endl;
         actualPointer = 0;
     }
+
+    emit onStackChanged();
 }
 
 int Stack::read()
@@ -61,6 +63,8 @@ int Stack::read()
         std::cerr << "Stack underflowed after reading." << std::endl;
         actualPointer = size - 1;
     }
+
+    emit onStackChanged();
 
     return registers[actualPointer] & 0xFFF;
 }

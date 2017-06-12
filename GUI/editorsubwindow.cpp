@@ -12,11 +12,6 @@ EditorSubWindow::EditorSubWindow() : SubWindow()
             [=](){
                 emit onTextChanged();
             });
-
-    connect(editor.get(), &Editor::onCursorPositionChanged,
-            [=](){
-                emit onCursorPositionChanged();
-            });
 }
 
 EditorSubWindow::~EditorSubWindow()

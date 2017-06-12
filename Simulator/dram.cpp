@@ -1,6 +1,7 @@
 #include "dram.h"
 
-DRAM::DRAM(int bankNumber) : length(bankNumber)
+DRAM::DRAM(int bankNumber) : QObject(),
+    length(bankNumber)
 {
     for (int i = 0; i < length; i++)
     {

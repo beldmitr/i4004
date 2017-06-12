@@ -1,6 +1,6 @@
 #include "cpu.h"
 
-CPU::CPU()
+CPU::CPU() : QObject()
 {
     stack = std::shared_ptr<Stack>(new Stack);
     PC = 0;
@@ -16,7 +16,6 @@ CPU::CPU()
     {
         registers.push_back(0);
     }
-
 }
 
 CPU::~CPU()
@@ -34,6 +33,7 @@ void CPU::setAcc(unsigned int value)
     if (value < 16)
     {
         acc = value;
+        emit onCpuChanged();
     }
     else
     {
@@ -52,6 +52,7 @@ void CPU::setCarry(unsigned int value)
     if (value == 1 || value == 0)
     {
         carry = value;
+        emit onCpuChanged();
     }
     else
     {
@@ -70,6 +71,8 @@ void CPU::setTest(unsigned int value)
     if (value == 1 || value == 0)
     {
         test = value;
+
+        emit onCpuChanged();
     }
     else
     {
@@ -86,6 +89,7 @@ int CPU::getCycles() const
 void CPU::setCycles(unsigned int value)
 {
     cycles = value;
+    emit onCpuChanged();
 }
 
 QString CPU::getOperation() const
@@ -96,6 +100,8 @@ QString CPU::getOperation() const
 void CPU::setOperation(const QString &value)
 {
     operation = value;
+
+    emit onCpuChanged();
 }
 
 Stack* CPU::getStack() const
@@ -135,6 +141,8 @@ void CPU::setRegisters(unsigned int index, unsigned int value)
     }
 
     registers.at(index) = value;
+
+    emit onCpuChanged();
 }
 
 unsigned int CPU::getPairAt(unsigned int index) const
@@ -171,6 +179,8 @@ void CPU::setPairs(unsigned int index, unsigned int value)
     }
     registers.at(2*index) = (value & 0xF);
     registers.at(2*index + 1) = (value & 0xF0) >> 4;
+
+    emit onCpuChanged();
 }
 
 int CPU::getPC() const
@@ -205,6 +215,8 @@ void CPU::setDcl(unsigned int value)
     }
 
     dcl = value;
+
+    emit onCpuChanged();
 }
 
 int CPU::getSrc() const
@@ -222,4 +234,6 @@ void CPU::setSrc(unsigned int value)
     }
 
     src = value;
+
+    emit onCpuChanged();
 }

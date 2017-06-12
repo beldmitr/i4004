@@ -2,6 +2,7 @@
 #define I4004_H
 
 #include <QApplication>
+#include <QObject>
 
 #include <memory>
 
@@ -9,8 +10,9 @@
 #include "Simulator/simulator.h"
 #include "GUI/mainwindow.h"
 
-class I4004
+class I4004 : public QObject
 {
+    Q_OBJECT
 public:
     I4004(int argc, char* argv[]);
 

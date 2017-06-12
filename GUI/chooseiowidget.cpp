@@ -86,6 +86,11 @@ ChooseIOWidget::ChooseIOWidget(QWidget *parent) : QWidget(parent)
     }
 
     button->setMenu(menuButton.get());
+
+//    connect(menuButton.get(), &QMenu::triggered,
+//    [=](QAction* action){
+//        emit connectionChanged(action);
+//    });
 }
 
 ChooseIOWidget::~ChooseIOWidget()

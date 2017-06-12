@@ -30,6 +30,9 @@
 #include <memory>
 #include <fstream>
 
+#include "Compiler/compiler.h"
+#include "Simulator/simulator.h"
+
 #include "programramwidget.h"
 #include "romwidget.h"
 #include "cpuwidget.h"
@@ -142,7 +145,7 @@ private:
     void buildCode();
     
 public:
-    explicit MainWindow(QWidget *parent = 0);
+    explicit MainWindow(const Compiler& compiler, const Simulator& simulator, QWidget *parent = 0);
     virtual ~MainWindow();
 
 signals:
