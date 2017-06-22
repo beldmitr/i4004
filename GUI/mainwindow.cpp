@@ -352,9 +352,9 @@ void MainWindow::createDocks()
     dockPRam->setWidget(pramWidget.get());
     this->addDockWidget(Qt::BottomDockWidgetArea, dockPRam.get());
 
-    this->tabifyDockWidget(dockResult.get(), dockDRam.get());
-    this->tabifyDockWidget(dockDRam.get(), dockRom.get());
-    this->tabifyDockWidget(dockRom.get(), dockPRam.get());
+    this->tabifyDockWidget(dockRom.get(), dockDRam.get());
+    this->tabifyDockWidget(dockDRam.get(), dockPRam.get());
+    this->tabifyDockWidget(dockPRam.get(), dockResult.get());
 
     dockCpuWidget = std::shared_ptr<QDockWidget>(new QDockWidget("CPU"));
     cpuWidget = std::shared_ptr<CpuWidget>(new CpuWidget(simulator));
