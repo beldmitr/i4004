@@ -15,7 +15,8 @@ class CPU : public QObject
 {
     Q_OBJECT
 private:
-    int PC;
+    const int countRegisters = 16;
+
     int acc;
     int carry;
     int test;
@@ -61,6 +62,8 @@ public:
     void setDcl(unsigned int value);
     int getSrc() const;
     void setSrc(unsigned int value);
+
+    int getCountRegisters() const;
 
 signals:
     void onCpuChanged();

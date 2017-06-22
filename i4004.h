@@ -5,6 +5,7 @@
 #include <QObject>
 
 #include <memory>
+#include <vector>
 
 #include "Compiler/compiler.h"
 #include "Simulator/simulator.h"

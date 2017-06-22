@@ -67,7 +67,7 @@ void ROM::setValue(unsigned int index, int value)
 
     table[index] = value & 0xFF;
 
-    emit onRomChanged();
+    emit onRomChanged(index, value);
 }
 
 void ROM::clearRom()
@@ -90,7 +90,7 @@ void ROM::clearRom()
         io[i] = 0;
     }
 
-    emit onRomChanged();
+    emit onRomCleared();
 }
 
 void ROM::flashRom(std::vector<unsigned int> compiledCode)
@@ -176,5 +176,5 @@ void ROM::setIO(unsigned int page, int value)
 
     io[page] = value & 0xF;
 
-    emit onRomChanged();
+    emit onRomIOChanged(page, value);
 }

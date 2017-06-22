@@ -75,7 +75,7 @@ void PRAM::setValue(unsigned int index, int value)
      */
     table[index] = value & 0xFF; // FIXME: explaining is close above
 
-    emit onPramChanged();
+    emit onPramChanged(index, value);
 }
 
 void PRAM::clearPRam()
@@ -91,5 +91,5 @@ void PRAM::clearPRam()
         table[i] = 0;
     }
 
-    emit onPramChanged();
+    emit onPramClear();
 }

@@ -1,12 +1,73 @@
 #include "cpuwidget.h"
 
-CpuWidget::CpuWidget(QWidget *parent) : QWidget(parent)
+CpuWidget::CpuWidget(Simulator *simulator, QWidget *parent) : QWidget(parent)
 {
     layout = std::make_shared<QGridLayout>(this);
 
     createWidgetStack();
     createWidgetRegisters();
     createWidgetOther();
+
+    // connects
+    Stack* stack = simulator->getCpu()->getStack();
+    connect(stack, &Stack::onStackChanged, [=](){
+
+        std::vector<int> registers = stack->getRegisters();
+
+        unsigned int pointer = stack->getActualPointer();
+
+        for (unsigned int i = 0; i < registers.size(); i++)
+        {
+            int address = registers[i];
+
+            QFont::Weight weight;
+            if (pointer == i)
+            {
+                weight = QFont::Bold;
+            }
+            else
+            {
+                weight = QFont::Normal;
+            }
+
+            switch(i)
+            {
+            case 0:
+                edtPC->setText(QString::number(address, 16));
+                edtPC->setFontWeight(weight);
+                break;
+            case 1:
+                edtLevel1->setText(QString::number(address, 16));
+                edtLevel1->setFontWeight(weight);
+                break;
+            case 2:
+                edtLevel2->setText(QString::number(address, 16));
+                edtLevel2->setFontWeight(weight);
+                break;
+            case 3:
+                edtLevel3->setText(QString::number(address, 16));
+                edtLevel3->setFontWeight(weight);
+                break;
+            }
+        }
+    });
+
+    CPU* cpu = simulator->getCpu().get();
+    connect(cpu, &CPU::onCpuChanged, [=](){
+        for (unsigned int i = 0; i < cpu->getCountRegisters(); i++)
+        {
+            std::shared_ptr<QTextEdit> edit = edtR[i];
+            unsigned int value = cpu->getRegisterAt(i);
+            edit->setText(QString::number(value, 16));
+        }
+
+        unsigned int acc = cpu->getAcc();
+        edtAccumulator->setText(QString::number(acc, 16));
+
+        cbxCarry->setChecked((bool)cpu->getCarry());
+
+        cbxTest->setChecked((bool)cpu->getTest());
+    });
 }
 
 CpuWidget::~CpuWidget()
@@ -20,9 +81,9 @@ void CpuWidget::createWidgetStack()
     layoutStack = std::make_shared<QGridLayout>(gbStack.get());
 
     lblPC = std::make_shared<QLabel>("PC");
-    lblLevel1 = std::make_shared<QLabel>("level 1");
-    lblLevel2 = std::make_shared<QLabel>("level 2");
-    lblLevel3 = std::make_shared<QLabel>("level 3");
+    lblLevel1 = std::make_shared<QLabel>("Level 1");
+    lblLevel2 = std::make_shared<QLabel>("Level 2");
+    lblLevel3 = std::make_shared<QLabel>("Level 3");
 
     edtPC = std::make_shared<QTextEdit>();
     edtLevel1 = std::make_shared<QTextEdit>();
@@ -30,18 +91,25 @@ void CpuWidget::createWidgetStack()
     edtLevel3 = std::make_shared<QTextEdit>();
 
     edtPC->setReadOnly(true);
-    edtLevel1->setReadOnly(true);
-    edtLevel2->setReadOnly(true);
-    edtLevel3->setReadOnly(true);
-
     edtPC->setFixedHeight(50);
-    edtPC->setFixedWidth(250);
+    edtPC->setFixedWidth(75);
+    edtPC->setFontWeight(QFont::Bold);
+    edtPC->setText("0");
+
+    edtLevel1->setReadOnly(true);
     edtLevel1->setFixedHeight(50);
-    edtLevel1->setFixedWidth(250);
+    edtLevel1->setFixedWidth(75);
+    edtLevel1->setText("0");
+
+    edtLevel2->setReadOnly(true);
     edtLevel2->setFixedHeight(50);
-    edtLevel2->setFixedWidth(250);
+    edtLevel2->setFixedWidth(75);
+    edtLevel2->setText("0");
+
+    edtLevel3->setReadOnly(true);
     edtLevel3->setFixedHeight(50);
-    edtLevel3->setFixedWidth(250);
+    edtLevel3->setFixedWidth(75);
+    edtLevel3->setText("0");
 
     layoutStack->addWidget(lblPC.get(), 0, 0);
     layoutStack->addWidget(lblLevel1.get(), 1, 0);
@@ -71,7 +139,7 @@ void CpuWidget::createWidgetRegisters()
 
     for (int i = 0; i < 16; i++)
     {
-        edtR.push_back(std::make_shared<QTextEdit>());
+        edtR.push_back(std::shared_ptr<QTextEdit>(new QTextEdit("0")));
     }
 
     for (int i = 0; i < 16; i++)
@@ -98,11 +166,15 @@ void CpuWidget::createWidgetOther()
     layoutOther = std::make_shared<QGridLayout>(gbOther.get());
 
     lblAccumulator = std::make_shared<QLabel>("Accumulator");
-    edtAccumulator = std::make_shared<QTextEdit>();
+    edtAccumulator = std::shared_ptr<QTextEdit>(new QTextEdit("0"));
+
     lblCarry = std::make_shared<QLabel>("Carry");
-    cbxCarry = std::make_shared<QCheckBox>();
+    cbxCarry = std::shared_ptr<QCheckBox>(new QCheckBox);
+
+
     lblTest = std::make_shared<QLabel>("Test");
-    cbxTest = std::make_shared<QCheckBox>();
+    cbxTest = std::shared_ptr<QCheckBox>(new QCheckBox);
+
     lblInstruction = std::make_shared<QLabel>();
     lblCycles = std::make_shared<QLabel>("Cycles");
     edtCycles = std::make_shared<QTextEdit>();

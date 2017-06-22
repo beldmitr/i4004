@@ -15,11 +15,18 @@ private:
     std::vector<std::shared_ptr<DataRAMChip>> chips;
     const int length = 4;
 
+    unsigned int bank;
+
 public:
-    DataRAMBank();
+    DataRAMBank(unsigned int bank);
     virtual ~DataRAMBank();
 
     std::shared_ptr<DataRAMChip> getDataRAMChip(int index);
+
+signals:
+    void onDramRegCharChanged(unsigned int bank, unsigned int chip, unsigned int reg, unsigned int index, unsigned int value);
+    void onDramRegStatChanged(unsigned int bank, unsigned int chip, unsigned int reg, unsigned int index, unsigned int value);
+    void onDramChipOutputChanged(unsigned int bank, unsigned int chip, unsigned int value);
 
 };
 

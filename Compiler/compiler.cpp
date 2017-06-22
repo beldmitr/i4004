@@ -1,5 +1,10 @@
 #include "compiler.h"
 
+std::vector<std::shared_ptr<CompilerError> > Compiler::getErrors() const
+{
+    return errors;
+}
+
 Compiler::Compiler() : QObject()
 {
     // is empty
@@ -7,6 +12,9 @@ Compiler::Compiler() : QObject()
 
 void Compiler::compile(const std::string& inputFilename)
 {
+    // delete old source code
+    lines.clear();
+
     // open and read source file
     std::ifstream input(inputFilename.c_str(), std::ios::in);
 

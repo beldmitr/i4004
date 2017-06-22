@@ -33,7 +33,9 @@ public:
     void setIO(unsigned int page, int value);
 
 signals:
-    void onRomChanged();
+    void onRomChanged(unsigned int addr, unsigned int value);
+    void onRomCleared();
+    void onRomIOChanged(unsigned int page, unsigned int value);
 };
 
 #endif // ROM_H

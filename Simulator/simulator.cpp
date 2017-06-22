@@ -1,9 +1,37 @@
 #include "simulator.h"
 
-Simulator::Simulator(const Compiler& compiler)
-    :rom(new ROM(16)), pram(new PRAM(16)),dram(new DRAM(8)), cpu(new CPU)
+Simulator::Simulator(Compiler& compiler) : QObject(),
+    rom(new ROM(16)), pram(new PRAM(16)),dram(new DRAM(8)), cpu(new CPU)
 {
     this->compiler = &compiler;
+
+    /*************************************
+     *  Connects
+     *************************************/
+
+    // Compiler
+    connect(this->compiler, &Compiler::onCompiled, [=](){
+        std::vector<unsigned int> code = this->compiler->getObjectCode();
+        this->setCode(code);
+    });
+
+    // ROM
+    connect(rom.get(), &ROM::onRomChanged, [=](unsigned int addr, unsigned int value){
+        emit onRomChanged(addr, value);
+    });
+
+    connect(rom.get(), &ROM::onRomCleared, [=](){
+        emit onRomCleared();
+    });
+
+    connect(rom.get(), &ROM::onRomIOChanged, [=](unsigned int page, unsigned int value){
+        emit onRomIOChanged(page, value);
+    });
+
+    // DRAM
+
+
+
 }
 
 Simulator::~Simulator()
@@ -33,13 +61,12 @@ void Simulator::step()
      *  and after we read the lowest byte.
      */
 
-    switch(code)
+     if ((code & 0xF0) == 0x10    // JCN
+            || (code & 0x21) == 0x20 // FIM
+            || (code & 0xF0) == 0x40     // JUN
+            || (code & 0xF0) == 0x50     // JMS
+            || (code & 0xF0) == 0x70)    // ISZ
     {
-    case 0x10:
-    case 0x20:
-    case 0x40:
-    case 0x50:
-    case 0x70:
         int low = rom->getValue(cpu->getPC() + 1);  // read the next byte
         code = (code << 8) | low;   // combine code to 2 byte
     }
@@ -48,6 +75,26 @@ void Simulator::step()
 }
 
 /// TODO TESTME evalCommand
+std::shared_ptr<CPU> Simulator::getCpu() const
+{
+    return cpu;
+}
+
+std::shared_ptr<DRAM> Simulator::getDram() const
+{
+    return dram;
+}
+
+std::shared_ptr<PRAM> Simulator::getPram() const
+{
+    return pram;
+}
+
+std::shared_ptr<ROM> Simulator::getRom() const
+{
+    return rom;
+}
+
 void Simulator::evalCommand(int command)
 {
     if ((command & 0xFFFF) == 0x0000) // NOP
@@ -60,7 +107,7 @@ void Simulator::evalCommand(int command)
     }
     else if ((command & 0xF100) == 0x2000) // FIM
     {
-        FIM((command & 0xE) >> 9, command & 0xFF);
+        FIM((command & 0xE00) >> 9, command & 0xFF);
     }
     else if ((command & 0xFFF1) == 0x0021) // SRC
     {
@@ -232,6 +279,7 @@ void Simulator::evalCommand(int command)
     }
     else
     {
+        std::cerr << "UNKNOWN COMMAND" << std::endl;
         throw "UNKNOWN COMMAND";
     }
 }

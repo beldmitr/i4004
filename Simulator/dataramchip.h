@@ -17,8 +17,10 @@ private:
 
     const int length = 4;
 
+    unsigned int chip;
+
 public:
-    DataRAMChip();
+    DataRAMChip(unsigned int chip);
     virtual ~DataRAMChip();
 
     std::shared_ptr<DataRAMRegister> getDataRAMRegister(int index);
@@ -26,7 +28,10 @@ public:
     void setOutput(int value);
 
 signals:
-    void onDramChipChanged();
+    void onDramChipOutputChanged(unsigned int chip, unsigned int value);
+
+    void onDramRegCharChanged(unsigned int chip, unsigned int reg, unsigned int index, unsigned int value);
+    void onDramRegStatChanged(unsigned int chip, unsigned int reg, unsigned int index, unsigned int value);
 };
 
 #endif // DATARAMCHIP_H

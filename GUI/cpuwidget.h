@@ -12,6 +12,8 @@
 #include <memory>
 #include <vector>
 
+#include "Simulator/simulator.h"
+
 /*
  *  I want to make widget like this:
  *
@@ -71,7 +73,7 @@ private:
     void createWidgetOther();
 
 public:
-    explicit CpuWidget(QWidget *parent = 0);
+    explicit CpuWidget(Simulator* simulator, QWidget *parent = 0);
     virtual ~CpuWidget();
 
     // Setters

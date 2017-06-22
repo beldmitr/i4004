@@ -23,7 +23,7 @@ class Stack : public QObject
      */
 
 private:
-    const int size = 3; // Size of the Stack
+    const int size = 4; // Size of the Stack
     int actualPointer = 0;
     std::vector<int> registers;
 
@@ -33,6 +33,12 @@ public:
 
     void write(int address);
     int read();
+
+    int getActualPointer() const;
+    std::vector<int> getRegisters() const;
+
+    void setPC(unsigned int value);
+    unsigned int getPC();
 
 signals:
     void onStackChanged();

@@ -1,9 +1,13 @@
 #include "cpu.h"
 
+int CPU::getCountRegisters() const
+{
+    return countRegisters;
+}
+
 CPU::CPU() : QObject()
 {
     stack = std::shared_ptr<Stack>(new Stack);
-    PC = 0;
     acc = 0;
     carry = 0;
     test = 0;
@@ -12,10 +16,11 @@ CPU::CPU() : QObject()
     dcl = 0;
     src = 0;
 
-    for (int i = 0; i <= 15; i++)
+    for (int i = 0; i < countRegisters; i++)
     {
         registers.push_back(0);
     }
+
 }
 
 CPU::~CPU()
@@ -30,7 +35,7 @@ int CPU::getAcc() const
 
 void CPU::setAcc(unsigned int value)
 {
-    if (value < 16)
+    if (value <= 0xF)
     {
         acc = value;
         emit onCpuChanged();
@@ -111,7 +116,7 @@ Stack* CPU::getStack() const
 
 unsigned int CPU::getRegisterAt(unsigned int index) const
 {
-    if(index > 0xF)
+    if(index >= countRegisters)
     {
         std::cerr << "Indexes of registers could be 0-15. " << index
                   << " is wrong index." << std::endl;
@@ -126,7 +131,7 @@ unsigned int CPU::getRegisterAt(unsigned int index) const
 void CPU::setRegisters(unsigned int index, unsigned int value)
 {
 
-    if(index > 0xF)
+    if(index >= countRegisters)
     {
         std::cerr << "Indexes of registers could be 0-15. " << index
                   << " is wrong index." << std::endl;
@@ -177,27 +182,20 @@ void CPU::setPairs(unsigned int index, unsigned int value)
                   << " is wrong value." << std::endl;
         return;
     }
-    registers.at(2*index) = (value & 0xF);
-    registers.at(2*index + 1) = (value & 0xF0) >> 4;
+    registers.at(2*index) = (value & 0xF0) >> 4;
+    registers.at(2*index + 1) = (value & 0xF);
 
     emit onCpuChanged();
 }
 
 int CPU::getPC() const
 {
-    return PC;
+    return stack->getPC();
 }
 
 void CPU::setPC(unsigned int value)
 {
-    if (value > 0xFFFFFF)
-    {
-        std::cerr << "Program counter could be 0-0xFFFFFF. " << value
-                  << " is wrong value." << std::endl;
-        return;
-    }
-
-    PC = value;
+    stack->setPC(value);
 }
 
 int CPU::getDcl() const

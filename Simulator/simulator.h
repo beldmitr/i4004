@@ -1,6 +1,8 @@
 #ifndef SIMULATOR_H
 #define SIMULATOR_H
 
+#include <QObject>
+
 #include <iostream>
 #include <string>
 #include <memory>
@@ -17,10 +19,11 @@
  * The additional information for Simulator of Intel4004 is at
  * http://bitsavers.trailing-edge.com/pdf/intel/MCS4/MCS-4_Assembly_Language_Programming_Manual_Dec73.pdf
  */
-class Simulator
+class Simulator : public QObject
 {
+    Q_OBJECT
 private:
-    const Compiler* compiler;
+    Compiler* compiler;
 
     std::shared_ptr<ROM> rom;
     std::shared_ptr<PRAM> pram;
@@ -77,11 +80,24 @@ private:
     void DCL();
 
 public:
-    Simulator(const Compiler& compiler);
+    Simulator(Compiler &compiler);
     virtual ~Simulator();
 
     void setCode(std::vector<unsigned int> compiledCode);
     void step();
+
+    std::shared_ptr<CPU> getCpu() const;
+
+    std::shared_ptr<DRAM> getDram() const;
+
+    std::shared_ptr<PRAM> getPram() const;
+
+    std::shared_ptr<ROM> getRom() const;
+
+signals:
+    void onRomChanged(unsigned int addr, unsigned int value);
+    void onRomCleared();
+    void onRomIOChanged(unsigned int page, unsigned int value);
 
 };
 

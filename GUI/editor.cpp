@@ -22,15 +22,13 @@ Editor::Editor(QWidget *parent) : QWidget(parent)
     layout->addWidget(panel.get());
     layout->addWidget(text.get());
 
-    connect(text.get(), &QTextEdit::textChanged,
-            [=](){
-                emit onTextChanged();
-            });
+    connect(text.get(), &QTextEdit::textChanged, [=](){
+        emit onTextChanged();
+    });
 
-    connect(text.get(), &QTextEdit::cursorPositionChanged,
-            [=](){
-                emit onCursorPositionChanged();
-            });
+    connect(text.get(), &QTextEdit::cursorPositionChanged, [=](){
+        emit onCursorPositionChanged();
+    });
 }
 
 Editor::~Editor()
@@ -38,10 +36,9 @@ Editor::~Editor()
     // delete here something or finalize
 }
 
-void Editor::clear()
+std::shared_ptr<QTextEdit> Editor::getText() const
 {
-    this->text->clear();
-    this->text->document()->setModified(false);
+    return text;
 }
 
 void Editor::resizeEvent(QResizeEvent* event)

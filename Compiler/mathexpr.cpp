@@ -1,12 +1,22 @@
 #include "mathexpr.h"
 
-std::regex MathExpr::mathExpression = std::regex("([(]*[)]*[[:blank:]]*[*]?[[:blank:]]*[+-]?[[:blank:]]*[[:alnum:]]*)+");
+/*
+ * Old regex causes some bugs.
+ * F.e.
+ *  DONE,
+ *       JUN DONE       . endless loop as end of program
+ *
+ * In this case regex_match returns result too slow, very slow, minutes...
+ */
+//std::regex MathExpr::mathExpression = std::regex("([(]*[)]*[[:blank:]]*[*]?[[:blank:]]*[+-]?[[:blank:]]*[[:alnum:]]*)+");
+/// Test new mathExpression
+std::regex MathExpr::mathExpression = std::regex("(\\w?\\s?[+-]?\\s?[*]?)+");
 
 /// TODO test class and delete commented code
 
 bool MathExpr::isMathExpression(const std::string& str)
 {
-    return regex_match(str, mathExpression) && !Pair::isPair(str) && !Register::isRegister(str) && !Constant::isConstant(str);
+    return !Pair::isPair(str) && !Register::isRegister(str) && !Constant::isConstant(str) && regex_match(str, mathExpression);
 }
 
 

@@ -1,5 +1,15 @@
 #include "stack.h"
 
+int Stack::getActualPointer() const
+{
+    return actualPointer;
+}
+
+std::vector<int> Stack::getRegisters() const
+{
+    return registers;
+}
+
 Stack::Stack() : QObject()
 {
     for (int i = 0; i < size; i++)
@@ -66,5 +76,24 @@ int Stack::read()
 
     emit onStackChanged();
 
+    return registers[actualPointer] & 0xFFF;
+}
+
+void Stack::setPC(unsigned int value)
+{
+    if (value > 0xFFF)
+    {
+        std::cerr << "Program counter could be 0-0xFFFFFF. " << value
+                  << " is wrong value." << std::endl;
+        return;
+    }
+
+    registers[actualPointer] = value;
+
+    emit onStackChanged();
+}
+
+unsigned int Stack::getPC()
+{
     return registers[actualPointer] & 0xFFF;
 }

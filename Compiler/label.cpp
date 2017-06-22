@@ -15,6 +15,14 @@ Label::Label(const std::string& name, const std::string& param)
 {
     this->name = name;
 
+    if (param.empty())
+    {
+        this->value = ObjectCode::getProgramCounter();
+
+        Constant::add(this->name, this->value);
+        return;
+    }
+
     SearchResult command = String::search(param, Line::commandRegex);
     if (!command.isEmpty() && CommandSet::isCommand(command.find))
     {

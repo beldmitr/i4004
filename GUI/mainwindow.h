@@ -64,7 +64,7 @@ private:
 
     std::shared_ptr<EditorSubWindow> editorSubWindow;
     std::shared_ptr<LEDSubWindow> ledSubWindow;
-//    std::shared_ptr<SevenSegmentSubWindow> sevenSegmentSubWindow;
+    //    std::shared_ptr<SevenSegmentSubWindow> sevenSegmentSubWindow;
     std::shared_ptr<ButtonSubWindow> buttonSubWindow;
 
     std::shared_ptr<QToolBar> toolBarFile;
@@ -129,8 +129,8 @@ private:
 
     fstream file;
 
-    const Compiler* compiler;   // I do not create this pointer here, so I don't it delete now
-    const Simulator* simulator; // I do not create this pointer here, so I don't it delete now
+    Compiler* compiler;   // I do not create this pointer here, so I don't it delete now
+    Simulator* simulator; // I do not create this pointer here, so I don't it delete now
 
 
     // Methods
@@ -138,8 +138,8 @@ private:
     void createMenu();
     void createToolbars();
 
-    void readFile();
-    void writeFile();
+//    void readFile();
+//    void writeFile();
     void createOutputFilename();
 
     void createSubWindows();
@@ -147,38 +147,44 @@ private:
     void createDocks();
 
     void buildCode();
-    
-public:
-    explicit MainWindow(const Compiler& compiler, const Simulator& simulator, QWidget *parent = 0);
-    virtual ~MainWindow();
 
-signals:
-
-private slots:
-    void newFile();
-    void openFile();
-    void saveFile();
-    void saveAsFile();
-    void exitFile();
-
-    void undoEdit();
-    void redoEdit();
-    void cutEdit();
-    void copyEdit();
-    void pasteEdit();
-    void deleteEdit();
-    void selectAllEdit();
-
-    void compileBuild();
-    void runBuild();
-    void compileRunBuild();
+    void handleCompile();
+    void handleRun();
 
     void debugResume();
     void debugStep();
     void debugStop();
     void debugReset();
 
-    void setWindowTitleFilename();
+    
+public:
+    explicit MainWindow(Compiler &compiler, Simulator& simulator, QWidget *parent = 0);
+    virtual ~MainWindow();
+
+signals:
+
+    //private slots:
+    //    void newFile();
+    //    void openFile();
+    //    void saveFile();
+    //    void saveAsFile();
+    //    void exitFile();
+
+    //    void undoEdit();
+    //    void redoEdit();
+    //    void cutEdit();
+    //    void copyEdit();
+    //    void pasteEdit();
+    //    void deleteEdit();
+    //    void selectAllEdit();
+
+    //    void compileBuild();
+    //    void runBuild();
+    //    void compileRunBuild();
+
+
+
+    //    void setWindowTitleFilename();
 
 
 public slots:

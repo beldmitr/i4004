@@ -1,11 +1,31 @@
 #include "datarambank.h"
 
-DataRAMBank::DataRAMBank() : QObject()
+DataRAMBank::DataRAMBank(unsigned int bank) : QObject()
 {
+    this->bank = bank;
+
     for (int i = 0; i < length; i++)
     {
-        chips.push_back(std::shared_ptr<DataRAMChip>(new DataRAMChip()));
+        std::shared_ptr<DataRAMChip> chip = std::shared_ptr<DataRAMChip>(new DataRAMChip(i));
+
+        connect(chip.get(), &DataRAMChip::onDramRegCharChanged,
+        [=](unsigned int chip, unsigned int reg, unsigned int index, unsigned int value){
+            emit onDramRegCharChanged(bank, chip, reg, index, value);
+        });
+
+        connect(chip.get(), &DataRAMChip::onDramRegStatChanged,
+        [=](unsigned int chip, unsigned int reg, unsigned int index, unsigned int value){
+            emit onDramRegStatChanged(bank, chip, reg, index, value);
+        });
+
+        connect(chip.get(), &DataRAMChip::onDramChipOutputChanged,
+        [=](unsigned int chip, unsigned int value){
+            emit onDramChipOutputChanged(bank, chip, value);
+        });
+
+        chips.push_back(chip);
     }
+
 }
 
 DataRAMBank::~DataRAMBank()

@@ -22,7 +22,7 @@ public:
     explicit Editor(QWidget *parent = 0);
     virtual ~Editor();
 
-    void clear();
+    std::shared_ptr<QTextEdit> getText() const;
 
 private:
     std::shared_ptr<QHBoxLayout> layout;

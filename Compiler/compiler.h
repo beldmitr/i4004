@@ -27,6 +27,8 @@ public:
     std::vector<unsigned int> getObjectCode();
     void saveObjectCode(const std::string& outputFile);
 
+    std::vector<std::shared_ptr<CompilerError> > getErrors() const;
+
 signals:
     void onCompiled();
 };

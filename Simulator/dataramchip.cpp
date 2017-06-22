@@ -1,11 +1,27 @@
 #include "dataramchip.h"
 
-DataRAMChip::DataRAMChip() : QObject()
+DataRAMChip::DataRAMChip(unsigned int number) : QObject()
 {
+    this->chip = number;
+
     for (int i = 0; i < length; i++)
     {
-        registers.push_back(std::shared_ptr<DataRAMRegister>(new DataRAMRegister()));
+        std::shared_ptr<DataRAMRegister> reg = std::shared_ptr<DataRAMRegister>(new DataRAMRegister(i));
+
+        connect(reg.get(), &DataRAMRegister::onDramRegCharChanged,
+                [=](unsigned int reg, unsigned int index, unsigned int value){
+                    emit onDramRegCharChanged(this->chip, reg, index, value);
+                });
+
+        connect(reg.get(), &DataRAMRegister::onDramRegStatChanged,
+                [=](unsigned int reg, unsigned int index, unsigned int value){
+                    emit onDramRegStatChanged(this->chip, reg, index, value);
+                });
+
+        registers.push_back(reg);
     }
+
+
 }
 
 DataRAMChip::~DataRAMChip()
@@ -41,5 +57,5 @@ void DataRAMChip::setOutput(int value)
 
     output = value;
 
-    emit onDramChipChanged();
+    emit onDramChipOutputChanged(chip, value);
 }
