@@ -31,7 +31,8 @@ void Compiler::compile(const std::string& inputFilename)
     }
     else
     {
-        std::string msg = "File " + inputFilename + " can't be open.";
+        std::string msg = "File " + inputFilename + " can't be open for reading.";
+        std::cerr << msg << std::endl;
         throw LogExceptions("Compiler", msg);
     }
 
@@ -86,7 +87,8 @@ void Compiler::saveObjectCode(const std::string& outputFile)
     }
     else
     {
-        std::string msg = "File " + outputFile + " can't be open.";
+        std::string msg = "File " + outputFile + " can't be open for writing.";
+        std::cerr << msg << std::endl;
         throw LogExceptions("Compiler", msg);
     }
 }

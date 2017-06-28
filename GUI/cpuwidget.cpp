@@ -181,8 +181,19 @@ void CpuWidget::createWidgetOther()
 
     edtAccumulator->setReadOnly(true);
     edtCycles->setReadOnly(true);
-    cbxCarry->setCheckable(false);
-    cbxTest->setCheckable(false);
+    cbxCarry->setEnabled(false);
+    cbxTest->setEnabled(false);
+
+    QString styleCheckBox("QCheckBox::indicator:checked { background-color: #000; } "
+                          "QCheckBox::indicator {"
+                                "background-color: #FFF;"
+                                "border: 2px solid #000;"
+                          "}"
+                          "QCheckBox {"
+                                "color: #000;"
+                          "}");
+    cbxCarry->setStyleSheet(styleCheckBox);
+    cbxTest->setStyleSheet(styleCheckBox);
 
     edtAccumulator->setFixedHeight(50);
     edtAccumulator->setFixedWidth(50);

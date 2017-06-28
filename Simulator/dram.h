@@ -23,10 +23,7 @@ public:
 
     std::shared_ptr<DataRAMBank> getDataRAMBank(int index);
 
-signals:
-    void onDramRegCharChanged(unsigned int bank, unsigned int chip, unsigned int reg, unsigned int index, unsigned int value);
-    void onDramRegStatChanged(unsigned int bank, unsigned int chip, unsigned int reg, unsigned int index, unsigned int value);
-    void onDramChipOutputChanged(unsigned int bank, unsigned int chip, unsigned int value);
+    int getLength() const;
 };
 
 #endif // DRAM_H

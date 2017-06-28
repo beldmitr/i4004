@@ -1,19 +1,24 @@
 #include "chipdataram.h"
 
-ChipDataRam::ChipDataRam(QWidget *parent) : QWidget(parent)
+ChipDataRam::ChipDataRam(Simulator* simulator, unsigned int bank, unsigned int chip, QWidget *parent) : QWidget(parent)
 {
-    QHBoxLayout* layout = new QHBoxLayout(this);
+    this->simulator = simulator;
+    this->bank = bank;
+    this->chip = chip;
 
-    QGroupBox* inFrame = new QGroupBox;
-    QHBoxLayout* inLayout = new QHBoxLayout(inFrame);
+    layout = new QHBoxLayout(this);
+
+    inFrame = new QGroupBox;
+    inLayout = new QHBoxLayout(inFrame);
 
     // In Layout
-    QTableWidget* memTable = new QTableWidget(4, 16);
-    QTableWidget* statTable = new QTableWidget(4, 4);
-    QGroupBox* outputFrame = new QGroupBox("Output");
-    QVBoxLayout* outputLayout = new QVBoxLayout(outputFrame);
+    memTable = new QTableWidget(4, 16);
+    statTable = new QTableWidget(4, 4);
+    outputFrame = new QGroupBox("Output "+QString::number(bank)+"/"+QString::number(chip));
+    outputLayout = new QVBoxLayout(outputFrame);
 
-    // tables settings
+    // Tables settings
+    // Memory Table
     memTable->setSelectionMode(QAbstractItemView::SingleSelection);
     statTable->setSelectionMode(QAbstractItemView::SingleSelection);
 
@@ -21,26 +26,63 @@ ChipDataRam::ChipDataRam(QWidget *parent) : QWidget(parent)
     memTable->horizontalHeader()->setSectionResizeMode(QHeaderView::Stretch);
     memTable->verticalHeader()->setStretchLastSection(false);
     memTable->horizontalHeader()->setStretchLastSection(false);
+
+    // Fill left header of memory table
     for (int i=0; i < memTable->verticalHeader()->count(); i++)
     {
         QTableWidgetItem* item = new QTableWidgetItem(QString::number(i));
         memTable->setVerticalHeaderItem(i, item);
+        headerItems.push_back(item);
     }
+
+    // Fill top header of memory table
     for (int i=0; i < memTable->horizontalHeader()->count(); i++)
     {
         QTableWidgetItem* item = new QTableWidgetItem(QString::number(i, 16));
         memTable->setHorizontalHeaderItem(i, item);
+        headerItems.push_back(item);
     }
 
+    //  Fill items memory
+    for (int i = 0; i < memTable->verticalHeader()->count(); i++)
+    {
+        for (int j = 0; j < memTable->horizontalHeader()->count(); j++)
+        {
+            QTableWidgetItem* item = new QTableWidgetItem("0");
+            memTable->setItem(i, j, item);
+            item->setFlags(Qt::ItemIsSelectable|Qt::ItemIsEnabled);
+            item->setTextAlignment(Qt::AlignCenter);
+
+            memoryItems.push_back(item);
+        }
+    }
+
+    // Status table
     statTable->verticalHeader()->hide();
     statTable->verticalHeader()->setSectionResizeMode(QHeaderView::Stretch);
     statTable->horizontalHeader()->setSectionResizeMode(QHeaderView::Stretch);
     statTable->verticalHeader()->setStretchLastSection(false);
     statTable->horizontalHeader()->setStretchLastSection(false);
+
+    // Fill top header of stat table
     for (int i=0; i < statTable->horizontalHeader()->count(); i++)
     {
         QTableWidgetItem* item = new QTableWidgetItem(QString::number(i, 16));
         statTable->setHorizontalHeaderItem(i, item);
+    }
+
+    //  Fill items status
+    for (int i = 0; i < statTable->verticalHeader()->count(); i++)
+    {
+        for (int j = 0; j < statTable->horizontalHeader()->count(); j++)
+        {
+            QTableWidgetItem* item = new QTableWidgetItem("0");
+            statTable->setItem(i, j, item);
+            item->setTextAlignment(Qt::AlignCenter);
+            item->setFlags(Qt::ItemIsSelectable|Qt::ItemIsEnabled);
+
+            statusItems.push_back(item);
+        }
     }
 
     memTable->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
@@ -62,8 +104,18 @@ ChipDataRam::ChipDataRam(QWidget *parent) : QWidget(parent)
     // make output checkboxes
     for (int i = 0; i < 4; i++)
     {
-        QCheckBox* output = new QCheckBox;
-        output->setCheckable(false);
+        QCheckBox* output = new QCheckBox(QString::number(i));
+        output->setLayoutDirection(Qt::RightToLeft);
+        output->setStyleSheet("QCheckBox::indicator:checked { background-color: #000; } "
+                              "QCheckBox::indicator {"
+                                    "background-color: #FFF;"
+                                    "border: 2px solid #000;"
+                              "}"
+                              "QCheckBox {"
+                                    "color: #000;"
+                              "}");
+        outputs.push_back(output);
+        output->setEnabled(false);
 
         outputLayout->addWidget(output);
         outputLayout->setAlignment(output, Qt::AlignHCenter);
@@ -76,9 +128,120 @@ ChipDataRam::ChipDataRam(QWidget *parent) : QWidget(parent)
 
     // add to layout
     layout->addWidget(inFrame);
+
+    // connects
+    DRAM* dram = simulator->getDram().get();
+    for (int i=0; i < dram->getLength(); i++)
+    {
+        DataRAMBank* bank = dram->getDataRAMBank(i).get();
+
+        for (int j = 0; j < bank->getLength(); j++)
+        {
+            DataRAMChip* chip = bank->getDataRAMChip(j).get();
+
+            connect(chip, &DataRAMChip::onDramChipOutputChanged,
+                    [=](unsigned int bank, unsigned int chip, unsigned int value){
+                        if (bank == this->bank && chip == this->chip)
+                        {
+                            this->setOutputValue(value);
+                        }
+                    });
+
+            for (int k = 0; k < chip->getLength(); k++)
+            {
+                DataRAMRegister* reg = chip->getDataRAMRegister(k).get();
+
+                connect(reg, &DataRAMRegister::onDramRegCharChanged,
+                        [=](unsigned bank, unsigned chip, unsigned reg, unsigned addr, unsigned value){
+                            if (bank == this->bank && chip == this->chip)
+                            {
+                                this->setRegisterValue(reg, addr, value);
+                            }
+                        });
+
+                connect(reg, &DataRAMRegister::onDramRegStatChanged,
+                        [=](unsigned bank, unsigned chip, unsigned reg, unsigned addr, unsigned value){
+                            if (bank == this->bank && chip == this->chip)
+                            {
+                                this->setStatusValue(reg, addr, value);
+                            }
+                        });
+            }
+        }
+    }
+
 }
 
 ChipDataRam::~ChipDataRam()
 {
-    // delete or finalize here something
+    for (QTableWidgetItem* item : statusItems)
+    {
+        delete (item);
+    }
+
+    for (QTableWidgetItem* item : memoryItems)
+    {
+        delete (item);
+    }
+
+    for (QCheckBox* checkBox : outputs)
+    {
+        delete (checkBox);
+    }
+
+    for (QTableWidgetItem* item : headerItems)
+    {
+        delete (item);
+    }
+
+    delete(outputLayout);
+    delete(outputFrame);
+    delete(statTable);
+    delete(memTable);
+    delete(inLayout);
+    delete(inFrame);
+    delete(layout);
+}
+
+ChipDataRam::setRegisterValue(unsigned int regNumber, unsigned int addr, unsigned int value)
+{
+    if (value > 0xF)
+    {
+        QString msg("ChipDataRam: setRegisterValue, value is too big.");
+        std::cerr << msg.toStdString() << std::endl;
+        throw msg;
+    }
+
+    QTableWidgetItem* item = memTable->item(addr, regNumber);
+    item->setText(QString::number(value));
+}
+
+ChipDataRam::setStatusValue(unsigned int regNumber, unsigned int addr, unsigned int value)
+{
+    if (value > 0xF)
+    {
+        QString msg("ChipDataRam: setStatusValue, value is too big.");
+        std::cerr << msg.toStdString() << std::endl;
+        throw msg;
+    }
+
+    QTableWidgetItem* item = statTable->item(addr, regNumber);
+    item->setText(QString::number(value));
+}
+
+void ChipDataRam::setOutputValue(unsigned int value)
+{
+    if (value > 0xF)
+    {
+        QString msg("ChipDataRam: setOutputValue, value is too big.");
+        std::cerr << msg.toStdString() << std::endl;
+        throw msg;
+    }
+
+    for (int i = 0; i < outputs.size(); i++)
+    {
+        QCheckBox* output = outputs.at(i);
+        bool checked = ((value & (int)pow(2, i)) != 0);
+        output->setChecked(checked);
+    }
 }

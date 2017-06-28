@@ -1,7 +1,9 @@
 #include "dataramwidget.h"
 
-DataRamWidget::DataRamWidget(QWidget *parent) : QWidget(parent)
+DataRamWidget::DataRamWidget(Simulator *simulator, QWidget *parent) : QWidget(parent)
 {
+    this->simulator = simulator;
+
     this->setAutoFillBackground(true);
     this->setStyleSheet("DataRamWidget { border: 1px solid black }");
 
@@ -42,7 +44,7 @@ DataRamWidget::DataRamWidget(QWidget *parent) : QWidget(parent)
     {    // 8 banks
         for (int j = 0; j < 4; j++)
         { // 4 chips in each bank
-            ChipDataRam* chip = new ChipDataRam;
+            ChipDataRam* chip = new ChipDataRam(simulator, i, j);
 
             // Memory layout
             memLayout->addWidget(chip);
@@ -64,7 +66,7 @@ DataRamWidget::DataRamWidget(QWidget *parent) : QWidget(parent)
 
     // connects
 
-    connect(comboTitle.get(), static_cast<void (QComboBox::*)(int)>(&QComboBox::currentIndexChanged),
+    connect(comboTitle.get(), static_cast<void (QComboBox::*)(int)>(&QComboBox::currentIndexChanged),   /// TODO is it enaugh &QComboBox::currentIndexChanged ??
         [=](int index)
         {
             int i = index / 5; // bank
@@ -106,6 +108,7 @@ DataRamWidget::~DataRamWidget()
 
 void DataRamWidget::wheelEvent(QWheelEvent* event)
 {
+    /// FIXME 120 is a magic number
     int p = event->delta() / 120; // +1 when scroll up, -1 when down
     int newValue = scrollBar->value() - p;
 

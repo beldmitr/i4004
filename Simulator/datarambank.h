@@ -23,10 +23,10 @@ public:
 
     std::shared_ptr<DataRAMChip> getDataRAMChip(int index);
 
+    int getLength() const;
+
 signals:
-    void onDramRegCharChanged(unsigned int bank, unsigned int chip, unsigned int reg, unsigned int index, unsigned int value);
-    void onDramRegStatChanged(unsigned int bank, unsigned int chip, unsigned int reg, unsigned int index, unsigned int value);
-    void onDramChipOutputChanged(unsigned int bank, unsigned int chip, unsigned int value);
+
 
 };
 

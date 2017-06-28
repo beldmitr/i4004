@@ -17,21 +17,21 @@ private:
 
     const int length = 4;
 
+    unsigned int bank;
     unsigned int chip;
 
 public:
-    DataRAMChip(unsigned int chip);
+    DataRAMChip(unsigned int bank, unsigned int chip);
     virtual ~DataRAMChip();
 
     std::shared_ptr<DataRAMRegister> getDataRAMRegister(int index);
     int getOutput() const;
     void setOutput(int value);
 
-signals:
-    void onDramChipOutputChanged(unsigned int chip, unsigned int value);
+    int getLength() const;
 
-    void onDramRegCharChanged(unsigned int chip, unsigned int reg, unsigned int index, unsigned int value);
-    void onDramRegStatChanged(unsigned int chip, unsigned int reg, unsigned int index, unsigned int value);
+signals:
+    void onDramChipOutputChanged(unsigned int bank, unsigned int chip, unsigned int value);
 };
 
 #endif // DATARAMCHIP_H

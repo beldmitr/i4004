@@ -16,10 +16,12 @@ private:
     const int charactersLength = 16;
     const int statusLength = 4;
 
+    unsigned int bank;
+    unsigned int chip;
     unsigned int reg;    // register number
 
 public:
-    DataRAMRegister(unsigned int reg);
+    DataRAMRegister(unsigned int bank, unsigned int chip, unsigned int reg);
     virtual ~DataRAMRegister();
 
     void setCharacter(int index, int value);
@@ -28,9 +30,12 @@ public:
     void setStatus(int index, int value);
     int getStatus(int index) const;
 
+    int getCharactersLength() const;
+    int getStatusLength() const;
+
 signals:
-    void onDramRegCharChanged(unsigned int number, unsigned int index, unsigned int value);
-    void onDramRegStatChanged(unsigned int number, unsigned int index, unsigned int value);
+    void onDramRegCharChanged(unsigned int bank, unsigned int chip, unsigned int reg, unsigned int index, unsigned int value);
+    void onDramRegStatChanged(unsigned int bank, unsigned int chip, unsigned int reg, unsigned int index, unsigned int value);
 
 };
 

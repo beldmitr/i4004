@@ -338,7 +338,7 @@ void MainWindow::createDocks()
     this->addDockWidget(Qt::BottomDockWidgetArea, dockResult.get());
 
     dockDRam = std::shared_ptr<QDockWidget>(new QDockWidget("Data RAM"));
-    dramWidget = std::shared_ptr<DataRamWidget>(new DataRamWidget);
+    dramWidget = std::shared_ptr<DataRamWidget>(new DataRamWidget(simulator));
     dockDRam->setWidget(dramWidget.get());
     this->addDockWidget(Qt::BottomDockWidgetArea, dockDRam.get());
 
@@ -420,21 +420,28 @@ MainWindow::MainWindow(Compiler& compiler, Simulator &simulator, QWidget *parent
     //    connect(textEditor, SIGNAL(textChanged()), this, SLOT(setWindowTitleFilename()));
 
     connect(this->compiler, &Compiler::onCompiled, [=](){
-        lstResult->clear();
 
         std::vector<std::shared_ptr<CompilerError>> errors = this->compiler->getErrors();
 
-        for (const std::shared_ptr<CompilerError> e : errors)
+        if (errors.empty())
         {
-            QString msg;
-//            if (e.row != -1)
-//            {
-                msg.append("Line ").append(QString::number(e->row));
-//            }
-            msg.append(": ")
-               .append(QString(e->message.c_str()));
-            lstResult->addItem(msg);
+            lstResult->addItem(QString(tr("Compiled successfully")));
         }
+        else
+        {
+            for (const std::shared_ptr<CompilerError> e : errors)
+            {
+                QString msg;
+    //            if (e.row != -1)
+    //            {
+                    msg.append("Line ").append(QString::number(e->row));
+    //            }
+                msg.append(": ")
+                   .append(QString(e->message.c_str()));
+                lstResult->addItem(msg);
+            }
+        }
+
     });
 
 }

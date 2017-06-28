@@ -1,7 +1,19 @@
 #include "dataramregister.h"
 
-DataRAMRegister::DataRAMRegister(unsigned int reg) : QObject()
+int DataRAMRegister::getCharactersLength() const
 {
+    return charactersLength;
+}
+
+int DataRAMRegister::getStatusLength() const
+{
+    return statusLength;
+}
+
+DataRAMRegister::DataRAMRegister(unsigned int bank, unsigned int chip, unsigned int reg) : QObject()
+{
+    this->bank = bank;
+    this->chip = chip;
     this->reg = reg;
 
     for (int i = 0; i < charactersLength; i++) {
@@ -34,7 +46,7 @@ void DataRAMRegister::setCharacter(int index, int value)
 
     characters[index] = value;
 
-    emit onDramRegCharChanged(reg, index, value);
+    emit onDramRegCharChanged(bank, chip, reg, index, value);
 }
 
 int DataRAMRegister::getCharacter(int index) const
@@ -67,7 +79,7 @@ void DataRAMRegister::setStatus(int index, int value)
 
     status[index] = value;
 
-    emit onDramRegStatChanged(reg, index, value);
+    emit onDramRegStatChanged(bank, chip, reg, index, value);
 }
 
 int DataRAMRegister::getStatus(int index) const

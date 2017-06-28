@@ -16,6 +16,7 @@
 #include <vector>
 #include <memory>
 
+#include "Simulator/simulator.h"
 #include "chipdataram.h"
 
 
@@ -23,6 +24,8 @@ class DataRamWidget : public QWidget
 {
     Q_OBJECT
 private:
+    Simulator* simulator; // I didn't create, I don't to delete
+
     std::shared_ptr<QVBoxLayout> layout;
     std::shared_ptr<QHBoxLayout> titleLayout;
     std::shared_ptr<QHBoxLayout> memLayout;
@@ -31,7 +34,7 @@ private:
     std::vector<ChipDataRam*> chips;
 
 public:
-    explicit DataRamWidget(QWidget *parent = 0);
+    explicit DataRamWidget(Simulator* simulator, QWidget *parent = 0);
     virtual ~DataRamWidget();
 
 signals:
