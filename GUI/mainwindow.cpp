@@ -343,7 +343,7 @@ void MainWindow::createDocks()
     this->addDockWidget(Qt::BottomDockWidgetArea, dockDRam.get());
 
     dockRom = std::shared_ptr<QDockWidget>(new QDockWidget("ROM"));
-    romWidget = std::shared_ptr<RomWidget>(new RomWidget);
+    romWidget = std::shared_ptr<RomWidget>(new RomWidget(simulator));
     dockRom->setWidget(romWidget.get());
     this->addDockWidget(Qt::BottomDockWidgetArea, dockRom.get());
 

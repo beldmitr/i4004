@@ -15,12 +15,15 @@
 #include <vector>
 #include <memory>
 
+#include "Simulator/simulator.h"
 #include "memorytable.h"
 
 class RomWidget : public QWidget
 {
     Q_OBJECT
 private:
+    Simulator* simulator;
+
     std::shared_ptr<QGroupBox> memoryGB;    /// TODO make smart_ptr or delete
     std::shared_ptr<QVBoxLayout> layout;
     std::shared_ptr<QScrollBar> scroll;
@@ -36,15 +39,13 @@ private:
     QTableWidgetItem* selItem;
     int lastRow = 0;
 
-
     void setMemoryTitle(int value);
     void setIOGroupBoxVisible(int value);
 
 public:
-    explicit RomWidget(QWidget *parent = 0);
+    explicit RomWidget(Simulator *simulator, QWidget *parent = 0);
     virtual ~RomWidget();
 
-    void clear();
     void write(std::vector<unsigned int> instructions);
 
 signals:

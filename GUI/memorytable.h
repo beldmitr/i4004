@@ -13,9 +13,15 @@ private:
     const int COLUMNS = 16;
     const int ROWS = 256;
 
+    std::vector<QTableWidgetItem*> items;
+    std::vector<QTableWidgetItem*> headerItems;
+
 public:
     explicit MemoryTable(QWidget *parent = 0);
     virtual ~MemoryTable();
+
+    void setValue(unsigned addr, unsigned value);
+    void clear();
 
 signals:
 

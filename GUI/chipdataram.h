@@ -38,8 +38,8 @@ private:
     std::vector<QTableWidgetItem*> memoryItems;
     std::vector<QTableWidgetItem*> statusItems;
 
-    setRegisterValue(unsigned int regNumber, unsigned int addr, unsigned int value);
-    setStatusValue(unsigned int regNumber, unsigned int addr, unsigned int value);
+    void setRegisterValue(unsigned int regNumber, unsigned int addr, unsigned int value);
+    void setStatusValue(unsigned int regNumber, unsigned int addr, unsigned int value);
 
     void setOutputValue(unsigned int value);
 signals:

@@ -30,7 +30,7 @@ ChipDataRam::ChipDataRam(Simulator* simulator, unsigned int bank, unsigned int c
     // Fill left header of memory table
     for (int i=0; i < memTable->verticalHeader()->count(); i++)
     {
-        QTableWidgetItem* item = new QTableWidgetItem(QString::number(i));
+        QTableWidgetItem* item = new QTableWidgetItem(QString::number(i, 16));
         memTable->setVerticalHeaderItem(i, item);
         headerItems.push_back(item);
     }
@@ -104,7 +104,7 @@ ChipDataRam::ChipDataRam(Simulator* simulator, unsigned int bank, unsigned int c
     // make output checkboxes
     for (int i = 0; i < 4; i++)
     {
-        QCheckBox* output = new QCheckBox(QString::number(i));
+        QCheckBox* output = new QCheckBox(QString::number(i, 16));
         output->setLayoutDirection(Qt::RightToLeft);
         output->setStyleSheet("QCheckBox::indicator:checked { background-color: #000; } "
                               "QCheckBox::indicator {"
@@ -203,7 +203,7 @@ ChipDataRam::~ChipDataRam()
     delete(layout);
 }
 
-ChipDataRam::setRegisterValue(unsigned int regNumber, unsigned int addr, unsigned int value)
+void ChipDataRam::setRegisterValue(unsigned int regNumber, unsigned int addr, unsigned int value)
 {
     if (value > 0xF)
     {
@@ -213,10 +213,10 @@ ChipDataRam::setRegisterValue(unsigned int regNumber, unsigned int addr, unsigne
     }
 
     QTableWidgetItem* item = memTable->item(addr, regNumber);
-    item->setText(QString::number(value));
+    item->setText(QString::number(value, 16));
 }
 
-ChipDataRam::setStatusValue(unsigned int regNumber, unsigned int addr, unsigned int value)
+void ChipDataRam::setStatusValue(unsigned int regNumber, unsigned int addr, unsigned int value)
 {
     if (value > 0xF)
     {
@@ -226,7 +226,7 @@ ChipDataRam::setStatusValue(unsigned int regNumber, unsigned int addr, unsigned 
     }
 
     QTableWidgetItem* item = statTable->item(addr, regNumber);
-    item->setText(QString::number(value));
+    item->setText(QString::number(value, 16));
 }
 
 void ChipDataRam::setOutputValue(unsigned int value)
@@ -238,7 +238,7 @@ void ChipDataRam::setOutputValue(unsigned int value)
         throw msg;
     }
 
-    for (int i = 0; i < outputs.size(); i++)
+    for (unsigned i = 0; i < outputs.size(); i++)
     {
         QCheckBox* output = outputs.at(i);
         bool checked = ((value & (int)pow(2, i)) != 0);

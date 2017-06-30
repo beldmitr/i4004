@@ -1,7 +1,9 @@
 #include "romwidget.h"
 
-RomWidget::RomWidget(QWidget *parent) : QWidget(parent)
+RomWidget::RomWidget(Simulator *simulator, QWidget *parent) : QWidget(parent)
 {
+    this->simulator = simulator;
+
     this->setAutoFillBackground(true);
 
     layout = std::shared_ptr<QVBoxLayout>(new QVBoxLayout(this));
@@ -107,6 +109,16 @@ RomWidget::RomWidget(QWidget *parent) : QWidget(parent)
         {
             scroll->setValue(index * 16);
     });
+
+    connect(simulator, &Simulator::onRomCleared,
+            [=](){
+               memory->clear();
+            });
+
+    connect(simulator, &Simulator::onRomChanged,
+            [=](unsigned addr, unsigned value){
+                memory->setValue(addr, value);
+            });
 }
 
 RomWidget::~RomWidget()
@@ -130,21 +142,6 @@ void RomWidget::setIOGroupBoxVisible(int value)
     activeIOGroupBox->setVisible(false);
     gb->setVisible(true);
     activeIOGroupBox = gb;
-}
-
-
-
-void RomWidget::clear()
-{
-    for (int i=0; i < memory->horizontalHeader()->count(); i++)
-    {
-        for (int j=0; j < memory->verticalHeader()->count(); j++)
-        {
-            QTableWidgetItem* item = new QTableWidgetItem("ff");
-            item->setTextAlignment(Qt::AlignCenter);
-            memory->setItem(j, i, item);
-        }
-    }
 }
 
 void RomWidget::write(std::vector<unsigned int> instructions)
