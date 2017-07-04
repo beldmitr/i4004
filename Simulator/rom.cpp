@@ -44,6 +44,11 @@ unsigned int ROM::getValue(unsigned int index) const
     return table[index];
 }
 
+unsigned int ROM::getPages() const
+{
+    return pages;
+}
+
 void ROM::setValue(unsigned int index, int value)
 {
     if(index >= pages * bytesPerPage)

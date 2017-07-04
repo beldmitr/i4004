@@ -11,8 +11,10 @@ void ProgramRamWidget::setMemoryTitle(int value)
     comboTitle->setCurrentIndex(value / 16);
 }
 
-ProgramRamWidget::ProgramRamWidget(QWidget *parent) : QWidget(parent)
+ProgramRamWidget::ProgramRamWidget(Simulator* simulator, QWidget *parent) : QWidget(parent)
 {
+    this->simulator = simulator;
+
     this->setAutoFillBackground(true);
 
     layout = std::shared_ptr<QVBoxLayout>(new QVBoxLayout(this));
@@ -89,6 +91,12 @@ ProgramRamWidget::ProgramRamWidget(QWidget *parent) : QWidget(parent)
         {
             scroll->setValue(index * 16);
         });
+
+    PRAM* pram = simulator->getPram().get();
+    connect(pram, &PRAM::onPramChanged,
+            [=](unsigned addr, unsigned value){
+                memory->setValue(addr, value);
+            });
 }
 
 ProgramRamWidget::~ProgramRamWidget()

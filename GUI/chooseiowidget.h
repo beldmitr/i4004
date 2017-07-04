@@ -23,7 +23,11 @@ public:
     virtual ~ChooseIOWidget();
 
 signals:
-//    void connectionChanged(QAction* action);
+    void onROMConnected(unsigned page, unsigned bit);
+    void onDRAMConnected(unsigned bank, unsigned chip, unsigned bit); // Data RAM connection
+
+    void onDisconnected();
+
 
 public slots:
 };

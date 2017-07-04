@@ -16,7 +16,7 @@ LedImage::LedImage(QWidget *parent) : QLabel(parent)
     setAlignment(Qt::AlignCenter);
     setAutoFillBackground(true);
 
-    image_on = pics.find("Blue")->second;
+    image_on = pics.find("Red")->second;
     image_off = pics.find("White")->second;
 
     isLight = false;

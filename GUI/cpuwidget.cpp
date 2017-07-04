@@ -67,7 +67,16 @@ CpuWidget::CpuWidget(Simulator *simulator, QWidget *parent) : QWidget(parent)
         cbxCarry->setChecked((bool)cpu->getCarry());
 
         cbxTest->setChecked((bool)cpu->getTest());
+
+        edtCycles->setText(QString::number(cpu->getCycles(), 16));
     });
+
+    connect(simulator, &Simulator::onActualCommand,
+            [=](const QString& cmd)
+            {
+                lblInstruction->setText(cmd);
+            });
+
 }
 
 CpuWidget::~CpuWidget()
@@ -175,9 +184,11 @@ void CpuWidget::createWidgetOther()
     lblTest = std::make_shared<QLabel>("Test");
     cbxTest = std::shared_ptr<QCheckBox>(new QCheckBox);
 
-    lblInstruction = std::make_shared<QLabel>();
+    lblInstruction = std::make_shared<QLabel>("");
+    lblInstruction->setFixedWidth(200);
+
     lblCycles = std::make_shared<QLabel>("Cycles");
-    edtCycles = std::make_shared<QTextEdit>();
+    edtCycles = std::make_shared<QTextEdit>("0");
 
     edtAccumulator->setReadOnly(true);
     edtCycles->setReadOnly(true);
@@ -186,11 +197,11 @@ void CpuWidget::createWidgetOther()
 
     QString styleCheckBox("QCheckBox::indicator:checked { background-color: #000; } "
                           "QCheckBox::indicator {"
-                                "background-color: #FFF;"
-                                "border: 2px solid #000;"
+                          "background-color: #FFF;"
+                          "border: 2px solid #000;"
                           "}"
                           "QCheckBox {"
-                                "color: #000;"
+                          "color: #000;"
                           "}");
     cbxCarry->setStyleSheet(styleCheckBox);
     cbxTest->setStyleSheet(styleCheckBox);

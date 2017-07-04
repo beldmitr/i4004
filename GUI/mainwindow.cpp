@@ -314,7 +314,7 @@ void MainWindow::createToolbars()
 void MainWindow::createSubWindows()
 {
     editorSubWindow = std::shared_ptr<EditorSubWindow>(new EditorSubWindow(this));
-    ledSubWindow = std::shared_ptr<LEDSubWindow>(new LEDSubWindow);
+    ledSubWindow = std::shared_ptr<LEDSubWindow>(new LEDSubWindow(simulator));
     //    sevenSegmentSubWindow = std::shared_ptr<SevenSegmentSubWindow>(new SevenSegmentSubWindow);
     buttonSubWindow = std::shared_ptr<ButtonSubWindow>(new ButtonSubWindow);
 
@@ -348,7 +348,7 @@ void MainWindow::createDocks()
     this->addDockWidget(Qt::BottomDockWidgetArea, dockRom.get());
 
     dockPRam = std::shared_ptr<QDockWidget>(new QDockWidget("Program RAM"));
-    pramWidget = std::shared_ptr<ProgramRamWidget>(new ProgramRamWidget);
+    pramWidget = std::shared_ptr<ProgramRamWidget>(new ProgramRamWidget(simulator));
     dockPRam->setWidget(pramWidget.get());
     this->addDockWidget(Qt::BottomDockWidgetArea, dockPRam.get());
 

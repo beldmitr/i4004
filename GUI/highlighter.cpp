@@ -4,10 +4,10 @@ Highlighter::Highlighter(QTextDocument* parent) : QSyntaxHighlighter(parent)
 {
     keywords << "NOP" << "JCN" << "FIM" << "SRC" << "FIN" << "JIN" << "JUN" << "JMS"
              << "INC" << "ISZ" << "ADD" << "SUB" << "LD" << "XCH" << "BBL" << "LDM"
-             << "WRM" << "WMP" << "WRR" << "WR0" << "WR1" << "WR2" << "WR3" << "SBM"
-             << "RDM" << "RDR" << "ADM" << "RD0" << "RD1" << "RD2" << "RD3" << "CLB"
-             << "CLC" << "IAC" << "CMC" << "CMA" << "RAL" << "RAR" << "TCC" << "DAC"
-             << "TCS" << "STC" << "DAA" << "KBP" << "DCL";
+             << "WRM" << "WMP" << "WRR" << "WPM"  << "WR0" << "WR1" << "WR2" << "WR3"
+             << "SBM" << "RDM" << "RDR" << "ADM" << "RD0" << "RD1" << "RD2" << "RD3"
+             << "CLB" << "CLC" << "IAC" << "CMC" << "CMA" << "RAL" << "RAR" << "TCC"
+             << "DAC" << "TCS" << "STC" << "DAA" << "KBP" << "DCL";
 }
 
 Highlighter::~Highlighter()

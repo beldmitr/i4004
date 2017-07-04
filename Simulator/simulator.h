@@ -52,6 +52,7 @@ private:
     void WRM();
     void WMP();
     void WRR();
+    void WPM();
     void WR0();
     void WR1();
     void WR2();
@@ -95,9 +96,7 @@ public:
     std::shared_ptr<ROM> getRom() const;
 
 signals:
-    void onRomChanged(unsigned int addr, unsigned int value);
-    void onRomCleared();
-    void onRomIOChanged(unsigned int page, unsigned int value);
+    void onActualCommand(const QString& command);
 
 };
 

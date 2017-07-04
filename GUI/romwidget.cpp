@@ -46,9 +46,20 @@ RomWidget::RomWidget(Simulator *simulator, QWidget *parent) : QWidget(parent)
         for(int i=0; i<4; i++)
         {
             QCheckBox* ioCB = new QCheckBox();
-            ioCB->setCheckable(false);
+            ioCB->setDisabled(true);
             ioLayout->addWidget(ioCB);
             ioLayout->setAlignment(ioCB, Qt::AlignHCenter);
+
+            ioCB->setStyleSheet("QCheckBox::indicator:checked { background-color: #000; } "
+                                  "QCheckBox::indicator {"
+                                        "background-color: #FFF;"
+                                        "border: 2px solid #000;"
+                                  "}"
+                                  "QCheckBox {"
+                                        "color: #000;"
+                                  "}");
+
+            ios.push_back(ioCB);
         }
 
         memLayout->addWidget(ioGB);
@@ -108,16 +119,23 @@ RomWidget::RomWidget(Simulator *simulator, QWidget *parent) : QWidget(parent)
         [=](int index)
         {
             scroll->setValue(index * 16);
-    });
+        });
 
-    connect(simulator, &Simulator::onRomCleared,
+    // ROM
+    ROM* rom = simulator->getRom().get();
+    connect(rom, &ROM::onRomCleared,
             [=](){
                memory->clear();
             });
 
-    connect(simulator, &Simulator::onRomChanged,
+    connect(rom, &ROM::onRomChanged,
             [=](unsigned addr, unsigned value){
                 memory->setValue(addr, value);
+            });
+
+    connect(rom, &ROM::onRomIOChanged,
+            [=](unsigned page, unsigned value){
+                this->setIO(page, value);
             });
 }
 
@@ -142,6 +160,31 @@ void RomWidget::setIOGroupBoxVisible(int value)
     activeIOGroupBox->setVisible(false);
     gb->setVisible(true);
     activeIOGroupBox = gb;
+}
+
+void RomWidget::setIO(unsigned page, unsigned value)
+{
+    if (page > 7)
+    {
+        std::cerr << "RomWidget: setIO: Wrong page: " << page << std::endl;
+        return; /// TODO make an exception
+    }
+
+    if (value > 0xf)
+    {
+        std::cerr << "RomWidget: setIO: Wrong value: " << value << std::endl;
+        return; /// TODO make an exception
+    }
+
+    QCheckBox* io0 = ios.at(page + 0);
+    QCheckBox* io1 = ios.at(page + 1);
+    QCheckBox* io2 = ios.at(page + 2);
+    QCheckBox* io3 = ios.at(page + 3);
+
+    io0->setChecked(value & 0x1);
+    io1->setChecked((value & 0x2) >> 1);
+    io2->setChecked((value & 0x4) >> 2);
+    io3->setChecked((value & 0x8) >> 3);
 }
 
 void RomWidget::write(std::vector<unsigned int> instructions)

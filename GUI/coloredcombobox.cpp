@@ -3,7 +3,7 @@
 ColoredComboBox::ColoredComboBox()
 {
     QStringList itemList;
-    itemList << tr("Blue") << tr("Green") << tr("Orange") << tr("Pink") << tr("Red") << tr("Yellow");
+    itemList << tr("Red") << tr("Blue") << tr("Green") << tr("Orange") << tr("Pink") << tr("Yellow");
 
     for (int i = 0; i < itemList.size(); i++)
     {

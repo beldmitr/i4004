@@ -10,6 +10,7 @@
 
 #include <QHBoxLayout>
 
+#include "Simulator/simulator.h"
 #include "subwindow.h"
 #include "led.h"
 
@@ -18,10 +19,12 @@ class LEDSubWindow : public SubWindow
 {
     Q_OBJECT
 public:
-    explicit LEDSubWindow();
+    explicit LEDSubWindow(Simulator* simulator);
     virtual ~LEDSubWindow();
 
 private:
+    Simulator* simulator;
+
     std::shared_ptr<QWidget> centralWidget;
     std::shared_ptr<QHBoxLayout> layout;
     std::vector<Led*> leds;

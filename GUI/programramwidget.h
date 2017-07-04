@@ -10,12 +10,15 @@
 
 #include <memory>
 
+#include "Simulator/simulator.h"
 #include "memorytable.h"
 
 class ProgramRamWidget : public QWidget
 {
     Q_OBJECT
 private:
+    Simulator* simulator;
+
     std::shared_ptr<QVBoxLayout> layout;
     std::shared_ptr<QHBoxLayout> titleLayout;
     std::shared_ptr<QComboBox> comboTitle;
@@ -28,7 +31,7 @@ private:
     void setMemoryTitle(int value);
 
 public:
-    explicit ProgramRamWidget(QWidget *parent = 0);
+    explicit ProgramRamWidget(Simulator *simulator, QWidget *parent = 0);
     virtual ~ProgramRamWidget();
 
 signals:

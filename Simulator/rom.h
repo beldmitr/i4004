@@ -32,6 +32,8 @@ public:
     int getIO(unsigned int page) const;
     void setIO(unsigned int page, int value);
 
+    unsigned int getPages() const;
+
 signals:
     void onRomChanged(unsigned int addr, unsigned int value);
     void onRomCleared();

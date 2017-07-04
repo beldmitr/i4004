@@ -5,7 +5,7 @@ DataRamWidget::DataRamWidget(Simulator *simulator, QWidget *parent) : QWidget(pa
     this->simulator = simulator;
 
     this->setAutoFillBackground(true);
-    this->setStyleSheet("DataRamWidget { border: 1px solid black }");
+    this->setStyleSheet("DataRamWidget { border: 1px solid black }");   /// FIXME What do this do?? Looks like nothing
 
     layout = std::shared_ptr<QVBoxLayout>(new QVBoxLayout(this));
 

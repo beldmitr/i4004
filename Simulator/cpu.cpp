@@ -182,9 +182,9 @@ void CPU::setPairs(unsigned int index, unsigned int value)
                   << " is wrong value." << std::endl;
         return;
     }
-    /// TODO use setRegister method
-    registers.at(2*index) = (value & 0xF);      // lower half byte (word) to lower register
-    registers.at(2*index + 1) = (value & 0xF0) >> 4;    // higher half byte (word) to higher register
+
+    this->setRegisters(2*index, (value & 0xF0) >> 4);
+    this->setRegisters(2*index + 1, value & 0xF);
 
     emit onCpuChanged();
 }

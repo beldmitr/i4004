@@ -14,24 +14,6 @@ Simulator::Simulator(Compiler& compiler) : QObject(),
         std::vector<unsigned int> code = this->compiler->getObjectCode();
         this->setCode(code);
     });
-
-    // ROM
-    connect(rom.get(), &ROM::onRomChanged, [=](unsigned int addr, unsigned int value){
-        emit onRomChanged(addr, value);
-    });
-
-    connect(rom.get(), &ROM::onRomCleared, [=](){
-        emit onRomCleared();
-    });
-
-    connect(rom.get(), &ROM::onRomIOChanged, [=](unsigned int page, unsigned int value){
-        emit onRomIOChanged(page, value);
-    });
-
-    // DRAM
-
-
-
 }
 
 Simulator::~Simulator()
@@ -100,187 +82,257 @@ void Simulator::evalCommand(int command)
     if ((command & 0xFFFF) == 0x0000) // NOP
     {
         NOP();
+        emit onActualCommand(QString::number(command, 16) + " " + "NOP");
     }
     else if ((command & 0xF000) == 0x1000) // JCN
     {
         JCN((command & 0x0F00) >> 8, command & 0x00FF);
+        emit onActualCommand(QString::number(command, 16) + " " + "JCN "
+                             + "0x" + QString::number((command & 0x0F00) >> 8, 16) + ", "
+                             + "0x" + QString::number(command & 0x00FF, 16));
     }
     else if ((command & 0xF100) == 0x2000) // FIM
     {
         FIM((command & 0xE00) >> 9, command & 0xFF);
+        emit onActualCommand(QString::number(command, 16) + " " + "FIM "
+                             + "P" + QString::number((command & 0xE00) >> 9, 16) + ", "
+                             + "0x" + QString::number(command & 0xFF, 16));
     }
     else if ((command & 0xFFF1) == 0x0021) // SRC
     {
         SRC((command & 0x0E) >> 1);
+        emit onActualCommand(QString::number(command, 16) + " " + "SRC "
+                             + "P" + QString::number((command & 0x0E) >> 1, 16));
     }
     else if ((command & 0xFFF1) == 0x0030) // FIN
     {
         FIN((command & 0xE) >> 1);
+        emit onActualCommand(QString::number(command, 16) + " " + "FIN "
+                             + "P" + QString::number((command & 0xE) >> 1, 16));
     }
     else if ((command & 0xFFF1) == 0x0031) // JIN
     {
         JIN((command & 0xE) >> 1);
+        emit onActualCommand(QString::number(command, 16) + " " + "JIN "
+                             + "P" + QString::number((command & 0xE) >> 1, 16));
     }
     else if ((command & 0xF000) == 0x4000) // JUN
     {
         JUN((command & 0x0F00) >> 8, command & 0x00FF);
+        emit onActualCommand(QString::number(command, 16) + " " + "JUN "
+                             + "0x" + QString::number((command & 0x0F00) >> 8, 16) + ", "
+                             + QString::number(command & 0x00FF, 16));
     }
     else if ((command & 0xF000) == 0x5000) // JMS
     {
         JMS((command & 0x0F00) >> 8, command & 0x00FF);
+        emit onActualCommand(QString::number(command, 16) + " " + "JMS "
+                             + "0x" + QString::number((command & 0x0F00) >> 8, 16) + ", "
+                             + QString::number(command & 0x00FF, 16));
     }
     else if ((command & 0xFFF0) == 0x0060) // INC
     {
         INC(command & 0xF);
+        emit onActualCommand(QString::number(command, 16) + " " + "INC "
+                             "R" + QString::number(command & 0xF, 16));
     }
     else if ((command & 0xF000) == 0x7000) // ISZ
     {
         ISZ((command & 0x0F00) >> 8, command & 0xFF);
+        emit onActualCommand(QString::number(command, 16) + " " + "ISZ "
+                             + "R" + QString::number((command & 0x0F00) >> 8, 16) + ", "
+                             + "0x" + QString::number(command & 0xFF, 16));
     }
     else if ((command & 0xFFF0) == 0x0080) // ADD
     {
         ADD(command & 0xF);
+        emit onActualCommand(QString::number(command, 16) + " " + "ADD "
+                             "R" + QString::number(command & 0xF, 16));
     }
     else if ((command & 0xFFF0) == 0x0090) // SUB
     {
         SUB(command & 0xF);
+        emit onActualCommand(QString::number(command, 16) + " " + "SUB "
+                             "R" + QString::number(command & 0xF, 16));
     }
     else if ((command & 0xFFF0) == 0x00A0) // LD
     {
         LD(command & 0xF);
+        emit onActualCommand(QString::number(command, 16) + " " + "LD "
+                             "R" + QString::number(command & 0xF, 16));
     }
     else if ((command & 0xFFF0) == 0x00B0) // XCH
     {
         XCH(command & 0xF);
+        emit onActualCommand(QString::number(command, 16) + " " + "XCH "
+                             "R" + QString::number(command & 0xF, 16));
     }
     else if ((command & 0xFFF0)== 0x00C0) // BBL
     {
         BBL(command & 0xF);
+        emit onActualCommand(QString::number(command, 16) + " " + "BBL "
+                             "0x" + QString::number(command & 0xF, 16));
     }
     else if ((command & 0xFFF0) == 0x00D0) // LDM
     {
         LDM(command & 0xF);
+        emit onActualCommand(QString::number(command, 16) + " " + "LDM "
+                             "0x" + QString::number(command & 0xF, 16));
     }
     else if ((command & 0xFFFF) == 0x00E0) // WRM
     {
         WRM();
+        emit onActualCommand(QString::number(command, 16) + " " + "WRM");
     }
     else if ((command & 0xFFFF) == 0x00E1) // WMP
     {
         WMP();
+        emit onActualCommand(QString::number(command, 16) + " " + "WMP");
     }
     else if ((command & 0xFFFF) == 0x00E2) // WRR
     {
         WRR();
+        emit onActualCommand(QString::number(command, 16) + " " + "WRR");
+    }
+    else if ((command & 0xFFFF) == 0x00E3) // WPM
+    {
+        WPM();
+        emit onActualCommand(QString::number(command, 16) + " " + "WPM");
     }
     else if ((command & 0xFFFF) == 0x00E4) // WR0
     {
         WR0();
+        emit onActualCommand(QString::number(command, 16) + " " + "WR0");
     }
     else if ((command & 0xFFFF) == 0x00E5) // WR1
     {
         WR1();
+        emit onActualCommand(QString::number(command, 16) + " " + "WR1");
     }
     else if ((command & 0xFFFF) == 0x00E6) // WR2
     {
         WR2();
+        emit onActualCommand(QString::number(command, 16) + " " + "WR2");
     }
     else if ((command & 0xFFFF) == 0x00E7) // WR3
     {
         WR3();
+        emit onActualCommand(QString::number(command, 16) + " " + "WR3");
     }
     else if ((command & 0xFFFF) == 0x00E8) // SBM
     {
         SBM();
+        emit onActualCommand(QString::number(command, 16) + " " + "SBM");
     }
     else if ((command & 0xFFFF) == 0x00E9) // RDM
     {
         RDM();
+        emit onActualCommand(QString::number(command, 16) + " " + "RDM");
     }
     else if ((command & 0xFFFF) == 0x00EA) // RDR
     {
         RDR();
+        emit onActualCommand(QString::number(command, 16) + " " + "RDR");
     }
     else if ((command & 0xFFFF) == 0x00EB) // ADM
     {
         ADM();
+        emit onActualCommand(QString::number(command, 16) + " " + "ADM");
     }
     else if ((command & 0xFFFF) == 0x00EC) // RD0
     {
         RD0();
+        emit onActualCommand(QString::number(command, 16) + " " + "RD0");
     }
     else if ((command & 0xFFFF) == 0x00ED) // RD1
     {
         RD1();
+        emit onActualCommand(QString::number(command, 16) + " " + "RD1");
     }
     else if ((command & 0xFFFF) == 0x00EE) // RD2
     {
         RD2();
+        emit onActualCommand(QString::number(command, 16) + " " + "RD2");
     }
     else if ((command & 0xFFFF) == 0x00EF) // RD3
     {
         RD3();
+        emit onActualCommand(QString::number(command, 16) + " " + "RD3");
     }
     else if ((command & 0xFFFF) == 0x00F0) // CLB
     {
         CLB();
+        emit onActualCommand(QString::number(command, 16) + " " + "CLB");
     }
     else if ((command & 0xFFFF) == 0x00F1) // CLC
     {
         CLC();
+        emit onActualCommand(QString::number(command, 16) + " " + "CLC");
     }
     else if ((command & 0xFFFF) == 0x00F2) // IAC
     {
         IAC();
+        emit onActualCommand(QString::number(command, 16) + " " + "IAC");
     }
     else if ((command & 0xFFFF) == 0x00F3) // CMC
     {
         CMC();
+        emit onActualCommand(QString::number(command, 16) + " " + "CMC");
     }
     else if ((command & 0xFFFF) == 0x00F4) // CMA
     {
         CMA();
+        emit onActualCommand(QString::number(command, 16) + " " + "CMA");
     }
     else if ((command & 0xFFFF) == 0x00F5) // RAL
     {
         RAL();
+        emit onActualCommand(QString::number(command, 16) + " " + "RAL");
     }
     else if ((command & 0xFFFF) == 0x00F6) // RAR
     {
         RAR();
+        emit onActualCommand(QString::number(command, 16) + " " + "RAR");
     }
     else if ((command & 0xFFFF) == 0x00F7) // TCC
     {
         TCC();
+        emit onActualCommand(QString::number(command, 16) + " " + "TCC");
     }
     else if ((command & 0xFFFF) == 0x00F8) // DAC
     {
         DAC();
+        emit onActualCommand(QString::number(command, 16) + " " + "DAC");
     }
     else if ((command & 0xFFFF) == 0x00F9) // TCS
     {
         TCS();
+        emit onActualCommand(QString::number(command, 16) + " " + "TCS");
     }
     else if ((command & 0xFFFF) == 0x00FA) // STC
     {
         STC();
+        emit onActualCommand(QString::number(command, 16) + " " + "STC");
     }
     else if ((command & 0xFFFF) == 0x00FB) // DAA
     {
         DAA();
+        emit onActualCommand(QString::number(command, 16) + " " + "DAA");
     }
     else if ((command & 0xFFFF) == 0x00FC) // KBP
     {
         KBP();
+        emit onActualCommand(QString::number(command, 16) + " " + "KBP");
     }
     else if ((command & 0xFFFF) == 0x00FD) // DCL
     {
         DCL();
+        emit onActualCommand(QString::number(command, 16) + " " + "DCL");
     }
     else
     {
-        std::cerr << "UNKNOWN COMMAND" << std::endl;
-        throw "UNKNOWN COMMAND";
+        std::cerr << "Simulator: evalCommand : Unknown command" << std::endl;
+        throw "Unknown command";
     }
 }
 
@@ -300,6 +352,7 @@ void Simulator::NOP()
      * The carry bit is not affected.
      */
     cpu->setPC(cpu->getPC() + 1);
+    cpu->setCycles(cpu->getCycles() + 1);
 }
 
 /**
@@ -389,6 +442,8 @@ void Simulator::JCN(unsigned int condition, unsigned int address)
          */
         cpu->setPC(cpu->getPC() + 2);
     }
+
+    cpu->setCycles(cpu->getCycles() + 2);
 }
 
 /**
@@ -425,6 +480,7 @@ void Simulator::FIM(unsigned int pair, unsigned int data)
 
     cpu->setPairs(pair, data & 0xFF);
     cpu->setPC(cpu->getPC() + 2);
+    cpu->setCycles(cpu->getCycles() + 2);
 }
 
 /**
@@ -478,8 +534,11 @@ void Simulator::SRC(unsigned int pair)
         return;
     }
 
-    cpu->setSrc(cpu->getPairAt(pair & 0x7));
+    int pairValue = cpu->getPairAt(pair & 0x7);
+
+    cpu->setSrc(pairValue);
     cpu->setPC(cpu->getPC() + 1);
+    cpu->setCycles(cpu->getCycles() + 1);
 }
 
 /**
@@ -525,6 +584,7 @@ void Simulator::FIN(unsigned int pair)
     cpu->setPairs(pair & 0b111, value);
 
     cpu->setPC(cpu->getPC() + 1);
+    cpu->setCycles(cpu->getCycles() + 1);
 }
 
 /**
@@ -557,6 +617,8 @@ void Simulator::JIN(unsigned int pair)
 
     int addr = (cpu->getPC() & 0x0F00) | cpu->getPairAt(pair & 0x7);
     cpu->setPC(addr);
+
+    cpu->setCycles(cpu->getCycles() + 1);
 }
 
 /**
@@ -593,6 +655,8 @@ void Simulator::JUN(unsigned int address1, unsigned int address2)
     }
 
     cpu->setPC(((address1 & 0xF) << 8) | (address2 & 0xFF));
+
+    cpu->setCycles(cpu->getCycles() + 2);
 }
 
 /**
@@ -629,7 +693,7 @@ void Simulator::JMS(unsigned int address1, unsigned int address2)
 
     cpu->getStack()->write(cpu->getPC() + 2);
     cpu->setPC(((address1 & 0xF) << 8) | (address2 & 0xFF));
-
+    cpu->setCycles(cpu->getCycles() + 2);
 }
 
 /**
@@ -658,6 +722,7 @@ void Simulator::INC(unsigned int reg)
     cpu->setRegisters(reg & 0xF, value);
 
     cpu->setPC(cpu->getPC() + 1);
+    cpu->setCycles(cpu->getCycles() + 1);
 }
 
 /**
@@ -714,6 +779,8 @@ void Simulator::ISZ(unsigned int reg, unsigned int address)
     {
         cpu->setPC((cpu->getPC() & 0x0F00) | (address & 0xFF));
     }
+
+    cpu->setCycles(cpu->getCycles() + 2);
 }
 
 /**
@@ -746,6 +813,7 @@ void Simulator::ADD(unsigned int reg)
     cpu->setAcc(value % 0xF);
 
     cpu->setPC(cpu->getPC() + 1);
+    cpu->setCycles(cpu->getCycles() + 1);
 }
 
 /**
@@ -787,6 +855,7 @@ void Simulator::SUB(unsigned int reg)
     cpu->setAcc(value % 0xF);
 
     cpu->setPC(cpu->getPC() + 1);
+    cpu->setCycles(cpu->getCycles() + 1);
 }
 
 /**
@@ -814,6 +883,7 @@ void Simulator::LD(unsigned int reg)
     cpu->setAcc(cpu->getRegisterAt(reg));
 
     cpu->setPC(cpu->getPC() + 1);
+    cpu->setCycles(cpu->getCycles() + 1);
 }
 
 /**
@@ -847,6 +917,7 @@ void Simulator::XCH(unsigned int reg)
     cpu->setAcc(r);
 
     cpu->setPC(cpu->getPC() + 1);
+    cpu->setCycles(cpu->getCycles() + 1);
 }
 
 /**
@@ -881,6 +952,8 @@ void Simulator::BBL(unsigned int data)
 
     int stackedAddress = cpu->getStack()->read();
     cpu->setPC(stackedAddress);
+
+    cpu->setCycles(cpu->getCycles() + 1);
 }
 
 /**
@@ -911,6 +984,7 @@ void Simulator::LDM(unsigned int data)
     cpu->setAcc(data & 0xF);
 
     cpu->setPC(cpu->getPC() + 1);
+    cpu->setCycles(cpu->getCycles() + 1);
 }
 
 /**
@@ -939,14 +1013,21 @@ void Simulator::WRM()
      *   zzzz - 1 of 16 4-bit data characters within the register
      *
      */
+    int src = cpu->getSrc();
 
     int bank = cpu->getDcl();
-    int chip = (cpu->getSrc() & 0b11000000) >> 6;
-    int reg = (cpu->getSrc() & 0b00110000) >> 4;
-    int character = cpu->getSrc() & 0xF;
+    int chip = (src & 0b11000000) >> 6;
+    int reg = (src & 0b00110000) >> 4;
+    int character = src & 0xF;
 
-    dram->getDataRAMBank(bank)->getDataRAMChip(chip)->
-            getDataRAMRegister(reg)->setCharacter(character, cpu->getAcc());
+    DataRAMBank* dataRAMBank = dram->getDataRAMBank(bank).get();
+    DataRAMChip* dataRAMChip = dataRAMBank->getDataRAMChip(chip).get();
+    DataRAMRegister* dataRAMRegister = dataRAMChip->getDataRAMRegister(reg).get();
+
+    dataRAMRegister->setCharacter(character, cpu->getAcc());
+
+    cpu->setPC(cpu->getPC() + 1);
+    cpu->setCycles(cpu->getCycles() + 1);
 }
 
 /**
@@ -983,6 +1064,7 @@ void Simulator::WMP()
     dram->getDataRAMBank(bank)->getDataRAMChip(chip)->setOutput(cpu->getAcc());
 
     cpu->setPC(cpu->getPC() + 1);
+    cpu->setCycles(cpu->getCycles() + 1);
 }
 
 /**
@@ -1006,6 +1088,15 @@ void Simulator::WRR()
     rom->setIO(romPage, cpu->getAcc());
 
     cpu->setPC(cpu->getPC() + 1);
+    cpu->setCycles(cpu->getCycles() + 1);
+}
+
+/**
+ * @brief Simulator::WPM - WRITE PROGRAM RAM
+ */
+void Simulator::WPM()
+{
+    /// TODO WPM
 }
 
 /**
@@ -1048,6 +1139,7 @@ void Simulator::WR0()
             getDataRAMRegister(reg)->setStatus(0, cpu->getAcc());
 
     cpu->setPC(cpu->getPC() + 1);
+    cpu->setCycles(cpu->getCycles() + 1);
 }
 
 /**
@@ -1066,6 +1158,7 @@ void Simulator::WR1()
             getDataRAMRegister(reg)->setStatus(1, cpu->getAcc());
 
     cpu->setPC(cpu->getPC() + 1);
+    cpu->setCycles(cpu->getCycles() + 1);
 }
 
 /**
@@ -1084,6 +1177,7 @@ void Simulator::WR2()
             getDataRAMRegister(reg)->setStatus(2, cpu->getAcc());
 
     cpu->setPC(cpu->getPC() + 1);
+    cpu->setCycles(cpu->getCycles() + 1);
 }
 
 /**
@@ -1102,6 +1196,7 @@ void Simulator::WR3()
             getDataRAMRegister(reg)->setStatus(3, cpu->getAcc());
 
     cpu->setPC(cpu->getPC() + 1);
+    cpu->setCycles(cpu->getCycles() + 1);
 }
 
 /**
@@ -1151,6 +1246,7 @@ void Simulator::SBM()
     cpu->setCarry((result & 0b10000) >> 4);
 
     cpu->setPC(cpu->getPC() + 1);
+    cpu->setCycles(cpu->getCycles() + 1);
 }
 
 /**
@@ -1187,6 +1283,7 @@ void Simulator::RDM()
     cpu->setAcc(value);
 
     cpu->setPC(cpu->getPC() + 1);
+    cpu->setCycles(cpu->getCycles() + 1);
 }
 
 /**
@@ -1222,6 +1319,7 @@ void Simulator::RDR()
     cpu->setAcc(rom->getIO(port));
 
     cpu->setPC(cpu->getPC() + 1);
+    cpu->setCycles(cpu->getCycles() + 1);
 }
 
 /**
@@ -1265,6 +1363,7 @@ void Simulator::ADM()
     cpu->setCarry((result & 0b10000) >> 4);
 
     cpu->setPC(cpu->getPC() + 1);
+    cpu->setCycles(cpu->getCycles() + 1);
 }
 
 /**
@@ -1310,6 +1409,7 @@ void Simulator::RD0()
     cpu->setAcc(value);
 
     cpu->setPC(cpu->getPC() + 1);
+    cpu->setCycles(cpu->getCycles() + 1);
 }
 
 /**
@@ -1330,6 +1430,7 @@ void Simulator::RD1()
     cpu->setAcc(value);
 
     cpu->setPC(cpu->getPC() + 1);
+    cpu->setCycles(cpu->getCycles() + 1);
 }
 
 /**
@@ -1350,6 +1451,7 @@ void Simulator::RD2()
     cpu->setAcc(value);
 
     cpu->setPC(cpu->getPC() + 1);
+    cpu->setCycles(cpu->getCycles() + 1);
 }
 
 /**
@@ -1370,6 +1472,7 @@ void Simulator::RD3()
     cpu->setAcc(value);
 
     cpu->setPC(cpu->getPC() + 1);
+    cpu->setCycles(cpu->getCycles() + 1);
 }
 
 /**
@@ -1389,6 +1492,7 @@ void Simulator::CLB()
     cpu->setCarry(0);
 
     cpu->setPC(cpu->getPC() + 1);
+    cpu->setCycles(cpu->getCycles() + 1);
 }
 
 /**
@@ -1407,6 +1511,7 @@ void Simulator::CLC()
     cpu->setCarry(0);
 
     cpu->setPC(cpu->getPC() + 1);
+    cpu->setCycles(cpu->getCycles() + 1);
 }
 
 /**
@@ -1429,6 +1534,7 @@ void Simulator::IAC()
     cpu->setCarry((acc & 0b10000) >> 4);
 
     cpu->setPC(cpu->getPC() + 1);
+    cpu->setCycles(cpu->getCycles() + 1);
 }
 
 /**
@@ -1448,6 +1554,7 @@ void Simulator::CMC()
     cpu->setCarry(~carry & 0xF);
 
     cpu->setPC(cpu->getPC() + 1);
+    cpu->setCycles(cpu->getCycles() + 1);
 }
 
 /**
@@ -1470,6 +1577,7 @@ void Simulator::CMA()
     cpu->setAcc(acc & 0xF);
 
     cpu->setPC(cpu->getPC() + 1);
+    cpu->setCycles(cpu->getCycles() + 1);
 }
 
 /**
@@ -1495,6 +1603,7 @@ void Simulator::RAL()
     cpu->setCarry((acc & 0b1000) >> 3);
 
     cpu->setPC(cpu->getPC() + 1);
+    cpu->setCycles(cpu->getCycles() + 1);
 }
 
 /**
@@ -1520,6 +1629,7 @@ void Simulator::RAR()
     cpu->setCarry(acc & 0x1);
 
     cpu->setPC(cpu->getPC() + 1);
+    cpu->setCycles(cpu->getCycles() + 1);
 }
 
 /**
@@ -1547,6 +1657,7 @@ void Simulator::TCC()
     cpu->setCarry(0);
 
     cpu->setPC(cpu->getPC() + 1);
+    cpu->setCycles(cpu->getCycles() + 1);
 }
 
 /**
@@ -1584,6 +1695,7 @@ void Simulator::DAC()
     cpu->setCarry((cpu->getAcc() & 0b10000) >> 4);
 
     cpu->setPC(cpu->getPC() + 1);
+    cpu->setCycles(cpu->getCycles() + 1);
 }
 
 /**
@@ -1611,6 +1723,7 @@ void Simulator::TCS()
     cpu->setCarry(0);
 
     cpu->setPC(cpu->getPC() + 1);
+    cpu->setCycles(cpu->getCycles() + 1);
 }
 
 /**
@@ -1629,6 +1742,7 @@ void Simulator::STC()
     cpu->setCarry(1);
 
     cpu->setPC(cpu->getPC() + 1);
+    cpu->setCycles(cpu->getCycles() + 1);
 }
 
 /**
@@ -1659,6 +1773,7 @@ void Simulator::DAA()
     }
 
     cpu->setPC(cpu->getPC() + 1);
+    cpu->setCycles(cpu->getCycles() + 1);
 }
 
 /**
@@ -1731,6 +1846,7 @@ void Simulator::KBP()
     }
 
     cpu->setPC(cpu->getPC() + 1);
+    cpu->setCycles(cpu->getCycles() + 1);
 }
 
 /**
@@ -1751,4 +1867,5 @@ void Simulator::DCL()
     cpu->setDcl(cpu->getAcc() & 0x7);
 
     cpu->setPC(cpu->getPC() + 1);
+    cpu->setCycles(cpu->getCycles() + 1);
 }

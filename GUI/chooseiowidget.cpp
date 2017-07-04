@@ -28,6 +28,8 @@ ChooseIOWidget::ChooseIOWidget(QWidget *parent) : QWidget(parent)
     {
         this->button->setText("N/C");
         this->button->setToolTip("No connection");
+
+        emit onDisconnected();
     });
 
     actionNoConnection->setActionGroup(groupAction);
@@ -54,6 +56,8 @@ ChooseIOWidget::ChooseIOWidget(QWidget *parent) : QWidget(parent)
             {
                 this->button->setText("ROM:P" + QString::number(i) + ",b" + QString::number(j));
                 this->button->setToolTip("ROM: Page " + QString::number(i) + ", bit " + QString::number(j));
+
+                emit onROMConnected(i, j);
             });
         }
     }
@@ -80,17 +84,13 @@ ChooseIOWidget::ChooseIOWidget(QWidget *parent) : QWidget(parent)
                                     + QString::number(j) + ",b" + QString::number(k));
                     this->button->setToolTip("Data RAM: Bank " + QString::number(i) + ", Chip "
                                              + QString::number(j) + ", bit " + QString::number(k));
+                    emit onDRAMConnected(i, j, k);
                 });
             }
         }
     }
 
     button->setMenu(menuButton.get());
-
-//    connect(menuButton.get(), &QMenu::triggered,
-//    [=](QAction* action){
-//        emit connectionChanged(action);
-//    });
 }
 
 ChooseIOWidget::~ChooseIOWidget()

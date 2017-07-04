@@ -33,6 +33,7 @@ private:
     std::shared_ptr<QHBoxLayout> titleLayout;
     std::shared_ptr<QHBoxLayout> mainLayout;
 
+    std::vector<QCheckBox*> ios;
 
     std::shared_ptr<MemoryTable> memory;
 
@@ -42,11 +43,14 @@ private:
     void setMemoryTitle(int value);
     void setIOGroupBoxVisible(int value);
 
+    void setIO(unsigned page, unsigned value);
+
 public:
     explicit RomWidget(Simulator *simulator, QWidget *parent = 0);
     virtual ~RomWidget();
 
     void write(std::vector<unsigned int> instructions);
+
 
 signals:
 

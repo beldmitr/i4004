@@ -1,7 +1,9 @@
 #include "ledsubwindow.h"
 
-LEDSubWindow::LEDSubWindow() : SubWindow()
+LEDSubWindow::LEDSubWindow(Simulator *simulator) : SubWindow()
 {
+    this->simulator = simulator;
+
     this->setWindowTitle("LED panel");
     this->setWindowIcon(QIcon(":/Resources/icons/led.png"));
 
@@ -12,7 +14,7 @@ LEDSubWindow::LEDSubWindow() : SubWindow()
 
     for (int i = 0; i < 8; i++)
     {
-        Led* led = new Led();
+        Led* led = new Led(simulator);
         layout->addWidget(led);
         leds.push_back(led);
     }

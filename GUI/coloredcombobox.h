@@ -13,6 +13,10 @@ public:
     explicit ColoredComboBox();
     virtual ~ColoredComboBox();
 
+signals:
+    void onTest();
+
+
 };
 
 #endif // COLOREDCOMBOBOX_H
