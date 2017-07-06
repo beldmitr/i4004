@@ -30,6 +30,8 @@ public:
 
     int getLength() const;
 
+    void reset();
+
 signals:
     void onDramChipOutputChanged(unsigned int bank, unsigned int chip, unsigned int value);
 };

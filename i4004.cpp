@@ -11,6 +11,7 @@ I4004::I4004(int argc, char *argv[]) : QObject()
     // Create GUI
     app = std::shared_ptr<QApplication>(new QApplication(argc, argv));
 
+
     parent = std::shared_ptr<MainWindow>(new MainWindow(*compiler.get(), *simulator.get()));
     parent->show();
 }

@@ -22,6 +22,13 @@ public:
     explicit ChooseIOWidget(QWidget *parent = 0);
     virtual ~ChooseIOWidget();
 
+    enum class IOType
+    {
+        NONE,
+        ROM_IO,
+        DRAM_IO
+    };
+
 signals:
     void onROMConnected(unsigned page, unsigned bit);
     void onDRAMConnected(unsigned bank, unsigned chip, unsigned bit); // Data RAM connection

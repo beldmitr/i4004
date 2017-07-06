@@ -25,6 +25,8 @@ public:
 
     int getLength() const;
 
+    void reset();
+
 signals:
 
 

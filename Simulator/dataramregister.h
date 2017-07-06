@@ -24,14 +24,16 @@ public:
     DataRAMRegister(unsigned int bank, unsigned int chip, unsigned int reg);
     virtual ~DataRAMRegister();
 
-    void setCharacter(int index, int value);
+    void setCharacter(unsigned index, unsigned value);
     int getCharacter(int index) const;
 
-    void setStatus(int index, int value);
+    void setStatus(unsigned index, unsigned value);
     int getStatus(int index) const;
 
     int getCharactersLength() const;
     int getStatusLength() const;
+
+    void reset();
 
 signals:
     void onDramRegCharChanged(unsigned int bank, unsigned int chip, unsigned int reg, unsigned int index, unsigned int value);

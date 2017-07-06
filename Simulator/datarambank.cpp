@@ -5,6 +5,15 @@ int DataRAMBank::getLength() const
     return length;
 }
 
+void DataRAMBank::reset()
+{
+    for (int i = 0; i < length; i++)
+    {
+        std::shared_ptr<DataRAMChip> chip = getDataRAMChip(i);
+        chip->reset();
+    }
+}
+
 DataRAMBank::DataRAMBank(unsigned int bank) : QObject()
 {
     this->bank = bank;

@@ -26,21 +26,14 @@ private:
 
     std::shared_ptr<QGridLayout> layout;
 
-    enum class IOType
-    {
-        NONE,
-        ROM_IO,
-        DRAM_IO
-    };
-
-    IOType type = IOType::NONE;
+    ChooseIOWidget::IOType type = ChooseIOWidget::IOType::NONE;
 
     unsigned bank;
     unsigned chip;
     unsigned page;
     unsigned bit;
 
-    unsigned value;
+    unsigned value = 0;
 
 public:
     explicit Led(Simulator* simulator, QWidget *parent = 0);
@@ -49,7 +42,8 @@ public:
 signals:
 
 private slots:
-
+    void handleDramChipOutputChanged(unsigned bank, unsigned chip, unsigned value);
+    void handleRomIOChanged(unsigned page, unsigned value);
 };
 
 #endif // LED_H

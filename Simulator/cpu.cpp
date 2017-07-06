@@ -5,6 +5,25 @@ int CPU::getCountRegisters() const
     return countRegisters;
 }
 
+void CPU::reset()
+{
+    stack->reset();
+    acc = 0;
+    carry = 0;
+    test = 0;
+    cycles = 0;
+    operation = "";
+    dcl = 0;
+    src = 0;
+
+    for (int i = 0; i < countRegisters; i++)
+    {
+        registers[i] = 0;
+    }
+
+    emit onCpuChanged();
+}
+
 CPU::CPU() : QObject()
 {
     stack = std::shared_ptr<Stack>(new Stack);
@@ -164,7 +183,7 @@ unsigned int CPU::getPairAt(unsigned int index) const
     unsigned int registerLow = getRegisterAt(2*index);
     unsigned int registerHigh = getRegisterAt(2*index + 1);
 
-    return (registerHigh << 4) | registerLow;
+    return (registerLow << 4) | registerHigh;
 }
 
 void CPU::setPairs(unsigned int index, unsigned int value)

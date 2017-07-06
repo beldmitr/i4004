@@ -10,6 +10,11 @@ Compiler::Compiler() : QObject()
     // is empty
 }
 
+Compiler::~Compiler()
+{
+
+}
+
 void Compiler::compile(const std::string& inputFilename)
 {
     // delete old source code

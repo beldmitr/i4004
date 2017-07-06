@@ -29,7 +29,6 @@ SOURCES += \
     GUI/chooseiowidget.cpp \
     GUI/sevensegmentio.cpp \
     GUI/sevensegmentpanel.cpp \
-    GUI/buttonpanel.cpp \
     GUI/editor.cpp \
     GUI/highlighter.cpp \
     GUI/editorsubwindow.cpp \
@@ -86,7 +85,6 @@ HEADERS += \
     GUI/chooseiowidget.h \
     GUI/sevensegmentio.h \
     GUI/sevensegmentpanel.h \
-    GUI/buttonpanel.h \
     GUI/editor.h \
     GUI/highlighter.h \
     GUI/editorsubwindow.h \

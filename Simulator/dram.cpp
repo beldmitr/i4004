@@ -5,6 +5,15 @@ int DRAM::getLength() const
     return length;
 }
 
+void DRAM::reset()
+{
+    for (int i = 0; i < length; i++)
+    {
+        std::shared_ptr<DataRAMBank> bank = getDataRAMBank(i);
+        bank->reset();
+    }
+}
+
 DRAM::DRAM(int bankNumber) : QObject(),
     length(bankNumber)
 {

@@ -26,6 +26,7 @@ public:
 
     void clearRom();
     void flashRom(std::vector<unsigned int> compiledCode);
+    void reset();
 
     unsigned int getValue(unsigned int index) const;
 

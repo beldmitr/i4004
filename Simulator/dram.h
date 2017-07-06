@@ -24,6 +24,8 @@ public:
     std::shared_ptr<DataRAMBank> getDataRAMBank(int index);
 
     int getLength() const;
+
+    void reset();
 };
 
 #endif // DRAM_H

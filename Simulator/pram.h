@@ -25,7 +25,7 @@ public:
     void setValue(unsigned int index, int value);
 
 signals:
-    void onPramChanged(unsigned int index, int value);
+    void onPramChanged(unsigned index, unsigned value);
     void onPramClear();
 };
 

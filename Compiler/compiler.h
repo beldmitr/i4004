@@ -2,6 +2,7 @@
 #define COMPILER_H
 
 #include <QObject>
+#include <QtConcurrent/QtConcurrent>
 
 #include <string>
 #include <vector>
@@ -21,7 +22,8 @@ private:
     std::vector<std::shared_ptr<CompilerError>> errors;
 
 public:
-    Compiler();
+    explicit Compiler();
+    virtual ~Compiler();
 
     void compile(const std::string& inputFilename);
     std::vector<unsigned int> getObjectCode();
@@ -31,6 +33,7 @@ public:
 
 signals:
     void onCompiled();
+
 };
 
 #endif // COMPILER_H

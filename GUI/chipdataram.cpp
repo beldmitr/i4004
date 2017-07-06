@@ -36,7 +36,7 @@ ChipDataRam::ChipDataRam(Simulator* simulator, unsigned int bank, unsigned int c
     }
 
     // Fill top header of memory table
-    for (int i=0; i < memTable->horizontalHeader()->count(); i++)
+    for (int i = 0; i < memTable->horizontalHeader()->count(); i++)
     {
         QTableWidgetItem* item = new QTableWidgetItem(QString::number(i, 16));
         memTable->setHorizontalHeaderItem(i, item);
@@ -49,7 +49,7 @@ ChipDataRam::ChipDataRam(Simulator* simulator, unsigned int bank, unsigned int c
         for (int j = 0; j < memTable->horizontalHeader()->count(); j++)
         {
             QTableWidgetItem* item = new QTableWidgetItem("0");
-            memTable->setItem(i, j, item);
+            memTable->setItem(i, j,item);
             item->setFlags(Qt::ItemIsSelectable|Qt::ItemIsEnabled);
             item->setTextAlignment(Qt::AlignCenter);
 
@@ -138,38 +138,16 @@ ChipDataRam::ChipDataRam(Simulator* simulator, unsigned int bank, unsigned int c
         for (int j = 0; j < bank->getLength(); j++)
         {
             DataRAMChip* chip = bank->getDataRAMChip(j).get();
-
-            connect(chip, &DataRAMChip::onDramChipOutputChanged,
-                    [=](unsigned int bank, unsigned int chip, unsigned int value){
-                        if (bank == this->bank && chip == this->chip)
-                        {
-                            this->setOutputValue(value);
-                        }
-                    });
+            connect(chip, SIGNAL(onDramChipOutputChanged(uint,uint,uint)), this, SLOT(handleDramChipOutputChanged(uint,uint,uint)));
 
             for (int k = 0; k < chip->getLength(); k++)
             {
                 DataRAMRegister* reg = chip->getDataRAMRegister(k).get();
-
-                connect(reg, &DataRAMRegister::onDramRegCharChanged,
-                        [=](unsigned bank, unsigned chip, unsigned reg, unsigned addr, unsigned value){
-                            if (bank == this->bank && chip == this->chip)
-                            {
-                                this->setRegisterValue(reg, addr, value);
-                            }
-                        });
-
-                connect(reg, &DataRAMRegister::onDramRegStatChanged,
-                        [=](unsigned bank, unsigned chip, unsigned reg, unsigned addr, unsigned value){
-                            if (bank == this->bank && chip == this->chip)
-                            {
-                                this->setStatusValue(reg, addr, value);
-                            }
-                        });
+                connect(reg, SIGNAL(onDramRegCharChanged(uint,uint,uint,uint,uint)), this, SLOT(handleDramRegCharChanged(uint,uint,uint,uint,uint)));
+                connect(reg, SIGNAL(onDramRegStatChanged(uint,uint,uint,uint,uint)), this, SLOT(handleDramRegStatChanged(uint,uint,uint,uint,uint)));
             }
         }
     }
-
 }
 
 ChipDataRam::~ChipDataRam()
@@ -212,7 +190,7 @@ void ChipDataRam::setRegisterValue(unsigned int regNumber, unsigned int addr, un
         throw msg;
     }
 
-    QTableWidgetItem* item = memTable->item(addr, regNumber);
+    QTableWidgetItem* item = memTable->item(regNumber, addr);
     item->setText(QString::number(value, 16));
 }
 
@@ -225,7 +203,7 @@ void ChipDataRam::setStatusValue(unsigned int regNumber, unsigned int addr, unsi
         throw msg;
     }
 
-    QTableWidgetItem* item = statTable->item(addr, regNumber);
+    QTableWidgetItem* item = statTable->item(regNumber, addr);
     item->setText(QString::number(value, 16));
 }
 
@@ -243,5 +221,29 @@ void ChipDataRam::setOutputValue(unsigned int value)
         QCheckBox* output = outputs.at(i);
         bool checked = ((value & (int)pow(2, i)) != 0);
         output->setChecked(checked);
+    }
+}
+
+void ChipDataRam::handleDramChipOutputChanged(unsigned bank, unsigned chip, unsigned value)
+{
+    if (bank == this->bank && chip == this->chip)
+    {
+        this->setOutputValue(value);
+    }
+}
+
+void ChipDataRam::handleDramRegCharChanged(unsigned bank, unsigned chip, unsigned reg, unsigned addr, unsigned value)
+{
+    if (bank == this->bank && chip == this->chip)
+    {
+        this->setRegisterValue(reg, addr, value);
+    }
+}
+
+void ChipDataRam::handleDramRegStatChanged(unsigned bank, unsigned chip, unsigned reg, unsigned addr, unsigned value)
+{
+    if (bank == this->bank && chip == this->chip)
+    {
+        this->setStatusValue(reg, addr, value);
     }
 }

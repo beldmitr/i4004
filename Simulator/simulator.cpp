@@ -53,7 +53,33 @@ void Simulator::step()
         code = (code << 8) | low;   // combine code to 2 byte
     }
 
-    evalCommand(code);
+     evalCommand(code);
+}
+
+void Simulator::play()
+{
+    isPlaying = true;
+    QtConcurrent::run([=]()
+    {
+        while(isPlaying)
+        {
+            step();
+            QThread::msleep(100);
+        }
+    });
+}
+
+void Simulator::stop()
+{
+    isPlaying = false;
+}
+
+void Simulator::reset()
+{
+    cpu->reset();
+    rom->reset();
+    dram->reset();
+    pram->clearPRam();
 }
 
 /// TODO TESTME evalCommand
@@ -770,7 +796,11 @@ void Simulator::ISZ(unsigned int reg, unsigned int address)
                   << " may consider only 8 bit. It will be reduced." << std::endl;
     }
 
-    INC(reg);
+    // Increment reg, don't use INC method, cause it adds PC too!!!
+    int value = (cpu->getRegisterAt(reg) + 1) % 0x10;
+    cpu->setRegisters(reg & 0xF, value);
+
+    // check the condition
     if (cpu->getRegisterAt(reg) == 0)
     {
         cpu->setPC(cpu->getPC() + 2);

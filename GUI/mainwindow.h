@@ -100,8 +100,6 @@ private:
     std::shared_ptr<QAction> actSelectAll;
 
     std::shared_ptr<QAction> actCompile;
-    std::shared_ptr<QAction> actRun;
-    std::shared_ptr<QAction> actCompileRun;
 
     std::shared_ptr<QAction> actResume;
     std::shared_ptr<QAction> actStep;
@@ -151,10 +149,6 @@ private:
     void handleCompile();
     void handleRun();
 
-    void debugResume();
-    void debugStep();
-    void debugStop();
-    void debugReset();
 
     
 public:
@@ -162,33 +156,14 @@ public:
     virtual ~MainWindow();
 
 signals:
-
-    //private slots:
-    //    void newFile();
-    //    void openFile();
-    //    void saveFile();
-    //    void saveAsFile();
-    //    void exitFile();
-
-    //    void undoEdit();
-    //    void redoEdit();
-    //    void cutEdit();
-    //    void copyEdit();
-    //    void pasteEdit();
-    //    void deleteEdit();
-    //    void selectAllEdit();
-
-    //    void compileBuild();
-    //    void runBuild();
-    //    void compileRunBuild();
-
-
-
     //    void setWindowTitleFilename();
 
 
 public slots:
     void closeEvent(QCloseEvent*);
+
+private slots:
+    void handleBuildCode();
 };
 
 #endif // MAINWINDOW_H

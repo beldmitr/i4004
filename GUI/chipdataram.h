@@ -44,7 +44,10 @@ private:
     void setOutputValue(unsigned int value);
 signals:
 
-public slots:
+private slots:
+    void handleDramChipOutputChanged(unsigned bank, unsigned chip, unsigned value);
+    void handleDramRegCharChanged(unsigned bank, unsigned chip, unsigned reg, unsigned addr, unsigned value);
+    void handleDramRegStatChanged(unsigned bank, unsigned chip, unsigned reg, unsigned addr, unsigned value);
 };
 
 #endif // CHIPDATARAM_H

@@ -54,7 +54,10 @@ public:
 
 signals:
 
-public slots:
+private slots:
+    void handleRomCleared();
+    void handleRomChanged(unsigned addr, unsigned value);
+    void handleRomIOChanged(unsigned page, unsigned value);
 
     // QWidget interface
 protected:

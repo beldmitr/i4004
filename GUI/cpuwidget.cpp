@@ -2,6 +2,10 @@
 
 CpuWidget::CpuWidget(Simulator *simulator, QWidget *parent) : QWidget(parent)
 {
+    this->simulator = simulator;
+    cpu = simulator->getCpu().get();
+    stack = cpu->getStack();
+
     layout = std::make_shared<QGridLayout>(this);
 
     createWidgetStack();
@@ -9,73 +13,11 @@ CpuWidget::CpuWidget(Simulator *simulator, QWidget *parent) : QWidget(parent)
     createWidgetOther();
 
     // connects
-    Stack* stack = simulator->getCpu()->getStack();
-    connect(stack, &Stack::onStackChanged, [=](){
+    connect(stack, SIGNAL(onStackChanged()), this, SLOT(handleStackChanged()));
 
-        std::vector<int> registers = stack->getRegisters();
+    connect(cpu, SIGNAL(onCpuChanged()), this, SLOT(handleCpuChanged()));
 
-        unsigned int pointer = stack->getActualPointer();
-
-        for (unsigned int i = 0; i < registers.size(); i++)
-        {
-            int address = registers[i];
-
-            QFont::Weight weight;
-            if (pointer == i)
-            {
-                weight = QFont::Bold;
-            }
-            else
-            {
-                weight = QFont::Normal;
-            }
-
-            switch(i)
-            {
-            case 0:
-                edtPC->setText(QString::number(address, 16));
-                edtPC->setFontWeight(weight);
-                break;
-            case 1:
-                edtLevel1->setText(QString::number(address, 16));
-                edtLevel1->setFontWeight(weight);
-                break;
-            case 2:
-                edtLevel2->setText(QString::number(address, 16));
-                edtLevel2->setFontWeight(weight);
-                break;
-            case 3:
-                edtLevel3->setText(QString::number(address, 16));
-                edtLevel3->setFontWeight(weight);
-                break;
-            }
-        }
-    });
-
-    CPU* cpu = simulator->getCpu().get();
-    connect(cpu, &CPU::onCpuChanged, [=](){
-        for (unsigned int i = 0; i < cpu->getCountRegisters(); i++)
-        {
-            std::shared_ptr<QTextEdit> edit = edtR[i];
-            unsigned int value = cpu->getRegisterAt(i);
-            edit->setText(QString::number(value, 16));
-        }
-
-        unsigned int acc = cpu->getAcc();
-        edtAccumulator->setText(QString::number(acc, 16));
-
-        cbxCarry->setChecked((bool)cpu->getCarry());
-
-        cbxTest->setChecked((bool)cpu->getTest());
-
-        edtCycles->setText(QString::number(cpu->getCycles(), 16));
-    });
-
-    connect(simulator, &Simulator::onActualCommand,
-            [=](const QString& cmd)
-            {
-                lblInstruction->setText(cmd);
-            });
+    connect(simulator, SIGNAL(onActualCommand(QString)), this, SLOT(handleActualCommand(QString)));
 
 }
 
@@ -94,10 +36,10 @@ void CpuWidget::createWidgetStack()
     lblLevel2 = std::make_shared<QLabel>("Level 2");
     lblLevel3 = std::make_shared<QLabel>("Level 3");
 
-    edtPC = std::make_shared<QTextEdit>();
-    edtLevel1 = std::make_shared<QTextEdit>();
-    edtLevel2 = std::make_shared<QTextEdit>();
-    edtLevel3 = std::make_shared<QTextEdit>();
+    edtPC = std::make_shared<QTextEdit>("");
+    edtLevel1 = std::make_shared<QTextEdit>("");
+    edtLevel2 = std::make_shared<QTextEdit>("");
+    edtLevel3 = std::make_shared<QTextEdit>("");
 
     edtPC->setReadOnly(true);
     edtPC->setFixedHeight(50);
@@ -185,7 +127,7 @@ void CpuWidget::createWidgetOther()
     cbxTest = std::shared_ptr<QCheckBox>(new QCheckBox);
 
     lblInstruction = std::make_shared<QLabel>("");
-    lblInstruction->setFixedWidth(200);
+    lblInstruction->setFixedWidth(300);
 
     lblCycles = std::make_shared<QLabel>("Cycles");
     edtCycles = std::make_shared<QTextEdit>("0");
@@ -276,4 +218,70 @@ void CpuWidget::setInstruction(QString value)
 void CpuWidget::setCycles(unsigned int value)
 {
     edtCycles->setText(QString::number(value, 16));
+}
+
+void CpuWidget::handleStackChanged()
+{
+    std::vector<int> registers = stack->getRegisters();
+
+    unsigned int pointer = stack->getActualPointer();
+
+    for (unsigned int i = 0; i < registers.size(); i++)
+    {
+        int address = registers[i];
+
+        QFont::Weight weight;
+        if (pointer == i)
+        {
+            weight = QFont::Bold;
+        }
+        else
+        {
+            weight = QFont::Normal;
+        }
+
+        switch(i)
+        {
+        case 0:
+            edtPC->setText(QString::number(address, 16));
+            edtPC->setFontWeight(weight);
+            break;
+        case 1:
+            edtLevel1->setText(QString::number(address, 16));
+            edtLevel1->setFontWeight(weight);
+            break;
+        case 2:
+            edtLevel2->setText(QString::number(address, 16));
+            edtLevel2->setFontWeight(weight);
+            break;
+        case 3:
+            edtLevel3->setText(QString::number(address, 16));
+            edtLevel3->setFontWeight(weight);
+            break;
+        }
+    }
+}
+
+void CpuWidget::handleCpuChanged()
+{
+    for (unsigned int i = 0; i < cpu->getCountRegisters(); i++)
+    {
+        std::shared_ptr<QTextEdit> edit = edtR[i];
+        unsigned int value = cpu->getRegisterAt(i);
+        edit->setText(QString::number(value, 16));
+    }
+
+    unsigned int acc = cpu->getAcc();
+    edtAccumulator->setText(QString::number(acc, 16));
+
+    cbxCarry->setChecked((bool)cpu->getCarry());
+
+    cbxTest->setChecked((bool)cpu->getTest());
+
+    edtCycles->setText(QString::number(cpu->getCycles(), 16));
+}
+
+void CpuWidget::handleActualCommand(const QString& cmd)
+{
+    lblInstruction->setText(cmd);
 }

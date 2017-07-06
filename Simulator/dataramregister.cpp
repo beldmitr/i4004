@@ -10,6 +10,19 @@ int DataRAMRegister::getStatusLength() const
     return statusLength;
 }
 
+void DataRAMRegister::reset()
+{
+    for (int i = 0; i < charactersLength; i++)
+    {
+        setCharacter(i, 0);
+    }
+
+    for (int i = 0; i < statusLength; i++)
+    {
+        setStatus(i, 0);
+    }
+}
+
 DataRAMRegister::DataRAMRegister(unsigned int bank, unsigned int chip, unsigned int reg) : QObject()
 {
     this->bank = bank;
@@ -30,15 +43,15 @@ DataRAMRegister::~DataRAMRegister()
     // delete or finalize here something
 }
 
-void DataRAMRegister::setCharacter(int index, int value)
+void DataRAMRegister::setCharacter(unsigned index, unsigned value)
 {
-    if (index < 0 || index > charactersLength) {
+    if (index > charactersLength) {
         std::cerr << "A DataRAM Chip has got " << charactersLength << " registers. "
                   << index << " is bad index of a register." << std::endl;
         return;
     }
 
-    if (value < 0 || value > 0xF) {
+    if (value > 0xF) {
         std::cerr << "A DataRAM Register has got 4 bit characters, which can save [0x0 - 0xF] values. "
                   << value << " is bad value. It will reduce with a mask 0xF." << std::endl;
         value = value & 0xF;
@@ -61,16 +74,16 @@ int DataRAMRegister::getCharacter(int index) const
     return characters[index];
 }
 
-void DataRAMRegister::setStatus(int index, int value)
+void DataRAMRegister::setStatus(unsigned index, unsigned value)
 {
-    if (index < 0 || index > statusLength)
+    if (index > statusLength)
     {
         std::cerr << "A DataRAM Chip has got " << statusLength << " status registers. "
                   << index << " is bad index of a status register." << std::endl;
         return;
     }
 
-    if (value < 0 || value > 0xF)
+    if (value > 0xF)
     {
         std::cerr << "A DataRAM Register has got 4 bit characters, wgich can save [0x0 - 0xF] values. "
                   << value << " is bad value. It will reduce with a mask 0xF." << std::endl;

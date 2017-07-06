@@ -24,6 +24,7 @@ class Simulator : public QObject
     Q_OBJECT
 private:
     Compiler* compiler;
+    bool isPlaying = false;
 
     std::shared_ptr<ROM> rom;
     std::shared_ptr<PRAM> pram;
@@ -86,6 +87,9 @@ public:
 
     void setCode(std::vector<unsigned int> compiledCode);
     void step();
+    void play();
+    void stop();
+    void reset();
 
     std::shared_ptr<CPU> getCpu() const;
 

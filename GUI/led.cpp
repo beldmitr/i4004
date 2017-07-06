@@ -24,11 +24,11 @@ Led::Led(Simulator *simulator, QWidget *parent) : QWidget(parent)
     connect(connector.get(), &ChooseIOWidget::onROMConnected,
             [=](unsigned page, unsigned bit)
     {
-        type = IOType::ROM_IO;
+        type = ChooseIOWidget::IOType::ROM_IO;
         this->page = page;
         this->bit = bit;
 
-        if (type == IOType::ROM_IO && page == this->page)
+        if (type == ChooseIOWidget::IOType::ROM_IO && page == this->page)
         {
             bool isLight = (value & (int)pow(2,bit)) >> bit;
             this->ledImage->light(isLight);
@@ -39,12 +39,12 @@ Led::Led(Simulator *simulator, QWidget *parent) : QWidget(parent)
     connect(connector.get(), &ChooseIOWidget::onDRAMConnected,
             [=](unsigned bank, unsigned chip, unsigned bit)
     {
-        type = IOType::DRAM_IO;
+        type = ChooseIOWidget::IOType::DRAM_IO;
         this->bank = bank;
         this->chip = chip;
         this->bit = bit;
 
-        if (this->type == IOType::DRAM_IO && this->bank == bank && this->chip == chip)
+        if (this->type == ChooseIOWidget::IOType::DRAM_IO && this->bank == bank && this->chip == chip)
         {
             bool isLight = (value & (int)pow(2, bit)) >> bit;
             this->ledImage->light(isLight);
@@ -54,7 +54,7 @@ Led::Led(Simulator *simulator, QWidget *parent) : QWidget(parent)
     connect(connector.get(), &ChooseIOWidget::onDisconnected,
             [=]()
     {
-        type = IOType::NONE;
+        type = ChooseIOWidget::IOType::NONE;
         this->ledImage->light(false);
     });
 
@@ -68,35 +68,16 @@ Led::Led(Simulator *simulator, QWidget *parent) : QWidget(parent)
             DataRAMChip* chip = bank->getDataRAMChip(j).get();
             for (int k = 0; k < chip->getLength(); k++)
             {
-                connect(chip, &DataRAMChip::onDramChipOutputChanged,
-                        [=](unsigned bank, unsigned chip, unsigned value)
-                {
-                    this->value = value;
-
-                    if (this->type == IOType::DRAM_IO && this->bank == bank && this->chip == chip)
-                    {
-                        bool isLight = (value & (int)pow(2,bit)) >> bit;
-                        this->ledImage->light(isLight);
-                    }
-
-                });
+                connect(chip, SIGNAL(onDramChipOutputChanged(uint,uint,uint)), this, SLOT(handleDramChipOutputChanged(uint,uint,uint)));
             }
         }
     }
 
     // Connect to ROM
     ROM* rom = simulator->getRom().get();
-    for (int i = 0; i < rom->getPages(); i++)
+    for (unsigned i = 0; i < rom->getPages(); i++)
     {
-        connect(rom, &ROM::onRomIOChanged, [=](unsigned page, unsigned value){
-            this->value = value;
-
-            if (type == IOType::ROM_IO && page == this->page)
-            {
-                bool isLight = (value & (int)pow(2,bit)) >> bit;
-                this->ledImage->light(isLight);
-            }
-        });
+        connect(rom, SIGNAL(onRomIOChanged(uint,uint)), this, SLOT(handleRomIOChanged(uint,uint)));
     }
 
 
@@ -109,5 +90,27 @@ Led::Led(Simulator *simulator, QWidget *parent) : QWidget(parent)
 Led::~Led()
 {
 
+}
+
+void Led::handleDramChipOutputChanged(unsigned bank, unsigned chip, unsigned value)
+{
+    this->value = value;
+
+    if (this->type == ChooseIOWidget::IOType::DRAM_IO && this->bank == bank && this->chip == chip)
+    {
+        bool isLight = (value & (int)pow(2,bit)) >> bit;
+        this->ledImage->light(isLight);
+    }
+}
+
+void Led::handleRomIOChanged(unsigned page, unsigned value)
+{
+    this->value = value;
+
+    if (type == ChooseIOWidget::IOType::ROM_IO && page == this->page)
+    {
+        bool isLight = (value & (int)pow(2,bit)) >> bit;
+        this->ledImage->light(isLight);
+    }
 }
 

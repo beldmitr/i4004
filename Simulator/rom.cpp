@@ -147,6 +147,14 @@ void ROM::flashRom(std::vector<unsigned int> compiledCode)
     //  We do not need here "emit onRomChanged();", because it is emitted in setValue method
 }
 
+void ROM::reset()
+{
+    for (int i = 0; i < pages; i++)
+    {
+        setIO(i, 0);
+    }
+}
+
 int ROM::getIO(unsigned int page) const
 {
     if (page > pages)

@@ -97,3 +97,15 @@ unsigned int Stack::getPC()
 {
     return registers[actualPointer] & 0xFFF;
 }
+
+void Stack::reset()
+{
+    actualPointer = 0;
+
+    for (int i = 0; i < size; i++)
+    {
+        registers[i] = 0;
+    }
+
+    emit onStackChanged();
+}

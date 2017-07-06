@@ -92,58 +92,10 @@ void MainWindow::createActions()
     actCompile = std::shared_ptr<QAction>(new QAction(tr("Compile"), this));
     actCompile->setIcon(QIcon(":/Resources/icons/compile.png"));
     actCompile->setShortcut(tr("Ctrl+B"));
-    //    actCompile->setDisabled(true);
+
     connect(actCompile.get(), &QAction::triggered, [=](){
-        this->editorSubWindow->saveFile();
+        buildCode();
 
-        lstResult->clear();
-
-        QString filename = this->editorSubWindow->getFilename();
-        this->compiler->compile(filename.toStdString());
-        //    compiler.reset(new Compiler(/*filename.toStdString(), outputname.toStdString()*/));
-        //    compiler->compile(filename.toStdString());
-
-        //    for (const Error& i : compiler->getErrors())
-        //    {
-        //        QString e;
-        //        if (i.line != -1)
-        //        {
-        //            e.append("Line ").append(QString::number(i.line));
-        //        }
-        //        e.append("\tCommand: ")
-        //                .append(QString::fromStdString(i.command))
-        //                .append("\t")
-        //                .append(QString::fromStdString(i.text))
-        //                .append("\n");
-        //        lstResult->addItem(e);
-
-        //    }
-
-        //    if(compiler->getErrors().empty())
-        //    {
-        //        lstResult->addItem("Project was compiled successfully.\n");
-
-        //        romWidget->clear();
-        ////        romWidget->write(compiler->getCompiledCode());
-        //    }
-
-    });
-
-    actRun = std::shared_ptr<QAction>(new QAction(tr("Run"), this));
-    actRun->setIcon(QIcon(":/Resources/icons/run.png"));
-    actRun->setShortcut(tr("F5"));
-    //    actRun->setDisabled(true);
-    connect(actRun.get(), &QAction::triggered, [=](){
-        handleRun();
-    });
-
-    actCompileRun = std::shared_ptr<QAction>(new QAction(tr("Compile and Run"), this));
-    actCompileRun->setIcon(QIcon(":/Resources/icons/compile_run.png"));
-    actCompileRun->setShortcut(tr("Ctrl+R"));
-    //    actCompileRun->setDisabled(true);
-    connect(actCompileRun.get(), &QAction::triggered, [=](){
-        handleCompile();
-        handleRun();
     });
 
     // Actions Debug
@@ -151,7 +103,7 @@ void MainWindow::createActions()
     actResume->setIcon(QIcon(":/Resources/icons/debug_resume.png"));
     actResume->setShortcut(tr("F8"));
     connect(actResume.get(), &QAction::triggered, [=](){
-        debugResume();
+        simulator->play();
     });
 
     actStep = std::shared_ptr<QAction>(new QAction(tr("Step"), this));
@@ -159,19 +111,18 @@ void MainWindow::createActions()
     actStep->setShortcut(tr("F10"));
     connect(actStep.get(), &QAction::triggered, [=](){
         simulator->step();
-        //        debugStep();
     });
 
     actStop = std::shared_ptr<QAction>(new QAction(tr("Stop"), this));
     actStop->setIcon(QIcon(":/Resources/icons/debug_stop.png"));
     connect(actStop.get(), &QAction::triggered, [=](){
-        debugStop();
+        simulator->stop();
     });
 
     actReset = std::shared_ptr<QAction>(new QAction(tr("Reset"), this));
     actReset->setIcon(QIcon(":/Resources/icons/debug_restart.png"));
     connect(actReset.get(), &QAction::triggered, [=](){
-        debugReset();
+        simulator->reset();
     });
 }
 
@@ -206,9 +157,7 @@ void MainWindow::createMenu()
     // Create menu Build
     menuBuild = std::shared_ptr<QMenu>(mainMenu->addMenu("Build"));
     menuBuild->addAction(actCompile.get());
-    menuBuild->addAction(actRun.get());
     menuBuild->addSeparator();
-    menuBuild->addAction(actCompileRun.get());
 
     // Create menu Preferences
     mainMenu->addMenu("Preferences");
@@ -295,8 +244,6 @@ void MainWindow::createToolbars()
 
     toolBarBuild = std::shared_ptr<QToolBar>(new QToolBar("Build"));
     toolBarBuild->addAction(actCompile.get());
-    toolBarBuild->addAction(actRun.get());
-    toolBarBuild->addAction(actCompileRun.get());
 
     toolBarDebug = std::shared_ptr<QToolBar>(new QToolBar("Debug"));
     toolBarDebug->addAction(actResume.get());
@@ -316,7 +263,7 @@ void MainWindow::createSubWindows()
     editorSubWindow = std::shared_ptr<EditorSubWindow>(new EditorSubWindow(this));
     ledSubWindow = std::shared_ptr<LEDSubWindow>(new LEDSubWindow(simulator));
     //    sevenSegmentSubWindow = std::shared_ptr<SevenSegmentSubWindow>(new SevenSegmentSubWindow);
-    buttonSubWindow = std::shared_ptr<ButtonSubWindow>(new ButtonSubWindow);
+    buttonSubWindow = std::shared_ptr<ButtonSubWindow>(new ButtonSubWindow(simulator));
 
     mdi->addSubWindow(editorSubWindow.get());
     mdi->addSubWindow(ledSubWindow.get());
@@ -419,30 +366,7 @@ MainWindow::MainWindow(Compiler& compiler, Simulator &simulator, QWidget *parent
     //    // connects
     //    connect(textEditor, SIGNAL(textChanged()), this, SLOT(setWindowTitleFilename()));
 
-    connect(this->compiler, &Compiler::onCompiled, [=](){
-
-        std::vector<std::shared_ptr<CompilerError>> errors = this->compiler->getErrors();
-
-        if (errors.empty())
-        {
-            lstResult->addItem(QString(tr("Compiled successfully")));
-        }
-        else
-        {
-            for (const std::shared_ptr<CompilerError> e : errors)
-            {
-                QString msg;
-    //            if (e.row != -1)
-    //            {
-                    msg.append("Line ").append(QString::number(e->row));
-    //            }
-                msg.append(": ")
-                   .append(QString(e->message.c_str()));
-                lstResult->addItem(msg);
-            }
-        }
-
-    });
+    connect(this->compiler, SIGNAL(onCompiled()), this, SLOT(handleBuildCode()));
 
 }
 
@@ -493,34 +417,24 @@ void MainWindow::createOutputFilename()
 
 void MainWindow::buildCode()
 {
-    //    saveFile();
+    this->actCompile->setDisabled(true);
+
+
+
+
+    this->editorSubWindow->saveFile();
+
     lstResult->clear();
-    //    compiler.reset(new Compiler(/*filename.toStdString(), outputname.toStdString()*/));
-    //    compiler->compile(filename.toStdString());
 
-    //    for (const Error& i : compiler->getErrors())
-    //    {
-    //        QString e;
-    //        if (i.line != -1)
-    //        {
-    //            e.append("Line ").append(QString::number(i.line));
-    //        }
-    //        e.append("\tCommand: ")
-    //                .append(QString::fromStdString(i.command))
-    //                .append("\t")
-    //                .append(QString::fromStdString(i.text))
-    //                .append("\n");
-    //        lstResult->addItem(e);
+    filename = this->editorSubWindow->getFilename();
 
-    //    }
+    QtConcurrent::run([=](){
+       compiler->compile(filename.toStdString());
+    });
 
-    //    if(compiler->getErrors().empty())
-    //    {
-    //        lstResult->addItem("Project was compiled successfully.\n");
-
-    //        romWidget->clear();
-    ////        romWidget->write(compiler->getCompiledCode());
-    //    }
+//    QThread* thr = new QThread;
+//    connect(thr, SIGNAL(started()), this, SLOT(compile()));
+//    thr->start();
 }
 
 void MainWindow::handleCompile()
@@ -530,7 +444,7 @@ void MainWindow::handleCompile()
 
 void MainWindow::handleRun()
 {
-
+    simulator->play();
 }
 
 //void MainWindow::compileRunBuild()
@@ -540,36 +454,11 @@ void MainWindow::handleRun()
 ////    simulator->setCode(compiler->getCompiledCode());
 //}
 
-void MainWindow::debugResume()
-{
 
-}
-
-void MainWindow::debugStep()
-{
-    //    if (simulator)
-    //    {
-    //        simulator->step();
-    //    }
-    //    else
-    //    {
-    //        // TODO Exception
-    //        std::cerr << "Can't make a step, because simulator was not created."  << std::endl;
-    //    }
-}
-
-void MainWindow::debugStop()
-{
-
-}
-
-void MainWindow::debugReset()
-{
-
-}
 
 void MainWindow::closeEvent(QCloseEvent* event)
 {
+    this->simulator->stop();
     QMessageBox::StandardButton btn;
     btn = QMessageBox::question(this, tr("Exit"), tr("Do you want to exit?"));
     if (btn == QMessageBox::Yes)
@@ -579,8 +468,38 @@ void MainWindow::closeEvent(QCloseEvent* event)
     else
     {
         event->ignore();
+        this->simulator->play();
     }
 }
+
+void MainWindow::handleBuildCode()
+{
+    std::vector<std::shared_ptr<CompilerError>> errors = this->compiler->getErrors();
+
+    if (errors.empty())
+    {
+        lstResult->addItem(QString(tr("Compiled successfully")));
+    }
+    else
+    {
+        for (const std::shared_ptr<CompilerError> e : errors)
+        {
+            QString msg;
+            //            if (e.row != -1)
+            //            {
+            msg.append("Line ").append(QString::number(e->row));
+            //            }
+            msg.append(": ")
+                    .append(QString(e->message.c_str()));
+            lstResult->addItem(msg);
+        }
+    }
+
+    this->actCompile->setDisabled(false);
+
+    return;
+}
+
 
 
 

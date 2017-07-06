@@ -93,13 +93,15 @@ ProgramRamWidget::ProgramRamWidget(Simulator* simulator, QWidget *parent) : QWid
         });
 
     PRAM* pram = simulator->getPram().get();
-    connect(pram, &PRAM::onPramChanged,
-            [=](unsigned addr, unsigned value){
-                memory->setValue(addr, value);
-            });
+    connect(pram, SIGNAL(onPramChanged(uint,uint)), this, SLOT(handlePramChanged(uint,uint)));
 }
 
 ProgramRamWidget::~ProgramRamWidget()
 {
     // delete or finalize here something
+}
+
+void ProgramRamWidget::handlePramChanged(unsigned addr, unsigned value)
+{
+    memory->setValue(addr, value);
 }

@@ -3,21 +3,33 @@
 
 #include <QObject>
 #include <QIcon>
+#include <QGridLayout>
 
 #include <memory>
+#include <vector>
 
+#include "Simulator/simulator.h"
 #include "subwindow.h"
-#include "buttonpanel.h"
+#include "button.h"
+#include "chooseiowidget.h"
+
+
 
 class ButtonSubWindow : public SubWindow
 {
     Q_OBJECT
 public:
-    ButtonSubWindow();
+    explicit ButtonSubWindow(Simulator* simulator);
     virtual ~ButtonSubWindow();
 
 private:
-    std::shared_ptr<ButtonPanel> buttonPanel;
+    Simulator* simulator;
+    std::shared_ptr<QWidget> centralWidget;
+    std::shared_ptr<QGridLayout> layout;
+
+    std::vector<Button*> buttons;
+    std::vector<ChooseIOWidget*> connectors;
+
 };
 
 #endif // BUTTONSUBWINDOW_H

@@ -36,7 +36,8 @@ public:
 
 signals:
 
-public slots:
+private slots:
+    void handlePramChanged(unsigned addr, unsigned value);
 };
 
 #endif // PROGRAMRAMWIDGET_H

@@ -123,20 +123,11 @@ RomWidget::RomWidget(Simulator *simulator, QWidget *parent) : QWidget(parent)
 
     // ROM
     ROM* rom = simulator->getRom().get();
-    connect(rom, &ROM::onRomCleared,
-            [=](){
-               memory->clear();
-            });
+    connect(rom, SIGNAL(onRomCleared()), this, SLOT(handleRomCleared()));
 
-    connect(rom, &ROM::onRomChanged,
-            [=](unsigned addr, unsigned value){
-                memory->setValue(addr, value);
-            });
+    connect(rom, SIGNAL(onRomChanged(uint,uint)), this, SLOT(handleRomChanged(uint,uint)));
 
-    connect(rom, &ROM::onRomIOChanged,
-            [=](unsigned page, unsigned value){
-                this->setIO(page, value);
-            });
+    connect(rom, SIGNAL(onRomIOChanged(uint,uint)), this, SLOT(handleRomIOChanged(uint,uint)));
 }
 
 RomWidget::~RomWidget()
@@ -164,7 +155,7 @@ void RomWidget::setIOGroupBoxVisible(int value)
 
 void RomWidget::setIO(unsigned page, unsigned value)
 {
-    if (page > 7)
+    if (page > 15)
     {
         std::cerr << "RomWidget: setIO: Wrong page: " << page << std::endl;
         return; /// TODO make an exception
@@ -176,10 +167,10 @@ void RomWidget::setIO(unsigned page, unsigned value)
         return; /// TODO make an exception
     }
 
-    QCheckBox* io0 = ios.at(page + 0);
-    QCheckBox* io1 = ios.at(page + 1);
-    QCheckBox* io2 = ios.at(page + 2);
-    QCheckBox* io3 = ios.at(page + 3);
+    QCheckBox* io0 = ios.at(page * 4 + 0);
+    QCheckBox* io1 = ios.at(page * 4 + 1);
+    QCheckBox* io2 = ios.at(page * 4 + 2);
+    QCheckBox* io3 = ios.at(page * 4 + 3);
 
     io0->setChecked(value & 0x1);
     io1->setChecked((value & 0x2) >> 1);
@@ -227,6 +218,21 @@ void RomWidget::write(std::vector<unsigned int> instructions)
         memory->setItem(i, j, w);
         j++;
     }
+}
+
+void RomWidget::handleRomCleared()
+{
+    memory->clear();
+}
+
+void RomWidget::handleRomChanged(unsigned addr, unsigned value)
+{
+    memory->setValue(addr, value);
+}
+
+void RomWidget::handleRomIOChanged(unsigned page, unsigned value)
+{
+    this->setIO(page, value);
 }
 
 void RomWidget::wheelEvent(QWheelEvent *event)

@@ -40,6 +40,8 @@ public:
     void setPC(unsigned int value);
     unsigned int getPC();
 
+    void reset();
+
 signals:
     void onStackChanged();
 

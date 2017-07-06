@@ -3,6 +3,7 @@
 
 #include <QApplication>
 #include <QObject>
+#include <QThread>
 
 #include <memory>
 #include <vector>

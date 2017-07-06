@@ -37,6 +37,10 @@ class CpuWidget : public QWidget
 {
     Q_OBJECT
 private:
+    Simulator* simulator;
+    CPU* cpu;
+    Stack* stack;
+
     std::shared_ptr<QGridLayout> layout;
 
     std::shared_ptr<QGroupBox> gbStack; // gb means GroupBox
@@ -92,7 +96,10 @@ public:
 
 signals:
 
-public slots:
+private slots:
+    void handleStackChanged();
+    void handleCpuChanged();
+    void handleActualCommand(const QString &cmd);
 };
 
 #endif // CPUWIDGET_H

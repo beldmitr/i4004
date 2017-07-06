@@ -65,6 +65,8 @@ public:
 
     int getCountRegisters() const;
 
+    void reset();
+
 signals:
     void onCpuChanged();
 };
