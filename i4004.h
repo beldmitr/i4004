@@ -18,7 +18,7 @@ class I4004 : public QObject
 public:
     I4004(int argc, char* argv[]);
 
-    exec();
+    int exec();
 
 private:
     std::shared_ptr<Compiler> compiler;

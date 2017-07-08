@@ -64,7 +64,7 @@ void Simulator::play()
         while(isPlaying)
         {
             step();
-            QThread::msleep(100);
+            QThread::msleep(50);
         }
     });
 }

@@ -101,7 +101,7 @@ void MainWindow::createActions()
     // Actions Debug
     actResume = std::shared_ptr<QAction>(new QAction(tr("Resume"), this));
     actResume->setIcon(QIcon(":/Resources/icons/debug_resume.png"));
-    actResume->setShortcut(tr("F8"));
+    actResume->setShortcut(tr("F5"));
     connect(actResume.get(), &QAction::triggered, [=](){
         simulator->play();
     });

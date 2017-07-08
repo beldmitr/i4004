@@ -13,8 +13,6 @@ Led::Led(Simulator *simulator, QWidget *parent) : QWidget(parent)
     layout->addWidget(ledImage.get(), 1,0);
     layout->addWidget(connector.get(), 2,0);
 
-    //    ledImage->light(true);
-
     connect(coloredComboBox.get(), static_cast<void (QComboBox::*)(const QString&)>(&ColoredComboBox::activated),
             [=](const QString& color)
     {
@@ -79,12 +77,6 @@ Led::Led(Simulator *simulator, QWidget *parent) : QWidget(parent)
     {
         connect(rom, SIGNAL(onRomIOChanged(uint,uint)), this, SLOT(handleRomIOChanged(uint,uint)));
     }
-
-
-
-    //    simulator->getDram()->getDataRAMBank(0)->getDataRAMChip(0)->onDramChipOutputChanged();
-    //    simulator->getRom()->onRomIOChanged();
-
 }
 
 Led::~Led()

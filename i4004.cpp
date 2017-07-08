@@ -16,7 +16,7 @@ I4004::I4004(int argc, char *argv[]) : QObject()
     parent->show();
 }
 
-I4004::exec()
+int I4004::exec()
 {
     return app->exec();
 }
