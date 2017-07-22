@@ -99,10 +99,10 @@ void MainWindow::createActions()
     });
 
     // Actions Debug
-    actResume = std::shared_ptr<QAction>(new QAction(tr("Resume"), this));
-    actResume->setIcon(QIcon(":/Resources/icons/debug_resume.png"));
-    actResume->setShortcut(tr("F5"));
-    connect(actResume.get(), &QAction::triggered, [=](){
+    actPlay = std::shared_ptr<QAction>(new QAction(tr("Play"), this));
+    actPlay->setIcon(QIcon(":/Resources/icons/debug_resume.png"));
+    actPlay->setShortcut(tr("F5"));
+    connect(actPlay.get(), &QAction::triggered, [=](){
         simulator->play();
     });
 
@@ -246,7 +246,7 @@ void MainWindow::createToolbars()
     toolBarBuild->addAction(actCompile.get());
 
     toolBarDebug = std::shared_ptr<QToolBar>(new QToolBar("Debug"));
-    toolBarDebug->addAction(actResume.get());
+    toolBarDebug->addAction(actPlay.get());
     toolBarDebug->addAction(actStop.get());
     toolBarDebug->addAction(actStep.get());
     toolBarDebug->addAction(actReset.get());

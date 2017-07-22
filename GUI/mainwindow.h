@@ -101,7 +101,7 @@ private:
 
     std::shared_ptr<QAction> actCompile;
 
-    std::shared_ptr<QAction> actResume;
+    std::shared_ptr<QAction> actPlay;
     std::shared_ptr<QAction> actStep;
     std::shared_ptr<QAction> actStop;
     std::shared_ptr<QAction> actReset;
