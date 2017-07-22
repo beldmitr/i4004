@@ -16,13 +16,15 @@ private:
     const unsigned int bytesPerPage = 256;
     const unsigned int maxPossiblePages = 16;
 
+    bool isHigherHalfByte = true;
+
 public:
     PRAM(unsigned int pages);
     virtual ~PRAM();
 
     void clearPRam();
-    int getValue(unsigned int index) const;
-    void setValue(unsigned int index, int value);
+    int getValue(unsigned int index);
+    void setValue(unsigned index, unsigned value);
 
 signals:
     void onPramChanged(unsigned index, unsigned value);

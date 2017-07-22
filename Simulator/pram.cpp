@@ -21,7 +21,7 @@ PRAM::~PRAM()
     // delete or finalize here something
 }
 
-int PRAM::getValue(unsigned int index) const
+int PRAM::getValue(unsigned int index)
 {
     if(index > pages * bytesPerPage)
     {
@@ -35,10 +35,23 @@ int PRAM::getValue(unsigned int index) const
         throw msg;
     }
 
-    return table[index];
+    unsigned value = 0;
+    if (isHigherHalfByte)
+    {
+        value = (table[index] & 0xFF) >> 4;
+    }
+    else
+    {
+        value = table[index] & 0xF;
+    }
+
+    // toggle isHigherhalfByte
+    isHigherHalfByte = !isHigherHalfByte;
+
+    return value;
 }
 
-void PRAM::setValue(unsigned int index, int value)
+void PRAM::setValue(unsigned index, unsigned value)
 {
     if(index >= pages * bytesPerPage)
     {
@@ -53,7 +66,7 @@ void PRAM::setValue(unsigned int index, int value)
         return;
     }
 
-    if (value < 0 || value > 0xFF)
+    if (value > 0xF)
     {
         std::cerr << "Program RAM is 8 byte memory, so it can be a 1B value [0x0 - 0xFF] at a cell. "
              << value << " will be reduced to 8 byte." << std::endl;
@@ -73,7 +86,33 @@ void PRAM::setValue(unsigned int index, int value)
      * So 2 byte instruction can't be cutted between 2 pages, when the first byte of instruction
      * is in a one page and the next byte of instruction is at the next page.
      */
-    table[index] = value & 0xFF; // FIXME: explaining is close above
+
+    unsigned oldValue = table[index];
+    if (isHigherHalfByte)
+    {
+        // clear high 4 bits
+        oldValue = oldValue & 0xF;
+
+        // value is high 4 bits
+        value = (value & 0xF) << 4; // FIXME: explaining is close above
+
+        // write to PRAM
+        table[index] = value;
+    }
+    else
+    {
+        // clear low 4 bits
+        oldValue = oldValue & 0xF0;
+
+        // join high 4 bits with low 4 bits
+        value = oldValue | (value & 0xF);
+
+        // write to PRAM
+        table[index] = value;
+    }
+
+    // toggle isHigherhalfByte
+    isHigherHalfByte = !isHigherHalfByte;
 
     emit onPramChanged(index, value);
 }
