@@ -1,5 +1,11 @@
 #include "compiler.h"
 
+const std::regex Compiler::labelRegex = std::regex("[[:alpha:]][[:alnum:]]{2,}(,)");
+const std::regex Compiler::commandRegex = std::regex("[[:alpha:]]{2,}[[:alnum:]]?");
+const std::regex Compiler::paramsRegex = std::regex("([[:blank:]]+[[:print:]]+[[:blank:]]*)(,)?([[:blank:]]+[[:print:]]+[[:blank:]]*)?");
+const std::regex Compiler::commentRegex = std::regex("/[[:print:]]*");
+const std::regex Compiler::pseudoRegex = std::regex("[[:blank:]]*=[[:blank:]]+");
+
 std::vector<std::shared_ptr<CompilerError> > Compiler::getErrors() const
 {
     return errors;
@@ -50,8 +56,30 @@ void Compiler::compile(const std::string& inputFilename)
     // delete old error messages
     errors.clear();
 
-    // parse lines
-    unsigned int row = 1;
+    // First passing
+    // Counting labels
+    unsigned row = 1;
+    for (const std::string& l : lines)
+    {
+        try
+        {
+            std::shared_ptr<FirstPassLine>(new FirstPassLine(l));
+        }
+        catch(const CompilerException& ex)
+        {
+            errors.push_back(std::shared_ptr<CompilerError>(new CompilerError(row, ex.what())));
+
+            std::cerr << "Line " << row << ": Error " << ex.what() << std::endl;
+            std::cerr << "\tFrom " << ex.who() << std::endl;
+        }
+        row++;
+    }
+
+    ObjectCode::setProgramCounter(0);
+
+    // Second passing
+    // Parse lines
+    row = 1;
     for (const std::string& l : lines)
     {
         try
@@ -62,7 +90,6 @@ void Compiler::compile(const std::string& inputFilename)
         {
             errors.push_back(std::shared_ptr<CompilerError>(new CompilerError(row, ex.what())));
 
-            /// TODO delete this std::cerr
             std::cerr << "Line " << row << ": Error " << ex.what() << std::endl;
             std::cerr << "\tFrom " << ex.who() << std::endl;
         }

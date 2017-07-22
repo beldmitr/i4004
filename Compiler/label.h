@@ -2,6 +2,7 @@
 #define LABEL_H
 
 #include <string>
+#include "Compiler/compiler.h"
 #include "Compiler/constant.h"
 #include "Utils/searchresult.h"
 

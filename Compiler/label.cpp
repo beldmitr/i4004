@@ -9,6 +9,8 @@ Label::Label(const std::string& name, unsigned int value)
 {
     this->name = name;
     this->value = value;
+
+    Constant::add(this->name, this->value);
 }
 
 Label::Label(const std::string& name, const std::string& param)
@@ -23,16 +25,20 @@ Label::Label(const std::string& name, const std::string& param)
         return;
     }
 
-    SearchResult command = String::search(param, Line::commandRegex);
+    SearchResult command = String::search(param, Compiler::commandRegex);
     if (!command.isEmpty() && CommandSet::isCommand(command.find))
     {
-        SearchResult params = String::String::search(param, Line::paramsRegex);
-        instruction = std::shared_ptr<Instruction>(new Instruction(command.find, params.find));
-        this->value = instruction->getCode();
+//        SearchResult params = String::String::search(param, Compiler::paramsRegex);
+//        instruction = std::shared_ptr<Instruction>(new Instruction(command.find, params.find));
+//        this->value = instruction->getCode();
 
-        ObjectCode::write(this->value);
+//        ObjectCode::write(this->value);
 
         Constant::add(this->name, ObjectCode::getProgramCounter());
+
+        unsigned length = CommandSet::getLength(command.find);
+        unsigned pc = ObjectCode::getProgramCounter();
+        ObjectCode::setProgramCounter(pc + length);
     }
     else if (Number::isNumber(param))
     {

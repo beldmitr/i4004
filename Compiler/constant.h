@@ -4,6 +4,7 @@
 #include <map>
 #include <string>
 #include <regex>
+#include <iostream>
 
 #include "Exceptions/compilerexception.h"
 

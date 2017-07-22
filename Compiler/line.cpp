@@ -1,11 +1,5 @@
 #include "line.h"
 
-const std::regex Line::labelRegex = std::regex("[[:alpha:]][[:alnum:]]{2,}(,)");
-const std::regex Line::commandRegex = std::regex("[[:alpha:]]{2,}[[:alnum:]]?");
-const std::regex Line::paramsRegex = std::regex("([[:blank:]]+[[:print:]]+[[:blank:]]*)(,)?([[:blank:]]+[[:print:]]+[[:blank:]]*)?");
-const std::regex Line::commentRegex = std::regex("/[[:print:]]*");
-const std::regex Line::pseudoRegex = std::regex("[[:blank:]]*=[[:blank:]]+");
-
 Line::Line(std::string line)
 {
     std::string parsedLine = line;
@@ -18,7 +12,7 @@ Line::Line(std::string line)
      * because in object code there is no need in describing.
      * And processor doesn't need comments for executing commands.
      */
-    SearchResult comment = String::search(parsedLine, commentRegex);
+    SearchResult comment = String::search(parsedLine, Compiler::commentRegex);
     if (!comment.isEmpty())
     {
         // we don't need a comment, so for next parsing we will take a line before a comment
@@ -58,7 +52,7 @@ Line::Line(std::string line)
      * - a MathExpr = * + ABC + 5
      * where "star" (*) means the actual address
      */
-    SearchResult pseudo = String::search(parsedLine, pseudoRegex);
+    SearchResult pseudo = String::search(parsedLine, Compiler::pseudoRegex);
     if (!pseudo.isEmpty())
     {
         std::shared_ptr<Operand> operand = std::shared_ptr<Operand>(
@@ -92,35 +86,51 @@ Line::Line(std::string line)
      * BUT
      * ab, 3ff, c, g-g, ARE NOT LABELS
      */
-    SearchResult label = String::search(parsedLine, labelRegex);
-    if (!label.isEmpty())
+    SearchResult label = String::search(parsedLine, Compiler::labelRegex);
+    if (!String::trim(label.prefix).empty())
     {
-        std::string labelName = label.find; // This is our label in format ABC,
-        labelName = labelName.substr(0, labelName.size() - 1);  // delete a comma from a label: ABC, => ABC
+        std::string msg = "There is an unknown parameter " + label.prefix
+                + " in line " + String::trim(line);
+        throw CompilerException("Line", msg);
+    }
 
-        /*
-         * Everything after this label is a parameter of this label.
-         * Which may be:
-         * - a Number       ABC, 5
-         * - a Constant,    ABC, PI314
-         * - a MathExpr     ABC, PI314 + CCC - 9
-         * - an Instruction ABC, FIM P0, 0xFF
-         * But this parameter is parsed in Label class and on this phaze we don't worry about this
-         */
-        std::string labelParam = String::trimBeginEnd(label.suffix);
-
-        std::shared_ptr<Label>(new Label(labelName, labelParam));
-
-        // There should be nothing before a label
-        if (!String::trim(label.prefix).empty())
-        {
-            std::string msg = "There is an unknown parameter " + label.prefix
-                    + " in line " + String::trim(line);
-            throw CompilerException("Line", msg);
-        }
-
+    if (!String::trim(label.find).empty())
+    {
+        parsedLine = label.suffix;
+    }
+    if (String::trim(parsedLine).empty())
+    {
         return;
     }
+
+//    if (!label.isEmpty())
+//    {
+//        std::string labelName = label.find; // This is our label in format ABC,
+//        labelName = labelName.substr(0, labelName.size() - 1);  // delete a comma from a label: ABC, => ABC
+
+//        /*
+//         * Everything after this label is a parameter of this label.
+//         * Which may be:
+//         * - a Number       ABC, 5
+//         * - a Constant,    ABC, PI314
+//         * - a MathExpr     ABC, PI314 + CCC - 9
+//         * - an Instruction ABC, FIM P0, 0xFF
+//         * But this parameter is parsed in Label class and on this phaze we don't worry about this
+//         */
+//        std::string labelParam = String::trimBeginEnd(label.suffix);
+
+//        std::shared_ptr<Label>(new Label(labelName, labelParam));
+
+//        // There should be nothing before a label
+//        if (!String::trim(label.prefix).empty())
+//        {
+//            std::string msg = "There is an unknown parameter " + label.prefix
+//                    + " in line " + String::trim(line);
+//            throw CompilerException("Line", msg);
+//        }
+
+//        return;
+//    }
 
     /*
      * Parsing an INSTRUCTION
@@ -128,7 +138,7 @@ Line::Line(std::string line)
      * In this place, we think, that if there is no a comment or a pseudo or a label, this is an instruction.
      * Because it should be something of this
      */
-    SearchResult command = String::search(parsedLine, commandRegex); // find the command. FIM P0, 3 => FIM is command
+    SearchResult command = String::search(parsedLine, Compiler::commandRegex); // find the command. FIM P0, 3 => FIM is command
     if (!command.isEmpty())
     {
         parsedLine = command.suffix;
@@ -142,7 +152,7 @@ Line::Line(std::string line)
         throw CompilerException("Line", msg);
     }
 
-    SearchResult params = String::search(parsedLine, paramsRegex);
+    SearchResult params = String::search(parsedLine, Compiler::paramsRegex);
     if (!params.isEmpty())
     {
         parsedLine = params.prefix + " " + params.suffix;   // there should be now nothing before params "P0, 3" and after it
@@ -156,14 +166,15 @@ Line::Line(std::string line)
         throw CompilerException("Line", msg);
     }
 
+    if (!String::trim(command.find).empty())
+    {
+        // create and execute the instruction
+        std::shared_ptr<Instruction> instruction = std::shared_ptr<Instruction>(
+                    new Instruction(String::trimBeginEnd(command.find),
+                                    String::trimBeginEnd(params.find)));
 
-    // create and execute the instruction
-    std::shared_ptr<Instruction> instruction = std::shared_ptr<Instruction>(
-                new Instruction(String::trimBeginEnd(command.find),
-                                String::trimBeginEnd(params.find)));
-
-    ObjectCode::write(instruction->getCode());
-
+        ObjectCode::write(instruction->getCode());
+    }
 
     return;
 }

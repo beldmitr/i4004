@@ -10,6 +10,7 @@
 #include <memory>
 
 #include "Compiler/line.h"
+#include "Compiler/firstpassline.h"
 #include "Compiler/compilererror.h"
 #include "Exceptions/compilerexception.h"
 #include "Exceptions/logexceptions.h"
@@ -30,6 +31,12 @@ public:
     void saveObjectCode(const std::string& outputFile);
 
     std::vector<std::shared_ptr<CompilerError> > getErrors() const;
+
+    static const std::regex labelRegex; // Template for Label
+    static const std::regex commandRegex; // Template for instruction, it is not exect
+    static const std::regex paramsRegex; // Template for operands, for both - left and right
+    static const std::regex commentRegex; // Template for comments
+    static const std::regex pseudoRegex; // Template for pseudo instruction =
 
 signals:
     void onCompiled();
