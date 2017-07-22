@@ -58,15 +58,18 @@ void Simulator::step()
 
 void Simulator::play()
 {
-    isPlaying = true;
-    QtConcurrent::run([=]()
+    if (!isPlaying)
     {
-        while(isPlaying)
+        isPlaying = true;
+        QtConcurrent::run([=]()
         {
-            step();
-            QThread::msleep(50);
-        }
-    });
+            while(isPlaying)
+            {
+                step();
+                QThread::msleep(50);
+            }
+        });
+    }
 }
 
 void Simulator::stop()
@@ -1114,7 +1117,7 @@ void Simulator::WRR()
      * The carry bit and the accumulator are unchanged.
      */
 
-    int romPage = (cpu->getSrc() & 0xF) >> 4;
+    int romPage = (cpu->getSrc() & 0xFF) >> 4;
     rom->setIO(romPage, cpu->getAcc());
 
     cpu->setPC(cpu->getPC() + 1);
@@ -1126,7 +1129,87 @@ void Simulator::WRR()
  */
 void Simulator::WPM()
 {
-    /// TODO WPM
+    /*
+     * WRITE PROGRAM RAM
+     *
+     * This is a special instruction which may be used to write the contents of the accumulator
+     * into a half byte of program RAM I or read the contents of a half byte of program
+     * RAM into a ROM input port where it can be acces sed by a program.
+     *
+     * The carry bit is unaffected.
+     *
+     * NOTE 1:
+     * Two WPM instructions must always appear in close succes sion; that is,
+     * each time one WPM instruction references a half byte of program RAM as indicated by
+     * an SRC address, another WPM must access the other half byte before the SRC
+     * address is altered. An internal counter keeps track of which half-byte is being
+     * accessed. If only one WPM occurs, this Gounte-r will be out of sync with the program
+     * and errors will occur. In this situation I a RESET pulse must -be used to re-initialize
+     * the machine.
+     *
+     * NOTE 2:
+     * A WPM instruction requires an SRC address to access program RAM.Whenever
+     * a WPM is executed, the DATA RAM which happens to correspond to this SRC
+     * address will also be written. If data needed later in the program is being held in
+     * such a DATA RAM, the programmer must save it elsewhere before executing the
+     * WPM instruction.
+     */
+
+    /*
+     * Storing Data Into Program RAM:
+     *
+     * A program must perform the following actions in order to store eight bits of data into
+     * a program RAM location:
+     *      1. The value 1 must be written to ROM port number 14. This is a "write enable"
+     *         signal, permitting the store operation to work.
+     *      2. The highest 4 bits of the program RAM address to be accessed must be
+     *         written to ROM port number 15.
+     *      3. The lowest 8 bits of the program RAM address to be accessed must be sent
+     *         out by an SRC instruction.
+     *      4. The higher 4 bits of data to be written must be loaded into the accumulator
+     *         and written with the first WPM; the lower 4 bits of data must then
+     *         be loaded into the accumulator and written with the second WPM.
+     *      5. The value 0 must be written to ROM port number 14, clearing the "write enable".
+     */
+
+    /*
+     * Reading Data From Program RAM:
+     *
+     * A program must perform the following actions in order to read eight bits of data
+     * from a program RAM location:
+     *      1. The highest 4 bits of the program RAM address to be accessed must be
+     *         written to ROM port 15.
+     *      2. The lowest 8 bits of the program RAM address to be accessed must be sent
+     *         out by an SRC instruction.
+     *      3. Two WPM instructions in succession must be executed. The first reads,
+     *         the leftmost 4 bits of the program RAM location into ROM port 14; the second
+     *         reads the rightmost 4 bits of the program RAM location into ROM port 15.
+     */
+
+    unsigned src = this->cpu->getSrc();
+    unsigned port14 = this->getRom()->getIO(14);
+    unsigned port15 = this->getRom()->getIO(15);
+
+    bool isWriteMode = (port14 == 1);
+    unsigned highAddress = port15;
+    unsigned middleAddress = (src & 0xF0) >> 4;
+    unsigned lowerAddress = (src & 0xF);
+
+    unsigned address = (highAddress << 8) | (middleAddress << 4) | lowerAddress;
+
+    if (isWriteMode)
+    {
+        unsigned value = this->getCpu()->getAcc();
+        this->getPram()->setValue(address, value);
+    }
+    else
+    {
+        unsigned value = this->getPram()->getValue(address);
+        this->getCpu()->setAcc(value);
+    }
+
+    cpu->setPC(cpu->getPC() + 1);
+    cpu->setCycles(cpu->getCycles() + 1);
 }
 
 /**
