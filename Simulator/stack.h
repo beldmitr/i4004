@@ -31,7 +31,7 @@ public:
     Stack();
     virtual ~Stack();
 
-    void write(int address);
+    void write(unsigned address);
     int read();
 
     int getActualPointer() const;

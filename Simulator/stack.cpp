@@ -23,7 +23,7 @@ Stack::~Stack()
     // delete or finalize here something
 }
 
-void Stack::write(int address)
+void Stack::write(unsigned address)
 {
     /*
      * Writing An Address To The Stack:
@@ -37,11 +37,10 @@ void Stack::write(int address)
      * number of previously stored addresses to be overwritten and lost.
      * F.e. Storing the fourth address overwrites the first address stored.
      */
-    if (address < 0 || address > 0xFFF)
+    if (address > 0xFFF)
     {
-        std::cerr << "Wrong address is pushed to the Stack. Address can be [0x0 - 0xFFF]. Pushed address is "
-                  << address << "." << std::endl;
-        return;
+        std::cerr << "Stack address overflowed." << std::endl;
+        address = address % 0x1000;
     }
     registers[actualPointer] = address;
 
@@ -83,9 +82,8 @@ void Stack::setPC(unsigned int value)
 {
     if (value > 0xFFF)
     {
-        std::cerr << "Program counter could be 0-0xFFFFFF. " << value
-                  << " is wrong value." << std::endl;
-        return;
+        std::cerr << "Program counter overflowed." << std::endl;
+        value = value % 0x1000;
     }
 
     registers[actualPointer] = value;
