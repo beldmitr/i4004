@@ -37,6 +37,7 @@ public:
 signals:
 
 private slots:
+    void handlePramCleared();
     void handlePramChanged(unsigned addr, unsigned value);
 };
 

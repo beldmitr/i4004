@@ -9,6 +9,12 @@ void ProgramRamWidget::setMemoryTitle(int value)
 //                       QString::number(256 * ((value / 16) + 1) - 1, 16) + " ]");
 
     comboTitle->setCurrentIndex(value / 16);
+
+    // PRAM
+    PRAM* pram = simulator->getPram().get();
+    connect(pram, SIGNAL(onPramClear()), this, SLOT(handlePramCleared()));
+
+    connect(pram, SIGNAL(onPramChanged(uint,uint)), this, SLOT(handlePramChanged(uint,uint)));
 }
 
 ProgramRamWidget::ProgramRamWidget(Simulator* simulator, QWidget *parent) : QWidget(parent)
@@ -99,6 +105,11 @@ ProgramRamWidget::ProgramRamWidget(Simulator* simulator, QWidget *parent) : QWid
 ProgramRamWidget::~ProgramRamWidget()
 {
     // delete or finalize here something
+}
+
+void ProgramRamWidget::handlePramCleared()
+{
+    memory->clear();
 }
 
 void ProgramRamWidget::handlePramChanged(unsigned addr, unsigned value)
