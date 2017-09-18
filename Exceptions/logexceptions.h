@@ -2,6 +2,7 @@
 #define LOGEXCEPTIONS_H
 
 #include <stdexcept>
+#include <string>
 
 class LogExceptions : public std::runtime_error
 {

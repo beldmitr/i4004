@@ -2,6 +2,7 @@
 #define COMPILEREXCEPTION_H
 
 #include <stdexcept>
+#include <string>
 
 class CompilerException : public std::runtime_error
 {
