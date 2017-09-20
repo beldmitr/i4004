@@ -68,7 +68,7 @@ void MemoryTable::setValue(unsigned addr, unsigned value)
 
 void MemoryTable::clear()
 {
-    for (int i = 0; i < items.size(); i++)
+    for (unsigned i = 0; i < items.size(); i++)
     {
         this->setValue(i, 0);
     }
