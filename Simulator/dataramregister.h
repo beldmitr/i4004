@@ -13,22 +13,22 @@ private:
     std::vector<int> characters;
     std::vector<int> status;
 
-    const int charactersLength = 16;
-    const int statusLength = 4;
+    const unsigned charactersLength = 16;
+    const unsigned statusLength = 4;
 
-    unsigned int bank;
-    unsigned int chip;
-    unsigned int reg;    // register number
+    unsigned bank;
+    unsigned chip;
+    unsigned reg;    // register number
 
 public:
     DataRAMRegister(unsigned int bank, unsigned int chip, unsigned int reg);
     virtual ~DataRAMRegister();
 
     void setCharacter(unsigned index, unsigned value);
-    int getCharacter(int index) const;
+    int getCharacter(unsigned index) const;
 
     void setStatus(unsigned index, unsigned value);
-    int getStatus(int index) const;
+    int getStatus(unsigned index) const;
 
     int getCharactersLength() const;
     int getStatusLength() const;

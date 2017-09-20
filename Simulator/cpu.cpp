@@ -1,6 +1,6 @@
 #include "cpu.h"
 
-int CPU::getCountRegisters() const
+unsigned CPU::getCountRegisters() const
 {
     return countRegisters;
 }
@@ -16,7 +16,7 @@ void CPU::reset()
     dcl = 0;
     src = 0;
 
-    for (int i = 0; i < countRegisters; i++)
+    for (unsigned i = 0; i < countRegisters; i++)
     {
         registers[i] = 0;
     }
@@ -35,7 +35,7 @@ CPU::CPU() : QObject()
     dcl = 0;
     src = 0;
 
-    for (int i = 0; i < countRegisters; i++)
+    for (unsigned i = 0; i < countRegisters; i++)
     {
         registers.push_back(0);
     }

@@ -12,12 +12,12 @@ int DataRAMRegister::getStatusLength() const
 
 void DataRAMRegister::reset()
 {
-    for (int i = 0; i < charactersLength; i++)
+    for (unsigned i = 0; i < charactersLength; i++)
     {
         setCharacter(i, 0);
     }
 
-    for (int i = 0; i < statusLength; i++)
+    for (unsigned i = 0; i < statusLength; i++)
     {
         setStatus(i, 0);
     }
@@ -29,11 +29,11 @@ DataRAMRegister::DataRAMRegister(unsigned int bank, unsigned int chip, unsigned 
     this->chip = chip;
     this->reg = reg;
 
-    for (int i = 0; i < charactersLength; i++) {
+    for (unsigned i = 0; i < charactersLength; i++) {
         characters.push_back(0);
     }
 
-    for (int i = 0; i < statusLength; i++) {
+    for (unsigned i = 0; i < statusLength; i++) {
         status.push_back(0);
     }
 }
@@ -62,9 +62,9 @@ void DataRAMRegister::setCharacter(unsigned index, unsigned value)
     emit onDramRegCharChanged(bank, chip, reg, index, value);
 }
 
-int DataRAMRegister::getCharacter(int index) const
+int DataRAMRegister::getCharacter(unsigned index) const
 {
-    if (index < 0 || index > charactersLength)
+    if (index > charactersLength)
     {
         std::cerr << "A DataRAM Chip has got " << charactersLength << " registers. "
                   << index << " is bad index of a register." << std::endl;
@@ -95,9 +95,9 @@ void DataRAMRegister::setStatus(unsigned index, unsigned value)
     emit onDramRegStatChanged(bank, chip, reg, index, value);
 }
 
-int DataRAMRegister::getStatus(int index) const
+int DataRAMRegister::getStatus(unsigned index) const
 {
-    if (index < 0 || index > statusLength)
+    if (index > statusLength)
     {
         std::cerr << "A DataRAM Chip has got " << statusLength << " status registers. "
                   << index << " is bad index of a register." << std::endl;

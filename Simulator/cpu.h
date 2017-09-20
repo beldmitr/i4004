@@ -15,7 +15,7 @@ class CPU : public QObject
 {
     Q_OBJECT
 private:
-    const int countRegisters = 16;
+    const unsigned countRegisters = 16;
 
     int acc;
     int carry;
@@ -63,7 +63,7 @@ public:
     int getSrc() const;
     void setSrc(unsigned int value);
 
-    int getCountRegisters() const;
+    unsigned getCountRegisters() const;
 
     void reset();
 

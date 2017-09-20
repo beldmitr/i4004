@@ -149,7 +149,7 @@ void ROM::flashRom(std::vector<unsigned int> compiledCode)
 
 void ROM::reset()
 {
-    for (int i = 0; i < pages; i++)
+    for (unsigned i = 0; i < pages; i++)
     {
         setIO(i, 0);
     }
