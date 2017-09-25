@@ -2,6 +2,8 @@
 
 ColoredComboBox::ColoredComboBox()
 {
+    this->setMaximumWidth(125);
+
     QStringList itemList;
     itemList << tr("Red") << tr("Blue") << tr("Green") << tr("Orange") << tr("Pink") << tr("Yellow");
 

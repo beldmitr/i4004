@@ -96,8 +96,8 @@ void CpuWidget::createWidgetRegisters()
     for (int i = 0; i < 16; i++)
     {
         edtR[i]->setReadOnly(true);
-        edtR[i]->setFixedHeight(50);
-        edtR[i]->setFixedWidth(50);
+        edtR[i]->setMaximumHeight(30);
+        lblR[i]->setMaximumHeight(30);
     }
 
     for (int i = 0; i < 16; i+=2)

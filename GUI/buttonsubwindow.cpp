@@ -15,7 +15,7 @@ ButtonSubWindow::ButtonSubWindow(Simulator* simulator) : SubWindow()
         ChooseIOWidget* chooseIO = new ChooseIOWidget;
         Button* button = new Button(simulator, chooseIO);
 
-        layout->addWidget(button, 0, i);
+        layout->addWidget(button, 0, i, Qt::AlignCenter);
         layout->addWidget(chooseIO, 1, i);
 
         buttons.push_back(button);

@@ -9,6 +9,7 @@
 */
 ChooseIOWidget::ChooseIOWidget(QWidget *parent) : QWidget(parent)
 {
+    this->setMinimumWidth(135);
     layout = std::shared_ptr<QVBoxLayout>(new QVBoxLayout(this));
 
     button = std::shared_ptr<QPushButton>(new QPushButton("N/C"));
