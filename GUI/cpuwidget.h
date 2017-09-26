@@ -6,7 +6,7 @@
 #include <QVBoxLayout>
 #include <QGroupBox>
 #include <QLabel>
-#include <QTextEdit>
+#include <QLineEdit>
 #include <QCheckBox>
 
 #include <memory>
@@ -49,27 +49,27 @@ private:
     std::shared_ptr<QLabel> lblLevel1;
     std::shared_ptr<QLabel> lblLevel2;
     std::shared_ptr<QLabel> lblLevel3;
-    std::shared_ptr<QTextEdit> edtPC;   // edt means Edit
-    std::shared_ptr<QTextEdit> edtLevel1;
-    std::shared_ptr<QTextEdit> edtLevel2;
-    std::shared_ptr<QTextEdit> edtLevel3;
+    std::shared_ptr<QLineEdit> edtPC;   // edt means Edit
+    std::shared_ptr<QLineEdit> edtLevel1;
+    std::shared_ptr<QLineEdit> edtLevel2;
+    std::shared_ptr<QLineEdit> edtLevel3;
 
     std::shared_ptr<QGroupBox> gbRegisters;
     std::shared_ptr<QGridLayout> layoutRegisters;
     std::vector<std::shared_ptr<QLabel>> lblR;
-    std::vector<std::shared_ptr<QTextEdit>> edtR;
+    std::vector<std::shared_ptr<QLineEdit>> edtR;
 
     std::shared_ptr<QGroupBox> gbOther;
     std::shared_ptr<QGridLayout> layoutOther;
     std::shared_ptr<QLabel> lblAccumulator;
-    std::shared_ptr<QTextEdit> edtAccumulator;
+    std::shared_ptr<QLineEdit> edtAccumulator;
     std::shared_ptr<QLabel> lblCarry;
     std::shared_ptr<QCheckBox> cbxCarry;    // cbx means CheckBox
     std::shared_ptr<QLabel> lblTest;
     std::shared_ptr<QCheckBox> cbxTest;
-    std::shared_ptr<QLabel> lblInstruction;
+//    std::shared_ptr<QLabel> lblInstruction;
     std::shared_ptr<QLabel> lblCycles;
-    std::shared_ptr<QTextEdit> edtCycles;
+    std::shared_ptr<QLineEdit> edtCycles;
 
     // Methods
     void createWidgetStack();
@@ -91,7 +91,7 @@ public:
     void setAccumulator(unsigned int value);
     void setCarry(bool value);
     void setTest(bool value);
-    void setInstruction(QString value);
+//    void setInstruction(QString value);
     void setCycles(unsigned int value);
 
 signals:
@@ -99,7 +99,7 @@ signals:
 private slots:
     void handleStackChanged();
     void handleCpuChanged();
-    void handleActualCommand(const QString &cmd);
+//    void handleActualCommand(const QString &cmd);
 };
 
 #endif // CPUWIDGET_H

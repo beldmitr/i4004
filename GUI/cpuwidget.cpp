@@ -1,23 +1,27 @@
 #include "cpuwidget.h"
 
 CpuWidget::CpuWidget(Simulator *simulator, QWidget *parent) : QWidget(parent)
-{
+{    
     this->simulator = simulator;
     cpu = simulator->getCpu().get();
     stack = cpu->getStack();
 
-    layout = std::make_shared<QGridLayout>(this);
+    layout = std::make_shared<QGridLayout>();
+
+    this->setSizePolicy(QSizePolicy::Maximum, QSizePolicy::MinimumExpanding);
 
     createWidgetStack();
     createWidgetRegisters();
     createWidgetOther();
+
+     this->setLayout(layout.get());
 
     // connects
     connect(stack, SIGNAL(onStackChanged()), this, SLOT(handleStackChanged()));
 
     connect(cpu, SIGNAL(onCpuChanged()), this, SLOT(handleCpuChanged()));
 
-    connect(simulator, SIGNAL(onActualCommand(QString)), this, SLOT(handleActualCommand(QString)));
+//    connect(simulator, SIGNAL(onActualCommand(QString)), this, SLOT(handleActualCommand(QString)));
 
 }
 
@@ -31,43 +35,41 @@ void CpuWidget::createWidgetStack()
     gbStack = std::make_shared<QGroupBox>("Stack");
     layoutStack = std::make_shared<QGridLayout>(gbStack.get());
 
+//    gbStack->setSizePolicy(QSizePolicy::Maximum, QSizePolicy::Maximum);
+
     lblPC = std::make_shared<QLabel>("PC");
     lblLevel1 = std::make_shared<QLabel>("Level 1");
     lblLevel2 = std::make_shared<QLabel>("Level 2");
     lblLevel3 = std::make_shared<QLabel>("Level 3");
 
-    edtPC = std::make_shared<QTextEdit>("");
-    edtLevel1 = std::make_shared<QTextEdit>("");
-    edtLevel2 = std::make_shared<QTextEdit>("");
-    edtLevel3 = std::make_shared<QTextEdit>("");
+    edtPC = std::make_shared<QLineEdit>("");
+    edtLevel1 = std::make_shared<QLineEdit>("");
+    edtLevel2 = std::make_shared<QLineEdit>("");
+    edtLevel3 = std::make_shared<QLineEdit>("");
 
     edtPC->setReadOnly(true);
-    edtPC->setFixedHeight(50);
     edtPC->setFixedWidth(75);
-    edtPC->setFontWeight(QFont::Bold);
+//    edtPC->setFontWeight(QFont::Bold);
     edtPC->setText("0");
 
     edtLevel1->setReadOnly(true);
-    edtLevel1->setFixedHeight(50);
     edtLevel1->setFixedWidth(75);
     edtLevel1->setText("0");
 
     edtLevel2->setReadOnly(true);
-    edtLevel2->setFixedHeight(50);
     edtLevel2->setFixedWidth(75);
     edtLevel2->setText("0");
 
     edtLevel3->setReadOnly(true);
-    edtLevel3->setFixedHeight(50);
     edtLevel3->setFixedWidth(75);
     edtLevel3->setText("0");
 
     layoutStack->addWidget(lblPC.get(), 0, 0);
+    layoutStack->addWidget(edtPC.get(), 0, 1);
     layoutStack->addWidget(lblLevel1.get(), 1, 0);
     layoutStack->addWidget(lblLevel2.get(), 2, 0);
     layoutStack->addWidget(lblLevel3.get(), 3, 0);
 
-    layoutStack->addWidget(edtPC.get(), 0, 1);
     layoutStack->addWidget(edtLevel1.get(), 1, 1);
     layoutStack->addWidget(edtLevel2.get(), 2, 1);
     layoutStack->addWidget(edtLevel3.get(), 3, 1);
@@ -80,6 +82,8 @@ void CpuWidget::createWidgetRegisters()
     gbRegisters = std::make_shared<QGroupBox>("Registers");
     layoutRegisters = std::make_shared<QGridLayout>(gbRegisters.get());
 
+//    gbRegisters->setSizePolicy(QSizePolicy::Maximum, QSizePolicy::Maximum);
+
     for (int i = 0; i < 16; i++)
     {
         QString text = (i < 10) ?
@@ -90,14 +94,13 @@ void CpuWidget::createWidgetRegisters()
 
     for (int i = 0; i < 16; i++)
     {
-        edtR.push_back(std::shared_ptr<QTextEdit>(new QTextEdit("0")));
+        edtR.push_back(std::shared_ptr<QLineEdit>(new QLineEdit("0")));
     }
 
     for (int i = 0; i < 16; i++)
     {
         edtR[i]->setReadOnly(true);
-        edtR[i]->setMaximumHeight(30);
-        lblR[i]->setMaximumHeight(30);
+        edtR[i]->setFixedWidth(25);
     }
 
     for (int i = 0; i < 16; i+=2)
@@ -116,8 +119,10 @@ void CpuWidget::createWidgetOther()
     gbOther = std::make_shared<QGroupBox>("");
     layoutOther = std::make_shared<QGridLayout>(gbOther.get());
 
+//    gbOther->setSizePolicy(QSizePolicy::Maximum, QSizePolicy::Maximum);
+
     lblAccumulator = std::make_shared<QLabel>("Accumulator");
-    edtAccumulator = std::shared_ptr<QTextEdit>(new QTextEdit("0"));
+    edtAccumulator = std::shared_ptr<QLineEdit>(new QLineEdit("0"));
 
     lblCarry = std::make_shared<QLabel>("Carry");
     cbxCarry = std::shared_ptr<QCheckBox>(new QCheckBox);
@@ -126,13 +131,14 @@ void CpuWidget::createWidgetOther()
     lblTest = std::make_shared<QLabel>("Test");
     cbxTest = std::shared_ptr<QCheckBox>(new QCheckBox);
 
-    lblInstruction = std::make_shared<QLabel>("");
-    lblInstruction->setFixedWidth(300);
+//    lblInstruction = std::make_shared<QLabel>("");
+//    lblInstruction->setFixedWidth(300);
 
     lblCycles = std::make_shared<QLabel>("Cycles");
-    edtCycles = std::make_shared<QTextEdit>("0");
+    edtCycles = std::make_shared<QLineEdit>("0");
 
     edtAccumulator->setReadOnly(true);
+    edtAccumulator->setFixedWidth(25);
     edtCycles->setReadOnly(true);
     cbxCarry->setEnabled(false);
     cbxTest->setEnabled(false);
@@ -148,24 +154,19 @@ void CpuWidget::createWidgetOther()
     cbxCarry->setStyleSheet(styleCheckBox);
     cbxTest->setStyleSheet(styleCheckBox);
 
-    edtAccumulator->setFixedHeight(50);
-    edtAccumulator->setFixedWidth(50);
-    edtCycles->setFixedHeight(50);
-    edtCycles->setFixedWidth(250);
-
     layoutOther->addWidget(lblAccumulator.get(), 0, 0);
     layoutOther->addWidget(edtAccumulator.get(), 0, 1);
 
-    layoutOther->addWidget(lblCarry.get(), 0, 2);
-    layoutOther->addWidget(cbxCarry.get(), 0, 3);
+    layoutOther->addWidget(lblCarry.get(), 0, 2, Qt::AlignRight);
+    layoutOther->addWidget(cbxCarry.get(), 0, 3, Qt::AlignHCenter);
 
-    layoutOther->addWidget(lblTest.get(), 0, 4);
-    layoutOther->addWidget(cbxTest.get(), 0, 5);
+    layoutOther->addWidget(lblTest.get(), 0, 4, Qt::AlignRight);
+    layoutOther->addWidget(cbxTest.get(), 0, 5, Qt::AlignHCenter);
 
-    layoutOther->addWidget(lblInstruction.get(), 1, 0);
+//    layoutOther->addWidget(lblInstruction.get(), 1, 0);   //TODO new class Debugger, and DebuggerList of instructions, for now I don't need this
 
-    layoutOther->addWidget(lblCycles.get(), 1, 4);
-    layoutOther->addWidget(edtCycles.get(), 1, 5);
+    layoutOther->addWidget(lblCycles.get(), 1, 0);
+    layoutOther->addWidget(edtCycles.get(), 1, 1, 1, 5);
 
     layout->addWidget(gbOther.get(), 1, 0, 1, 2);
 }
@@ -210,10 +211,10 @@ void CpuWidget::setTest(bool value)
     cbxTest->setChecked(value);
 }
 
-void CpuWidget::setInstruction(QString value)
-{
-    lblInstruction->setText(value);
-}
+//void CpuWidget::setInstruction(QString value)
+//{
+//    lblInstruction->setText(value);
+//}
 
 void CpuWidget::setCycles(unsigned int value)
 {
@@ -230,33 +231,34 @@ void CpuWidget::handleStackChanged()
     {
         int address = registers[i];
 
-        QFont::Weight weight;
+        QFont font;
+
         if (pointer == i)
         {
-            weight = QFont::Bold;
+            font.setBold(true);
         }
         else
         {
-            weight = QFont::Normal;
+            font.setBold(false);
         }
 
         switch(i)
         {
         case 0:
             edtPC->setText(QString::number(address, 16));
-            edtPC->setFontWeight(weight);
+            edtPC->setFont(font);
             break;
         case 1:
             edtLevel1->setText(QString::number(address, 16));
-            edtLevel1->setFontWeight(weight);
+            edtLevel1->setFont(font);
             break;
         case 2:
             edtLevel2->setText(QString::number(address, 16));
-            edtLevel2->setFontWeight(weight);
+            edtLevel2->setFont(font);
             break;
         case 3:
             edtLevel3->setText(QString::number(address, 16));
-            edtLevel3->setFontWeight(weight);
+            edtLevel3->setFont(font);
             break;
         }
     }
@@ -266,7 +268,7 @@ void CpuWidget::handleCpuChanged()
 {
     for (unsigned int i = 0; i < cpu->getCountRegisters(); i++)
     {
-        std::shared_ptr<QTextEdit> edit = edtR[i];
+        std::shared_ptr<QLineEdit> edit = edtR[i];
         unsigned int value = cpu->getRegisterAt(i);
         edit->setText(QString::number(value, 16));
     }
@@ -281,7 +283,7 @@ void CpuWidget::handleCpuChanged()
     edtCycles->setText(QString::number(cpu->getCycles(), 16));
 }
 
-void CpuWidget::handleActualCommand(const QString& cmd)
-{
-    lblInstruction->setText(cmd);
-}
+//void CpuWidget::handleActualCommand(const QString& cmd)
+//{
+//    lblInstruction->setText(cmd);
+//}

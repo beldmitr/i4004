@@ -283,21 +283,25 @@ void MainWindow::createDocks()
     lstResult = std::shared_ptr<QListWidget>(new QListWidget);
     dockResult->setWidget(lstResult.get());
     this->addDockWidget(Qt::BottomDockWidgetArea, dockResult.get());
+    dockResult->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Minimum);
 
     dockDRam = std::shared_ptr<QDockWidget>(new QDockWidget("Data RAM"));
     dramWidget = std::shared_ptr<DataRamWidget>(new DataRamWidget(simulator));
     dockDRam->setWidget(dramWidget.get());
     this->addDockWidget(Qt::BottomDockWidgetArea, dockDRam.get());
+    dockDRam->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Minimum);
 
     dockRom = std::shared_ptr<QDockWidget>(new QDockWidget("ROM"));
     romWidget = std::shared_ptr<RomWidget>(new RomWidget(simulator));
     dockRom->setWidget(romWidget.get());
     this->addDockWidget(Qt::BottomDockWidgetArea, dockRom.get());
+    dockRom->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Minimum);
 
     dockPRam = std::shared_ptr<QDockWidget>(new QDockWidget("Program RAM"));
     pramWidget = std::shared_ptr<ProgramRamWidget>(new ProgramRamWidget(simulator));
     dockPRam->setWidget(pramWidget.get());
     this->addDockWidget(Qt::BottomDockWidgetArea, dockPRam.get());
+    dockPRam->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Minimum);
 
     this->tabifyDockWidget(dockRom.get(), dockDRam.get());
     this->tabifyDockWidget(dockDRam.get(), dockPRam.get());
@@ -307,26 +311,29 @@ void MainWindow::createDocks()
     cpuWidget = std::shared_ptr<CpuWidget>(new CpuWidget(simulator));
     dockCpuWidget->setWidget(cpuWidget.get());
     this->addDockWidget(Qt::BottomDockWidgetArea, dockCpuWidget.get());
+//    cpuWidget->setSizePolicy(QSizePolicy::Minimum, QSizePolicy::Minimum);
+//    dockCpuWidget->setSizePolicy(QSizePolicy::Minimum, QSizePolicy::Minimum);
 
-    QSizePolicy sizePolicy = dockCpuWidget->sizePolicy();
-    sizePolicy.setHorizontalPolicy(QSizePolicy::Maximum);
-    dockCpuWidget->setSizePolicy(sizePolicy);
 
-    sizePolicy = dockResult->sizePolicy();
-    sizePolicy.setHorizontalPolicy(QSizePolicy::Minimum);
-    dockResult->setSizePolicy(sizePolicy);
+//    QSizePolicy sizePolicy = dockCpuWidget->sizePolicy();
+//    sizePolicy.setHorizontalPolicy(QSizePolicy::Maximum);
+//    dockCpuWidget->setSizePolicy(sizePolicy);
 
-    sizePolicy = dockDRam->sizePolicy();
-    sizePolicy.setHorizontalPolicy(QSizePolicy::Minimum);
-    dockDRam->setSizePolicy(sizePolicy);
+//    sizePolicy = dockResult->sizePolicy();
+//    sizePolicy.setHorizontalPolicy(QSizePolicy::Minimum);
+//    dockResult->setSizePolicy(sizePolicy);
 
-    sizePolicy = dockRom->sizePolicy();
-    sizePolicy.setHorizontalPolicy(QSizePolicy::Minimum);
-    dockRom->setSizePolicy(sizePolicy);
+//    sizePolicy = dockDRam->sizePolicy();
+//    sizePolicy.setHorizontalPolicy(QSizePolicy::Minimum);
+//    dockDRam->setSizePolicy(sizePolicy);
 
-    sizePolicy = dockPRam->sizePolicy();
-    sizePolicy.setHorizontalPolicy(QSizePolicy::Minimum);
-    dockPRam->setSizePolicy(sizePolicy);
+//    sizePolicy = dockRom->sizePolicy();
+//    sizePolicy.setHorizontalPolicy(QSizePolicy::Minimum);
+//    dockRom->setSizePolicy(sizePolicy);
+
+//    sizePolicy = dockPRam->sizePolicy();
+//    sizePolicy.setHorizontalPolicy(QSizePolicy::Minimum);
+//    dockPRam->setSizePolicy(sizePolicy);
 }
 
 MainWindow::MainWindow(Compiler& compiler, Simulator &simulator, QWidget *parent)
@@ -339,7 +346,7 @@ MainWindow::MainWindow(Compiler& compiler, Simulator &simulator, QWidget *parent
 
     // create components
     mdi = std::shared_ptr<QMdiArea>(new QMdiArea);
-    //    mdi->tileSubWindows();
+//    mdi->tileSubWindows();
     mdi->cascadeSubWindows();
 
     mdi->setHorizontalScrollBarPolicy(Qt::ScrollBarAsNeeded);
