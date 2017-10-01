@@ -2,6 +2,9 @@
 
 LedImage::LedImage(QWidget *parent) : QLabel(parent)
 {
+    this->setMargin(0);
+    this->setMaximumWidth(50);
+
     pics =
     {
         {"Blue", QImage(":/Resources/components/LedBlue.png")},
@@ -13,8 +16,8 @@ LedImage::LedImage(QWidget *parent) : QLabel(parent)
         {"Yellow", QImage(":/Resources/components/LedYellow.png")}
     };
 
-    setAlignment(Qt::AlignCenter);
-    setAutoFillBackground(true);
+    this->setAlignment(Qt::AlignCenter);
+    this->setAutoFillBackground(false);
 
     image_on = pics.find("Red")->second;
     image_off = pics.find("White")->second;

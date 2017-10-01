@@ -8,10 +8,19 @@ Led::Led(Simulator *simulator, QWidget *parent) : QWidget(parent)
     coloredComboBox = std::shared_ptr<ColoredComboBox>(new ColoredComboBox);
     connector = std::shared_ptr<ChooseIOWidget>(new ChooseIOWidget);
 
-    layout = std::shared_ptr<QGridLayout>(new QGridLayout(this));
-    layout->addWidget(coloredComboBox.get(), 0, 0, Qt::AlignCenter);
-    layout->addWidget(ledImage.get(), 1, 0, Qt::AlignCenter);
-    layout->addWidget(connector.get(), 2, 0, Qt::AlignCenter);
+    layout = std::shared_ptr<QVBoxLayout>(new QVBoxLayout(this));
+    layout->addWidget(coloredComboBox.get(), Qt::AlignCenter);
+    layout->addWidget(ledImage.get(), Qt::AlignCenter);
+    layout->addWidget(connector.get(), Qt::AlignCenter);
+
+    layout->setMargin(0);
+    layout->setSpacing(0);
+
+//    ledImage->setMargin(10);
+//    coloredComboBox->setMargin(0);
+
+//    this->setSizePolicy(QSizePolicy::Maximum, QSizePolicy::Maximum);
+//    this->setStyleSheet("background-color: red");
 
     connect(coloredComboBox.get(), static_cast<void (QComboBox::*)(const QString&)>(&ColoredComboBox::activated),
             [=](const QString& color)

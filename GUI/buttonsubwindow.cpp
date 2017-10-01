@@ -9,6 +9,8 @@ ButtonSubWindow::ButtonSubWindow(Simulator* simulator) : SubWindow()
     this->setWidget(centralWidget.get());
 
     layout = std::shared_ptr<QGridLayout>(new QGridLayout(centralWidget.get()));
+    layout->setMargin(0);
+    layout->setSpacing(0);
 
     for (int i = 0; i < 8; i++)
     {

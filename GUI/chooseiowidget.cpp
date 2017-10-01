@@ -10,12 +10,14 @@
 ChooseIOWidget::ChooseIOWidget(QWidget *parent) : QWidget(parent)
 {
     this->setMinimumWidth(135);
+
     layout = std::shared_ptr<QVBoxLayout>(new QVBoxLayout(this));
 
     button = std::shared_ptr<QPushButton>(new QPushButton("N/C"));
-    this->button->setToolTip("No connection");
+    button->setToolTip("No connection");
 
     layout->addWidget(button.get());
+    layout->setMargin(0);
 
     menuButton = std::shared_ptr<QMenu>(new QMenu(button.get()));
 
