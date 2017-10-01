@@ -2,12 +2,12 @@
 
 Button::Button(Simulator* simulator, ChooseIOWidget *connector) : QPushButton()
 {
-    this->setMaximumSize(40,40);
+    this->setMaximumSize(72, 72);
 
     this->simulator = simulator;
 
     this->setIcon(QIcon(":/Resources/components/button.png"));
-    this->setIconSize(QSize(32, 32));
+    this->setIconSize(QSize(64, 64));
 
     this->setCheckable(true);
 

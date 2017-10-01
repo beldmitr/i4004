@@ -3,7 +3,7 @@
 
 
 #include <QWidget>
-#include <QVBoxLayout>
+#include <QGridLayout>
 #include <QComboBox>
 
 #include <memory>
@@ -24,7 +24,7 @@ private:
     std::shared_ptr<ColoredComboBox> coloredComboBox;
     std::shared_ptr<ChooseIOWidget> connector;
 
-    std::shared_ptr<QVBoxLayout> layout;
+    std::shared_ptr<QGridLayout> layout;
 
     ChooseIOWidget::IOType type = ChooseIOWidget::IOType::NONE;
 
