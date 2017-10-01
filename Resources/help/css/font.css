@@ -1,0 +1,9 @@
+@font-face {
+  font-family: 'Awesome';
+  src: url('font-awesome-4.7.0/fonts/fontawesome-webfont.eot'); /* IE9 Compat Modes */
+  src: url('font-awesome-4.7.0/fonts/fontawesome-webfont.eot?#iefix') format('embedded-opentype'), /* IE6-IE8 */
+       url('font-awesome-4.7.0/fonts/fontawesome-webfont.woff2') format('woff2'), /* Super Modern Browsers */
+       url('font-awesome-4.7.0/fonts/fontawesome-webfont.woff') format('woff'), /* Pretty Modern Browsers */
+       url('font-awesome-4.7.0/fonts/fontawesome-webfont.ttf')  format('truetype'), /* Safari, Android, iOS */
+       url('font-awesome-4.7.0/fonts/fontawesome-webfont.svg#svgFontName') format('svg'); /* Legacy iOS */
+}

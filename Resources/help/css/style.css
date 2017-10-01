@@ -1,0 +1,7 @@
+@import "font.css";
+
+
+.content:before {
+  font-family: "Awesome";
+  content: "\f2c0";
+}

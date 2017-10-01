@@ -202,7 +202,9 @@ void MainWindow::createMenu()
     menuWindows->addAction(showWindows.get());
 
     // Create menu Help
-    mainMenu->addMenu("Help");
+    menuHelp = std::shared_ptr<QMenu>(mainMenu->addMenu("Help"));
+    menuHelp->addAction("Help");
+    menuHelp->addAction("About Intel4004");
 }
 
 void MainWindow::createToolbars()

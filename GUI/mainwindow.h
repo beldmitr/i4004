@@ -59,6 +59,7 @@ private:
     std::shared_ptr<QMenu> menuEdit;
     std::shared_ptr<QMenu> menuBuild;
     std::shared_ptr<QMenu> menuWindows;
+    std::shared_ptr<QMenu> menuHelp;
 
     std::shared_ptr<QMdiArea> mdi;
 
