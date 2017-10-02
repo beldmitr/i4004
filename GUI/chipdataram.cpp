@@ -7,15 +7,18 @@ ChipDataRam::ChipDataRam(Simulator* simulator, unsigned int bank, unsigned int c
     this->chip = chip;
 
     layout = new QHBoxLayout(this);
+    layout->setMargin(0);
 
     inFrame = new QGroupBox;
     inLayout = new QHBoxLayout(inFrame);
+    inLayout->setMargin(0);
+    inLayout->setSpacing(3);
 
     // In Layout
     memTable = new QTableWidget(4, 16);
     statTable = new QTableWidget(4, 4);
-    outputFrame = new QGroupBox("Output "+QString::number(bank)+"/"+QString::number(chip));
-    outputLayout = new QVBoxLayout(outputFrame);
+    outputFrame = new QGroupBox("Output");
+    outputLayout = new QGridLayout(outputFrame);
 
     // Tables settings
     // Memory Table
@@ -104,7 +107,8 @@ ChipDataRam::ChipDataRam(Simulator* simulator, unsigned int bank, unsigned int c
     // make output checkboxes
     for (int i = 0; i < 4; i++)
     {
-        QCheckBox* output = new QCheckBox(QString::number(i, 16));
+        QCheckBox* output = new QCheckBox("");
+
         output->setLayoutDirection(Qt::RightToLeft);
         output->setStyleSheet("QCheckBox::indicator:checked { background-color: #000; } "
                               "QCheckBox::indicator {"
@@ -117,8 +121,7 @@ ChipDataRam::ChipDataRam(Simulator* simulator, unsigned int bank, unsigned int c
         outputs.push_back(output);
         output->setEnabled(false);
 
-        outputLayout->addWidget(output);
-        outputLayout->setAlignment(output, Qt::AlignHCenter);
+        outputLayout->addWidget(output, i, 0, Qt::AlignCenter);
     }
 
     // add to in layout

@@ -3,7 +3,7 @@
 
 #include <QWidget>
 #include <QHBoxLayout>
-#include <QVBoxLayout>
+#include <QGridLayout>
 #include <QLabel>
 #include <QGroupBox>
 #include <QTableWidget>
@@ -26,7 +26,7 @@ class DataRamWidget : public QWidget
 private:
     Simulator* simulator; // I didn't create, I don't to delete
 
-    std::shared_ptr<QVBoxLayout> layout;
+    std::shared_ptr<QGridLayout> layout;
     std::shared_ptr<QHBoxLayout> titleLayout;
     std::shared_ptr<QHBoxLayout> memLayout;
     std::shared_ptr<QComboBox> comboTitle;

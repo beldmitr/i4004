@@ -5,14 +5,19 @@ DataRamWidget::DataRamWidget(Simulator *simulator, QWidget *parent) : QWidget(pa
     this->simulator = simulator;
 
     this->setAutoFillBackground(true);
-    this->setStyleSheet("DataRamWidget { border: 1px solid black }");   /// FIXME What do this do?? Looks like nothing
 
-    layout = std::shared_ptr<QVBoxLayout>(new QVBoxLayout(this));
+    layout = std::shared_ptr<QGridLayout>(new QGridLayout(this));
+    layout->setMargin(2);
+    layout->setSpacing(0);
+    layout->setHorizontalSpacing(0);
 
     titleLayout = std::shared_ptr<QHBoxLayout>(new QHBoxLayout);
     memLayout = std::shared_ptr<QHBoxLayout>(new QHBoxLayout);
+    memLayout->setMargin(0);
+    memLayout->setSpacing(0);
 
     comboTitle = std::shared_ptr<QComboBox>(new QComboBox);
+    comboTitle->setMinimumWidth(150);
 
     scrollBar = std::shared_ptr<QScrollBar>(new QScrollBar);
 
@@ -21,7 +26,7 @@ DataRamWidget::DataRamWidget(Simulator *simulator, QWidget *parent) : QWidget(pa
     {
         for (int j = 0; j < 4; j++)
         {
-            comboTitle->addItem(QString("Bank %1\tChip %2\t")
+            comboTitle->addItem(QString("Bank %1 Chip %2")
                                 .arg(QString::number(i))
                                 .arg(QString::number(j)));
 
@@ -34,11 +39,10 @@ DataRamWidget::DataRamWidget(Simulator *simulator, QWidget *parent) : QWidget(pa
 
     // scrollBar settings
     scrollBar->setMinimum(0);
-    scrollBar->setMaximum(8*4 - 1); // must be the same as a count of items in ComboBox
+    scrollBar->setMaximum(8 * 4 - 1); // must be the same as a count of items in ComboBox
 
     // Title layout
     titleLayout->addWidget(comboTitle.get());
-    titleLayout->addStretch();
 
     for(int i = 0; i < 8; i++)
     {    // 8 banks
@@ -61,8 +65,8 @@ DataRamWidget::DataRamWidget(Simulator *simulator, QWidget *parent) : QWidget(pa
     memLayout->addWidget(scrollBar.get());
 
     // add to main layout
-    layout->addLayout(titleLayout.get());
-    layout->addLayout(memLayout.get());
+    layout->addLayout(titleLayout.get(), 0, 0, Qt::AlignCenter);
+    layout->addLayout(memLayout.get(), 1, 0);
 
     // connects
 

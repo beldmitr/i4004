@@ -5,7 +5,7 @@
 #include <QGroupBox>
 #include <QHBoxLayout>
 #include <QTableWidget>
-#include <QVBoxLayout>
+#include <QGridLayout>
 #include <QHeaderView>
 #include <QCheckBox>
 
@@ -31,7 +31,7 @@ private:
     QGroupBox* inFrame;
     QHBoxLayout* inLayout;
     QGroupBox* outputFrame;
-    QVBoxLayout* outputLayout;
+    QGridLayout* outputLayout;
 
     std::vector<QTableWidgetItem*> headerItems;
     std::vector<QCheckBox*> outputs;
