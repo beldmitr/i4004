@@ -4,7 +4,6 @@
 #include <QWidget>
 #include <QHBoxLayout>
 #include <QGridLayout>
-#include <QLabel>
 #include <QGroupBox>
 #include <QTableWidget>
 #include <QCheckBox>
@@ -32,6 +31,9 @@ private:
     std::shared_ptr<QComboBox> comboTitle;
     std::shared_ptr<QScrollBar> scrollBar;
     std::vector<ChipDataRam*> chips;
+
+    const unsigned banksNumber = 8;
+    const unsigned chipNumber = 4;
 
 public:
     explicit DataRamWidget(Simulator* simulator, QWidget *parent = 0);

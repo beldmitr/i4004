@@ -22,32 +22,32 @@ DataRamWidget::DataRamWidget(Simulator *simulator, QWidget *parent) : QWidget(pa
     scrollBar = std::shared_ptr<QScrollBar>(new QScrollBar);
 
     // Add Banks and Chips items to ComboBox
-    for (int i = 0; i < 8; i++)
+    for (unsigned i = 0; i < banksNumber; i++)
     {
-        for (int j = 0; j < 4; j++)
+        for (unsigned j = 0; j < chipNumber; j++)
         {
             comboTitle->addItem(QString("Bank %1 Chip %2")
                                 .arg(QString::number(i))
                                 .arg(QString::number(j)));
 
-            if (j == 3 && i != 7)
+            if (j == (chipNumber - 1) && i != (banksNumber - 1))
             {
-                comboTitle->insertSeparator(5 * i + 4);
+                comboTitle->insertSeparator((chipNumber + 1) * i + chipNumber);
             }
         }
     }
 
     // scrollBar settings
     scrollBar->setMinimum(0);
-    scrollBar->setMaximum(8 * 4 - 1); // must be the same as a count of items in ComboBox
+    scrollBar->setMaximum(banksNumber * chipNumber - 1); // must be the same as a count of items in ComboBox
 
     // Title layout
     titleLayout->addWidget(comboTitle.get());
 
-    for(int i = 0; i < 8; i++)
-    {    // 8 banks
-        for (int j = 0; j < 4; j++)
-        { // 4 chips in each bank
+    for(unsigned i = 0; i < banksNumber; i++)
+    {
+        for (unsigned j = 0; j < chipNumber; j++)
+        {
             ChipDataRam* chip = new ChipDataRam(simulator, i, j);
 
             // Memory layout
@@ -70,27 +70,27 @@ DataRamWidget::DataRamWidget(Simulator *simulator, QWidget *parent) : QWidget(pa
 
     // connects
 
-    connect(comboTitle.get(), static_cast<void (QComboBox::*)(int)>(&QComboBox::currentIndexChanged),   /// TODO is it enaugh &QComboBox::currentIndexChanged ??
+    connect(comboTitle.get(), static_cast<void (QComboBox::*)(int)>(&QComboBox::currentIndexChanged),
         [=](int index)
         {
-            int i = index / 5; // bank
-            int j = index % 5; // chip
+            int i = index / (chipNumber + 1); // bank
+            int j = index % (chipNumber + 1); // chip
 
-            scrollBar->setValue(4 * i + j);
+            scrollBar->setValue(chipNumber * i + j);
 
             // show choosen bank chip memory table
             for(ChipDataRam* g : chips)
             {
                 g->hide();
             }
-            ChipDataRam* gb = chips.at(4 * i + j);
+            ChipDataRam* gb = chips.at(chipNumber * i + j);
             gb->show();
         });
 
     connect(scrollBar.get(), &QScrollBar::valueChanged,
         [=](int value)
         {
-            comboTitle->setCurrentIndex(value + value / 4);
+            comboTitle->setCurrentIndex(value + value / chipNumber);
 
             // show choosen bank chip memory table
             for(ChipDataRam* g : chips)
