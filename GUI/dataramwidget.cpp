@@ -17,7 +17,6 @@ DataRamWidget::DataRamWidget(Simulator *simulator, QWidget *parent) : QWidget(pa
     memLayout->setSpacing(0);
 
     comboTitle = std::shared_ptr<QComboBox>(new QComboBox);
-    comboTitle->setMinimumWidth(150);
 
     scrollBar = std::shared_ptr<QScrollBar>(new QScrollBar);
 

@@ -23,7 +23,7 @@ class DataRamWidget : public QWidget
 {
     Q_OBJECT
 private:
-    Simulator* simulator; // I didn't create, I don't to delete
+    Simulator* simulator; // I didn't create, I don't have to delete
 
     std::shared_ptr<QGridLayout> layout;
     std::shared_ptr<QHBoxLayout> titleLayout;
