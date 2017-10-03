@@ -7,6 +7,7 @@
 #include <QGroupBox>
 #include <QScrollBar>
 #include <QComboBox>
+#include <QGridLayout>
 
 #include <memory>
 
@@ -20,7 +21,7 @@ private:
     Simulator* simulator;
 
     std::shared_ptr<QVBoxLayout> layout;
-    std::shared_ptr<QHBoxLayout> titleLayout;
+    std::shared_ptr<QGridLayout> titleLayout;
     std::shared_ptr<QComboBox> comboTitle;
     std::shared_ptr<QHBoxLayout> mainLayout;
     std::shared_ptr<QScrollBar> scroll;
@@ -29,6 +30,9 @@ private:
     std::shared_ptr<MemoryTable> memory;
 
     void setMemoryTitle(int value);
+
+    const unsigned pagesNumber = 16; /// TODO this
+    const unsigned bytesPerPage = 256; /// TODO this
 
 public:
     explicit ProgramRamWidget(Simulator *simulator, QWidget *parent = 0);

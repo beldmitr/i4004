@@ -3,11 +3,6 @@
 
 void ProgramRamWidget::setMemoryTitle(int value)
 {
-    /// Uncomment this if you want a "Page Z [0xZZZ - 0xZZZ]" as a title of a GroupBox
-//    memoryGB->setTitle("Page " + QString::number(value / 16) +
-//                       " [ 0x" + QString::number(256 * (value / 16), 16) + " - 0x" +
-//                       QString::number(256 * ((value / 16) + 1) - 1, 16) + " ]");
-
     comboTitle->setCurrentIndex(value / 16);
 
     // PRAM
@@ -24,8 +19,10 @@ ProgramRamWidget::ProgramRamWidget(Simulator* simulator, QWidget *parent) : QWid
     this->setAutoFillBackground(true);
 
     layout = std::shared_ptr<QVBoxLayout>(new QVBoxLayout(this));
+    layout->setMargin(2);
+    layout->setSpacing(0);
 
-    titleLayout = std::shared_ptr<QHBoxLayout>(new QHBoxLayout);
+    titleLayout = std::shared_ptr<QGridLayout>(new QGridLayout);
     comboTitle = std::shared_ptr<QComboBox>(new QComboBox);
 
     for (int i = 0; i < 16; i++)
@@ -36,9 +33,7 @@ ProgramRamWidget::ProgramRamWidget(Simulator* simulator, QWidget *parent) : QWid
                             .arg(QString::number(256 * (i + 1) - 1, 16)));
     }
 
-    titleLayout->addWidget(comboTitle.get());
-    titleLayout->addStretch();
-
+    titleLayout->addWidget(comboTitle.get(), 0, 0, Qt::AlignCenter);
 
     mainLayout = std::shared_ptr<QHBoxLayout>(new QHBoxLayout);
     scroll = std::shared_ptr<QScrollBar>(new QScrollBar);
