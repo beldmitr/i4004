@@ -31,8 +31,10 @@ private:
 
     void setMemoryTitle(int value);
 
-    const unsigned pagesNumber = 16; /// TODO this
-    const unsigned bytesPerPage = 256; /// TODO this
+    const unsigned columnsNumber = 16;
+
+    const unsigned pagesNumber = 16;
+    const unsigned bytesPerPage = 256;
 
 public:
     explicit ProgramRamWidget(Simulator *simulator, QWidget *parent = 0);

@@ -3,8 +3,7 @@
 
 void ProgramRamWidget::setMemoryTitle(int value)
 {
-    comboTitle->setCurrentIndex(value / 16);
-
+    comboTitle->setCurrentIndex(value / bytesPerPage);
     // PRAM
     PRAM* pram = simulator->getPram().get();
     connect(pram, SIGNAL(onPramClear()), this, SLOT(handlePramCleared()));
@@ -25,12 +24,12 @@ ProgramRamWidget::ProgramRamWidget(Simulator* simulator, QWidget *parent) : QWid
     titleLayout = std::shared_ptr<QGridLayout>(new QGridLayout);
     comboTitle = std::shared_ptr<QComboBox>(new QComboBox);
 
-    for (int i = 0; i < 16; i++)
+    for (unsigned i = 0; i < pagesNumber; i++)
     {
         comboTitle->addItem(QString("Page %1: [0x%2 - 0x%3]")
                             .arg(QString::number(i))
-                            .arg(QString::number(256 * i, 16))
-                            .arg(QString::number(256 * (i + 1) - 1, 16)));
+                            .arg(QString::number(bytesPerPage * i, 16))
+                            .arg(QString::number(bytesPerPage * (i + 1) - 1, 16)));
     }
 
     titleLayout->addWidget(comboTitle.get(), 0, 0, Qt::AlignCenter);
@@ -41,12 +40,13 @@ ProgramRamWidget::ProgramRamWidget(Simulator* simulator, QWidget *parent) : QWid
     memoryGB = std::shared_ptr<QGroupBox>(new QGroupBox);
     memLayout = std::shared_ptr<QHBoxLayout>(new QHBoxLayout(memoryGB.get()));
 
-    memory = std::shared_ptr<MemoryTable>(new MemoryTable);
+    memory = std::shared_ptr<MemoryTable>(new MemoryTable(columnsNumber, pagesNumber, bytesPerPage));
     memLayout->addWidget(memory.get());
 
     scroll->setMinimum(0);
-    scroll->setMaximum(255);
-    setMemoryTitle(0);
+    scroll->setMaximum(pagesNumber * bytesPerPage - 1);
+
+    this->setMemoryTitle(0);
 
     mainLayout->addWidget(memoryGB.get());
     mainLayout->addWidget(scroll.get());
@@ -58,8 +58,9 @@ ProgramRamWidget::ProgramRamWidget(Simulator* simulator, QWidget *parent) : QWid
     connect(scroll.get(), &QScrollBar::valueChanged,
         [=](int value)
         {
-            memory->setCurrentCell(value, memory->currentColumn());
-            setMemoryTitle(value);
+            memory->setSelectedCell(value);
+
+            this->setMemoryTitle(value);
         });
 
     connect(memory.get(), &QTableWidget::itemSelectionChanged,
@@ -68,29 +69,17 @@ ProgramRamWidget::ProgramRamWidget(Simulator* simulator, QWidget *parent) : QWid
             int row = memory->currentRow();
             int column = memory->currentColumn();
 
-            for (int i=0; i<memory->verticalHeader()->count(); i++)
-            {
-                memory->verticalHeaderItem(i)->setText(QString::number(i * 16, 16));
-            }
+            scroll->setValue(row * columnsNumber + column);
 
-            scroll->setValue(row);
-
-            // I don't create this pointer with new, so I don't need to delete it
-            QTableWidgetItem* selItem = memory->verticalHeaderItem(row);
-            selItem->setText(QString::number(row * 16 + column, 16));
-            /*
-             * I didn't create selItem with "new" command so I do not need to delete it,
-             * only assign to nullptr to disallow reusage or wrong usage of this pointer
-             */
-            selItem = nullptr;
-
-            setMemoryTitle(row);
+            this->setMemoryTitle(row * columnsNumber + column);
         });
 
     connect(comboTitle.get(), static_cast<void (QComboBox::*)(int)>(&QComboBox::activated),
         [=](int index)
         {
-            scroll->setValue(index * 16);
+            scroll->setValue(index * bytesPerPage - columnsNumber);
+
+            memory->setSelectedCell(index * bytesPerPage);
         });
 
     PRAM* pram = simulator->getPram().get();
