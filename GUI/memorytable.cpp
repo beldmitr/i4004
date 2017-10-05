@@ -1,15 +1,18 @@
 #include "memorytable.h"
 
-MemoryTable::MemoryTable(QWidget *parent) : QTableWidget(parent)
+MemoryTable::MemoryTable(unsigned columnsNumber, unsigned pages, unsigned bytesPerPage) : QTableWidget()
 {
-    this->setRowCount(ROWS);
-    this->setColumnCount(COLUMNS);
+    this->columnsNumber = columnsNumber;
+    rowsNumber = pages * bytesPerPage / columnsNumber;
+
+    this->setRowCount(rowsNumber);
+    this->setColumnCount(columnsNumber);
 
     this->verticalHeader()->setSectionResizeMode(QHeaderView::Stretch);
     this->verticalHeader()->setStretchLastSection(false);
-    for (int i=0; i < this->verticalHeader()->count(); i++)
+    for (unsigned i = 0; i < rowsNumber; i++)
     {
-        QTableWidgetItem* item = new QTableWidgetItem(QString::number(i * 16, 16));
+        QTableWidgetItem* item = new QTableWidgetItem(QString::number(i * columnsNumber, 16));
         this->setVerticalHeaderItem(i, item);
 
         headerItems.push_back(item);
@@ -17,7 +20,7 @@ MemoryTable::MemoryTable(QWidget *parent) : QTableWidget(parent)
 
     this->horizontalHeader()->setSectionResizeMode(QHeaderView::Stretch);
     this->horizontalHeader()->setStretchLastSection(false);
-    for (int i=0; i < this->horizontalHeader()->count(); i++)
+    for (unsigned i = 0; i < columnsNumber; i++)
     {
         QTableWidgetItem* item = new QTableWidgetItem(QString::number(i, 16));
         this->setHorizontalHeaderItem(i, item);
@@ -25,9 +28,9 @@ MemoryTable::MemoryTable(QWidget *parent) : QTableWidget(parent)
         headerItems.push_back(item);
     }
 
-    for (int i=0; i < this->horizontalHeader()->count(); i++)
+    for (unsigned i = 0; i < columnsNumber; i++)
     {
-        for (int j=0; j < this->verticalHeader()->count(); j++)
+        for (unsigned j = 0; j < rowsNumber; j++)
         {
             QTableWidgetItem* item = new QTableWidgetItem("0");
             item->setTextAlignment(Qt::AlignCenter);
@@ -42,6 +45,26 @@ MemoryTable::MemoryTable(QWidget *parent) : QTableWidget(parent)
     this->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
 
     this->setSelectionMode(QAbstractItemView::SingleSelection);
+
+    connect(this, &QTableWidget::itemSelectionChanged,
+            [=]() {
+        int row = this->currentRow();
+        int column = this->currentColumn();
+
+        for (unsigned i = 0; i < rowsNumber; i++)
+        {
+            this->verticalHeaderItem(i)->setText(QString::number(i * columnsNumber, 16));
+        }
+
+        // I don't create this pointer with new, so I don't need to delete it
+        QTableWidgetItem* selItem = this->verticalHeaderItem(row);
+        selItem->setText(QString::number(row * columnsNumber + column, 16));
+        /*
+         * I didn't create selItem with "new" command so I do not need to delete it,
+         * only assign to nullptr to disallow reusage or wrong usage of this pointer
+         */
+        selItem = nullptr;
+    });
 }
 
 MemoryTable::~MemoryTable()
@@ -59,11 +82,19 @@ MemoryTable::~MemoryTable()
 
 void MemoryTable::setValue(unsigned addr, unsigned value)
 {
-    int row = addr / 16;
-    int col = addr % 16;
+    int row = addr / columnsNumber;
+    int col = addr % columnsNumber;
 
     QTableWidgetItem* item = this->item(row, col);
     item->setText(QString::number(value, 16));
+}
+
+void MemoryTable::setSelectedCell(unsigned addr)
+{
+    int row = addr / columnsNumber;
+    int col = this->currentColumn();
+
+    this->setCurrentCell(row, col);
 }
 
 void MemoryTable::clear()
@@ -77,16 +108,16 @@ void MemoryTable::clear()
 void MemoryTable::wheelEvent(QWheelEvent* event)
 {
     /// FIXME magic number 120
-    int p = event->delta()/120; // +1 when scroll up, -1 when down
+    int p = event->delta() / 120; // +1 when scroll up, -1 when down
 
     int row = this->currentRow() - p;
     if (row < 0)
     {
         row = 0;
     }
-    if (row >= ROWS-1)
+    if ((unsigned)row >= rowsNumber - 1)
     {
-        row = ROWS-1;
+        row = rowsNumber - 1;
     }
 
     this->setCurrentCell(row, this->currentColumn());

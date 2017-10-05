@@ -10,17 +10,19 @@ class MemoryTable : public QTableWidget
 {
     Q_OBJECT
 private:
-    const int COLUMNS = 16;
-    const int ROWS = 256;
+    unsigned columnsNumber;
+
+    unsigned rowsNumber;
 
     std::vector<QTableWidgetItem*> items;
     std::vector<QTableWidgetItem*> headerItems;
 
 public:
-    explicit MemoryTable(QWidget *parent = 0);
+    explicit MemoryTable(unsigned columnsNumber, unsigned pages, unsigned bytesPerPage);
     virtual ~MemoryTable();
 
     void setValue(unsigned addr, unsigned value);
+    void setSelectedCell(unsigned addr);
     void clear();
 
 signals:
@@ -30,6 +32,7 @@ public slots:
     // QWidget interface
 protected:
     void wheelEvent(QWheelEvent *);
+
 };
 
 #endif // MEMORYTABLE_H
