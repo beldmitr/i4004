@@ -4,6 +4,7 @@
 #include <QWidget>
 #include <QHBoxLayout>
 #include <QVBoxLayout>
+#include <QGridLayout>
 #include <QTableWidget>
 #include <QScrollBar>
 #include <QGroupBox>
@@ -22,6 +23,12 @@ class RomWidget : public QWidget
 {
     Q_OBJECT
 private:
+    const unsigned columnsNumber = 16;
+    const unsigned pagesNumber = 16;
+    const unsigned bytesPerPage = 256;
+    const unsigned ioPerPage = 4;
+
+
     Simulator* simulator;
 
     std::shared_ptr<QGroupBox> memoryGB;    /// TODO make smart_ptr or delete
@@ -30,7 +37,7 @@ private:
     std::shared_ptr<QHBoxLayout> memLayout;
     QGroupBox* activeIOGroupBox; /// TODO wtf ????
     std::shared_ptr<QComboBox> comboTitle;
-    std::shared_ptr<QHBoxLayout> titleLayout;
+    std::shared_ptr<QGridLayout> titleLayout;
     std::shared_ptr<QHBoxLayout> mainLayout;
 
     std::vector<QCheckBox*> ios;

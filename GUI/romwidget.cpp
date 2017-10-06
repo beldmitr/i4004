@@ -7,20 +7,21 @@ RomWidget::RomWidget(Simulator *simulator, QWidget *parent) : QWidget(parent)
     this->setAutoFillBackground(true);
 
     layout = std::shared_ptr<QVBoxLayout>(new QVBoxLayout(this));
+    layout->setMargin(2);
+    layout->setSpacing(0);
 
-    titleLayout = std::shared_ptr<QHBoxLayout>(new QHBoxLayout);
+    titleLayout = std::shared_ptr<QGridLayout>(new QGridLayout);
     comboTitle = std::shared_ptr<QComboBox>(new QComboBox);
 
-    for (int i = 0; i < 16; i++)
+    for (unsigned i = 0; i < pagesNumber; i++)
     {
         comboTitle->addItem(QString("Page %1: [0x%2 - 0x%3]")
                             .arg(QString::number(i))
-                            .arg(QString::number(256 * i, 16))
-                            .arg(QString::number(256 * (i + 1) - 1, 16)));
+                            .arg(QString::number(bytesPerPage * i, 16))
+                            .arg(QString::number(bytesPerPage * (i + 1) - 1, 16)));
     }
 
-    titleLayout->addWidget(comboTitle.get());
-    titleLayout->addStretch();
+    titleLayout->addWidget(comboTitle.get(), 0, 0, Qt::AlignCenter);
 
     mainLayout = std::shared_ptr<QHBoxLayout>(new QHBoxLayout);
 
@@ -29,23 +30,17 @@ RomWidget::RomWidget(Simulator *simulator, QWidget *parent) : QWidget(parent)
     memoryGB = std::shared_ptr<QGroupBox>(new QGroupBox);
     memLayout = std::shared_ptr<QHBoxLayout>(new QHBoxLayout(memoryGB.get()));
 
-    memory = std::shared_ptr<MemoryTable>(new MemoryTable);
+    memory = std::shared_ptr<MemoryTable>(new MemoryTable(columnsNumber, pagesNumber, bytesPerPage));
     memLayout->addWidget(memory.get());
 
-    for (int j=0; j<16; j++)
+    for (unsigned j = 0; j < pagesNumber; j++)
     {
-        QString pageNumber = QString::number(j);
-        if (j < 10)
-        {
-            pageNumber.append("  ");
-        }
-
-        QGroupBox* ioGB = new QGroupBox("I/O " + pageNumber);
+        QGroupBox* ioGB = new QGroupBox("I/O");
         QVBoxLayout* ioLayout = new QVBoxLayout(ioGB);
 
-        for(int i=0; i<4; i++)
+        for(unsigned i=0; i < ioPerPage; i++)
         {
-            QCheckBox* ioCB = new QCheckBox();
+            QCheckBox* ioCB = new QCheckBox();  /// TODO delete this pointer
             ioCB->setDisabled(true);
             ioLayout->addWidget(ioCB);
             ioLayout->setAlignment(ioCB, Qt::AlignHCenter);
@@ -64,7 +59,7 @@ RomWidget::RomWidget(Simulator *simulator, QWidget *parent) : QWidget(parent)
 
         memLayout->addWidget(ioGB);
 
-        if (j==0)
+        if (j == 0)
         {
             activeIOGroupBox = ioGB;
         }
@@ -75,8 +70,8 @@ RomWidget::RomWidget(Simulator *simulator, QWidget *parent) : QWidget(parent)
     }
 
     scroll->setMinimum(0);
-    scroll->setMaximum(255);
-    setMemoryTitle(0);
+    scroll->setMaximum(pagesNumber * bytesPerPage - 1);
+    this->setMemoryTitle(0);
 
     mainLayout->addWidget(memoryGB.get());
     mainLayout->addWidget(scroll.get());
@@ -88,9 +83,11 @@ RomWidget::RomWidget(Simulator *simulator, QWidget *parent) : QWidget(parent)
     connect(scroll.get(), &QScrollBar::valueChanged,
         [=](int value)
         {
-            memory->setCurrentCell(value, memory->currentColumn());
-            setMemoryTitle(value);
-            setIOGroupBoxVisible(value);
+            memory->setSelectedCell(value);
+
+            this->setMemoryTitle(value);
+
+            this->setIOGroupBoxVisible(value / bytesPerPage);
         });
 
     connect(memory.get(), &QTableWidget::itemSelectionChanged,
@@ -99,26 +96,21 @@ RomWidget::RomWidget(Simulator *simulator, QWidget *parent) : QWidget(parent)
             int row = memory->currentRow();
             int column = memory->currentColumn();
 
-            for (int i=0; i<memory->verticalHeader()->count(); i++)
-            {
-//                memory->verticalHeaderItem(i)->setText("0x" + QString::number(i * 16, 16));
-                memory->verticalHeaderItem(i)->setText(QString::number(i * 16, 16));
-            }
+            scroll->setValue(row * columnsNumber + column);
 
-            scroll->setValue(row);
+            this->setMemoryTitle(row * columnsNumber + column);
 
-            selItem = memory->verticalHeaderItem(row);
-//            selItem->setText("0x" + QString::number(row * 16 + column, 16));
-            selItem->setText(QString::number(row * 16 + column, 16));
-
-            setMemoryTitle(row);
-            setIOGroupBoxVisible(row);
+            this->setIOGroupBoxVisible((row * columnsNumber) / bytesPerPage);
         });
 
     connect(comboTitle.get(), static_cast<void (QComboBox::*)(int)>(&QComboBox::activated),
         [=](int index)
         {
-            scroll->setValue(index * 16);
+            scroll->setValue(index * bytesPerPage - columnsNumber);
+
+            memory->setSelectedCell(index * bytesPerPage);
+
+            this->setIOGroupBoxVisible(index);
         });
 
     // ROM
@@ -132,22 +124,20 @@ RomWidget::RomWidget(Simulator *simulator, QWidget *parent) : QWidget(parent)
 
 RomWidget::~RomWidget()
 {
-    // delete or finalize here something
+    for (QCheckBox* io : ios)
+    {
+        delete(io);
+    }
 }
 
 void RomWidget::setMemoryTitle(int value)
 {
-    // Uncomment this if you want a "Page Z [0xZZZ - 0xZZZ]" as a title of a GroupBox
-//    memoryGB->setTitle("Page " + QString::number(value / 16) +
-//                       " [ 0x" + QString::number(256 * (value / 16), 16) + " - 0x" +
-//                       QString::number(256 * ((value / 16) + 1) - 1, 16) + " ]");
-
-    comboTitle->setCurrentIndex(value / 16);
+    comboTitle->setCurrentIndex(value / bytesPerPage);
 }
 
 void RomWidget::setIOGroupBoxVisible(int value)
 {
-    QGroupBox* gb = (QGroupBox*)memLayout->itemAt(1 + value / 16)->widget();
+    QGroupBox* gb = (QGroupBox*)memLayout->itemAt(value + 1)->widget();
     activeIOGroupBox->setVisible(false);
     gb->setVisible(true);
     activeIOGroupBox = gb;
@@ -155,13 +145,13 @@ void RomWidget::setIOGroupBoxVisible(int value)
 
 void RomWidget::setIO(unsigned page, unsigned value)
 {
-    if (page > 15)
+    if (page > pagesNumber)
     {
         std::cerr << "RomWidget: setIO: Wrong page: " << page << std::endl;
         return; /// TODO make an exception
     }
 
-    if (value > 0xf)
+    if (value > 0xF)    // 4 bits number
     {
         std::cerr << "RomWidget: setIO: Wrong value: " << value << std::endl;
         return; /// TODO make an exception
@@ -206,9 +196,9 @@ void RomWidget::write(std::vector<unsigned int> instructions)
 
         // write an instruction
         QString t;
-        (lowByte < 16) ? t.append("0") : t.append("");
+        (lowByte <= 0xF) ? t.append("0") : t.append("");
         t.append(QString::number(lowByte, 16));
-        QTableWidgetItem* w = new QTableWidgetItem(t);
+        QTableWidgetItem* w = new QTableWidgetItem(t);  /// TODO delete this pointer
         w->setTextAlignment(Qt::AlignCenter);
         if (j > 15)
         {
