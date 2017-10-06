@@ -4,11 +4,6 @@
 void ProgramRamWidget::setMemoryTitle(int value)
 {
     comboTitle->setCurrentIndex(value / bytesPerPage);
-    // PRAM
-    PRAM* pram = simulator->getPram().get();
-    connect(pram, SIGNAL(onPramClear()), this, SLOT(handlePramCleared()));
-
-    connect(pram, SIGNAL(onPramChanged(uint,uint)), this, SLOT(handlePramChanged(uint,uint)));
 }
 
 ProgramRamWidget::ProgramRamWidget(Simulator* simulator, QWidget *parent) : QWidget(parent)
@@ -82,7 +77,10 @@ ProgramRamWidget::ProgramRamWidget(Simulator* simulator, QWidget *parent) : QWid
             memory->setSelectedCell(index * bytesPerPage);
         });
 
+    // PRAM
     PRAM* pram = simulator->getPram().get();
+    connect(pram, SIGNAL(onPramClear()), this, SLOT(handlePramCleared()));
+
     connect(pram, SIGNAL(onPramChanged(uint,uint)), this, SLOT(handlePramChanged(uint,uint)));
 }
 
