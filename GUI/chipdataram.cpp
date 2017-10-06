@@ -11,8 +11,6 @@ ChipDataRam::ChipDataRam(Simulator* simulator, unsigned int bank, unsigned int c
 
     inFrame = new QGroupBox;
     inLayout = new QHBoxLayout(inFrame);
-    inLayout->setMargin(0);
-    inLayout->setSpacing(3);
 
     // In Layout
     memTable = new QTableWidget(4, 16);
@@ -109,7 +107,6 @@ ChipDataRam::ChipDataRam(Simulator* simulator, unsigned int bank, unsigned int c
     {
         QCheckBox* output = new QCheckBox("");
 
-        output->setLayoutDirection(Qt::RightToLeft);
         output->setStyleSheet("QCheckBox::indicator:checked { background-color: #000; } "
                               "QCheckBox::indicator {"
                                     "background-color: #FFF;"

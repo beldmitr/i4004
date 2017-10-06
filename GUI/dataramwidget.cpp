@@ -9,12 +9,9 @@ DataRamWidget::DataRamWidget(Simulator *simulator, QWidget *parent) : QWidget(pa
     layout = std::shared_ptr<QGridLayout>(new QGridLayout(this));
     layout->setMargin(2);
     layout->setSpacing(0);
-    layout->setHorizontalSpacing(0);
 
     titleLayout = std::shared_ptr<QHBoxLayout>(new QHBoxLayout);
     memLayout = std::shared_ptr<QHBoxLayout>(new QHBoxLayout);
-    memLayout->setMargin(0);
-    memLayout->setSpacing(0);
 
     comboTitle = std::shared_ptr<QComboBox>(new QComboBox);
 
