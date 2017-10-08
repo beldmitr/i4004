@@ -35,7 +35,9 @@ RomWidget::RomWidget(Simulator *simulator, QWidget *parent) : QWidget(parent)
 
     for (unsigned j = 0; j < pagesNumber; j++)
     {
-        QGroupBox* ioGB = new QGroupBox("I/O");
+        QGroupBox* ioGB = new QGroupBox("I/O " + QString::number(j));
+        ioGB->setMinimumWidth(65);
+
         QVBoxLayout* ioLayout = new QVBoxLayout(ioGB);
 
         for(unsigned i=0; i < ioPerPage; i++)
@@ -151,21 +153,29 @@ void RomWidget::setIO(unsigned page, unsigned value)
         return; /// TODO make an exception
     }
 
-    if (value > 0xF)    // 4 bits number
+    if (value > (pow(2, ioPerPage) - 1))    // 4 bits number
     {
         std::cerr << "RomWidget: setIO: Wrong value: " << value << std::endl;
         return; /// TODO make an exception
     }
 
-    QCheckBox* io0 = ios.at(page * 4 + 0);
-    QCheckBox* io1 = ios.at(page * 4 + 1);
-    QCheckBox* io2 = ios.at(page * 4 + 2);
-    QCheckBox* io3 = ios.at(page * 4 + 3);
+    for (unsigned i = 0; i < ioPerPage; i++)
+    {
+        QCheckBox* io = ios.at(page * ioPerPage + 0);
+        io->setChecked((value & (unsigned)pow(2, i)) >> i);
+    }
 
-    io0->setChecked(value & 0x1);
-    io1->setChecked((value & 0x2) >> 1);
-    io2->setChecked((value & 0x4) >> 2);
-    io3->setChecked((value & 0x8) >> 3);
+
+
+//    QCheckBox* io0 = ios.at(page * ioPerPage + 0);
+//    QCheckBox* io1 = ios.at(page * ioPerPage + 1);
+//    QCheckBox* io2 = ios.at(page * ioPerPage + 2);
+//    QCheckBox* io3 = ios.at(page * ioPerPage + 3);
+
+//    io0->setChecked(value & 0x1);
+//    io1->setChecked((value & 0x2) >> 1);
+//    io2->setChecked((value & 0x4) >> 2);
+//    io3->setChecked((value & 0x8) >> 3);
 }
 
 void RomWidget::write(std::vector<unsigned int> instructions)
