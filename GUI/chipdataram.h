@@ -19,6 +19,16 @@ public:
     virtual ~ChipDataRam();
 
 private:
+    const unsigned ioPerChip = 4;
+
+    const unsigned memoryRowsNumber = 4;
+    const unsigned memoryColumnsNumber = 16;
+
+    const unsigned statusRowsNumber = 4;
+    const unsigned statusColumnsNumber = 4;
+
+
+
     Simulator* simulator;
 
     unsigned int bank;
