@@ -280,24 +280,28 @@ void MainWindow::createDocks()
     this->setCorner(Qt::BottomRightCorner, Qt::RightDockWidgetArea);
 
     dockResult = std::shared_ptr<QDockWidget>(new QDockWidget("Compile Output"));
+    dockResult->setFeatures(QDockWidget::NoDockWidgetFeatures);
     lstResult = std::shared_ptr<QListWidget>(new QListWidget);
     dockResult->setWidget(lstResult.get());
     this->addDockWidget(Qt::BottomDockWidgetArea, dockResult.get());
     dockResult->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Minimum);
 
     dockDRam = std::shared_ptr<QDockWidget>(new QDockWidget("Data RAM"));
+    dockDRam->setFeatures(QDockWidget::NoDockWidgetFeatures);
     dramWidget = std::shared_ptr<DataRamWidget>(new DataRamWidget(simulator));
     dockDRam->setWidget(dramWidget.get());
     this->addDockWidget(Qt::BottomDockWidgetArea, dockDRam.get());
     dockDRam->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Minimum);
 
     dockRom = std::shared_ptr<QDockWidget>(new QDockWidget("ROM"));
+    dockRom->setFeatures(QDockWidget::NoDockWidgetFeatures);
     romWidget = std::shared_ptr<RomWidget>(new RomWidget(simulator));
     dockRom->setWidget(romWidget.get());
     this->addDockWidget(Qt::BottomDockWidgetArea, dockRom.get());
     dockRom->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Minimum);
 
     dockPRam = std::shared_ptr<QDockWidget>(new QDockWidget("Program RAM"));
+    dockPRam->setFeatures(QDockWidget::NoDockWidgetFeatures);
     pramWidget = std::shared_ptr<ProgramRamWidget>(new ProgramRamWidget(simulator));
     dockPRam->setWidget(pramWidget.get());
     this->addDockWidget(Qt::BottomDockWidgetArea, dockPRam.get());
@@ -308,6 +312,7 @@ void MainWindow::createDocks()
     this->tabifyDockWidget(dockPRam.get(), dockResult.get());
 
     dockCpuWidget = std::shared_ptr<QDockWidget>(new QDockWidget("CPU"));
+    dockCpuWidget->setFeatures(QDockWidget::NoDockWidgetFeatures);
     cpuWidget = std::shared_ptr<CpuWidget>(new CpuWidget(simulator));
     dockCpuWidget->setWidget(cpuWidget.get());
     this->addDockWidget(Qt::BottomDockWidgetArea, dockCpuWidget.get());
