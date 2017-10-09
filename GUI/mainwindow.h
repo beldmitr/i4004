@@ -71,7 +71,6 @@ private:
     std::shared_ptr<QToolBar> toolBarFile;
     std::shared_ptr<QToolBar> toolBarEdit;
     std::shared_ptr<QToolBar> toolBarBuild;
-    std::shared_ptr<QToolBar> toolBarDebug;
     std::shared_ptr<QToolBar> toolBarMinimize;
 
     std::shared_ptr<QDockWidget> dockCpuWidget;

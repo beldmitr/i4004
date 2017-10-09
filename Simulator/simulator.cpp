@@ -106,6 +106,11 @@ std::shared_ptr<ROM> Simulator::getRom() const
     return rom;
 }
 
+bool Simulator::getIsPlaying() const
+{
+    return isPlaying;
+}
+
 void Simulator::evalCommand(int command)
 {
     if ((command & 0xFFFF) == 0x0000) // NOP

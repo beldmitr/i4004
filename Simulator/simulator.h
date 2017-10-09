@@ -99,6 +99,8 @@ public:
 
     std::shared_ptr<ROM> getRom() const;
 
+    bool getIsPlaying() const;
+
 signals:
     void onActualCommand(const QString& command);
 

@@ -95,7 +95,6 @@ void MainWindow::createActions()
 
     connect(actCompile.get(), &QAction::triggered, [=](){
         buildCode();
-
     });
 
     // Actions Debug
@@ -142,6 +141,8 @@ void MainWindow::createMenu()
     menuFile->addAction(actSave.get());
     menuFile->addAction(actSaveAs.get());
     menuFile->addSeparator();
+    menuFile->addAction("Preferences");     /// TODO Preferences + shortcut should be Ctrl+,
+    menuFile->addSeparator();
     menuFile->addAction(actExit.get());
 
     // Create menu Edit
@@ -164,9 +165,6 @@ void MainWindow::createMenu()
     menuBuild->addAction(actStop.get());
     menuBuild->addAction(actStep.get());
     menuBuild->addAction(actReset.get());
-
-    // Create menu Preferences
-    mainMenu->addMenu("Preferences");
 
     // Create menu Windows
     menuWindows = std::shared_ptr<QMenu>(mainMenu->addMenu("Windows"));
@@ -215,8 +213,6 @@ void MainWindow::createMenu()
     {
         connect(showWindows.get(), SIGNAL(triggered(bool)), w, SLOT(showNormal()));
     }
-    connect(showWindows.get(), SIGNAL(triggered(bool)), mdi.get(), SLOT(cascadeSubWindows()));
-
     menuWindows->addAction(showWindows.get());
 
     // Create menu Help
@@ -254,6 +250,7 @@ void MainWindow::createToolbars()
     toolBarEdit->addAction(actRedo.get());
     toolBarEdit->addSeparator();
     toolBarEdit->addAction(actCut.get());
+//    toolBarEdit->setStyleSheet("QToolBar { border: 1px solid black; }"); /// TODO play with styles
     toolBarEdit->addAction(actCopy.get());
     toolBarEdit->addAction(actPaste.get());
     toolBarEdit->addAction(actDelete.get());
@@ -262,17 +259,15 @@ void MainWindow::createToolbars()
 
     toolBarBuild = std::shared_ptr<QToolBar>(new QToolBar("Build"));
     toolBarBuild->addAction(actCompile.get());
-
-    toolBarDebug = std::shared_ptr<QToolBar>(new QToolBar("Debug"));
-    toolBarDebug->addAction(actPlay.get());
-    toolBarDebug->addAction(actStop.get());
-    toolBarDebug->addAction(actStep.get());
-    toolBarDebug->addAction(actReset.get());
+    toolBarBuild->addSeparator();
+    toolBarBuild->addAction(actPlay.get());
+    toolBarBuild->addAction(actStop.get());
+    toolBarBuild->addAction(actStep.get());
+    toolBarBuild->addAction(actReset.get());
 
     this->addToolBar(toolBarFile.get());
     this->addToolBar(toolBarEdit.get());
     this->addToolBar(toolBarBuild.get());
-    this->addToolBar(toolBarDebug.get());
     this->addToolBar(Qt::LeftToolBarArea, toolBarMinimize.get());
 }
 
@@ -285,10 +280,10 @@ void MainWindow::createSubWindows()
     //    sevenSegmentSubWindow = std::shared_ptr<SevenSegmentSubWindow>(new SevenSegmentSubWindow);
     buttonSubWindow = std::shared_ptr<ButtonSubWindow>(new ButtonSubWindow(simulator));
 
-    mdi->addSubWindow(editorSubWindow.get(), Qt::Tool);
-    mdi->addSubWindow(ledSubWindow.get(), Qt::Tool);
+    mdi->addSubWindow(editorSubWindow.get(), Qt::CustomizeWindowHint | Qt::WindowMinimizeButtonHint | Qt::WindowCloseButtonHint);
+    mdi->addSubWindow(ledSubWindow.get(), Qt::CustomizeWindowHint | Qt::WindowMinimizeButtonHint | Qt::WindowCloseButtonHint);
     //    mdi->addSubWindow(sevenSegmentSubWindow.get());
-    mdi->addSubWindow(buttonSubWindow.get(), Qt::Tool);
+    mdi->addSubWindow(buttonSubWindow.get(), Qt::CustomizeWindowHint | Qt::WindowMinimizeButtonHint | Qt::WindowCloseButtonHint);
 }
 
 void MainWindow::createDocks()
@@ -336,29 +331,6 @@ void MainWindow::createDocks()
     cpuWidget = std::shared_ptr<CpuWidget>(new CpuWidget(simulator));
     dockCpuWidget->setWidget(cpuWidget.get());
     this->addDockWidget(Qt::BottomDockWidgetArea, dockCpuWidget.get());
-//    cpuWidget->setSizePolicy(QSizePolicy::Minimum, QSizePolicy::Minimum);
-//    dockCpuWidget->setSizePolicy(QSizePolicy::Minimum, QSizePolicy::Minimum);
-
-
-//    QSizePolicy sizePolicy = dockCpuWidget->sizePolicy();
-//    sizePolicy.setHorizontalPolicy(QSizePolicy::Maximum);
-//    dockCpuWidget->setSizePolicy(sizePolicy);
-
-//    sizePolicy = dockResult->sizePolicy();
-//    sizePolicy.setHorizontalPolicy(QSizePolicy::Minimum);
-//    dockResult->setSizePolicy(sizePolicy);
-
-//    sizePolicy = dockDRam->sizePolicy();
-//    sizePolicy.setHorizontalPolicy(QSizePolicy::Minimum);
-//    dockDRam->setSizePolicy(sizePolicy);
-
-//    sizePolicy = dockRom->sizePolicy();
-//    sizePolicy.setHorizontalPolicy(QSizePolicy::Minimum);
-//    dockRom->setSizePolicy(sizePolicy);
-
-//    sizePolicy = dockPRam->sizePolicy();
-//    sizePolicy.setHorizontalPolicy(QSizePolicy::Minimum);
-//    dockPRam->setSizePolicy(sizePolicy);
 }
 
 MainWindow::MainWindow(Compiler& compiler, Simulator &simulator, QWidget *parent)
@@ -449,12 +421,11 @@ void MainWindow::createOutputFilename()
 
 void MainWindow::buildCode()
 {
-    this->actCompile->setDisabled(true);
-
-
-
-
     this->editorSubWindow->saveFile();
+
+    this->actCompile->setDisabled(true);
+    simulator->stop();
+    simulator->reset();
 
     lstResult->clear();
 
@@ -479,17 +450,9 @@ void MainWindow::handleRun()
     simulator->play();
 }
 
-//void MainWindow::compileRunBuild()
-//{
-//    buildCode();
-////    simulator.reset(new Simulator());
-////    simulator->setCode(compiler->getCompiledCode());
-//}
-
-
-
 void MainWindow::closeEvent(QCloseEvent* event)
 {
+    bool isPlaying = this->simulator->getIsPlaying();
     this->simulator->stop();
     QMessageBox::StandardButton btn;
     btn = QMessageBox::question(this, tr("Exit"), tr("Do you want to exit?"));
@@ -500,7 +463,10 @@ void MainWindow::closeEvent(QCloseEvent* event)
     else
     {
         event->ignore();
-        this->simulator->play();
+        if (isPlaying)
+        {
+            this->simulator->play();
+        }
     }
 }
 
