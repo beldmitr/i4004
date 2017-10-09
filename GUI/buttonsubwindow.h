@@ -30,6 +30,10 @@ private:
     std::vector<Button*> buttons;
     std::vector<ChooseIOWidget*> connectors;
 
+
+    // QWidget interface
+protected:
+    void changeEvent(QEvent *event);
 };
 
 #endif // BUTTONSUBWINDOW_H

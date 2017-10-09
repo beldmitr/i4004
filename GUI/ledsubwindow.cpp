@@ -30,3 +30,19 @@ LEDSubWindow::~LEDSubWindow()
         delete (led);
     }
 }
+
+void LEDSubWindow::changeEvent(QEvent *event)
+{
+    if (event->type() == QEvent::WindowStateChange)
+    {
+        QWindowStateChangeEvent* ev = static_cast<QWindowStateChangeEvent*>(event);
+        if (!(ev->oldState() & Qt::WindowMaximized) && windowState() & Qt::WindowMaximized)
+        {
+            this->setWindowState(Qt::WindowNoState);
+        }
+        else
+        {
+            QMdiSubWindow::changeEvent(event);
+        }
+    }
+}

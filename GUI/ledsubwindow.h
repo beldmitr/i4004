@@ -28,6 +28,10 @@ private:
     std::shared_ptr<QWidget> centralWidget;
     std::shared_ptr<QHBoxLayout> layout;
     std::vector<Led*> leds;
+
+    // QWidget interface
+protected:
+    void changeEvent(QEvent *event);
 };
 
 #endif // LEDSUBWINDOW_H
