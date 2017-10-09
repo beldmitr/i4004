@@ -29,6 +29,7 @@
 #include <iostream>
 #include <memory>
 #include <fstream>
+#include <string>
 
 #include "Compiler/compiler.h"
 #include "Simulator/simulator.h"

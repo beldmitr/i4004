@@ -171,18 +171,28 @@ void MainWindow::createMenu()
     // Create menu Windows
     menuWindows = std::shared_ptr<QMenu>(mainMenu->addMenu("Windows"));
     nextWindow = std::shared_ptr<QAction>(new QAction("Next window", this));
+    nextWindow->setShortcut(tr("Ctrl+]"));
     connect(nextWindow.get(), SIGNAL(triggered(bool)), mdi.get(), SLOT(activateNextSubWindow()));
     menuWindows->addAction(nextWindow.get());
 
     prevWindow = std::shared_ptr<QAction>(new QAction("Previous window", this));
+    prevWindow->setShortcut(tr("Ctrl+["));
     connect(prevWindow.get(), SIGNAL(triggered(bool)), mdi.get(), SLOT(activatePreviousSubWindow()));
     menuWindows->addAction(prevWindow.get());
 
     menuWindows->addSeparator();
 
-    for(QMdiSubWindow* w : mdi->subWindowList())
+    for(int i = 0; i < mdi->subWindowList().length(); i++)
     {
+        QMdiSubWindow* w = mdi->subWindowList().at(i);
+
         QAction* act = new QAction(w->windowTitle(), this);
+        if (i < 10)
+        {
+            std::string shortcut = QString("Ctrl+"+ QString::number(i)).toStdString();
+            act->setShortcut(tr(shortcut.c_str()));
+        }
+
         listWindowsMenuBtn.push_back(act);
         connect(act, SIGNAL(triggered(bool)), w, SLOT(show()));
         connect(act, SIGNAL(triggered(bool)), w, SLOT(setFocus()));
@@ -192,6 +202,7 @@ void MainWindow::createMenu()
     menuWindows->addSeparator();
 
     minimizeAll = std::shared_ptr<QAction>(new QAction("Minimize all", this));
+    minimizeAll->setShortcut(tr("Ctrl+M"));
     for(QMdiSubWindow* w : mdi->subWindowList())
     {
         connect(minimizeAll.get(), SIGNAL(triggered(bool)), w, SLOT(showMinimized()));
@@ -199,11 +210,12 @@ void MainWindow::createMenu()
     menuWindows->addAction(minimizeAll.get());
 
     showWindows = std::shared_ptr<QAction>(new QAction("Show windows", this));
+    showWindows->setShortcut(tr("Ctrl+Shift+M"));
     for(QMdiSubWindow* w : mdi->subWindowList())
     {
         connect(showWindows.get(), SIGNAL(triggered(bool)), w, SLOT(showNormal()));
     }
-    connect(showWindows.get(), SIGNAL(triggered(bool)), mdi.get(), SLOT(tileSubWindows()));
+    connect(showWindows.get(), SIGNAL(triggered(bool)), mdi.get(), SLOT(cascadeSubWindows()));
 
     menuWindows->addAction(showWindows.get());
 
@@ -273,10 +285,10 @@ void MainWindow::createSubWindows()
     //    sevenSegmentSubWindow = std::shared_ptr<SevenSegmentSubWindow>(new SevenSegmentSubWindow);
     buttonSubWindow = std::shared_ptr<ButtonSubWindow>(new ButtonSubWindow(simulator));
 
-    mdi->addSubWindow(editorSubWindow.get());
-    mdi->addSubWindow(ledSubWindow.get());
+    mdi->addSubWindow(editorSubWindow.get(), Qt::Tool);
+    mdi->addSubWindow(ledSubWindow.get(), Qt::Tool);
     //    mdi->addSubWindow(sevenSegmentSubWindow.get());
-    mdi->addSubWindow(buttonSubWindow.get());
+    mdi->addSubWindow(buttonSubWindow.get(), Qt::Tool);
 }
 
 void MainWindow::createDocks()
