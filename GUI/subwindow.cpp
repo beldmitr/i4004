@@ -2,7 +2,6 @@
 
 SubWindow::SubWindow(QWidget *parent) : QMdiSubWindow(parent)
 {
-
 }
 
 SubWindow::~SubWindow()
