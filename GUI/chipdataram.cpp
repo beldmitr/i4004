@@ -29,7 +29,7 @@ ChipDataRam::ChipDataRam(Simulator* simulator, unsigned int bank, unsigned int c
     memTable->horizontalHeader()->setStretchLastSection(false);
 
     // Fill left header of memory table
-    for (int i=0; i < memoryRowsNumber; i++)
+    for (unsigned i=0; i < memoryRowsNumber; i++)
     {
         QTableWidgetItem* item = new QTableWidgetItem(QString::number(i, 16));
         memTable->setVerticalHeaderItem(i, item);
@@ -37,7 +37,7 @@ ChipDataRam::ChipDataRam(Simulator* simulator, unsigned int bank, unsigned int c
     }
 
     // Fill top header of memory table
-    for (int i = 0; i < memoryColumnsNumber; i++)
+    for (unsigned i = 0; i < memoryColumnsNumber; i++)
     {
         QTableWidgetItem* item = new QTableWidgetItem(QString::number(i, 16));
         memTable->setHorizontalHeaderItem(i, item);
@@ -45,9 +45,9 @@ ChipDataRam::ChipDataRam(Simulator* simulator, unsigned int bank, unsigned int c
     }
 
     //  Fill items memory
-    for (int i = 0; i < memoryRowsNumber; i++)
+    for (unsigned i = 0; i < memoryRowsNumber; i++)
     {
-        for (int j = 0; j < memoryColumnsNumber; j++)
+        for (unsigned j = 0; j < memoryColumnsNumber; j++)
         {
             QTableWidgetItem* item = new QTableWidgetItem("0");
             memTable->setItem(i, j,item);
@@ -66,16 +66,16 @@ ChipDataRam::ChipDataRam(Simulator* simulator, unsigned int bank, unsigned int c
     statTable->horizontalHeader()->setStretchLastSection(false);
 
     // Fill top header of stat table
-    for (int i=0; i < statusColumnsNumber; i++)
+    for (unsigned i=0; i < statusColumnsNumber; i++)
     {
         QTableWidgetItem* item = new QTableWidgetItem(QString::number(i, 16));
         statTable->setHorizontalHeaderItem(i, item);
     }
 
     //  Fill items status
-    for (int i = 0; i < statusRowsNumber; i++)
+    for (unsigned i = 0; i < statusRowsNumber; i++)
     {
-        for (int j = 0; j < statusColumnsNumber; j++)
+        for (unsigned j = 0; j < statusColumnsNumber; j++)
         {
             QTableWidgetItem* item = new QTableWidgetItem("0");
             statTable->setItem(i, j, item);
