@@ -115,12 +115,14 @@ void MainWindow::createActions()
 
     actStop = std::shared_ptr<QAction>(new QAction(tr("Stop"), this));
     actStop->setIcon(QIcon(":/Resources/icons/debug_stop.png"));
+    actStop->setShortcut(tr("Escape"));
     connect(actStop.get(), &QAction::triggered, [=](){
         simulator->stop();
     });
 
     actReset = std::shared_ptr<QAction>(new QAction(tr("Reset"), this));
     actReset->setIcon(QIcon(":/Resources/icons/debug_restart.png"));
+    actReset->setShortcut(tr("Ctrl+Backspace"));
     connect(actReset.get(), &QAction::triggered, [=](){
         simulator->reset();
     });
@@ -158,6 +160,10 @@ void MainWindow::createMenu()
     menuBuild = std::shared_ptr<QMenu>(mainMenu->addMenu("Build"));
     menuBuild->addAction(actCompile.get());
     menuBuild->addSeparator();
+    menuBuild->addAction(actPlay.get());
+    menuBuild->addAction(actStop.get());
+    menuBuild->addAction(actStep.get());
+    menuBuild->addAction(actReset.get());
 
     // Create menu Preferences
     mainMenu->addMenu("Preferences");
@@ -261,7 +267,9 @@ void MainWindow::createToolbars()
 void MainWindow::createSubWindows()
 {
     editorSubWindow = std::shared_ptr<EditorSubWindow>(new EditorSubWindow(this));
+
     ledSubWindow = std::shared_ptr<LEDSubWindow>(new LEDSubWindow(simulator));
+
     //    sevenSegmentSubWindow = std::shared_ptr<SevenSegmentSubWindow>(new SevenSegmentSubWindow);
     buttonSubWindow = std::shared_ptr<ButtonSubWindow>(new ButtonSubWindow(simulator));
 
