@@ -9,9 +9,9 @@ EditorSubWindow::EditorSubWindow(QWidget *parent) : SubWindow(parent)
     this->setWindowTitle("Editor");
     this->setWindowIcon(QIcon(":/Resources/icons/editor.png"));
 
-    connect(editor.get(), &Editor::onTextChanged, [=](){
-        emit onTextChanged();
-    });
+//    connect(editor.get(), &Editor::onTextChanged, [=](){
+//        emit onTextChanged();
+//    });
 }
 
 
@@ -49,8 +49,7 @@ void EditorSubWindow::readFile()
         file.close();
         //        QTextEdit* textEditor = this->editorSubWindow->getTextEditor();
         //        textEditor->setPlainText(doc);
-        std::shared_ptr<QTextEdit> text = this->editor->getText();
-        text->setPlainText(doc);
+        editor->setPlainText(doc);
     }
     else
     {
@@ -64,8 +63,7 @@ void EditorSubWindow::writeFile()
 
     if (file.is_open())
     {
-        std::shared_ptr<QTextEdit> text = this->editor->getText();
-        QStringList lines = text->toPlainText().split("\n");
+        QStringList lines = editor->toPlainText().split("\n");
 
         for (QString l : lines)
         {
@@ -85,9 +83,8 @@ void EditorSubWindow::newFile()
     QMessageBox::StandardButton btn = QMessageBox::question(this, tr("New file"), tr("Do you want to start a new file?"));
     if (btn == QMessageBox::Yes)
     {
-        std::shared_ptr<QTextEdit> text = this->editor->getText();
-        text->clear();
-        text->document()->setModified(false);
+        editor->clear();
+        editor->document()->setModified(false);
 
         this->filename.clear();
 
@@ -161,44 +158,37 @@ void EditorSubWindow::saveAsFile()
 
 void EditorSubWindow::undoEdit()
 {
-    std::shared_ptr<QTextEdit> textEditor = this->editor->getText();
-    textEditor->undo();
+    editor->undo();
 }
 
 void EditorSubWindow::redoEdit()
 {
-    std::shared_ptr<QTextEdit> textEditor = this->editor->getText();
-    textEditor->redo();
+    editor->redo();
 }
 
 void EditorSubWindow::cutEdit()
 {
-    std::shared_ptr<QTextEdit> textEditor = this->editor->getText();
-    textEditor->cut();
+    editor->cut();
 }
 
 void EditorSubWindow::copyEdit()
 {
-    std::shared_ptr<QTextEdit> textEditor = this->editor->getText();
-    textEditor->copy();
+    editor->copy();
 }
 
 void EditorSubWindow::pasteEdit()
 {
-    std::shared_ptr<QTextEdit> textEditor = this->editor->getText();
-    textEditor->paste();
+    editor->paste();
 }
 
 void EditorSubWindow::deleteEdit()
 {
-    std::shared_ptr<QTextEdit> textEditor = this->editor->getText();
-    textEditor->textCursor().removeSelectedText();
+    editor->textCursor().removeSelectedText();
 }
 
 void EditorSubWindow::selectAllEdit()
 {
-    std::shared_ptr<QTextEdit> textEditor = this->editor->getText();
-    textEditor->selectAll();
+    editor->selectAll();
 }
 
 QString EditorSubWindow::getFilename() const
