@@ -43,5 +43,6 @@
         <file>Resources/components/SevenSegmentVerticalOn.png</file>
         <file>Resources/icons/button.png</file>
         <file>Resources/icons/led.png</file>
+        <file>Resources/completer.txt</file>
     </qresource>
 </RCC>
