@@ -61,7 +61,9 @@ SOURCES += \
     GUI/autocompleter.cpp \
     GUI/ledimage.cpp \
     GUI/led.cpp \
-    Compiler/firstpassline.cpp
+    Compiler/firstpassline.cpp \
+    GUI/debuggerlist.cpp \
+    GUI/debuggersubwindow.cpp
 
 HEADERS += \
     GUI/mainwindow.h \
@@ -118,7 +120,9 @@ HEADERS += \
     GUI/autocompleter.h \
     GUI/ledimage.h \
     GUI/led.h \
-    Compiler/firstpassline.h
+    Compiler/firstpassline.h \
+    GUI/debuggerlist.h \
+    GUI/debuggersubwindow.h
 
 RESOURCES += \
     resources.qrc

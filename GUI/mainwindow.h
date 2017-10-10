@@ -43,6 +43,7 @@
 #include "ledsubwindow.h"
 //#include "sevensegmentsubwindow.h"
 #include "buttonsubwindow.h"
+#include "debuggersubwindow.h"
 
 class MainWindow : public QMainWindow
 {
@@ -67,6 +68,7 @@ private:
     std::shared_ptr<LEDSubWindow> ledSubWindow;
     //    std::shared_ptr<SevenSegmentSubWindow> sevenSegmentSubWindow;
     std::shared_ptr<ButtonSubWindow> buttonSubWindow;
+    std::shared_ptr<DebuggerSubWindow> debuggerSubWindow;
 
     std::shared_ptr<QToolBar> toolBarFile;
     std::shared_ptr<QToolBar> toolBarEdit;

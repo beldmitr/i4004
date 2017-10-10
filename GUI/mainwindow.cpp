@@ -279,11 +279,13 @@ void MainWindow::createSubWindows()
 
     //    sevenSegmentSubWindow = std::shared_ptr<SevenSegmentSubWindow>(new SevenSegmentSubWindow);
     buttonSubWindow = std::shared_ptr<ButtonSubWindow>(new ButtonSubWindow(simulator));
+    debuggerSubWindow = std::shared_ptr<DebuggerSubWindow>(new DebuggerSubWindow);
 
     mdi->addSubWindow(editorSubWindow.get(), Qt::CustomizeWindowHint | Qt::WindowMinimizeButtonHint | Qt::WindowCloseButtonHint);
     mdi->addSubWindow(ledSubWindow.get(), Qt::CustomizeWindowHint | Qt::WindowMinimizeButtonHint | Qt::WindowCloseButtonHint);
     //    mdi->addSubWindow(sevenSegmentSubWindow.get());
     mdi->addSubWindow(buttonSubWindow.get(), Qt::CustomizeWindowHint | Qt::WindowMinimizeButtonHint | Qt::WindowCloseButtonHint);
+    mdi->addSubWindow(debuggerSubWindow.get(), Qt::CustomizeWindowHint | Qt::WindowMinimizeButtonHint | Qt::WindowCloseButtonHint);
 }
 
 void MainWindow::createDocks()
