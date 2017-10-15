@@ -8,6 +8,7 @@ MemoryTable::MemoryTable(unsigned columnsNumber, unsigned pages, unsigned bytesP
     this->setRowCount(rowsNumber);
     this->setColumnCount(columnsNumber);
 
+    // Set vertical header (rows)
     this->verticalHeader()->setSectionResizeMode(QHeaderView::Stretch);
     this->verticalHeader()->setStretchLastSection(false);
     for (unsigned i = 0; i < rowsNumber; i++)
@@ -18,6 +19,7 @@ MemoryTable::MemoryTable(unsigned columnsNumber, unsigned pages, unsigned bytesP
         headerItems.push_back(item);
     }
 
+    // Set horizontal header (columns)
     this->horizontalHeader()->setSectionResizeMode(QHeaderView::Stretch);
     this->horizontalHeader()->setStretchLastSection(false);
     for (unsigned i = 0; i < columnsNumber; i++)
