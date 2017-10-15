@@ -10,7 +10,7 @@
  */
 //std::regex MathExpr::mathExpression = std::regex("([(]*[)]*[[:blank:]]*[*]?[[:blank:]]*[+-]?[[:blank:]]*[[:alnum:]]*)+");
 /// Test new mathExpression
-std::regex MathExpr::mathExpression = std::regex("(\\w?\\s?[+-]?\\s?[*]?)+");
+std::regex MathExpr::mathExpression = std::regex("(\\w?\\s?[(]*[)]*[+-]?\\s?[*]?)+");
 
 /// TODO test class and delete commented code
 
