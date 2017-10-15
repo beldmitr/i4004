@@ -44,5 +44,6 @@
         <file>Resources/icons/button.png</file>
         <file>Resources/icons/led.png</file>
         <file>Resources/completer.txt</file>
+        <file>Resources/icons/assembly.png</file>
     </qresource>
 </RCC>
