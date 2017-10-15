@@ -6,15 +6,18 @@
 
 #include "GUI/subwindow.h"
 #include "GUI/debuggerlist.h"
+#include "Compiler/compiler.h"
 
 class DebuggerSubWindow : public SubWindow
 {
 public:
-    explicit DebuggerSubWindow();
+    explicit DebuggerSubWindow(Compiler *compiler);
     virtual ~DebuggerSubWindow();
 
 private:
     std::shared_ptr<DebuggerList> debuggerLst;
+
+    Compiler* compiler;
 };
 
 #endif // DEBUGGERSUBWINDOW_H

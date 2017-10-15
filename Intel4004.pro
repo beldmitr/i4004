@@ -63,7 +63,8 @@ SOURCES += \
     GUI/led.cpp \
     Compiler/firstpassline.cpp \
     GUI/debuggerlist.cpp \
-    GUI/debuggersubwindow.cpp
+    GUI/debuggersubwindow.cpp \
+    Simulator/debugger.cpp
 
 HEADERS += \
     GUI/mainwindow.h \
@@ -122,7 +123,8 @@ HEADERS += \
     GUI/led.h \
     Compiler/firstpassline.h \
     GUI/debuggerlist.h \
-    GUI/debuggersubwindow.h
+    GUI/debuggersubwindow.h \
+    Simulator/debugger.h
 
 RESOURCES += \
     resources.qrc

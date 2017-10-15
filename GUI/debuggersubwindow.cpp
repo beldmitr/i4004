@@ -1,8 +1,13 @@
 #include "debuggersubwindow.h"
 
-DebuggerSubWindow::DebuggerSubWindow() : SubWindow()
+DebuggerSubWindow::DebuggerSubWindow(Compiler* compiler) : SubWindow()
 {
-    debuggerLst = std::shared_ptr<DebuggerList>(new DebuggerList());
+    this->compiler = compiler;
+
+    debuggerLst = std::shared_ptr<DebuggerList>(new DebuggerList(compiler));
+
+    this->setWindowTitle("Debugger");
+    this->setWindowIcon(QIcon(":/Resources/icons/assembly.png"));
 
     this->setWidget(debuggerLst.get());
 }
