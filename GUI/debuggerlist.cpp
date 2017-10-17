@@ -8,20 +8,46 @@ DebuggerList::DebuggerList(Compiler* compiler) : QTableWidget()
 
     this->horizontalHeader()->setSectionResizeMode(QHeaderView::Fixed);
     this->horizontalHeader()->setStretchLastSection(true);
-    this->setHorizontalHeaderLabels(QStringList() << tr("Code") << tr("Command"));
+    this->setHorizontalHeaderLabels(QStringList() << "" << tr("Address") << tr("Code") << tr("Command"));
+
+    // Don't delete headerView pointer. I didn't create it with "new"
+    QHeaderView* headerView = this->horizontalHeader();
+    headerView->resizeSection(0, 30);
 
     this->verticalHeader()->setSectionResizeMode(QHeaderView::Fixed);
 
     this->setSelectionBehavior(QAbstractItemView::SelectRows);
     this->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
-    this->setSelectionMode(QAbstractItemView::SingleSelection);
+    this->setSelectionMode(QAbstractItemView::NoSelection);
 
-    this->setMinimumWidth(300);
+    this->verticalHeader()->setVisible(false);
+
+    this->setMinimumWidth(350);
+//    this->resizeColumnsToContents();
+
+    /// TODO make 00 | NOP everywhere by default from the beggining
+
+
+    connect(this, &QTableWidget::cellClicked, [=](int row, int /*col*/){
+        QTableWidgetItem* item = this->item(row, 0);
+        QIcon icon = item->icon();
+        if (icon.isNull())
+        {
+            item->setIcon(QIcon(":/Resources/icons/breakpoint.png"));
+        }
+        else
+        {
+            item->setIcon(QIcon());
+        }
+    });
 
     // Compiler
     connect(this->compiler, &Compiler::onCompiled, [=](){
         std::vector<unsigned> code = this->compiler->getObjectCode();
         this->setCode(code);
+
+//        this->resizeColumnsToContents();
+//        this->horizontalHeader()->setStretchLastSection(true);
     });
 }
 
@@ -37,6 +63,8 @@ void DebuggerList::setCode(std::vector<unsigned> code)
 {
     this->setRowCount(0);
 
+    unsigned addr = 0;
+
     for (unsigned i = 0; i < code.size(); i++)
     {
         unsigned byte = code[i];
@@ -50,18 +78,38 @@ void DebuggerList::setCode(std::vector<unsigned> code)
 
         this->insertRow(this->rowCount());
 
+        QTableWidgetItem* brkptItem = new QTableWidgetItem();
+        brkptItem->setTextAlignment(Qt::AlignCenter);
+        brkptItem->setFlags(Qt::ItemIsSelectable|Qt::ItemIsEnabled);
+        this->setItem(this->rowCount()-1, 0, brkptItem);
+//        items.push_back(brkptItem);    // DON'T DO THIS. IT WILL CAUSE A CRASH. this->setRowCount(0); already removes items !!!
 
-        QTableWidgetItem* codeItem = new QTableWidgetItem(QString::number(command, 16));
+        QTableWidgetItem* addrItem = new QTableWidgetItem(Debugger::addressToString(addr));
+        addrItem->setTextAlignment(Qt::AlignCenter);
+        addrItem->setFlags(Qt::ItemIsSelectable|Qt::ItemIsEnabled);
+        this->setItem(this->rowCount()-1, 1, addrItem);
+//        items.push_back(addrItem);    // DON'T DO THIS. IT WILL CAUSE A CRASH. this->setRowCount(0); already removes items !!!
+
+        QTableWidgetItem* codeItem = new QTableWidgetItem(Debugger::commandToString(command));
         codeItem->setTextAlignment(Qt::AlignCenter);
         codeItem->setFlags(Qt::ItemIsSelectable|Qt::ItemIsEnabled);
-        this->setItem(this->rowCount()-1, 0, codeItem);
+        this->setItem(this->rowCount()-1, 2, codeItem);
 //        items.push_back(codeItem);    // DON'T DO THIS. IT WILL CAUSE A CRASH. this->setRowCount(0); already removes items !!!
 
         QTableWidgetItem* commandItem = new QTableWidgetItem(Debugger::codeToInstruction(command));
         commandItem->setTextAlignment(Qt::AlignCenter);
         commandItem->setFlags(Qt::ItemIsSelectable|Qt::ItemIsEnabled);
-        this->setItem(this->rowCount()-1, 1, commandItem);
+        this->setItem(this->rowCount()-1, 3, commandItem);
 //        items.push_back(commandItem); // DON'T DO THIS. IT WILL CAUSE A CRASH. this->setRowCount(0); already removes items !!!
+
+        if (longCommand)
+        {
+            addr += 2;
+        }
+        else
+        {
+            addr += 1;
+        }
     }
 
     this->viewport()->update();

@@ -223,3 +223,44 @@ QString Debugger::codeToInstruction(unsigned code)
 
     return instruction;
 }
+
+QString Debugger::commandToString(unsigned code)
+{
+    QString result;
+
+    unsigned hiByte = (code & 0xFF00) >> 8;
+    unsigned lowByte = code & 0x00FF;
+
+    if (hiByte != 0)
+    {
+        result = QString("%1 %2").arg(QString::number(hiByte, 16), QString::number(lowByte, 16));
+    }
+    else
+    {
+        result = QString::number(lowByte, 16);
+    }
+
+    return result;
+}
+
+QString Debugger::addressToString(unsigned addr)
+{
+    QString result;
+
+    if (addr < 0x10)
+    {
+        result = QString("00").append(QString::number(addr, 16));
+    }
+    else if (addr < 0x100)
+    {
+        result = QString("0").append(QString::number(addr, 16));
+    }
+    else
+    {
+        result = QString::number(addr, 16);
+    }
+
+    return result;
+}
+
+

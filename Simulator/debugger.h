@@ -11,6 +11,8 @@ public:
 
     static bool hasNextByte(unsigned code);
     static QString codeToInstruction(unsigned code);
+    static QString commandToString(unsigned code);
+    static QString addressToString(unsigned addr);
 
 signals:
 

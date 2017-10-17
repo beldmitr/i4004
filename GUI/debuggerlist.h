@@ -4,6 +4,7 @@
 #include <QWidget>
 #include <QTableWidget>
 #include <QHeaderView>
+#include <QPainter>
 
 #include <memory>
 #include <vector>
@@ -19,7 +20,7 @@ public:
     virtual ~DebuggerList();
 
 private:
-    const unsigned columnNumbers = 2;
+    const unsigned columnNumbers = 4;
 
     std::vector<QTableWidgetItem*> items;
     Compiler* compiler;
