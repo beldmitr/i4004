@@ -8,6 +8,7 @@
 #include <memory>
 
 #include "Compiler/compiler.h"
+#include "debugger.h"
 #include "rom.h"
 #include "pram.h"
 #include "dram.h"
@@ -25,6 +26,7 @@ class Simulator : public QObject
 private:
     Compiler* compiler;
     bool isPlaying = false;
+    bool isStopped = false; // stopped by breakpoint
 
     std::shared_ptr<ROM> rom;
     std::shared_ptr<PRAM> pram;

@@ -12,7 +12,14 @@ DebuggerList::DebuggerList(Compiler* compiler) : QTableWidget()
 
     // Don't delete headerView pointer. I didn't create it with "new"
     QHeaderView* headerView = this->horizontalHeader();
-    headerView->resizeSection(0, 30);
+    headerView->resizeSection(0, 26);
+
+    connect(headerView, &QHeaderView::sectionClicked, [=](int index) {
+        if (index == 0)
+        {
+            /// TODO delete all breakpoints
+        }
+    });
 
     this->verticalHeader()->setSectionResizeMode(QHeaderView::Fixed);
 
@@ -23,21 +30,27 @@ DebuggerList::DebuggerList(Compiler* compiler) : QTableWidget()
     this->verticalHeader()->setVisible(false);
 
     this->setMinimumWidth(350);
-//    this->resizeColumnsToContents();
 
     /// TODO make 00 | NOP everywhere by default from the beggining
 
 
     connect(this, &QTableWidget::cellClicked, [=](int row, int /*col*/){
-        QTableWidgetItem* item = this->item(row, 0);
-        QIcon icon = item->icon();
+
+        QTableWidgetItem* addressItem = this->item(row, 1);
+        QString addrTxt = addressItem->text();
+        unsigned addr = addrTxt.toUInt(nullptr, 16);
+
+        QTableWidgetItem* breakpointItem = this->item(row, 0);
+        QIcon icon = breakpointItem->icon();
         if (icon.isNull())
         {
-            item->setIcon(QIcon(":/Resources/icons/breakpoint.png"));
+            breakpointItem->setIcon(QIcon(":/Resources/icons/breakpoint.png"));
+            Debugger::addBreakpoint(addr);
         }
         else
         {
-            item->setIcon(QIcon());
+            breakpointItem->setIcon(QIcon());
+            Debugger::removeBreakpoint(addr);
         }
     });
 
@@ -45,9 +58,7 @@ DebuggerList::DebuggerList(Compiler* compiler) : QTableWidget()
     connect(this->compiler, &Compiler::onCompiled, [=](){
         std::vector<unsigned> code = this->compiler->getObjectCode();
         this->setCode(code);
-
-//        this->resizeColumnsToContents();
-//        this->horizontalHeader()->setStretchLastSection(true);
+        Debugger::clearBreakpoint();
     });
 }
 
@@ -57,6 +68,16 @@ DebuggerList::~DebuggerList()
     {
         delete i;
     }
+}
+
+void DebuggerList::selectAddress(unsigned address)
+{
+
+}
+
+void DebuggerList::deselectAll()
+{
+
 }
 
 void DebuggerList::setCode(std::vector<unsigned> code)
@@ -115,3 +136,4 @@ void DebuggerList::setCode(std::vector<unsigned> code)
     this->viewport()->update();
 
 }
+

@@ -65,6 +65,15 @@ void Simulator::play()
         {
             while(isPlaying)
             {
+                int pc = this->cpu->getPC();
+                bool isBreakpoint = Debugger::isBreakpoint(pc);
+                if (isBreakpoint && !isStopped)
+                {
+                    this->stop();
+                    isStopped = true;
+                    return;
+                }
+                isStopped = false;
                 step();
                 QThread::msleep(50);
             }

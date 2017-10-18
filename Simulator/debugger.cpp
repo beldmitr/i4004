@@ -1,5 +1,7 @@
 #include "debugger.h"
 
+std::unordered_set<unsigned> Debugger::breakpointAddresses = std::unordered_set<unsigned>();
+
 Debugger::Debugger(QObject *parent) : QObject(parent)
 {
 
@@ -261,6 +263,27 @@ QString Debugger::addressToString(unsigned addr)
     }
 
     return result;
+}
+
+void Debugger::addBreakpoint(unsigned addr)
+{
+    breakpointAddresses.insert(addr);
+}
+
+void Debugger::removeBreakpoint(unsigned addr)
+{
+    breakpointAddresses.erase(addr);
+}
+
+void Debugger::clearBreakpoint()
+{
+    breakpointAddresses.clear();
+}
+
+bool Debugger::isBreakpoint(unsigned addr)
+{
+    auto it = breakpointAddresses.find(addr);
+    return it != breakpointAddresses.end();
 }
 
 

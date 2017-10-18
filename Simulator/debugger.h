@@ -3,6 +3,9 @@
 
 #include <QObject>
 
+#include <memory>
+#include <unordered_set>
+
 class Debugger : public QObject
 {
     Q_OBJECT
@@ -13,6 +16,18 @@ public:
     static QString codeToInstruction(unsigned code);
     static QString commandToString(unsigned code);
     static QString addressToString(unsigned addr);
+
+    static void addBreakpoint(unsigned addr);
+    static void removeBreakpoint(unsigned addr);
+    static void clearBreakpoint();
+
+    static bool isBreakpoint(unsigned addr);
+
+//    static void nextBreakpoint(unsigned addr);
+//    static void prevBreakpoint(unsigned addr);
+
+private:
+    static std::unordered_set<unsigned> breakpointAddresses;
 
 signals:
 

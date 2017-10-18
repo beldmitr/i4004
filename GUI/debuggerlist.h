@@ -19,6 +19,9 @@ public:
     explicit DebuggerList(Compiler *compiler = nullptr);
     virtual ~DebuggerList();
 
+    void selectAddress(unsigned address);
+    void deselectAll();
+
 private:
     const unsigned columnNumbers = 4;
 
@@ -30,6 +33,7 @@ private:
 signals:
 
 public slots:
+
 };
 
 #endif // DEBUGGERLIST_H
