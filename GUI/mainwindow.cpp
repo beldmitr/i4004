@@ -279,7 +279,7 @@ void MainWindow::createSubWindows()
 
     //    sevenSegmentSubWindow = std::shared_ptr<SevenSegmentSubWindow>(new SevenSegmentSubWindow);
     buttonSubWindow = std::shared_ptr<ButtonSubWindow>(new ButtonSubWindow(simulator));
-    debuggerSubWindow = std::shared_ptr<DebuggerSubWindow>(new DebuggerSubWindow(compiler));
+    debuggerSubWindow = std::shared_ptr<DebuggerSubWindow>(new DebuggerSubWindow(compiler, simulator));
 
     mdi->addSubWindow(editorSubWindow.get(), Qt::CustomizeWindowHint | Qt::WindowMinimizeButtonHint | Qt::WindowCloseButtonHint);
     mdi->addSubWindow(ledSubWindow.get(), Qt::CustomizeWindowHint | Qt::WindowMinimizeButtonHint | Qt::WindowCloseButtonHint);

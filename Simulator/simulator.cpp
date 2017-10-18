@@ -54,6 +54,11 @@ void Simulator::step()
     }
 
      evalCommand(code);
+
+     if (!isPlaying)
+     {
+        emit onStopPlaying();
+     }
 }
 
 void Simulator::play()
@@ -84,6 +89,7 @@ void Simulator::play()
 void Simulator::stop()
 {
     isPlaying = false;
+    emit onStopPlaying();
 }
 
 void Simulator::reset()
@@ -92,6 +98,11 @@ void Simulator::reset()
     rom->reset();
     dram->reset();
     pram->clearPRam();
+
+    if (!isPlaying)
+    {
+       emit onStopPlaying();
+    }
 }
 
 /// TODO TESTME evalCommand

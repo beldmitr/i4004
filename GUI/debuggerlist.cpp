@@ -1,8 +1,9 @@
 #include "debuggerlist.h"
 
-DebuggerList::DebuggerList(Compiler* compiler) : QTableWidget()
+DebuggerList::DebuggerList(Compiler* compiler, Simulator *simulator) : QTableWidget()
 {
     this->compiler = compiler;
+    this->simulator = simulator;
 
     this->setColumnCount(columnNumbers);
 
@@ -55,10 +56,17 @@ DebuggerList::DebuggerList(Compiler* compiler) : QTableWidget()
     });
 
     // Compiler
-    connect(this->compiler, &Compiler::onCompiled, [=](){
+    connect(this->compiler, &Compiler::onCompiled, [=]() {
         std::vector<unsigned> code = this->compiler->getObjectCode();
         this->setCode(code);
         Debugger::clearBreakpoint();
+    });
+
+    // Simulator
+    connect(simulator, &Simulator::onStopPlaying, [=]() {
+        unsigned addr = this->simulator->getCpu()->getPC();
+
+        this->selectAddress(addr);
     });
 }
 
@@ -70,14 +78,18 @@ DebuggerList::~DebuggerList()
     }
 }
 
-void DebuggerList::selectAddress(unsigned address)
+void DebuggerList::selectAddress(unsigned addr)
 {
+    /// FIXME Correct translation between addresses and rows
 
+    this->setSelectionMode(QAbstractItemView::SingleSelection);
+    this->selectRow(addr);
+    this->setSelectionMode(QAbstractItemView::NoSelection);
 }
 
 void DebuggerList::deselectAll()
 {
-
+    this->clearSelection();
 }
 
 void DebuggerList::setCode(std::vector<unsigned> code)
@@ -134,6 +146,5 @@ void DebuggerList::setCode(std::vector<unsigned> code)
     }
 
     this->viewport()->update();
-
 }
 

@@ -105,6 +105,7 @@ public:
 
 signals:
     void onActualCommand(const QString& command);
+    void onStopPlaying();
 
 };
 

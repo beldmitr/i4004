@@ -11,15 +11,16 @@
 
 #include "Simulator/debugger.h"
 #include "Compiler/compiler.h"
+#include "Simulator/simulator.h"
 
 class DebuggerList : public QTableWidget
 {
     Q_OBJECT
 public:
-    explicit DebuggerList(Compiler *compiler = nullptr);
+    explicit DebuggerList(Compiler *compiler, Simulator* simulator);
     virtual ~DebuggerList();
 
-    void selectAddress(unsigned address);
+    void selectAddress(unsigned addr);
     void deselectAll();
 
 private:
@@ -27,6 +28,7 @@ private:
 
     std::vector<QTableWidgetItem*> items;
     Compiler* compiler;
+    Simulator* simulator;
 
     void setCode(std::vector<unsigned> code);
 
