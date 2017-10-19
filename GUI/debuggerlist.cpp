@@ -59,32 +59,40 @@ DebuggerList::DebuggerList(Compiler* compiler, Simulator *simulator) : QTableWid
     connect(this->compiler, &Compiler::onCompiled, [=]() {
         std::vector<unsigned> code = this->compiler->getObjectCode();
         this->setCode(code);
+        this->selectAddress(0);
         Debugger::clearBreakpoint();
     });
 
     // Simulator
     connect(simulator, &Simulator::onStopPlaying, [=]() {
         unsigned addr = this->simulator->getCpu()->getPC();
-
         this->selectAddress(addr);
+        this->viewport()->update();
+    });
+
+    connect(simulator, &Simulator::onStartPlaying, [=]() {
+        this->deselectAll();
     });
 }
 
 DebuggerList::~DebuggerList()
 {
-    for (QTableWidgetItem* i : items)
-    {
-        delete i;
-    }
+
 }
 
 void DebuggerList::selectAddress(unsigned addr)
 {
     /// FIXME Correct translation between addresses and rows
 
-    this->setSelectionMode(QAbstractItemView::SingleSelection);
-    this->selectRow(addr);
-    this->setSelectionMode(QAbstractItemView::NoSelection);
+    std::unordered_map<unsigned, unsigned>::const_iterator it = addrToRow.find(addr);
+    if (it != addrToRow.end())
+    {
+        unsigned row = it->second;
+
+        this->setSelectionMode(QAbstractItemView::SingleSelection);
+        this->selectRow(row);
+        this->setSelectionMode(QAbstractItemView::NoSelection);
+    }
 }
 
 void DebuggerList::deselectAll()
@@ -96,18 +104,42 @@ void DebuggerList::setCode(std::vector<unsigned> code)
 {
     this->setRowCount(0);
 
-    unsigned addr = 0;
+    // This address will be shown in the table
+    // It hides addresses for long commands
+    // F.e. command FIM P0, 0x12 => 20 12, has got 2 bytes
+    // But in the table we need to show it in one row:
+    //  =============================================
+    //  | addr |   code   |         command         |
+    //  |--------------------------------------------
+    //  |   0  |    ...   |           ...           |
+    //  |   1  |   20 12  |    FIM P0, 0x12         |
+    //  |   3  |    ...   |           ...           |
+    //  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    //  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    //  | fff  |    ...   |           ...           |
+    //  =============================================
+    //
+    // So the address 2 won't be in table, cause it is already in the second row
+    unsigned addrInTable = 0;
 
-    for (unsigned i = 0; i < code.size(); i++)
+    // For the address number 1 and 2 there will be selected the same row
+    // So we need to translate between addresses and row
+    unsigned addrRow = 0;
+
+    for (unsigned row = 0; row < code.size(); row++)
     {
-        unsigned byte = code[i];
+        unsigned byte = code[row];
         unsigned command = byte;
         bool longCommand = Debugger::hasNextByte(byte);
+        addrToRow.insert(std::pair<unsigned, unsigned>(row, addrRow));
+
         if (longCommand)
         {
-            int low = code[++i];  // read the next byte
+            int low = code[++row];  // read the next byte
             command = (byte << 8) | low;   // combine code to 2 byte
+            addrToRow.insert(std::pair<unsigned, unsigned>(row, addrRow));
         }
+        addrRow++;
 
         this->insertRow(this->rowCount());
 
@@ -117,10 +149,11 @@ void DebuggerList::setCode(std::vector<unsigned> code)
         this->setItem(this->rowCount()-1, 0, brkptItem);
 //        items.push_back(brkptItem);    // DON'T DO THIS. IT WILL CAUSE A CRASH. this->setRowCount(0); already removes items !!!
 
-        QTableWidgetItem* addrItem = new QTableWidgetItem(Debugger::addressToString(addr));
+        QTableWidgetItem* addrItem = new QTableWidgetItem(Debugger::addressToString(addrInTable));
         addrItem->setTextAlignment(Qt::AlignCenter);
         addrItem->setFlags(Qt::ItemIsSelectable|Qt::ItemIsEnabled);
         this->setItem(this->rowCount()-1, 1, addrItem);
+
 //        items.push_back(addrItem);    // DON'T DO THIS. IT WILL CAUSE A CRASH. this->setRowCount(0); already removes items !!!
 
         QTableWidgetItem* codeItem = new QTableWidgetItem(Debugger::commandToString(command));
@@ -137,11 +170,11 @@ void DebuggerList::setCode(std::vector<unsigned> code)
 
         if (longCommand)
         {
-            addr += 2;
+            addrInTable += 2;
         }
         else
         {
-            addr += 1;
+            addrInTable += 1;
         }
     }
 

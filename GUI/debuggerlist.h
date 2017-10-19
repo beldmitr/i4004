@@ -7,7 +7,7 @@
 #include <QPainter>
 
 #include <memory>
-#include <vector>
+#include <unordered_map>
 
 #include "Simulator/debugger.h"
 #include "Compiler/compiler.h"
@@ -26,7 +26,7 @@ public:
 private:
     const unsigned columnNumbers = 4;
 
-    std::vector<QTableWidgetItem*> items;
+    std::unordered_map<unsigned, unsigned> addrToRow;
     Compiler* compiler;
     Simulator* simulator;
 

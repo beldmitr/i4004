@@ -83,6 +83,7 @@ void Simulator::play()
                 QThread::msleep(50);
             }
         });
+        emit onStartPlaying();
     }
 }
 
