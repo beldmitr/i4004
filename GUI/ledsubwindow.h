@@ -8,7 +8,7 @@
 #include <memory>
 #include <vector>
 
-#include <QHBoxLayout>
+#include <QGridLayout>
 
 #include "Simulator/simulator.h"
 #include "subwindow.h"
@@ -26,8 +26,11 @@ private:
     Simulator* simulator;
 
     std::shared_ptr<QWidget> centralWidget;
-    std::shared_ptr<QHBoxLayout> layout;
+    std::shared_ptr<QGridLayout> layout;
     std::vector<Led*> leds;
+
+    const unsigned ledNumber = 15;
+    const unsigned ledColumns = 3;
 
     // QWidget interface
 protected:

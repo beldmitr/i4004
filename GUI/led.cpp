@@ -9,7 +9,7 @@ Led::Led(Simulator *simulator, QWidget *parent) : QWidget(parent)
     connector = std::shared_ptr<ChooseIOWidget>(new ChooseIOWidget);
 
     layout = std::shared_ptr<QGridLayout>(new QGridLayout(this));
-    layout->addWidget(coloredComboBox.get(),0, 0, Qt::AlignCenter);
+//    layout->addWidget(coloredComboBox.get(),0, 0, Qt::AlignCenter);
     layout->addWidget(ledImage.get(), 1, 0, Qt::AlignCenter);
     layout->addWidget(connector.get(), 2, 0, Qt::AlignCenter);
 

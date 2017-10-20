@@ -12,13 +12,18 @@ ButtonSubWindow::ButtonSubWindow(Simulator* simulator) : SubWindow()
     layout->setMargin(10);
     layout->setSpacing(10);
 
-    for (int i = 0; i < 8; i++)
+    for (unsigned i = 0; i < buttonNumber; i++)
     {
         ChooseIOWidget* chooseIO = new ChooseIOWidget;
         Button* button = new Button(simulator, chooseIO);
 
-        layout->addWidget(button, 0, i, Qt::AlignCenter);
-        layout->addWidget(chooseIO, 1, i, Qt::AlignCenter);
+        unsigned buttonRows = buttonNumber / buttonColumns;
+
+        unsigned buttonRow = (i / buttonColumns) * buttonRows;
+        unsigned chooserRow = (i / buttonColumns) * buttonRows + 1;
+
+        layout->addWidget(button, buttonRow, i % buttonColumns, Qt::AlignCenter);
+        layout->addWidget(chooseIO, chooserRow, i % buttonColumns, Qt::AlignCenter);
 
         buttons.push_back(button);
         connectors.push_back(chooseIO);

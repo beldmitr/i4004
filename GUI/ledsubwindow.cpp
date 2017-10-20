@@ -8,16 +8,19 @@ LEDSubWindow::LEDSubWindow(Simulator *simulator) : SubWindow()
     this->setWindowIcon(QIcon(":/Resources/icons/led.png"));
 
     centralWidget = std::shared_ptr<QWidget>(new QWidget);
-    layout = std::shared_ptr<QHBoxLayout>(new QHBoxLayout(centralWidget.get()));
+    layout = std::shared_ptr<QGridLayout>(new QGridLayout(centralWidget.get()));
     layout->setMargin(10);
     layout->setSpacing(0);
 
     this->setWidget(centralWidget.get());
 
-    for (int i = 0; i < 8; i++)
+    for (unsigned i = 0; i < ledNumber; i++)
     {
         Led* led = new Led(simulator);
-        layout->addWidget(led);
+
+        unsigned ledRow = i / ledColumns;
+
+        layout->addWidget(led, ledRow, i % ledColumns);
         leds.push_back(led);
     }
 

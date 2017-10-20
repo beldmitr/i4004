@@ -1,5 +1,8 @@
 #include "debuggerlist.h"
 
+
+/// TODO next/prev breakpoint, list of breakpoints ???
+
 DebuggerList::DebuggerList(Compiler* compiler, Simulator *simulator) : QTableWidget()
 {
     this->compiler = compiler;
@@ -44,8 +47,6 @@ DebuggerList::DebuggerList(Compiler* compiler, Simulator *simulator) : QTableWid
     QRect rect = desktop.availableGeometry(desktop.primaryScreen());
     this->setMinimumHeight(rect.height() / 2);
     this->setMinimumWidth(350);
-
-    /// TODO next/prev breakpoint, list of breakpoints ???
 
     connect(this, &QTableWidget::cellClicked, [=](int row, int /*col*/) {
 

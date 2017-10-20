@@ -30,6 +30,9 @@ private:
     std::vector<Button*> buttons;
     std::vector<ChooseIOWidget*> connectors;
 
+    const unsigned buttonNumber = 15;
+    const unsigned buttonColumns = 3;
+
 
     // QWidget interface
 protected:
