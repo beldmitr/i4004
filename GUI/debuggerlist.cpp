@@ -39,19 +39,13 @@ DebuggerList::DebuggerList(Compiler* compiler, Simulator *simulator) : QTableWid
 
     this->verticalHeader()->setVisible(false);
 
-    this->setMinimumWidth(350);
-
     // Making minimal size according to screen resolution
     QDesktopWidget desktop;
     QRect rect = desktop.availableGeometry(desktop.primaryScreen());
     this->setMinimumHeight(rect.height() / 2);
     this->setMinimumWidth(350);
-//    this->setMinimumWidth(rect.width() / 4);
 
-    /// TODO setMinHeight proportional to editor
-    ///
-    /// TODO next/prev breakpoint ???
-
+    /// TODO next/prev breakpoint, list of breakpoints ???
 
     connect(this, &QTableWidget::cellClicked, [=](int row, int /*col*/) {
 
