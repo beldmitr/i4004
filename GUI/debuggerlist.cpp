@@ -11,6 +11,10 @@ DebuggerList::DebuggerList(Compiler* compiler, Simulator *simulator) : QTableWid
     this->horizontalHeader()->setStretchLastSection(true);
     this->setHorizontalHeaderLabels(QStringList() << "" << tr("Address") << tr("Code") << tr("Command"));
 
+    QTableWidgetItem* delBrkpnt = this->horizontalHeaderItem(0);
+    delBrkpnt->setIcon(QIcon(":/Resources/icons/removeBreakpoint.png"));
+    delBrkpnt->setToolTip(tr("Remove all breakpoints"));
+
     // Don't delete headerView pointer. I didn't create it with "new"
     QHeaderView* headerView = this->horizontalHeader();
     headerView->resizeSection(0, 26);
@@ -18,7 +22,12 @@ DebuggerList::DebuggerList(Compiler* compiler, Simulator *simulator) : QTableWid
     connect(headerView, &QHeaderView::sectionClicked, [=](int index) {
         if (index == 0)
         {
-            /// TODO delete all breakpoints
+            for (int i = 0; i < this->verticalHeader()->count(); i++)
+            {
+                QTableWidgetItem* item = this->item(i, 0);
+                item->setIcon(QIcon());
+            }
+            Debugger::clearBreakpoint();
         }
     });
 
@@ -32,10 +41,19 @@ DebuggerList::DebuggerList(Compiler* compiler, Simulator *simulator) : QTableWid
 
     this->setMinimumWidth(350);
 
-    /// TODO make 00 | NOP everywhere by default from the beggining
+    // Making minimal size according to screen resolution
+    QDesktopWidget desktop;
+    QRect rect = desktop.availableGeometry(desktop.primaryScreen());
+    this->setMinimumHeight(rect.height() / 2);
+    this->setMinimumWidth(350);
+//    this->setMinimumWidth(rect.width() / 4);
+
+    /// TODO setMinHeight proportional to editor
+    ///
+    /// TODO next/prev breakpoint ???
 
 
-    connect(this, &QTableWidget::cellClicked, [=](int row, int /*col*/){
+    connect(this, &QTableWidget::cellClicked, [=](int row, int /*col*/) {
 
         QTableWidgetItem* addressItem = this->item(row, 1);
         QString addrTxt = addressItem->text();
@@ -73,6 +91,8 @@ DebuggerList::DebuggerList(Compiler* compiler, Simulator *simulator) : QTableWid
     connect(simulator, &Simulator::onStartPlaying, [=]() {
         this->deselectAll();
     });
+
+    init();
 }
 
 DebuggerList::~DebuggerList()
@@ -82,8 +102,6 @@ DebuggerList::~DebuggerList()
 
 void DebuggerList::selectAddress(unsigned addr)
 {
-    /// FIXME Correct translation between addresses and rows
-
     std::unordered_map<unsigned, unsigned>::const_iterator it = addrToRow.find(addr);
     if (it != addrToRow.end())
     {
@@ -103,6 +121,7 @@ void DebuggerList::deselectAll()
 void DebuggerList::setCode(std::vector<unsigned> code)
 {
     this->setRowCount(0);
+    addrToRow.clear();
 
     // This address will be shown in the table
     // It hides addresses for long commands
@@ -179,5 +198,11 @@ void DebuggerList::setCode(std::vector<unsigned> code)
     }
 
     this->viewport()->update();
+}
+
+void DebuggerList::init()
+{
+    std::vector<unsigned> code(rowNumbers); /// TODO check on all OS, if it fills the free space with zeroes
+    this->setCode(code);
 }
 

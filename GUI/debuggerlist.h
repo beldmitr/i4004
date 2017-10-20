@@ -5,6 +5,7 @@
 #include <QTableWidget>
 #include <QHeaderView>
 #include <QPainter>
+#include <QDesktopWidget>
 
 #include <memory>
 #include <unordered_map>
@@ -25,12 +26,14 @@ public:
 
 private:
     const unsigned columnNumbers = 4;
+    const unsigned rowNumbers = 0x1000; // [0x0 - 0xFFF]
 
     std::unordered_map<unsigned, unsigned> addrToRow;
     Compiler* compiler;
     Simulator* simulator;
 
     void setCode(std::vector<unsigned> code);
+    void init();
 
 signals:
 

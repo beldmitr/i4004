@@ -46,5 +46,6 @@
         <file>Resources/completer.txt</file>
         <file>Resources/icons/assembly.png</file>
         <file>Resources/icons/breakpoint.png</file>
+        <file>Resources/icons/removeBreakpoint.png</file>
     </qresource>
 </RCC>
