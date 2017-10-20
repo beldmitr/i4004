@@ -80,7 +80,7 @@ void Simulator::play()
                 }
                 isStopped = false;
                 step();
-                QThread::msleep(50);
+                QThread::msleep(1);
             }
         });
         emit onStartPlaying();
