@@ -141,8 +141,6 @@ void MainWindow::createMenu()
     menuFile->addAction(actSave.get());
     menuFile->addAction(actSaveAs.get());
     menuFile->addSeparator();
-    menuFile->addAction("Preferences");     /// TODO Preferences + shortcut should be Ctrl+,
-    menuFile->addSeparator();
     menuFile->addAction(actExit.get());
 
     // Create menu Edit
