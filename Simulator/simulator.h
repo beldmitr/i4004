@@ -104,7 +104,6 @@ public:
     bool getIsPlaying() const;
 
 signals:
-    void onActualCommand(const QString& command);
     void onStopPlaying();
     void onStartPlaying();
 

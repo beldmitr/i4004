@@ -30,24 +30,9 @@ void Simulator::step()
 {
     unsigned int code = rom->getValue(cpu->getPC());
 
-    /*
-     *  If it is a 2 byte instruction, read the next byte
-     *  There are 5 instructions 2 byte long:
-     *  Jump Conditional	JCN	0001CCCC	AAAAAAAA	condition, address
-     *  Fetch Immediate     FIM	0010RRR0	DDDDDDDD	register pair, data
-     *  Jump Uncoditional	JUN	0100AAAA	AAAAAAAA	address
-     *  Jump to Subroutine	JMS	0101AAAA	AAAAAAAA	address
-     *  Increment and Skip	ISZ	0111RRRR	AAAAAAAA	register, address
-     *
-     *  So we took a high byte with previous command
-     *  and after we read the lowest byte.
-     */
+    bool isLongCommand = Debugger::hasNextByte(code);
 
-     if ((code & 0xF0) == 0x10    // JCN
-            || (code & 0xF1) == 0x20 // FIM
-            || (code & 0xF0) == 0x40     // JUN
-            || (code & 0xF0) == 0x50     // JMS
-            || (code & 0xF0) == 0x70)    // ISZ
+    if (isLongCommand)
     {
         int low = rom->getValue(cpu->getPC() + 1);  // read the next byte
         code = (code << 8) | low;   // combine code to 2 byte
@@ -137,252 +122,186 @@ void Simulator::evalCommand(int command)
     if ((command & 0xFFFF) == 0x0000) // NOP
     {
         NOP();
-        emit onActualCommand(QString::number(command, 16) + " " + "NOP");
     }
     else if ((command & 0xF000) == 0x1000) // JCN
     {
         JCN((command & 0x0F00) >> 8, command & 0x00FF);
-        emit onActualCommand(QString::number(command, 16) + " " + "JCN "
-                             + "0x" + QString::number((command & 0x0F00) >> 8, 16) + ", "
-                             + "0x" + QString::number(command & 0x00FF, 16));
     }
     else if ((command & 0xF100) == 0x2000) // FIM
     {
         FIM((command & 0xE00) >> 9, command & 0xFF);
-        emit onActualCommand(QString::number(command, 16) + " " + "FIM "
-                             + "P" + QString::number((command & 0xE00) >> 9, 16) + ", "
-                             + "0x" + QString::number(command & 0xFF, 16));
     }
     else if ((command & 0xFFF1) == 0x0021) // SRC
     {
         SRC((command & 0x0E) >> 1);
-        emit onActualCommand(QString::number(command, 16) + " " + "SRC "
-                             + "P" + QString::number((command & 0x0E) >> 1, 16));
     }
     else if ((command & 0xFFF1) == 0x0030) // FIN
     {
         FIN((command & 0xE) >> 1);
-        emit onActualCommand(QString::number(command, 16) + " " + "FIN "
-                             + "P" + QString::number((command & 0xE) >> 1, 16));
     }
     else if ((command & 0xFFF1) == 0x0031) // JIN
     {
         JIN((command & 0xE) >> 1);
-        emit onActualCommand(QString::number(command, 16) + " " + "JIN "
-                             + "P" + QString::number((command & 0xE) >> 1, 16));
     }
     else if ((command & 0xF000) == 0x4000) // JUN
     {
         JUN((command & 0x0F00) >> 8, command & 0x00FF);
-        emit onActualCommand(QString::number(command, 16) + " " + "JUN "
-                             + "0x" + QString::number((command & 0x0F00) >> 8, 16) + ", "
-                             + QString::number(command & 0x00FF, 16));
     }
     else if ((command & 0xF000) == 0x5000) // JMS
     {
         JMS((command & 0x0F00) >> 8, command & 0x00FF);
-        emit onActualCommand(QString::number(command, 16) + " " + "JMS "
-                             + "0x" + QString::number((command & 0x0F00) >> 8, 16) + ", "
-                             + QString::number(command & 0x00FF, 16));
     }
     else if ((command & 0xFFF0) == 0x0060) // INC
     {
         INC(command & 0xF);
-        emit onActualCommand(QString::number(command, 16) + " " + "INC "
-                             "R" + QString::number(command & 0xF, 16));
     }
     else if ((command & 0xF000) == 0x7000) // ISZ
     {
         ISZ((command & 0x0F00) >> 8, command & 0xFF);
-        emit onActualCommand(QString::number(command, 16) + " " + "ISZ "
-                             + "R" + QString::number((command & 0x0F00) >> 8, 16) + ", "
-                             + "0x" + QString::number(command & 0xFF, 16));
     }
     else if ((command & 0xFFF0) == 0x0080) // ADD
     {
         ADD(command & 0xF);
-        emit onActualCommand(QString::number(command, 16) + " " + "ADD "
-                             "R" + QString::number(command & 0xF, 16));
     }
     else if ((command & 0xFFF0) == 0x0090) // SUB
     {
         SUB(command & 0xF);
-        emit onActualCommand(QString::number(command, 16) + " " + "SUB "
-                             "R" + QString::number(command & 0xF, 16));
     }
     else if ((command & 0xFFF0) == 0x00A0) // LD
     {
         LD(command & 0xF);
-        emit onActualCommand(QString::number(command, 16) + " " + "LD "
-                             "R" + QString::number(command & 0xF, 16));
     }
     else if ((command & 0xFFF0) == 0x00B0) // XCH
     {
         XCH(command & 0xF);
-        emit onActualCommand(QString::number(command, 16) + " " + "XCH "
-                             "R" + QString::number(command & 0xF, 16));
     }
     else if ((command & 0xFFF0)== 0x00C0) // BBL
     {
         BBL(command & 0xF);
-        emit onActualCommand(QString::number(command, 16) + " " + "BBL "
-                             "0x" + QString::number(command & 0xF, 16));
     }
     else if ((command & 0xFFF0) == 0x00D0) // LDM
     {
         LDM(command & 0xF);
-        emit onActualCommand(QString::number(command, 16) + " " + "LDM "
-                             "0x" + QString::number(command & 0xF, 16));
     }
     else if ((command & 0xFFFF) == 0x00E0) // WRM
     {
         WRM();
-        emit onActualCommand(QString::number(command, 16) + " " + "WRM");
     }
     else if ((command & 0xFFFF) == 0x00E1) // WMP
     {
         WMP();
-        emit onActualCommand(QString::number(command, 16) + " " + "WMP");
     }
     else if ((command & 0xFFFF) == 0x00E2) // WRR
     {
         WRR();
-        emit onActualCommand(QString::number(command, 16) + " " + "WRR");
     }
     else if ((command & 0xFFFF) == 0x00E3) // WPM
     {
         WPM();
-        emit onActualCommand(QString::number(command, 16) + " " + "WPM");
     }
     else if ((command & 0xFFFF) == 0x00E4) // WR0
     {
         WR0();
-        emit onActualCommand(QString::number(command, 16) + " " + "WR0");
     }
     else if ((command & 0xFFFF) == 0x00E5) // WR1
     {
         WR1();
-        emit onActualCommand(QString::number(command, 16) + " " + "WR1");
     }
     else if ((command & 0xFFFF) == 0x00E6) // WR2
     {
         WR2();
-        emit onActualCommand(QString::number(command, 16) + " " + "WR2");
     }
     else if ((command & 0xFFFF) == 0x00E7) // WR3
     {
         WR3();
-        emit onActualCommand(QString::number(command, 16) + " " + "WR3");
     }
     else if ((command & 0xFFFF) == 0x00E8) // SBM
     {
         SBM();
-        emit onActualCommand(QString::number(command, 16) + " " + "SBM");
     }
     else if ((command & 0xFFFF) == 0x00E9) // RDM
     {
         RDM();
-        emit onActualCommand(QString::number(command, 16) + " " + "RDM");
     }
     else if ((command & 0xFFFF) == 0x00EA) // RDR
     {
         RDR();
-        emit onActualCommand(QString::number(command, 16) + " " + "RDR");
     }
     else if ((command & 0xFFFF) == 0x00EB) // ADM
     {
         ADM();
-        emit onActualCommand(QString::number(command, 16) + " " + "ADM");
     }
     else if ((command & 0xFFFF) == 0x00EC) // RD0
     {
         RD0();
-        emit onActualCommand(QString::number(command, 16) + " " + "RD0");
     }
     else if ((command & 0xFFFF) == 0x00ED) // RD1
     {
         RD1();
-        emit onActualCommand(QString::number(command, 16) + " " + "RD1");
     }
     else if ((command & 0xFFFF) == 0x00EE) // RD2
     {
         RD2();
-        emit onActualCommand(QString::number(command, 16) + " " + "RD2");
     }
     else if ((command & 0xFFFF) == 0x00EF) // RD3
     {
         RD3();
-        emit onActualCommand(QString::number(command, 16) + " " + "RD3");
     }
     else if ((command & 0xFFFF) == 0x00F0) // CLB
     {
         CLB();
-        emit onActualCommand(QString::number(command, 16) + " " + "CLB");
     }
     else if ((command & 0xFFFF) == 0x00F1) // CLC
     {
         CLC();
-        emit onActualCommand(QString::number(command, 16) + " " + "CLC");
     }
     else if ((command & 0xFFFF) == 0x00F2) // IAC
     {
         IAC();
-        emit onActualCommand(QString::number(command, 16) + " " + "IAC");
     }
     else if ((command & 0xFFFF) == 0x00F3) // CMC
     {
         CMC();
-        emit onActualCommand(QString::number(command, 16) + " " + "CMC");
     }
     else if ((command & 0xFFFF) == 0x00F4) // CMA
     {
         CMA();
-        emit onActualCommand(QString::number(command, 16) + " " + "CMA");
     }
     else if ((command & 0xFFFF) == 0x00F5) // RAL
     {
         RAL();
-        emit onActualCommand(QString::number(command, 16) + " " + "RAL");
     }
     else if ((command & 0xFFFF) == 0x00F6) // RAR
     {
         RAR();
-        emit onActualCommand(QString::number(command, 16) + " " + "RAR");
     }
     else if ((command & 0xFFFF) == 0x00F7) // TCC
     {
         TCC();
-        emit onActualCommand(QString::number(command, 16) + " " + "TCC");
     }
     else if ((command & 0xFFFF) == 0x00F8) // DAC
     {
         DAC();
-        emit onActualCommand(QString::number(command, 16) + " " + "DAC");
     }
     else if ((command & 0xFFFF) == 0x00F9) // TCS
     {
         TCS();
-        emit onActualCommand(QString::number(command, 16) + " " + "TCS");
     }
     else if ((command & 0xFFFF) == 0x00FA) // STC
     {
         STC();
-        emit onActualCommand(QString::number(command, 16) + " " + "STC");
     }
     else if ((command & 0xFFFF) == 0x00FB) // DAA
     {
         DAA();
-        emit onActualCommand(QString::number(command, 16) + " " + "DAA");
     }
     else if ((command & 0xFFFF) == 0x00FC) // KBP
     {
         KBP();
-        emit onActualCommand(QString::number(command, 16) + " " + "KBP");
     }
     else if ((command & 0xFFFF) == 0x00FD) // DCL
     {
         DCL();
-        emit onActualCommand(QString::number(command, 16) + " " + "DCL");
     }
     else
     {
