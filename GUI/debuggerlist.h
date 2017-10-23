@@ -9,6 +9,7 @@
 
 #include <memory>
 #include <unordered_map>
+#include <vector>
 
 #include "Simulator/debugger.h"
 #include "Compiler/compiler.h"
@@ -26,9 +27,11 @@ public:
 
 private:
     const unsigned columnNumbers = 4;
-    const unsigned rowNumbers = 0x1000; // [0x0 - 0xFFF]
+    const unsigned rowMaxNumbers = 0x1000; // [0x0 - 0xFFF]
+    unsigned rows = 0;  // actual number of rows in the table
 
     std::unordered_map<unsigned, unsigned> addrToRow;
+    std::vector<QTableWidgetItem*> items;
     Compiler* compiler;
     Simulator* simulator;
 

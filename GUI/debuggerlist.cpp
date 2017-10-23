@@ -92,7 +92,10 @@ DebuggerList::DebuggerList(Compiler* compiler, Simulator *simulator) : QTableWid
 
 DebuggerList::~DebuggerList()
 {
-
+//    for (QTableWidgetItem* item : items)
+//    {
+//        delete item;
+//    }
 }
 
 void DebuggerList::selectAddress(unsigned addr)
@@ -115,8 +118,13 @@ void DebuggerList::deselectAll()
 
 void DebuggerList::setCode(std::vector<unsigned> code)
 {
-    this->setRowCount(0);
     addrToRow.clear();
+
+    for (unsigned row = 0; row < rows; row++)
+    {
+        this->removeRow(row);
+    }
+    rows = 0;
 
     // This address will be shown in the table
     // It hides addresses for long commands
@@ -155,32 +163,31 @@ void DebuggerList::setCode(std::vector<unsigned> code)
         }
         addrRow++;
 
-        this->insertRow(this->rowCount());
+        this->insertRow(rows++);
 
-        QTableWidgetItem* brkptItem = new QTableWidgetItem();
+        QTableWidgetItem* brkptItem = new QTableWidgetItem("", QTableWidgetItem::UserType);
         brkptItem->setTextAlignment(Qt::AlignCenter);
         brkptItem->setFlags(Qt::ItemIsSelectable|Qt::ItemIsEnabled);
-        this->setItem(this->rowCount()-1, 0, brkptItem);
-//        items.push_back(brkptItem);    // DON'T DO THIS. IT WILL CAUSE A CRASH. this->setRowCount(0); already removes items !!!
+        this->setItem(rows-1, 0, brkptItem);
+        items.push_back(brkptItem);
 
-        QTableWidgetItem* addrItem = new QTableWidgetItem(Debugger::addressToString(addrInTable));
+        QTableWidgetItem* addrItem = new QTableWidgetItem(Debugger::addressToString(addrInTable), QTableWidgetItem::UserType);
         addrItem->setTextAlignment(Qt::AlignCenter);
         addrItem->setFlags(Qt::ItemIsSelectable|Qt::ItemIsEnabled);
-        this->setItem(this->rowCount()-1, 1, addrItem);
+        this->setItem(rows-1, 1, addrItem);
+        items.push_back(addrItem);
 
-//        items.push_back(addrItem);    // DON'T DO THIS. IT WILL CAUSE A CRASH. this->setRowCount(0); already removes items !!!
-
-        QTableWidgetItem* codeItem = new QTableWidgetItem(Debugger::commandToString(command));
+        QTableWidgetItem* codeItem = new QTableWidgetItem(Debugger::commandToString(command), QTableWidgetItem::UserType);
         codeItem->setTextAlignment(Qt::AlignCenter);
         codeItem->setFlags(Qt::ItemIsSelectable|Qt::ItemIsEnabled);
-        this->setItem(this->rowCount()-1, 2, codeItem);
-//        items.push_back(codeItem);    // DON'T DO THIS. IT WILL CAUSE A CRASH. this->setRowCount(0); already removes items !!!
+        this->setItem(rows-1, 2, codeItem);
+        items.push_back(codeItem);
 
-        QTableWidgetItem* commandItem = new QTableWidgetItem(Debugger::codeToInstruction(command));
+        QTableWidgetItem* commandItem = new QTableWidgetItem(Debugger::codeToInstruction(command), QTableWidgetItem::UserType);
         commandItem->setTextAlignment(Qt::AlignCenter);
         commandItem->setFlags(Qt::ItemIsSelectable|Qt::ItemIsEnabled);
-        this->setItem(this->rowCount()-1, 3, commandItem);
-//        items.push_back(commandItem); // DON'T DO THIS. IT WILL CAUSE A CRASH. this->setRowCount(0); already removes items !!!
+        this->setItem(rows-1, 3, commandItem);
+        items.push_back(commandItem);
 
         if (longCommand)
         {
@@ -197,7 +204,8 @@ void DebuggerList::setCode(std::vector<unsigned> code)
 
 void DebuggerList::init()
 {
-    std::vector<unsigned> code(rowNumbers); /// TODO check on all OS, if it fills the free space with zeroes
+    std::vector<unsigned> code(rowMaxNumbers); /// TODO check on all OS, if it fills the free space with zeroes
     this->setCode(code);
+    this->selectAddress(0);
 }
 

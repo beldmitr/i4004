@@ -63,11 +63,13 @@ QString Debugger::codeToInstruction(unsigned code)
     {
         instruction = "JUN 0x" + QString::number((code & 0x0F00) >> 8, 16) + ", "
                 + QString::number(code & 0x00FF, 16);
+//        instruction = "JUN 0x" + QString::number((code & 0x0FFF), 16);
     }
     else if ((code & 0xF000) == 0x5000) // JMS
     {
         instruction = "JMS 0x" + QString::number((code & 0x0F00) >> 8, 16) + ", "
                 + QString::number(code & 0x00FF, 16);
+//        instruction = "JMS 0x" + QString::number((code & 0x0FFF), 16);
     }
     else if ((code & 0xFFF0) == 0x0060) // INC
     {
