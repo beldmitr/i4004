@@ -61,15 +61,11 @@ QString Debugger::codeToInstruction(unsigned code)
     }
     else if ((code & 0xF000) == 0x4000) // JUN
     {
-        instruction = "JUN 0x" + QString::number((code & 0x0F00) >> 8, 16) + ", "
-                + QString::number(code & 0x00FF, 16);
-//        instruction = "JUN 0x" + QString::number((code & 0x0FFF), 16);
+        instruction = "JUN 0x" + QString::number((code & 0x0FFF), 16);
     }
     else if ((code & 0xF000) == 0x5000) // JMS
     {
-        instruction = "JMS 0x" + QString::number((code & 0x0F00) >> 8, 16) + ", "
-                + QString::number(code & 0x00FF, 16);
-//        instruction = "JMS 0x" + QString::number((code & 0x0FFF), 16);
+        instruction = "JMS 0x" + QString::number((code & 0x0FFF), 16);
     }
     else if ((code & 0xFFF0) == 0x0060) // INC
     {
@@ -237,11 +233,12 @@ QString Debugger::commandToString(unsigned code)
 
     if (hiByte != 0)
     {
-        result = QString("%1 %2").arg(QString::number(hiByte, 16), QString::number(lowByte, 16));
+        result = QString("%1 %2").arg((hiByte < 10) ? QString("0").append(QString::number(hiByte, 16)) : QString::number(hiByte, 16),
+                                      (lowByte < 10) ? QString("0").append(QString::number(lowByte, 16)) : QString::number(lowByte, 16));
     }
     else
     {
-        result = QString::number(lowByte, 16);
+        result = (lowByte < 10) ? QString("0").append(QString::number(lowByte, 16)) : QString::number(lowByte, 16);
     }
 
     return result;
