@@ -103,35 +103,6 @@ Line::Line(std::string line)
         return;
     }
 
-    if (!label.isEmpty())
-    {
-//        std::string labelName = label.find; // This is our label in format ABC,
-//        labelName = labelName.substr(0, labelName.size() - 1);  // delete a comma from a label: ABC, => ABC
-
-        /*
-         * Everything after this label is a parameter of this label.
-         * Which may be:
-         * - a Number       ABC, 5
-         * - a Constant,    ABC, PI314
-         * - a MathExpr     ABC, PI314 + CCC - 9
-         * - an Instruction ABC, FIM P0, 0xFF
-         * But this parameter is parsed in Label class and on this phaze we don't worry about this
-         */
-//        std::string labelParam = String::trimBeginEnd(label.suffix);
-
-//        std::shared_ptr<Label>(new Label(labelName, labelParam));
-
-//        // There should be nothing before a label
-//        if (!String::trim(label.prefix).empty())
-//        {
-//            std::string msg = "There is an unknown parameter " + label.prefix
-//                    + " in line " + String::trim(line);
-//            throw CompilerException("Line", msg);
-//        }
-
-        return;
-    }
-
     /*
      * Parsing an INSTRUCTION
      *
