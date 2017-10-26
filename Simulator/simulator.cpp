@@ -65,7 +65,7 @@ void Simulator::play()
                 }
                 isStopped = false;
                 step();
-                QThread::msleep(1);
+                QThread::msleep(10);
             }
         });
         emit onStartPlaying();
