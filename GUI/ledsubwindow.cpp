@@ -23,7 +23,7 @@ LEDSubWindow::LEDSubWindow(Simulator *simulator) : SubWindow()
         layout->addWidget(led, ledRow, i % ledColumns);
         leds.push_back(led);
     }
-
+    this->move(725, 15);
 }
 
 LEDSubWindow::~LEDSubWindow()

@@ -5,7 +5,6 @@
 #include <QTextEdit>
 #include <QAbstractItemView>
 #include <QCompleter>
-#include <QDesktopWidget>
 #include <QScrollBar>
 #include <QStringListModel>
 #include <QStandardItemModel>

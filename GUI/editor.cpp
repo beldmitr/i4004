@@ -10,11 +10,8 @@ Editor::Editor(QWidget *parent) : QTextEdit(parent)
     completer->setCaseSensitivity(Qt::CaseInsensitive);
     connect(completer.get(), SIGNAL(activated(QString)), this, SLOT(insertCompletion(QString)));
 
-    // Making minimal size according to screen resolution
-    QDesktopWidget desktop;
-    QRect rect = desktop.availableGeometry(desktop.primaryScreen());
-    this->setMinimumHeight(rect.height() / 2);
-    this->setMinimumWidth(rect.width() / 4);
+    this->setMinimumHeight(650);
+    this->setMinimumWidth(325);
 
     this->setMouseTracking(true);
 

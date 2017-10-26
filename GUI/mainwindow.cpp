@@ -272,18 +272,16 @@ void MainWindow::createToolbars()
 void MainWindow::createSubWindows()
 {
     editorSubWindow = std::shared_ptr<EditorSubWindow>(new EditorSubWindow(this));
+    mdi->addSubWindow(editorSubWindow.get(), Qt::CustomizeWindowHint | Qt::WindowMinimizeButtonHint | Qt::WindowCloseButtonHint);
+
+    debuggerSubWindow = std::shared_ptr<DebuggerSubWindow>(new DebuggerSubWindow(compiler, simulator));
+    mdi->addSubWindow(debuggerSubWindow.get(), Qt::CustomizeWindowHint | Qt::WindowMinimizeButtonHint | Qt::WindowCloseButtonHint);
 
     ledSubWindow = std::shared_ptr<LEDSubWindow>(new LEDSubWindow(simulator));
-
-    //    sevenSegmentSubWindow = std::shared_ptr<SevenSegmentSubWindow>(new SevenSegmentSubWindow);
-    buttonSubWindow = std::shared_ptr<ButtonSubWindow>(new ButtonSubWindow(simulator));
-    debuggerSubWindow = std::shared_ptr<DebuggerSubWindow>(new DebuggerSubWindow(compiler, simulator));
-
-    mdi->addSubWindow(editorSubWindow.get(), Qt::CustomizeWindowHint | Qt::WindowMinimizeButtonHint | Qt::WindowCloseButtonHint);
     mdi->addSubWindow(ledSubWindow.get(), Qt::CustomizeWindowHint | Qt::WindowMinimizeButtonHint | Qt::WindowCloseButtonHint);
-    //    mdi->addSubWindow(sevenSegmentSubWindow.get());
+
+    buttonSubWindow = std::shared_ptr<ButtonSubWindow>(new ButtonSubWindow(simulator));
     mdi->addSubWindow(buttonSubWindow.get(), Qt::CustomizeWindowHint | Qt::WindowMinimizeButtonHint | Qt::WindowCloseButtonHint);
-    mdi->addSubWindow(debuggerSubWindow.get(), Qt::CustomizeWindowHint | Qt::WindowMinimizeButtonHint | Qt::WindowCloseButtonHint);
 }
 
 void MainWindow::createDocks()
@@ -344,7 +342,7 @@ MainWindow::MainWindow(Compiler& compiler, Simulator &simulator, QWidget *parent
     // create components
     mdi = std::shared_ptr<QMdiArea>(new QMdiArea);
 //    mdi->tileSubWindows();
-    mdi->cascadeSubWindows();
+//    mdi->cascadeSubWindows();
 
     mdi->setHorizontalScrollBarPolicy(Qt::ScrollBarAsNeeded);
     mdi->setVerticalScrollBarPolicy(Qt::ScrollBarAsNeeded);

@@ -12,6 +12,8 @@ EditorSubWindow::EditorSubWindow(QWidget *parent) : SubWindow(parent)
 //    connect(editor.get(), &Editor::onTextChanged, [=](){
 //        emit onTextChanged();
 //    });
+
+    this->move(5, 15);
 }
 
 

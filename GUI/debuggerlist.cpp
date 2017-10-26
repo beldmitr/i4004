@@ -42,11 +42,8 @@ DebuggerList::DebuggerList(Compiler* compiler, Simulator *simulator) : QTableWid
 
     this->verticalHeader()->setVisible(false);
 
-    // Making minimal size according to screen resolution
-    QDesktopWidget desktop;
-    QRect rect = desktop.availableGeometry(desktop.primaryScreen());
-    this->setMinimumHeight(rect.height() / 2);
-    this->setMinimumWidth(350);
+    this->setMinimumHeight(650);
+    this->setMinimumWidth(325);
 
     connect(this, &QTableWidget::cellClicked, [=](int row, int /*col*/) {
 

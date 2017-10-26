@@ -28,6 +28,8 @@ ButtonSubWindow::ButtonSubWindow(Simulator* simulator) : SubWindow()
         buttons.push_back(button);
         connectors.push_back(chooseIO);
     }
+
+    this->move(685, 400);
 }
 
 ButtonSubWindow::~ButtonSubWindow()

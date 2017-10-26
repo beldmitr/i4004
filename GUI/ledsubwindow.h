@@ -29,8 +29,8 @@ private:
     std::shared_ptr<QGridLayout> layout;
     std::vector<Led*> leds;
 
-    const unsigned ledNumber = 15;
-    const unsigned ledColumns = 3;
+    const unsigned ledNumber = 24;
+    const unsigned ledColumns = 8;
 
     // QWidget interface
 protected:

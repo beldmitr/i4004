@@ -11,6 +11,8 @@ DebuggerSubWindow::DebuggerSubWindow(Compiler* compiler, Simulator *simulator) :
     this->setWindowIcon(QIcon(":/Resources/icons/assembly.png"));
 
     this->setWidget(debuggerLst.get());
+
+    this->move(340, 15);
 }
 
 DebuggerSubWindow::~DebuggerSubWindow()
