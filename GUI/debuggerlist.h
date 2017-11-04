@@ -7,6 +7,7 @@
 #include <memory>
 #include <unordered_map>
 #include <vector>
+#include <iostream>
 
 #include "Simulator/debugger.h"
 #include "Compiler/compiler.h"
@@ -37,7 +38,13 @@ private:
 
 signals:
 
-public slots:
+private slots:
+    void handleSectionClicked(int index);
+    void handleCellClicked(int row, int col);
+    void handleCompiled();
+    void handleStopPlaing();
+    void handleStartPlaying();
+
 
 };
 

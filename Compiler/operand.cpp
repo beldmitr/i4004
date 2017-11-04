@@ -22,7 +22,7 @@ Operand::Operand(const std::string& operand, CommandSet::OperandType type)
         case CommandSet::OperandType::NONE:
             if (!operand.empty())
             {
-                std::string msg = "It is not expected an operand. But " + operand + " occurs.";
+                std::string msg = "Operand is not expected. But " + operand + " occurs.";
                 throw CompilerException("Operand", msg);
             }
             return;

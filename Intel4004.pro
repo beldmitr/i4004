@@ -57,7 +57,6 @@ SOURCES += \
     Exceptions/logexceptions.cpp \
     Compiler/compilererror.cpp \
     Compiler/compiler.cpp \
-    i4004.cpp \
     GUI/autocompleter.cpp \
     GUI/ledimage.cpp \
     GUI/led.cpp \
@@ -117,7 +116,6 @@ HEADERS += \
     Exceptions/logexceptions.h \
     Compiler/compilererror.h \
     Compiler/compiler.h \
-    i4004.h \
     GUI/autocompleter.h \
     GUI/ledimage.h \
     GUI/led.h \

@@ -22,17 +22,7 @@ DebuggerList::DebuggerList(Compiler* compiler, Simulator *simulator) : QTableWid
     QHeaderView* headerView = this->horizontalHeader();
     headerView->resizeSection(0, 26);
 
-    connect(headerView, &QHeaderView::sectionClicked, [=](int index) {
-        if (index == 0)
-        {
-            for (int i = 0; i < this->verticalHeader()->count(); i++)
-            {
-                QTableWidgetItem* item = this->item(i, 0);
-                item->setIcon(QIcon());
-            }
-            Debugger::clearBreakpoint();
-        }
-    });
+    connect(headerView, SIGNAL(sectionClicked(int)), this, SLOT(handleSectionClicked(int)));
 
     this->verticalHeader()->setSectionResizeMode(QHeaderView::Fixed);
 
@@ -45,54 +35,21 @@ DebuggerList::DebuggerList(Compiler* compiler, Simulator *simulator) : QTableWid
     this->setMinimumHeight(650);
     this->setMinimumWidth(325);
 
-    connect(this, &QTableWidget::cellClicked, [=](int row, int /*col*/) {
-
-        QTableWidgetItem* addressItem = this->item(row, 1);
-        QString addrTxt = addressItem->text();
-        unsigned addr = addrTxt.toUInt(nullptr, 16);
-
-        QTableWidgetItem* breakpointItem = this->item(row, 0);
-        QIcon icon = breakpointItem->icon();
-        if (icon.isNull())
-        {
-            breakpointItem->setIcon(QIcon(":/Resources/icons/breakpoint.png"));
-            Debugger::addBreakpoint(addr);
-        }
-        else
-        {
-            breakpointItem->setIcon(QIcon());
-            Debugger::removeBreakpoint(addr);
-        }
-    });
+    connect(this, SIGNAL(cellClicked(int,int)), this, SLOT(handleCellClicked(int,int)));
 
     // Compiler
-    connect(this->compiler, &Compiler::onCompiled, [=]() {
-        std::vector<unsigned> code = this->compiler->getObjectCode();
-        this->setCode(code);
-        this->selectAddress(0);
-        Debugger::clearBreakpoint();
-    });
+    connect(this->compiler, SIGNAL(onCompiled()), this, SLOT(handleCompiled()));
 
     // Simulator
-    connect(simulator, &Simulator::onStopPlaying, [=]() {
-        unsigned addr = this->simulator->getCpu()->getPC();
-        this->selectAddress(addr);
-        this->viewport()->update();
-    });
-
-    connect(simulator, &Simulator::onStartPlaying, [=]() {
-        this->deselectAll();
-    });
+    connect(simulator, SIGNAL(onStopPlaying()), this, SLOT(handleStopPlaing()));
+    connect(simulator, SIGNAL(onStartPlaying()), this, SLOT(handleStartPlaying()));
 
     init();
 }
 
 DebuggerList::~DebuggerList()
 {
-//    for (QTableWidgetItem* item : items)
-//    {
-//        delete item;
-//    }
+
 }
 
 void DebuggerList::selectAddress(unsigned addr)
@@ -117,10 +74,18 @@ void DebuggerList::setCode(std::vector<unsigned> code)
 {
     addrToRow.clear();
 
-    for (unsigned row = 0; row < rows; row++)
+    //    this->clear();
+
+    while (this->rowCount() > 0)
     {
-        this->removeRow(row);
+        this->removeRow(0);
     }
+
+    //    for (unsigned row = 0; row < rows; row++)
+    //    {
+    //        this->removeRow(row);
+    //    }
+    //    this->setRowCount(0);
     rows = 0;
 
     // This address will be shown in the table
@@ -196,7 +161,8 @@ void DebuggerList::setCode(std::vector<unsigned> code)
         }
     }
 
-    this->viewport()->update();
+    QWidget* viewport = this->viewport();
+    viewport->update();
 }
 
 void DebuggerList::init()
@@ -204,5 +170,62 @@ void DebuggerList::init()
     std::vector<unsigned> code(rowMaxNumbers); /// TODO check on all OS, if it fills the free space with zeroes
     this->setCode(code);
     this->selectAddress(0);
+
+    //    this->setRowCount(0xFFF);
+}
+
+void DebuggerList::handleSectionClicked(int index)
+{
+    if (index == 0)
+    {
+        for (int i = 0; i < this->verticalHeader()->count(); i++)
+        {
+            QTableWidgetItem* item = this->item(i, 0);
+            item->setIcon(QIcon());
+        }
+        Debugger::clearBreakpoint();
+    }
+}
+
+void DebuggerList::handleCellClicked(int row, int /*col*/)
+{
+    QTableWidgetItem* addressItem = this->item(row, 1);
+    QString addrTxt = addressItem->text();
+    unsigned addr = addrTxt.toUInt(nullptr, 16);
+
+    QTableWidgetItem* breakpointItem = this->item(row, 0);
+    QIcon icon = breakpointItem->icon();
+    if (icon.isNull())
+    {
+        breakpointItem->setIcon(QIcon(":/Resources/icons/breakpoint.png"));
+        Debugger::addBreakpoint(addr);
+    }
+    else
+    {
+        breakpointItem->setIcon(QIcon());
+        Debugger::removeBreakpoint(addr);
+    }
+}
+
+void DebuggerList::handleCompiled()
+{
+    std::vector<unsigned> code = this->compiler->getObjectCode();
+    this->setCode(code);
+    this->selectAddress(0);
+    Debugger::clearBreakpoint();
+}
+
+void DebuggerList::handleStopPlaing()
+{
+    unsigned addr = this->simulator->getCpu()->getPC();
+    this->selectAddress(addr);
+
+    QWidget* viewport = this->viewport();
+    viewport->update();
+}
+
+void DebuggerList::handleStartPlaying()
+{
+    this->deselectAll();
 }
 

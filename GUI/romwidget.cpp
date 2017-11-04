@@ -35,10 +35,10 @@ RomWidget::RomWidget(Simulator *simulator, QWidget *parent) : QWidget(parent)
 
     for (unsigned j = 0; j < pagesNumber; j++)
     {
-        QGroupBox* ioGB = new QGroupBox("I/O " + QString::number(j));
+        QGroupBox* ioGB = new QGroupBox("I/O " + QString::number(j));   /// TODO delete this pointer
         ioGB->setMinimumWidth(65);
 
-        QVBoxLayout* ioLayout = new QVBoxLayout(ioGB);
+        QVBoxLayout* ioLayout = new QVBoxLayout(ioGB);  /// TODO delete this pointer
 
         for(unsigned i=0; i < ioPerPage; i++)
         {
@@ -161,21 +161,9 @@ void RomWidget::setIO(unsigned page, unsigned value)
 
     for (unsigned i = 0; i < ioPerPage; i++)
     {
-        QCheckBox* io = ios.at(page * ioPerPage + 0);
+        QCheckBox* io = ios.at(page * ioPerPage + i);
         io->setChecked((value & (unsigned)pow(2, i)) >> i);
     }
-
-
-
-//    QCheckBox* io0 = ios.at(page * ioPerPage + 0);
-//    QCheckBox* io1 = ios.at(page * ioPerPage + 1);
-//    QCheckBox* io2 = ios.at(page * ioPerPage + 2);
-//    QCheckBox* io3 = ios.at(page * ioPerPage + 3);
-
-//    io0->setChecked(value & 0x1);
-//    io1->setChecked((value & 0x2) >> 1);
-//    io2->setChecked((value & 0x4) >> 2);
-//    io3->setChecked((value & 0x8) >> 3);
 }
 
 void RomWidget::write(std::vector<unsigned int> instructions)
@@ -193,7 +181,7 @@ void RomWidget::write(std::vector<unsigned int> instructions)
             (highByte < 16) ? t.append("0") : t.append("");
             t.append(QString::number(highByte, 16));
 
-            QTableWidgetItem* w = new QTableWidgetItem(t);
+            QTableWidgetItem* w = new QTableWidgetItem(t);  /// TODO delete this pointer
             w->setTextAlignment(Qt::AlignCenter);
             if (j > 15)
             {

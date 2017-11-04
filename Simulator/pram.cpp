@@ -130,5 +130,7 @@ void PRAM::clearPRam()
         table[i] = 0;
     }
 
+    isHigherHalfByte = true;
+
     emit onPramClear();
 }

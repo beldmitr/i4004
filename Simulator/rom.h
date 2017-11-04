@@ -7,38 +7,40 @@
 #include <iostream>
 #include <string>
 
+#include "debugger.h"
+
 class ROM : public QObject
 {
     Q_OBJECT
 private:
     unsigned int pages;
-    const unsigned int bytesPerPage = 256;
-    const unsigned int maxPossiblePages = 16;
+    const unsigned bytesPerPage = 256;
+    const unsigned maxPossiblePages = 16;
 
-    std::vector<unsigned int> table;
-    std::vector<unsigned int> io;
+    std::vector<unsigned> table;
+    std::vector<unsigned> io;
 
-    void setValue(unsigned int index, int value);
+    void setValue(unsigned addr, unsigned value);
 
 public:
-    ROM(unsigned int pages);
+    ROM(unsigned pages);
     virtual ~ROM();
 
     void clearRom();
-    void flashRom(std::vector<unsigned int> compiledCode);
+    void flashRom(std::vector<unsigned> compiledCode);
     void reset();
 
-    unsigned int getValue(unsigned int index) const;
+    unsigned int getValue(unsigned index) const;
 
-    int getIO(unsigned int page) const;
-    void setIO(unsigned int page, int value);
+    int getIO(unsigned page) const;
+    void setIO(unsigned page, unsigned value);
 
     unsigned int getPages() const;
 
 signals:
-    void onRomChanged(unsigned int addr, unsigned int value);
+    void onRomChanged(unsigned addr, unsigned value);
     void onRomCleared();
-    void onRomIOChanged(unsigned int page, unsigned int value);
+    void onRomIOChanged(unsigned page, unsigned value);
 };
 
 #endif // ROM_H

@@ -33,11 +33,11 @@ unsigned int Register::getUInt(const std::string& str)
     std::string msg;
     if (str.empty())
     {
-        msg = "Program expects a register";
+        msg = "Program expects a register. Register should be: R0, R1 ... R14, R15";
     }
     else
     {
-        msg = "Register " + str + " is wrong";
+        msg = "Register " + str + " is wrong. Register should be: R0, R1 ... R14, R15";
     }
     throw CompilerException("Register", msg);
 }

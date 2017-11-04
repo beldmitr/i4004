@@ -27,6 +27,17 @@ FirstPassLine::FirstPassLine(std::string line)
         return;
     }
 
+
+    /*
+     * Deleting some aditional white symbols from the line, because we don't need them
+     * So if there was a line: ABC,     FIM       P0,    5 / here is some comment
+     * The line will be this one: ABC, FIM P0, 5
+     * Comment was deleted before.
+     */
+    parsedLine = String::trimBeginEnd(parsedLine); // delete white symbols at the beginning and at the end
+    parsedLine = String::trim(parsedLine);  // delete white symbols in the line
+
+
     /*
      * Parsing a PSEUDO instruction equal (=)
      *
@@ -64,7 +75,7 @@ FirstPassLine::FirstPassLine(std::string line)
      * BUT
      * ab, 3ff, c, g-g, ARE NOT LABELS
      */
-    SearchResult label = String::search(parsedLine, Compiler::labelRegex);
+    SearchResult label = String::search(String::trim(parsedLine), Compiler::labelRegex);
     if (!label.isEmpty())
     {
         std::string labelName = label.find; // This is our label in format ABC,

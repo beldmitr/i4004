@@ -39,66 +39,66 @@ QString Debugger::codeToInstruction(unsigned code)
     }
     else if ((code & 0xF000) == 0x1000) // JCN
     {
-        instruction = "JCN 0x" + QString::number((code & 0x0F00) >> 8, 16) + ", "
-                + "0x" + QString::number(code & 0x00FF, 16);
+        instruction = "JCN 0x" + QString::number((code & 0x0F00) >> 8, 16).toUpper() + ", "
+                + "0x" + QString::number(code & 0x00FF, 16).toUpper();
     }
     else if ((code & 0xF100) == 0x2000) // FIM
     {
-        instruction = "FIM P" + QString::number((code & 0xE00) >> 9, 16) + ", "
-                + "0x" + QString::number(code & 0xFF, 16);
+        instruction = "FIM P" + QString::number((code & 0xE00) >> 9, 16).toUpper() + ", "
+                + "0x" + QString::number(code & 0xFF, 16).toUpper();
     }
     else if ((code & 0xFFF1) == 0x0021) // SRC
     {
-        instruction = "SRC P" + QString::number((code & 0x0E) >> 1, 16);
+        instruction = "SRC P" + QString::number((code & 0x0E) >> 1, 16).toUpper();
     }
     else if ((code & 0xFFF1) == 0x0030) // FIN
     {
-        instruction = "FIN P" + QString::number((code & 0xE) >> 1, 16);
+        instruction = "FIN P" + QString::number((code & 0xE) >> 1, 16).toUpper();
     }
     else if ((code & 0xFFF1) == 0x0031) // JIN
     {
-        instruction = "JIN P" + QString::number((code & 0xE) >> 1, 16);
+        instruction = "JIN P" + QString::number((code & 0xE) >> 1, 16).toUpper();
     }
     else if ((code & 0xF000) == 0x4000) // JUN
     {
-        instruction = "JUN 0x" + QString::number((code & 0x0FFF), 16);
+        instruction = "JUN 0x" + QString::number((code & 0x0FFF), 16).toUpper();
     }
     else if ((code & 0xF000) == 0x5000) // JMS
     {
-        instruction = "JMS 0x" + QString::number((code & 0x0FFF), 16);
+        instruction = "JMS 0x" + QString::number((code & 0x0FFF), 16).toUpper();
     }
     else if ((code & 0xFFF0) == 0x0060) // INC
     {
-        instruction = "INC R" + QString::number(code & 0xF, 16);
+        instruction = "INC R" + QString::number(code & 0xF, 10).toUpper();
     }
     else if ((code & 0xF000) == 0x7000) // ISZ
     {
-        instruction = "ISZ R" + QString::number((code & 0x0F00) >> 8, 16) + ", "
-                + "0x" + QString::number(code & 0xFF, 16);
+        instruction = "ISZ R" + QString::number((code & 0x0F00) >> 8, 10).toUpper() + ", "
+                + "0x" + QString::number(code & 0xFF, 16).toUpper();
     }
     else if ((code & 0xFFF0) == 0x0080) // ADD
     {
-        instruction = "ADD R" + QString::number(code & 0xF, 16);
+        instruction = "ADD R" + QString::number(code & 0xF, 10).toUpper();
     }
     else if ((code & 0xFFF0) == 0x0090) // SUB
     {
-        instruction = "SUB R" + QString::number(code & 0xF, 16);
+        instruction = "SUB R" + QString::number(code & 0xF, 10).toUpper();
     }
     else if ((code & 0xFFF0) == 0x00A0) // LD
     {
-        instruction = "LD R" + QString::number(code & 0xF, 16);
+        instruction = "LD R" + QString::number(code & 0xF, 10).toUpper();
     }
     else if ((code & 0xFFF0) == 0x00B0) // XCH
     {
-        instruction = "XCH R" + QString::number(code & 0xF, 16);
+        instruction = "XCH R" + QString::number(code & 0xF, 10).toUpper();
     }
     else if ((code & 0xFFF0)== 0x00C0) // BBL
     {
-        instruction = "BBL 0x" + QString::number(code & 0xF, 16);
+        instruction = "BBL 0x" + QString::number(code & 0xF, 16).toUpper();
     }
     else if ((code & 0xFFF0) == 0x00D0) // LDM
     {
-        instruction = "LDM 0x" + QString::number(code & 0xF, 16);
+        instruction = "LDM 0x" + QString::number(code & 0xF, 16).toUpper();
     }
     else if ((code & 0xFFFF) == 0x00E0) // WRM
     {

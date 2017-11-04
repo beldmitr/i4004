@@ -549,11 +549,24 @@ void Simulator::FIN(unsigned int pair)
         return;
     }
 
-    int ph = cpu->getPC() & 0x0F00; // high order program counter Field (4 bit)
-    int addr = ph | (cpu->getRegisterAt(0) << 4) | cpu->getRegisterAt(1);
+    // high order program counter Field (4 bit)
+    int pcHigh = cpu->getPC() & 0x0F00;
+
+    /*
+     * If a FIN instruction is located in the last location of a page,
+     * the upper 4 bits of the designated address will be assumed equal to the upper 4 bits of the
+     * next page.
+     *
+     * SEE NOTE ABOVE
+     */
+    if ((cpu->getPC() & 0xFF) >= 0xFE)
+    {
+        pcHigh += 1;
+        pcHigh = pcHigh % 0x1000;
+    }
+    int addr = pcHigh | (cpu->getRegisterAt(0) << 4) | cpu->getRegisterAt(1);
 
     /// TODO choose between ROM and Program RAM !!!!!!!
-    /// TODO Make a Note as it is described in a comment above
     int value = rom->getValue(addr);
     cpu->setPairs(pair & 0b111, value);
 
@@ -788,7 +801,7 @@ void Simulator::ADD(unsigned int reg)
     int value = cpu->getRegisterAt(reg) + cpu->getAcc() + cpu->getCarry();
 
     cpu->setCarry((value & 0x10) >> 4);
-    cpu->setAcc(value % 0xF);
+    cpu->setAcc(value % 0x10);
 
     cpu->setPC(cpu->getPC() + 1);
     cpu->setCycles(cpu->getCycles() + 1);
@@ -826,11 +839,15 @@ void Simulator::SUB(unsigned int reg)
         return;
     }
 
-    int complementCarry = (cpu->getCarry() == 0) ? 1 : 0;
-    int value = cpu->getAcc() + cpu->getRegisterAt(reg) + complementCarry ;
+    int complementCarry = cpu->getCarry() == 0 ? 1 : 0;
+    int complementReg = (~cpu->getRegisterAt(reg)) & 0xF;
+    int value = cpu->getAcc() + complementReg + complementCarry;
 
-    cpu->setCarry((value & 0x10) >> 4);
-    cpu->setAcc(value % 0xF);
+    int borrow = (value & 0x10) >> 4;
+
+    cpu->setCarry(borrow);
+
+    cpu->setAcc(value % 0x10);
 
     cpu->setPC(cpu->getPC() + 1);
     cpu->setCycles(cpu->getCycles() + 1);
@@ -1417,7 +1434,7 @@ void Simulator::ADM()
             getDataRAMRegister(reg)->getCharacter(character);
 
     int result = memValue + cpu->getCarry() + cpu->getAcc();
-    cpu->setAcc(result % 0xF);
+    cpu->setAcc(result % 0x10);
     cpu->setCarry((result & 0b10000) >> 4);
 
     cpu->setPC(cpu->getPC() + 1);
@@ -1609,7 +1626,8 @@ void Simulator::CMC()
      */
 
     int carry = cpu->getCarry();
-    cpu->setCarry(~carry & 0xF);
+    carry = carry == 0 ? 1 : 0;
+    cpu->setCarry(carry);
 
     cpu->setPC(cpu->getPC() + 1);
     cpu->setCycles(cpu->getCycles() + 1);
@@ -1657,7 +1675,7 @@ void Simulator::RAL()
     int acc = cpu->getAcc();
     int carry = cpu->getCarry();
 
-    cpu->setAcc((acc << 1) | carry);
+    cpu->setAcc(((acc << 1) | carry) & 0xF);
     cpu->setCarry((acc & 0b1000) >> 3);
 
     cpu->setPC(cpu->getPC() + 1);
@@ -1749,8 +1767,10 @@ void Simulator::DAC()
      *
      */
 
-    cpu->setAcc((cpu->getAcc() + 0xF) & 0xF);
-    cpu->setCarry((cpu->getAcc() & 0b10000) >> 4);
+    int acc = cpu->getAcc() + 0xF;
+
+    cpu->setAcc(acc & 0xF);
+    cpu->setCarry((acc & 0b10000) >> 4);
 
     cpu->setPC(cpu->getPC() + 1);
     cpu->setCycles(cpu->getCycles() + 1);
@@ -1820,14 +1840,14 @@ void Simulator::DAA()
      * it is not reset).
      */
 
-    if (cpu->getAcc() > 9 || cpu->getCarry() == 1)
+    if (cpu->getAcc() > 9 || cpu->getCarry())
     {
         int acc = cpu->getAcc() + 6;
         if (acc > 0xF)
         {
             cpu->setCarry(1);
         }
-        cpu->setAcc(acc % 0xF);
+        cpu->setAcc(acc % 0x10);
     }
 
     cpu->setPC(cpu->getPC() + 1);

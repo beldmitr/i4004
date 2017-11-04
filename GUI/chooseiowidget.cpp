@@ -7,8 +7,10 @@
  *   2. setDRAMEnabled
  *   3. Hint to status menu
 */
-ChooseIOWidget::ChooseIOWidget(QWidget *parent) : QWidget(parent)
+ChooseIOWidget::ChooseIOWidget(bool isDRAM, QWidget *parent) : QWidget(parent)
 {
+    this->isDRAM = isDRAM;
+
     this->setMinimumWidth(135);
 
     layout = std::shared_ptr<QVBoxLayout>(new QVBoxLayout(this));
@@ -40,7 +42,10 @@ ChooseIOWidget::ChooseIOWidget(QWidget *parent) : QWidget(parent)
     actionNoConnection->setChecked(true);
 
     menuButton->addMenu(menuROM);
-    menuButton->addMenu(menuDRAM);
+    if (isDRAM)
+    {
+        menuButton->addMenu(menuDRAM);
+    }
     menuButton->addAction(actionNoConnection);
 
     for (int i = 0; i < 16; i++)
@@ -65,30 +70,33 @@ ChooseIOWidget::ChooseIOWidget(QWidget *parent) : QWidget(parent)
         }
     }
 
-    for (int i = 0; i < 8; i++) // 8 banks
+    if (isDRAM)
     {
-        QMenu* bankMenu = new QMenu("Bank " + QString::number(i));
-        menuDRAM->addMenu(bankMenu);
-        for (int j = 0; j < 4; j++) // 4 chips at each bank
+        for (int i = 0; i < 8; i++) // 8 banks
         {
-            QMenu* chipMenu = new QMenu("Chip " + QString::number(j));
-            bankMenu->addMenu(chipMenu);
-            for (int k = 0; k < 4; k++) // 4 bits IO at each chip
+            QMenu* bankMenu = new QMenu("Bank " + QString::number(i));
+            menuDRAM->addMenu(bankMenu);
+            for (int j = 0; j < 4; j++) // 4 chips at each bank
             {
-                QAction* bitAction = new QAction("Bit " + QString::number(k));
-                bitAction->setCheckable(true);
-                bitAction->setActionGroup(groupAction);
-                chipMenu->addAction(bitAction);
-
-                connect(bitAction, &QAction::triggered,
-                        [=]()
+                QMenu* chipMenu = new QMenu("Chip " + QString::number(j));
+                bankMenu->addMenu(chipMenu);
+                for (int k = 0; k < 4; k++) // 4 bits IO at each chip
                 {
-                    this->button->setText("DR:B" + QString::number(i) + ",C"
-                                    + QString::number(j) + ",b" + QString::number(k));
-                    this->button->setToolTip("Data RAM: Bank " + QString::number(i) + ", Chip "
-                                             + QString::number(j) + ", bit " + QString::number(k));
-                    emit onDRAMConnected(i, j, k);
-                });
+                    QAction* bitAction = new QAction("Bit " + QString::number(k));
+                    bitAction->setCheckable(true);
+                    bitAction->setActionGroup(groupAction);
+                    chipMenu->addAction(bitAction);
+
+                    connect(bitAction, &QAction::triggered,
+                            [=]()
+                    {
+                        this->button->setText("DR:B" + QString::number(i) + ",C"
+                                        + QString::number(j) + ",b" + QString::number(k));
+                        this->button->setToolTip("Data RAM: Bank " + QString::number(i) + ", Chip "
+                                                 + QString::number(j) + ", bit " + QString::number(k));
+                        emit onDRAMConnected(i, j, k);
+                    });
+                }
             }
         }
     }

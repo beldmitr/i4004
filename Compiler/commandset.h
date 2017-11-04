@@ -57,6 +57,7 @@ public:
     static unsigned int getNumberOperands(const std::string& command);
     static std::vector<OperandStruct> getOperands(const std::string& command);
     static OperandType getOperandType(const std::string& command, unsigned int operandNumber);
+    static std::string operandTypeToString(OperandType type);
 
 };
 

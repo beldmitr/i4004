@@ -34,8 +34,8 @@ Line::Line(std::string line)
      * The line will be this one: ABC, FIM P0, 5
      * Comment was deleted before.
      */
-    line = String::trimBeginEnd(parsedLine); // delete white symbols at the beginning and at the end
-    line = String::trim(line);  // delete white symbols in te line
+    parsedLine = String::trimBeginEnd(parsedLine); // delete white symbols at the beginning and at the end
+    parsedLine = String::trim(parsedLine);  // delete white symbols in the line
 
 
     /*
@@ -97,6 +97,7 @@ Line::Line(std::string line)
     if (!String::trim(label.find).empty())
     {
         parsedLine = label.suffix;
+        return;
     }
     if (String::trim(parsedLine).empty())
     {

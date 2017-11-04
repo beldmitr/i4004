@@ -18,8 +18,10 @@ private:
     std::shared_ptr<QPushButton> button;
     std::shared_ptr<QMenu> menuButton;
 
+    bool isDRAM = true;
+
 public:
-    explicit ChooseIOWidget(QWidget *parent = 0);
+    explicit ChooseIOWidget(bool isDRAM, QWidget *parent = 0);
     virtual ~ChooseIOWidget();
 
     enum class IOType

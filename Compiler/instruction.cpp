@@ -33,9 +33,8 @@ void Instruction::combine()
         if (operandCode >> o.length)
         {
             std::string operandString = this->getParams()->getOperandString(i);
-            std::string msg = "Operand " + operandString + " has too big size: "
-                    + operandString + "=" + std::to_string(operandCode)
-                    + " (unsigned). It is allowed only " + std::to_string(o.length) + " bits.";
+            std::string msg = "Operand " + operandString + " has too big size. "
+                    + "It is allowed only " + std::to_string(o.length) + " bits.";
             throw CompilerException("Instruction", msg);
         }
 

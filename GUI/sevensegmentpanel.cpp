@@ -40,7 +40,7 @@ void SevenSegmentPanel::init(unsigned int countSegments)
         QMenu* menu = new QMenu;
         for (int j = 0; j < 8; j++)
         {
-            ChooseIOWidget* chooser = new ChooseIOWidget;
+            ChooseIOWidget* chooser = new ChooseIOWidget(false);
             vectChooser.push_back(chooser);
 
             QWidgetAction* chooserAction = new QWidgetAction(this);

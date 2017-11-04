@@ -66,7 +66,6 @@ private:
 
     std::shared_ptr<EditorSubWindow> editorSubWindow;
     std::shared_ptr<LEDSubWindow> ledSubWindow;
-    //    std::shared_ptr<SevenSegmentSubWindow> sevenSegmentSubWindow;
     std::shared_ptr<ButtonSubWindow> buttonSubWindow;
     std::shared_ptr<DebuggerSubWindow> debuggerSubWindow;
 

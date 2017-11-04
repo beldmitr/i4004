@@ -223,4 +223,35 @@ CommandSet::OperandType CommandSet::getOperandType(const std::string& command, u
     return OperandType::NONE;
 }
 
+std::string CommandSet::operandTypeToString(CommandSet::OperandType type)
+{
+    std::string res = "";
+    switch(type)
+    {
+        case NONE:
+            res = "no operand";
+            break;
+        case CONDITION:
+            res = "condition";
+            break;
+        case ADDRESS:
+            res = "address";
+            break;
+        case DATA:
+            res = "data";
+            break;
+        case PAIR:
+            res = "pair";
+            break;
+        case REGISTER:
+            res = "register";
+            break;
+        default:
+            std::string msg = "Wrong operand type";
+            throw msg;
+    }
+
+    return res;
+}
+
 

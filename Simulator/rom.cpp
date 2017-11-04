@@ -1,6 +1,6 @@
 #include "rom.h"
 
-ROM::ROM(unsigned int pages) : QObject(),
+ROM::ROM(unsigned pages) : QObject(),
     pages(pages)
 {    
     if (pages > maxPossiblePages)
@@ -27,7 +27,7 @@ ROM::~ROM()
     // delete or finalize here something
 }
 
-unsigned int ROM::getValue(unsigned int index) const
+unsigned int ROM::getValue(unsigned index) const
 {
     if(index > pages * bytesPerPage)
     {
@@ -49,30 +49,30 @@ unsigned int ROM::getPages() const
     return pages;
 }
 
-void ROM::setValue(unsigned int index, int value)
+void ROM::setValue(unsigned addr, unsigned value)
 {
-    if(index >= pages * bytesPerPage)
+    if(addr >= pages * bytesPerPage)
     {
         std::string msg;
         msg.append("ROM memory has ").append(std::to_string(pages * bytesPerPage))
                 .append(" bytes, so it is possible to write cells from 0 to ")
                 .append(std::to_string(pages * bytesPerPage - 1)).append(". ")
-                .append(std::to_string(index))
+                .append(std::to_string(addr))
                 .append(" is wrong address and it will be ignore.");
 
         std::cerr << msg << std::endl;
         return;
     }
 
-    if (value < 0 || value > 0xFF)
+    if (value > 0xFF)
     {
-        std::cerr << "ROM is 8 byte memory, so it can be a 1B value [0x0 - 0xFF] at a cell. "
+        std::cerr << "ROM is 8 bit memory, so it can be a 1B value [0x0 - 0xFF] at a cell. "
              << value << " will be reduced to 8 byte." << std::endl;
     }
 
-    table[index] = value & 0xFF;
+    table[addr] = value & 0xFF;
 
-    emit onRomChanged(index, value);
+    emit onRomChanged(addr, value);
 }
 
 void ROM::clearRom()
@@ -98,7 +98,7 @@ void ROM::clearRom()
     emit onRomCleared();
 }
 
-void ROM::flashRom(std::vector<unsigned int> compiledCode)
+void ROM::flashRom(std::vector<unsigned> compiledCode)
 {
     unsigned int addr = 0;
 
@@ -123,18 +123,18 @@ void ROM::flashRom(std::vector<unsigned int> compiledCode)
          * If it is enaugh, just write it as is, if not enought, place a NOP (0x0) instruction
          * and write a 2 byte instruction at a new page.
          */
+        bool longCommand = Debugger::hasNextByte(code);
 
-        if (code & 0xFF00) // if 2 byte long instruction
+        if (longCommand) // if 2 byte long instruction
         {
             // if it is not enaugh place in a ROM page
-            if ((bytesPerPage - addr % bytesPerPage) < 2)
+            int leavePlace = (bytesPerPage - addr % bytesPerPage);
+            if (leavePlace > 0 && leavePlace < 2)
             {
                 setValue(addr, 0x0); // Write a NOP and this cause a step to a next page
                 addr += 1;
             }
-            setValue(addr, (code & 0xFF00) >> 8); // write hi byte
-            addr += 1;
-            setValue(addr, code & 0xFF); // write low byte
+            setValue(addr, code & 0xFF);
             addr += 1;
         }
         else // if 1 byte long instruction
@@ -155,7 +155,7 @@ void ROM::reset()
     }
 }
 
-int ROM::getIO(unsigned int page) const
+int ROM::getIO(unsigned page) const
 {
     if (page > pages)
     {
@@ -169,7 +169,7 @@ int ROM::getIO(unsigned int page) const
     return io[page] & 0xF;
 }
 
-void ROM::setIO(unsigned int page, int value)
+void ROM::setIO(unsigned page, unsigned value)
 {
     if (page > pages)
     {
@@ -181,7 +181,7 @@ void ROM::setIO(unsigned int page, int value)
         throw msg;
     }
 
-    if (value < 0 || value > 0xF)
+    if (value > 0xF)
     {
         std::cerr << value << " is wrong value of ROM IO. ROM IO is 4 bit. Value will be reduced by 0xF mask."
                   << std::endl;

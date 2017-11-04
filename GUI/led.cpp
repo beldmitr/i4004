@@ -6,7 +6,7 @@ Led::Led(Simulator *simulator, QWidget *parent) : QWidget(parent)
 
     ledImage = std::shared_ptr<LedImage>(new LedImage);
     coloredComboBox = std::shared_ptr<ColoredComboBox>(new ColoredComboBox);
-    connector = std::shared_ptr<ChooseIOWidget>(new ChooseIOWidget);
+    connector = std::shared_ptr<ChooseIOWidget>(new ChooseIOWidget(true));
 
     layout = std::shared_ptr<QGridLayout>(new QGridLayout(this));
 //    layout->addWidget(coloredComboBox.get(),0, 0, Qt::AlignCenter);

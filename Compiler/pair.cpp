@@ -3,6 +3,7 @@
 std::regex Pair::pairPrefix = std::regex("[Pp][0-7]");
 std::regex Pair::pairPostfix = std::regex("[0-7][Pp]");
 
+
 bool Pair::isPair(const std::string& str)
 {
     return regex_match(str, pairPrefix) || regex_match(str, pairPostfix);
@@ -33,11 +34,11 @@ unsigned int Pair::getUInt(const std::string& str)
     std::string msg;
     if (str.empty())
     {
-        msg = "Program expects a pair";
+        msg = "Program expects a pair. Pair should be: P0, P1 ... P6 or P7";
     }
     else
     {
-        msg = "Pair " + str + " is wrong";
+        msg = "Pair " + str + " is wrong. Pair should be: P0, P1 ... P6 or P7";
     }
     throw CompilerException("Pair", msg);;
 }

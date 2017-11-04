@@ -183,9 +183,9 @@ void MainWindow::createMenu()
         QMdiSubWindow* w = mdi->subWindowList().at(i);
 
         QAction* act = new QAction(w->windowTitle(), this);
-        if (i < 10)
+        if (i < 9)
         {
-            std::string shortcut = QString("Ctrl+"+ QString::number(i)).toStdString();
+            std::string shortcut = QString("Ctrl+"+ QString::number(i+1)).toStdString();
             act->setShortcut(tr(shortcut.c_str()));
         }
 
@@ -282,6 +282,8 @@ void MainWindow::createSubWindows()
 
     buttonSubWindow = std::shared_ptr<ButtonSubWindow>(new ButtonSubWindow(simulator));
     mdi->addSubWindow(buttonSubWindow.get(), Qt::CustomizeWindowHint | Qt::WindowMinimizeButtonHint | Qt::WindowCloseButtonHint);
+
+    mdi->setActiveSubWindow(editorSubWindow.get()); // Editor window is activated (focused) by default
 }
 
 void MainWindow::createDocks()

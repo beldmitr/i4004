@@ -1,6 +1,6 @@
 #include "compiler.h"
 
-const std::regex Compiler::labelRegex = std::regex("[[:alpha:]][[:alnum:]]{2,}(,)");
+const std::regex Compiler::labelRegex = std::regex("^[[:alpha:]][[:alnum:]]{2,}(,)");
 const std::regex Compiler::commandRegex = std::regex("[[:alpha:]]{2,}[[:alnum:]]?");
 const std::regex Compiler::paramsRegex = std::regex("([[:blank:]]+[[:print:]]+[[:blank:]]*)(,)?([[:blank:]]*[[:print:]]+[[:blank:]]*)?");
 const std::regex Compiler::commentRegex = std::regex("/[[:print:]]*");

@@ -1,7 +1,5 @@
 #include "data.h"
 
-
-
 unsigned int Data::getUInt(const std::string& data)
 {
     if (Number::isNumber(data))

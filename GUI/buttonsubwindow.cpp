@@ -14,7 +14,7 @@ ButtonSubWindow::ButtonSubWindow(Simulator* simulator) : SubWindow()
 
     for (unsigned i = 0; i < buttonNumber; i++)
     {
-        ChooseIOWidget* chooseIO = new ChooseIOWidget;
+        ChooseIOWidget* chooseIO = new ChooseIOWidget(false);
         Button* button = new Button(simulator, chooseIO);
 
         unsigned buttonRows = buttonNumber / buttonColumns;
