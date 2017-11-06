@@ -55,6 +55,7 @@ ChooseIOWidget::ChooseIOWidget(bool isDRAM, QWidget *parent) : QWidget(parent)
         for (int j = 0; j < 4; j++)
         {
             QAction* bitAction = new QAction("Bit " + QString::number(j));
+            romActions.push_back(bitAction);
             bitAction->setCheckable(true);
             bitAction->setActionGroup(groupAction);
             pageMenu->addAction(bitAction);
@@ -83,6 +84,7 @@ ChooseIOWidget::ChooseIOWidget(bool isDRAM, QWidget *parent) : QWidget(parent)
                 for (int k = 0; k < 4; k++) // 4 bits IO at each chip
                 {
                     QAction* bitAction = new QAction("Bit " + QString::number(k));
+                    dramActions.push_back(bitAction);
                     bitAction->setCheckable(true);
                     bitAction->setActionGroup(groupAction);
                     chipMenu->addAction(bitAction);
@@ -107,4 +109,24 @@ ChooseIOWidget::ChooseIOWidget(bool isDRAM, QWidget *parent) : QWidget(parent)
 ChooseIOWidget::~ChooseIOWidget()
 {
     // delete here something
+}
+
+void ChooseIOWidget::setConnection(ChooseIOWidget::IOType type, unsigned page, unsigned bit)
+{
+    if (type == IOType::ROM_IO)
+    {
+        unsigned index = page * 4 + bit;
+        QAction* bitAction = romActions[index];
+        bitAction->trigger();
+    }
+}
+
+void ChooseIOWidget::setConnection(ChooseIOWidget::IOType type, unsigned bank, unsigned chip, unsigned bit)
+{
+    if (type == IOType::DRAM_IO)
+    {
+        unsigned index = bank * chip * 4 + bit;
+        QAction* bitAction = dramActions[index];
+        bitAction->trigger();
+    }
 }

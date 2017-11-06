@@ -17,6 +17,7 @@ LEDSubWindow::LEDSubWindow(Simulator *simulator) : SubWindow()
     for (unsigned i = 0; i < ledNumber; i++)
     {
         Led* led = new Led(simulator);
+        led->setConnection(ChooseIOWidget::IOType::ROM_IO, i / 4, 3 - i % 4);
 
         unsigned ledRow = i / ledColumns;
 

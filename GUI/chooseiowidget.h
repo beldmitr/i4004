@@ -20,16 +20,23 @@ private:
 
     bool isDRAM = true;
 
-public:
-    explicit ChooseIOWidget(bool isDRAM, QWidget *parent = 0);
-    virtual ~ChooseIOWidget();
+    std::vector<QAction*> romActions;
+    std::vector<QAction*> dramActions;
 
+public:
     enum class IOType
     {
         NONE,
         ROM_IO,
         DRAM_IO
     };
+
+    explicit ChooseIOWidget(bool isDRAM, QWidget *parent = 0);
+    virtual ~ChooseIOWidget();
+
+    void setConnection(IOType type, unsigned page, unsigned bit);
+    void setConnection(IOType type, unsigned bank, unsigned chip, unsigned bit);
+
 
 signals:
     void onROMConnected(unsigned page, unsigned bit);

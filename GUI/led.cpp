@@ -88,6 +88,16 @@ Led::~Led()
 
 }
 
+void Led::setConnection(ChooseIOWidget::IOType type, unsigned page, unsigned bit)
+{
+    connector->setConnection(type, page, bit);
+}
+
+void Led::setConnection(ChooseIOWidget::IOType type, unsigned bank, unsigned chip, unsigned bit)
+{
+    connector->setConnection(type, bank, chip, bit);
+}
+
 void Led::handleDramChipOutputChanged(unsigned bank, unsigned chip, unsigned value)
 {
     this->value = value;

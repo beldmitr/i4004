@@ -39,6 +39,9 @@ public:
     explicit Led(Simulator* simulator, QWidget *parent = 0);
     virtual ~Led();
 
+    void setConnection(ChooseIOWidget::IOType type, unsigned page, unsigned bit);
+    void setConnection(ChooseIOWidget::IOType type, unsigned bank, unsigned chip, unsigned bit);
+
 signals:
 
 private slots:

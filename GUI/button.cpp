@@ -9,7 +9,7 @@ Button::Button(Simulator* simulator, ChooseIOWidget *connector) : QPushButton()
     this->setIcon(QIcon(":/Resources/components/button.png"));
     this->setIconSize(QSize(64, 64));
 
-    this->setCheckable(true);
+    this->setCheckable(false);
 
     this->setFlat(false);
 
@@ -36,8 +36,8 @@ Button::Button(Simulator* simulator, ChooseIOWidget *connector) : QPushButton()
         type = ChooseIOWidget::IOType::NONE;
     });
 
-    connect(this, &Button::clicked,
-            [=](bool checked)
+    connect(this, &Button::pressed,
+            [=]()
             {
                 switch (type)
                 {
@@ -45,17 +45,38 @@ Button::Button(Simulator* simulator, ChooseIOWidget *connector) : QPushButton()
                         {
                             ROM* rom = simulator->getRom().get();
                             int value = rom->getIO(page);
-                            if (checked)
-                            {
-                                value |= 1 << bit;
-                                rom->setIO(page, value);
-                            }
-                            else
-                            {
-                                value &= ~(1 << bit);
-                                rom->setIO(page, value);
-                            }
+                            value |= 1 << bit;
+                            rom->setIO(page, value);
+                            break;
+                        }
 
+                    case ChooseIOWidget::IOType::DRAM_IO:
+                        {
+                            DataRAMChip* dramChip = simulator->getDram()->getDataRAMBank(bank)->getDataRAMChip(chip).get();
+                            int value = dramChip->getOutput();
+                            dramChip->setOutput(value ^ (1 << bit));
+                            break;
+                        }
+                    case ChooseIOWidget::IOType::NONE:
+
+                        break;
+                    default:
+                        break;
+                }
+            });
+
+    connect(this, &Button::released,
+            [=]()
+            {
+
+                switch (type)
+                {
+                    case ChooseIOWidget::IOType::ROM_IO:
+                        {
+                            ROM* rom = simulator->getRom().get();
+                            int value = rom->getIO(page);
+                            value &= ~(1 << bit);
+                            rom->setIO(page, value);
                             break;
                         }
 
