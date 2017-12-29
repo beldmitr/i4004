@@ -13,15 +13,20 @@
 
 int main (int argc, char* argv[])
 {
+    std::shared_ptr<Compiler> compiler;
+    std::shared_ptr<Simulator> simulator;
+    std::shared_ptr<QApplication> app;
+    std::shared_ptr<MainWindow> parent;
+
     // Create Compiler
-    std::shared_ptr<Compiler> compiler = std::shared_ptr<Compiler>(new Compiler);
+    compiler = std::shared_ptr<Compiler>(new Compiler);
 
     // Create Simulator
-    std::shared_ptr<Simulator> simulator = std::shared_ptr<Simulator>(new Simulator(*compiler.get()));
+    simulator = std::shared_ptr<Simulator>(new Simulator(*compiler.get()));
 
     // Create GUI
-    std::shared_ptr<QApplication> app = std::shared_ptr<QApplication>(new QApplication(argc, argv));
-    std::shared_ptr<MainWindow> parent = std::shared_ptr<MainWindow>(new MainWindow(*compiler.get(), *simulator.get()));
+    app = std::shared_ptr<QApplication>(new QApplication(argc, argv));
+    parent = std::shared_ptr<MainWindow>(new MainWindow(*compiler.get(), *simulator.get()));
     parent->show();
 
     return app->exec();
