@@ -32,7 +32,7 @@ unsigned int ROM::getValue(unsigned index) const
     if(index > pages * bytesPerPage)
     {
         std::string msg;
-        msg.append("ROM memory has ").append(std::to_string(pages * bytesPerPage))
+        msg.append("ROM memory has ").append(String::int2hex_string(pages * bytesPerPage))
                 .append(" bytes, so it is possible to read cells from 0 to ")
                 .append(std::to_string(pages * bytesPerPage - 1)).append(". ")
                 .append(std::to_string(index)).append(" is wrong address");
@@ -54,7 +54,7 @@ void ROM::setValue(unsigned addr, unsigned value)
     if(addr >= pages * bytesPerPage)
     {
         std::string msg;
-        msg.append("ROM memory has ").append(std::to_string(pages * bytesPerPage))
+        msg.append("ROM memory has ").append(String::int2hex_string(pages * bytesPerPage))
                 .append(" bytes, so it is possible to write cells from 0 to ")
                 .append(std::to_string(pages * bytesPerPage - 1)).append(". ")
                 .append(std::to_string(addr))

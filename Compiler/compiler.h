@@ -40,6 +40,7 @@ public:
 
 signals:
     void onCompiled();
+    void onCompiledError();
 
 };
 

@@ -22,6 +22,8 @@ public:
     explicit Editor(QWidget *parent = 0);
     virtual ~Editor();
 
+    void rehighlight();
+
 private:
     const int tabStop = 4;  // tab characters
 
@@ -33,7 +35,6 @@ private:
 
 private slots:
     void insertCompletion(const QString& completion);
-
 
     // QWidget interface
 protected:

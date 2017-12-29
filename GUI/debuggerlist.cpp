@@ -12,7 +12,7 @@ DebuggerList::DebuggerList(Compiler* compiler, Simulator *simulator) : QTableWid
 
     this->horizontalHeader()->setSectionResizeMode(QHeaderView::Fixed);
     this->horizontalHeader()->setStretchLastSection(true);
-    this->setHorizontalHeaderLabels(QStringList() << "" << tr("Address") << tr("Code") << tr("Command"));
+    this->setHorizontalHeaderLabels(QStringList() << "" << tr("Address") << tr("(Lenght) Code") << tr("Command"));
 
     QTableWidgetItem* delBrkpnt = this->horizontalHeaderItem(0);
     delBrkpnt->setIcon(QIcon(":/Resources/icons/removeBreakpoint.png"));
@@ -139,13 +139,14 @@ void DebuggerList::setCode(std::vector<unsigned> code)
         this->setItem(rows-1, 1, addrItem);
         items.push_back(addrItem);
 
-        QTableWidgetItem* codeItem = new QTableWidgetItem(Debugger::commandToString(command), QTableWidgetItem::UserType);
+        QTableWidgetItem* codeItem = new QTableWidgetItem((longCommand ? "(2) " : "(1) ") + Debugger::commandToString(command), QTableWidgetItem::UserType);
         codeItem->setTextAlignment(Qt::AlignCenter);
         codeItem->setFlags(Qt::ItemIsSelectable|Qt::ItemIsEnabled);
         this->setItem(rows-1, 2, codeItem);
         items.push_back(codeItem);
 
-        QTableWidgetItem* commandItem = new QTableWidgetItem(Debugger::codeToInstruction(command), QTableWidgetItem::UserType);
+        QTableWidgetItem* commandItem = new QTableWidgetItem(Debugger::codeToInstruction(command),
+                                                             QTableWidgetItem::UserType);
         commandItem->setTextAlignment(Qt::AlignCenter);
         commandItem->setFlags(Qt::ItemIsSelectable|Qt::ItemIsEnabled);
         this->setItem(rows-1, 3, commandItem);

@@ -16,6 +16,7 @@ public:
     static QString codeToInstruction(unsigned code);
     static QString commandToString(unsigned code);
     static QString addressToString(unsigned addr);
+    static QString lengthCommand(unsigned code);
 
     static void addBreakpoint(unsigned addr);
     static void removeBreakpoint(unsigned addr);

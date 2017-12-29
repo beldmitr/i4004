@@ -264,6 +264,11 @@ QString Debugger::addressToString(unsigned addr)
     return result;
 }
 
+QString Debugger::lengthCommand(unsigned code)
+{
+    return Debugger::hasNextByte(code) ? QString("2") : QString("1");
+}
+
 void Debugger::addBreakpoint(unsigned addr)
 {
     breakpointAddresses.insert(addr);

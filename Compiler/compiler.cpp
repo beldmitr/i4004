@@ -1,9 +1,9 @@
 #include "compiler.h"
 
-const std::regex Compiler::labelRegex = std::regex("^[[:alpha:]][[:alnum:]]{2,}(,)");
+const std::regex Compiler::labelRegex = std::regex("^[[:alpha:]][[:alnum:]]{2,}[,:]");
 const std::regex Compiler::commandRegex = std::regex("[[:alpha:]]{2,}[[:alnum:]]?");
 const std::regex Compiler::paramsRegex = std::regex("([[:blank:]]+[[:print:]]+[[:blank:]]*)(,)?([[:blank:]]*[[:print:]]+[[:blank:]]*)?");
-const std::regex Compiler::commentRegex = std::regex("/[[:print:]]*");
+const std::regex Compiler::commentRegex = std::regex("[/;][[:print:]]*");
 const std::regex Compiler::pseudoRegex = std::regex("[[:blank:]]*=[[:blank:]]+");
 
 std::vector<std::shared_ptr<CompilerError> > Compiler::getErrors() const
@@ -23,6 +23,14 @@ Compiler::~Compiler()
 
 void Compiler::compile(const std::string& inputFilename)
 {
+    if (inputFilename.empty())
+    {
+        // Just nothing for compiling
+
+        emit onCompiledError();
+        return;
+    }
+
     // delete old source code
     lines.clear();
 
@@ -59,6 +67,7 @@ void Compiler::compile(const std::string& inputFilename)
     // First passing
     // Counting labels
     unsigned row = 1;
+
     for (const std::string& l : lines)
     {
         try
@@ -67,19 +76,21 @@ void Compiler::compile(const std::string& inputFilename)
         }
         catch(const CompilerException& ex)
         {
-            errors.push_back(std::shared_ptr<CompilerError>(new CompilerError(row, ex.what())));
+    //            errors.push_back(std::shared_ptr<CompilerError>(new CompilerError(row, ex.what())));
 
-            std::cerr << "Line " << row << ": Error " << ex.what() << std::endl;
-            std::cerr << "\tFrom " << ex.who() << std::endl;
+    //            std::cerr << "Line " << row << ": Error " << ex.what() << std::endl;
+    //            std::cerr << "\tFrom " << ex.who() << std::endl;
         }
         row++;
     }
+
 
     ObjectCode::setProgramCounter(0);
 
     // Second passing
     // Parse lines
     row = 1;
+
     for (const std::string& l : lines)
     {
         try

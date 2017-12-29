@@ -396,17 +396,30 @@ void Simulator::JCN(unsigned int condition, unsigned int address)
     bool c2 = ((condition & 0x4) >> 2) == 1;
     bool c1 = ((condition & 0x8) >> 3) == 1;
 
-    bool jump = (!c1 & (((cpu->getAcc() == 0) & c2) | ((cpu->getCarry() == 1) & c3) | ((cpu->getTest() == 0) & c4))) |
+    bool isJump = (!c1 & (((cpu->getAcc() == 0) & c2) | ((cpu->getCarry() == 1) & c3) | ((cpu->getTest() == 0) & c4))) |
             (c1 & (((cpu->getAcc() != 0) | !c2) & ((cpu->getCarry() == 0) | !c3) & ((cpu->getTest() == 1) | !c4)));
 
-    if (jump)
+    if (isJump)
     {
         /*
          * If the condition is true, the 8 bits specified by
          * address replace the lower 8 bits of the program counter.
          * The highest 4 bits of the program counter are unchanged.
          */
-        cpu->setPC((cpu->getPC() & 0x0F00) | (address & 0xFF));
+
+        if ((cpu->getPC() & 0xFF) == 0xFE)
+        {
+            // See note
+            // It must jump to the next page
+
+            unsigned actualPage = (cpu->getPC() & 0x0F00) >> 8;
+
+            cpu->setPC((actualPage + 1) << 8 | (address & 0xFF));
+        }
+        else
+        {
+            cpu->setPC((cpu->getPC() & 0x0F00) | (address & 0xFF));
+        }
     }
     else
     {
@@ -559,14 +572,14 @@ void Simulator::FIN(unsigned int pair)
      *
      * SEE NOTE ABOVE
      */
-    if ((cpu->getPC() & 0xFF) >= 0xFE)
+    if ((cpu->getPC() & 0xFF) == 0xFF)
     {
-        pcHigh += 1;
-        pcHigh = pcHigh % 0x1000;
+        unsigned actualPage = pcHigh >> 8;
+        actualPage += 1;
+        pcHigh = (actualPage << 8) % 0x1000;
     }
-    int addr = pcHigh | (cpu->getRegisterAt(0) << 4) | cpu->getRegisterAt(1);
+    int addr = pcHigh | (cpu->getRegisterAt(pair * 2) << 4) | cpu->getRegisterAt((pair * 2) + 1); // do with getPairAt ???
 
-    /// TODO choose between ROM and Program RAM !!!!!!!
     int value = rom->getValue(addr);
     cpu->setPairs(pair & 0b111, value);
 
@@ -594,6 +607,11 @@ void Simulator::JIN(unsigned int pair)
      * page of memory in which the JIN instruction is loaded.
      *
      * The carry bit is not affected.
+     *
+     * Note: when JIN is located at the address
+     * (PH) 1111 1111 program control is transferred to the next page in sequence and
+     * not to the same page where the JIN instruction is located.
+     * That is, the next address is (PH+1) (RRR0) (RRR1) and not (PH) (RRR0) (RRR1)
      */
 
     if (pair > 0x7)
@@ -602,8 +620,20 @@ void Simulator::JIN(unsigned int pair)
         return;
     }
 
-    int addr = (cpu->getPC() & 0x0F00) | cpu->getPairAt(pair & 0x7);
-    cpu->setPC(addr);
+    unsigned actualPage = (cpu->getPC() & 0x0F00) >> 8;
+
+    if ((cpu->getPC() & 0xFF) == 0xFF)
+    {
+        actualPage += 1;
+        int addr = (actualPage << 8) | cpu->getPairAt(pair & 0x7);
+        cpu->setPC(addr);
+    }
+    else
+    {
+        int addr = (cpu->getPC() & 0x0F00) | cpu->getPairAt(pair & 0x7);
+        cpu->setPC(addr);
+    }
+
 
     cpu->setCycles(cpu->getCycles() + 1);
 }

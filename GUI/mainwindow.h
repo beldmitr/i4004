@@ -25,6 +25,8 @@
 #include <QTableWidgetItem>
 #include <QAbstractTableModel>
 
+#include <QDesktopServices>
+
 #include <sstream>
 #include <iostream>
 #include <memory>
@@ -56,11 +58,13 @@ private:
 
     std::shared_ptr<QMenuBar> mainMenu;
     std::shared_ptr<QStatusBar> statusBar;
+    std::shared_ptr<QLabel> statusLabel;
 
     std::shared_ptr<QMenu> menuFile;
     std::shared_ptr<QMenu> menuEdit;
     std::shared_ptr<QMenu> menuBuild;
     std::shared_ptr<QMenu> menuWindows;
+    std::shared_ptr<QMenu> menuHelp;
 
     std::shared_ptr<QMdiArea> mdi;
 
@@ -78,9 +82,9 @@ private:
     std::shared_ptr<QDockWidget> dockResult;
     std::shared_ptr<QDockWidget> dockDRam;
     std::shared_ptr<QDockWidget> dockRom;
-    std::shared_ptr<QDockWidget> dockPRam;
+//    std::shared_ptr<QDockWidget> dockPRam;
 
-    std::shared_ptr<ProgramRamWidget> pramWidget;
+//    std::shared_ptr<ProgramRamWidget> pramWidget;
     std::shared_ptr<RomWidget> romWidget;
     std::shared_ptr<CpuWidget> cpuWidget;
     std::shared_ptr<QListWidget> lstResult;
@@ -126,6 +130,9 @@ private:
      */
     std::vector<QAction*> listWindowsToolbarBtn;
 
+    // In help menu
+    std::shared_ptr<QAction> actHelp;
+
     fstream file;
 
     Compiler* compiler;   // I do not create this pointer here, so I don't it delete now
@@ -165,6 +172,11 @@ public slots:
 
 private slots:
     void handleBuildCode();
+    void handleCompiledError();
+    void handleCompiled();
+
+    void handleCursorPosChanged(unsigned line);
+
 };
 
 #endif // MAINWINDOW_H

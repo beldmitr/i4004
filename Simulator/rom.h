@@ -7,6 +7,7 @@
 #include <iostream>
 #include <string>
 
+#include "Utils/string.h"
 #include "debugger.h"
 
 class ROM : public QObject

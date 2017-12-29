@@ -2,6 +2,14 @@
 
 void MainWindow::createActions()
 {
+//    // Add some non-menu shortcuts
+//    QAction* actDockRomRaise = new QAction(this);
+//    actDockRomRaise->setShortcut(tr("Ctrl+R"));
+//    connect(actDockRomRaise, &QAction::triggered, [=](){
+//        std::cout << "Hello" << std::endl;
+//    });
+
+
     // Actions File
     actNew = std::shared_ptr<QAction>(new QAction(tr("&New"), this));
     actNew->setIcon(QIcon(":/Resources/icons/new.png"));
@@ -125,6 +133,19 @@ void MainWindow::createActions()
     connect(actReset.get(), &QAction::triggered, [=](){
         simulator->reset();
     });
+
+    actHelp = std::shared_ptr<QAction>(new QAction(tr("Help"), this));
+    actHelp->setIcon(QIcon(":/Resources/icons/help.png"));
+    actHelp->setShortcut(tr("F1"));
+    connect(actHelp.get(), &QAction::triggered, [=](){
+        QFile file("help file"); /// TODO add path to help file
+        if (!file.open(QIODevice::ReadOnly))
+        {
+           return;
+        }
+
+        QDesktopServices::openUrl(file.fileName());
+    });
 }
 
 void MainWindow::createMenu()
@@ -214,7 +235,8 @@ void MainWindow::createMenu()
     menuWindows->addAction(showWindows.get());
 
     // Create menu Help
-    mainMenu->addMenu("Help");
+//    menuHelp = std::shared_ptr<QMenu>(mainMenu->addMenu("Help"));
+//    menuHelp->addAction(actHelp.get());
 }
 
 void MainWindow::createToolbars()
@@ -315,22 +337,18 @@ void MainWindow::createDocks()
     this->addDockWidget(Qt::BottomDockWidgetArea, dockRom.get());
     dockRom->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Minimum);
 
-    dockPRam = std::shared_ptr<QDockWidget>(new QDockWidget("Program RAM"));
-    dockPRam->setFeatures(QDockWidget::NoDockWidgetFeatures);
-    pramWidget = std::shared_ptr<ProgramRamWidget>(new ProgramRamWidget(simulator));
-    dockPRam->setWidget(pramWidget.get());
-    this->addDockWidget(Qt::BottomDockWidgetArea, dockPRam.get());
-    dockPRam->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Minimum);
-
+    this->tabifyDockWidget(dockResult.get(), dockRom.get());
     this->tabifyDockWidget(dockRom.get(), dockDRam.get());
-    this->tabifyDockWidget(dockDRam.get(), dockPRam.get());
-    this->tabifyDockWidget(dockPRam.get(), dockResult.get());
+    this->dockResult->raise();
+
 
     dockCpuWidget = std::shared_ptr<QDockWidget>(new QDockWidget("CPU"));
     dockCpuWidget->setFeatures(QDockWidget::NoDockWidgetFeatures);
     cpuWidget = std::shared_ptr<CpuWidget>(new CpuWidget(simulator));
     dockCpuWidget->setWidget(cpuWidget.get());
     this->addDockWidget(Qt::BottomDockWidgetArea, dockCpuWidget.get());
+
+    connect(compiler, SIGNAL(onCompiled()), this, SLOT(handleCompiled()));
 }
 
 MainWindow::MainWindow(Compiler& compiler, Simulator &simulator, QWidget *parent)
@@ -355,7 +373,11 @@ MainWindow::MainWindow(Compiler& compiler, Simulator &simulator, QWidget *parent
     createToolbars();
     createMenu();
 
+    statusLabel = std::shared_ptr<QLabel>(new QLabel("Line: 1\t"));
     statusBar = std::shared_ptr<QStatusBar>(new QStatusBar);
+    statusBar->setStyleSheet("background-color: lightgray");
+    statusBar->addPermanentWidget(statusLabel.get());
+
 
     // set widgets
     this->setCentralWidget(mdi.get());
@@ -372,6 +394,9 @@ MainWindow::MainWindow(Compiler& compiler, Simulator &simulator, QWidget *parent
 
     connect(this->compiler, SIGNAL(onCompiled()), this, SLOT(handleBuildCode()));
 
+    connect(this->compiler, SIGNAL(onCompiledError()), this, SLOT(handleCompiledError()));
+
+    connect(editorSubWindow.get(), SIGNAL(onCursorPosChanged(unsigned)), this, SLOT(handleCursorPosChanged(unsigned)));
 }
 
 MainWindow::~MainWindow()
@@ -470,6 +495,11 @@ void MainWindow::closeEvent(QCloseEvent* event)
     }
 }
 
+void MainWindow::handleCompiledError()
+{
+    this->actCompile->setDisabled(false);
+}
+
 void MainWindow::handleBuildCode()
 {
     std::vector<std::shared_ptr<CompilerError>> errors = this->compiler->getErrors();
@@ -498,9 +528,12 @@ void MainWindow::handleBuildCode()
     return;
 }
 
+void MainWindow::handleCompiled()
+{
+    dockResult->raise();
+}
 
-
-
-
-
-
+void MainWindow::handleCursorPosChanged(unsigned line)
+{
+    statusLabel->setText("Line: " + QString::number(line) + "\t");
+}

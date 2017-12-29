@@ -1,6 +1,7 @@
 #ifndef STRING_H
 #define STRING_H
 
+#include <sstream>
 #include <string>
 #include <regex>
 #include <vector>
@@ -31,6 +32,8 @@ public:
     static std::string replace(const std::string& where, std::regex what, const std::string& with);
 
     static std::string trimBeginEnd(const std::string& str);
+
+    static std::string int2hex_string(int dec);
 };
 
 

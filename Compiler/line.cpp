@@ -97,7 +97,11 @@ Line::Line(std::string line)
     if (!String::trim(label.find).empty())
     {
         parsedLine = label.suffix;
-        return;
+
+        // Commented return:
+        /// return;
+        // because it doesn't work with f.e. this line: end, JUN end
+        // Probably this will cause some other bug
     }
     if (String::trim(parsedLine).empty())
     {

@@ -115,6 +115,7 @@ FirstPassLine::FirstPassLine(std::string line)
         unsigned pc = ObjectCode::getProgramCounter();
 
         ObjectCode::setProgramCounter(pc + length);
+
     }
 }
 

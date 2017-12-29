@@ -45,6 +45,10 @@ private:
 
 signals:
     void onTextChanged();
+    void onCursorPosChanged(unsigned);
+
+private slots:
+    void handleCursorPosChanged();
 };
 
 #endif // EDITORSUBWINDOW_H

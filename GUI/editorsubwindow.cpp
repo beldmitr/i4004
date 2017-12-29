@@ -14,6 +14,8 @@ EditorSubWindow::EditorSubWindow(QWidget *parent) : SubWindow(parent)
 //    });
 
     this->move(5, 15);
+
+    connect(editor.get(), SIGNAL(cursorPositionChanged()), this, SLOT(handleCursorPosChanged()));
 }
 
 
@@ -181,6 +183,7 @@ void EditorSubWindow::copyEdit()
 void EditorSubWindow::pasteEdit()
 {
     editor->paste();
+    editor->rehighlight();
 }
 
 void EditorSubWindow::deleteEdit()
@@ -196,4 +199,12 @@ void EditorSubWindow::selectAllEdit()
 QString EditorSubWindow::getFilename() const
 {
     return filename;
+}
+
+void EditorSubWindow::handleCursorPosChanged()
+{
+    QTextCursor tc = editor->textCursor();
+    unsigned lineNumber = tc.block().blockNumber() + 1;
+
+    emit onCursorPosChanged(lineNumber);
 }

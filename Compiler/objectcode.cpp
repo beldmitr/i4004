@@ -1,30 +1,38 @@
 #include "objectcode.h"
 
-ObjectCode::Endianness ObjectCode::endiannes = ObjectCode::Endianness::BigEndian;
 unsigned int ObjectCode::programCounter = 0;
 std::vector<unsigned int> ObjectCode::table;
 
 void ObjectCode::writeBigEndian(unsigned int hiByte, unsigned int lowByte)
 {
-    table[programCounter] = hiByte;
-    setProgramCounter(programCounter+1);
-    table[programCounter] = lowByte;
-    setProgramCounter(programCounter+1);
-}
+    if (programCounter+1 < 0x1000)
+    {
+        table[programCounter] = hiByte;
+        setProgramCounter(programCounter+1);
+    }
+    else
+    {
+        std::string msg = "Couldn't access to address 0x" + String::int2hex_string(programCounter + 1) + ". Allowed only 12 bit addresses";
+        throw CompilerException("ObjectCode", msg);
+    }
 
-void ObjectCode::writeLittleEndian(unsigned int hiByte, unsigned int lowByte)
-{
-    table[programCounter] = lowByte;
-    setProgramCounter(programCounter+1);
-    table[programCounter] = hiByte;
-    setProgramCounter(programCounter+1);
+    if (programCounter+1 < 0x1001)
+    {
+        table[programCounter] = lowByte;
+        setProgramCounter(programCounter+1);
+    }
+    else
+    {
+        std::string msg = "Couldn't access to address 0x" + String::int2hex_string(programCounter) + ". Allowed only 12 bit addresses";
+        throw CompilerException("ObjectCode", msg);
+    }
 }
 
 void ObjectCode::setProgramCounter(unsigned int address)
 {
     if (address > 0x1000)  /// TODO magic number
     {
-        std::string msg = "Address " + std::to_string(address) + " is too big. Allowed only 12 bit addresses";
+        std::string msg = "Couldn't set address 0x" + String::int2hex_string(address) + ". Allowed only 12 bit addresses";
         throw CompilerException("ObjectCode", msg);
     }
     programCounter = address;
@@ -45,20 +53,20 @@ void ObjectCode::write(unsigned int value)
         // divide to 2 bytes and write each byte on the needed address
         unsigned hiByte = (value & 0xFF00) >> 8;
         unsigned lowByte = (value & 0xFF);
-        if (endiannes == Endianness::BigEndian)
+        writeBigEndian(hiByte, lowByte);
+    }
+    else // write 1 byte length instruction
+    {        
+        if (programCounter+1 < 0x1001)
         {
-            writeBigEndian(hiByte, lowByte);
+            table[programCounter] = value; // only write
+            setProgramCounter(programCounter+1); // next instruction will be written into the next address
         }
         else
         {
-            writeLittleEndian(hiByte, lowByte);
+            std::string msg = "Couldn't access to address 0x" + String::int2hex_string(programCounter) + ". Allowed only 12 bit addresses";
+            throw CompilerException("ObjectCode", msg);
         }
-
-    }
-    else // write 1 byte length instruction
-    {
-        table[programCounter] = value; // only write
-        setProgramCounter(programCounter+1); // next instruction will be written into the next address
     }
 }
 

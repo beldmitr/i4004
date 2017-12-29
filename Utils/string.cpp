@@ -94,3 +94,12 @@ std::string String::trimBeginEnd(const std::string& str)
 
     return result;
 }
+
+std::string String::int2hex_string(int dec)
+{
+    std::stringstream hex;
+    hex<< std::hex << dec; // int decimal_value
+    std::string res ( hex.str() );
+
+    return res;
+}

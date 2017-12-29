@@ -72,15 +72,17 @@ void Editor::keyPressEvent(QKeyEvent *event)
     QRect cr = cursorRect();
     cr.setWidth(completer->popup()->sizeHintForColumn(0) + completer->popup()->verticalScrollBar()->sizeHint().width());
     completer->complete(cr);
+
+
 }
 
 void Editor::insertCompletion(const QString& completion)
 {
     QTextCursor tc = textCursor();
-    int extra = completion.length() - completer->completionPrefix().length();
-    tc.movePosition(QTextCursor::Left);
-    tc.movePosition(QTextCursor::EndOfWord);
-    tc.insertText(completion.right(extra) + " ");
+    tc.select(QTextCursor::WordUnderCursor);
+    tc.removeSelectedText();
+
+    tc.insertText(completion + " ");
 
     setTextCursor(tc);
 }
@@ -108,6 +110,11 @@ QStringList Editor::fileToList(const QString &filename) const
             words << line.trimmed();
     }
     return words;
+}
+
+void Editor::rehighlight()
+{
+    highliter->rehighlight();
 }
 
 void Editor::focusInEvent(QFocusEvent *event)

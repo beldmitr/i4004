@@ -28,10 +28,10 @@ ButtonSubWindow::ButtonSubWindow(Simulator* simulator) : SubWindow()
         buttons.push_back(button);
         connectors.push_back(chooseIO);
 
-        chooseIO->setConnection(ChooseIOWidget::IOType::ROM_IO, 6  + i / 4, 3 - i % 4);
+        chooseIO->setConnection(ChooseIOWidget::IOType::ROM_IO, 10  + i / 4, 3 - i % 4);
     }
 
-    this->move(685, 400);
+    this->move(685, 432);
 }
 
 ButtonSubWindow::~ButtonSubWindow()

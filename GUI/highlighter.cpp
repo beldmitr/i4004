@@ -52,18 +52,18 @@ void Highlighter::highlightBlock(const QString &text)
     formatCommands.setFontWeight(QFont::Bold);
     formatCommands.setForeground(Qt::darkBlue);
     QString patternCommands = makePattern(keywords);
-    highlight(text, formatCommands, patternCommands, false);
+    highlight(text, formatCommands, patternCommands, true);
 
     // Labels highlighting
     QTextCharFormat formatLabels;
     formatLabels.setForeground(Qt::darkYellow);
-    QString patternLabels = "^(\\s)*[A-Za-z][A-Za-z0-9]{2,}(,)";
+    QString patternLabels = "^(\\s)*[A-Za-z][A-Za-z0-9]{2,}[,:]";
     highlight(text, formatLabels, patternLabels, false);
 
     // Comments highliting
     QTextCharFormat formatComments;
     formatComments.setForeground(Qt::darkGreen);
-    QString patternComments = "/.*";
+    QString patternComments = "[/;].*";
     highlight(text, formatComments, patternComments, false);
 }
 
