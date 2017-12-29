@@ -74,12 +74,10 @@ void Compiler::compile(const std::string& inputFilename)
         {
             std::shared_ptr<FirstPassLine>(new FirstPassLine(l));
         }
-        catch(const CompilerException& ex)
+        catch(const CompilerException&)
         {
-    //            errors.push_back(std::shared_ptr<CompilerError>(new CompilerError(row, ex.what())));
-
-    //            std::cerr << "Line " << row << ": Error " << ex.what() << std::endl;
-    //            std::cerr << "\tFrom " << ex.who() << std::endl;
+            // empty
+            // all output will be provided in the second pass
         }
         row++;
     }
