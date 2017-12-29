@@ -33,6 +33,8 @@ private:
     std::shared_ptr<DRAM> dram;
     std::shared_ptr<CPU> cpu;
 
+    QString lastError;
+
     // methods
     void evalCommand(int);
 
@@ -106,6 +108,8 @@ public:
 signals:
     void onStopPlaying();
     void onStartPlaying();
+
+    void onEvalCommand(const QString& msg);
 
 };
 

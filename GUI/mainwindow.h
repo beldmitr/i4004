@@ -176,6 +176,7 @@ private slots:
     void handleCompiled();
 
     void handleCursorPosChanged(unsigned line);
+    void handleEvalCommand(const QString& msg);
 
 };
 

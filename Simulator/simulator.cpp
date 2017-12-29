@@ -38,12 +38,25 @@ void Simulator::step()
         code = (code << 8) | low;   // combine code to 2 byte
     }
 
-     evalCommand(code);
+    try
+    {
+        evalCommand(code);
+        lastError = "";
+    }
+    catch (const LogExceptions& ex)
+    {
+        lastError = QString(ex.what());
+    }
 
-     if (!isPlaying)
-     {
+    if (!lastError.isEmpty())
+    {
+        emit onEvalCommand(lastError);
+    }
+
+    if (!isPlaying)
+    {
         emit onStopPlaying();
-     }
+    }
 }
 
 void Simulator::play()
@@ -87,7 +100,7 @@ void Simulator::reset()
 
     if (!isPlaying)
     {
-       emit onStopPlaying();
+        emit onStopPlaying();
     }
 }
 
@@ -305,8 +318,13 @@ void Simulator::evalCommand(int command)
     }
     else
     {
-        std::cerr << "Simulator: evalCommand : Unknown command" << std::endl;
-        throw "Unknown command";
+        unsigned addr = cpu->getPC();
+        NOP();
+
+        std::cerr << "Simulator: evalCommand : Unknown command 0x" << std::hex << command << " at address 0x" << addr << std::endl;
+
+        throw LogExceptions("Simulator", "Command 0x" + QString::number(command, 16).toStdString() + " at address 0x"
+                            + QString::number(addr, 16).toStdString() + " can't be evaluated");
     }
 }
 
@@ -735,7 +753,7 @@ void Simulator::INC(unsigned int reg)
         return;
     }
 
-    int value = (cpu->getRegisterAt(reg) + 1) % 0xF;
+    int value = (cpu->getRegisterAt(reg) + 1) % 0x10;
     cpu->setRegisters(reg & 0xF, value);
 
     cpu->setPC(cpu->getPC() + 1);

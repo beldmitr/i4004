@@ -316,7 +316,7 @@ void MainWindow::createDocks()
     this->setCorner(Qt::TopRightCorner, Qt::RightDockWidgetArea);
     this->setCorner(Qt::BottomRightCorner, Qt::RightDockWidgetArea);
 
-    dockResult = std::shared_ptr<QDockWidget>(new QDockWidget("Compile Output"));
+    dockResult = std::shared_ptr<QDockWidget>(new QDockWidget("Output"));
     dockResult->setFeatures(QDockWidget::NoDockWidgetFeatures);
     lstResult = std::shared_ptr<QListWidget>(new QListWidget);
     dockResult->setWidget(lstResult.get());
@@ -395,6 +395,8 @@ MainWindow::MainWindow(Compiler& compiler, Simulator &simulator, QWidget *parent
     connect(this->compiler, SIGNAL(onCompiled()), this, SLOT(handleBuildCode()));
 
     connect(this->compiler, SIGNAL(onCompiledError()), this, SLOT(handleCompiledError()));
+
+    connect(this->simulator, SIGNAL(onEvalCommand(QString)), this, SLOT(handleEvalCommand(const QString&)));
 
     connect(editorSubWindow.get(), SIGNAL(onCursorPosChanged(unsigned)), this, SLOT(handleCursorPosChanged(unsigned)));
 }
@@ -536,4 +538,9 @@ void MainWindow::handleCompiled()
 void MainWindow::handleCursorPosChanged(unsigned line)
 {
     statusLabel->setText("Line: " + QString::number(line) + "\t");
+}
+
+void MainWindow::handleEvalCommand(const QString &msg)
+{
+    this->lstResult->addItem(msg);
 }
