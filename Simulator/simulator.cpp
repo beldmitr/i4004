@@ -1438,7 +1438,7 @@ void Simulator::RDR()
      *   yyyy - These bits are not relevant for this reference.
      */
 
-    int port = (cpu->getSrc() & 0xF) >> 4;
+    int port = (cpu->getSrc() & 0xF0) >> 4;
     cpu->setAcc(rom->getIO(port));
 
     cpu->setPC(cpu->getPC() + 1);
