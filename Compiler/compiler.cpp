@@ -74,10 +74,19 @@ void Compiler::compile(const std::string& inputFilename)
         {
             std::shared_ptr<FirstPassLine>(new FirstPassLine(l));
         }
-        catch(const CompilerException&)
+        catch(const CompilerException& ex)
         {
-            // empty
-            // all output will be provided in the second pass
+            /*
+             * Here is a dilema. If I left this block empty, then some errors in label won't be shown.
+             * But if I will show these errors, some of them will be repeated in the second pass.
+             * For best solution I need to make several types of CompilerExceptions, f.e. special
+             * exceptions for labels or for first pass, which will be shown here.
+             */
+
+            errors.push_back(std::shared_ptr<CompilerError>(new CompilerError(row, ex.what())));
+
+            std::cerr << "Line " << row << ": Error " << ex.what() << std::endl;
+            std::cerr << "\tFrom " << ex.who() << std::endl;
         }
         row++;
     }
