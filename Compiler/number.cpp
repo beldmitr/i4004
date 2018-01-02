@@ -66,6 +66,10 @@ std::string Number::replaceNumbersWithDec(const std::string& str)
     std::string result = str;
 
     SearchResult s = String::search(result, binPrefix);
+    if (!s.prefix.empty() || !s.suffix.empty())
+    {
+        throw CompilerException("Number", "Unknown binary number " + result);
+    }
     while(!s.find.empty())
     {
         result = String::replace(result, binPrefix, std::to_string(getUInt(s.find)));
@@ -73,6 +77,10 @@ std::string Number::replaceNumbersWithDec(const std::string& str)
     }
 
     s = String::search(result, binPostfix);
+    if (!s.prefix.empty() || !s.suffix.empty())
+    {
+        throw CompilerException("Number", "Unknown binary number " + result);
+    }
     while(!s.find.empty())
     {
         result = String::replace(result, binPostfix, std::to_string(getUInt(s.find)));
@@ -80,6 +88,10 @@ std::string Number::replaceNumbersWithDec(const std::string& str)
     }
 
     s = String::search(result, hexPrefix);
+    if (!s.prefix.empty() || !s.suffix.empty())
+    {
+        throw CompilerException("Number", "Unknown hex number " + result);
+    }
     while(!s.find.empty())
     {
         result = String::replace(result, hexPrefix, std::to_string(getUInt(s.find)));
@@ -87,6 +99,10 @@ std::string Number::replaceNumbersWithDec(const std::string& str)
     }
 
     s = String::search(result, hexPostfix);
+    if (!s.prefix.empty() || !s.suffix.empty())
+    {
+        throw CompilerException("Number", "Unknown hex number " + result);
+    }
     while(!s.find.empty())
     {
         result = String::replace(result, hexPostfix, std::to_string(getUInt(s.find)));
