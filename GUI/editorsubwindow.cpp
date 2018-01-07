@@ -9,11 +9,7 @@ EditorSubWindow::EditorSubWindow(QWidget *parent) : SubWindow(parent)
     this->setWindowTitle("Editor");
     this->setWindowIcon(QIcon(":/Resources/icons/editor.png"));
 
-//    connect(editor.get(), &Editor::onTextChanged, [=](){
-//        emit onTextChanged();
-//    });
-
-    this->move(5, 15);
+    this->move(5, 5);
 
     connect(editor.get(), SIGNAL(cursorPositionChanged()), this, SLOT(handleCursorPosChanged()));
 }

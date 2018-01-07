@@ -10,7 +10,8 @@ LEDSubWindow::LEDSubWindow(Simulator *simulator) : SubWindow()
     centralWidget = std::shared_ptr<QWidget>(new QWidget);
     layout = std::shared_ptr<QGridLayout>(new QGridLayout(centralWidget.get()));
     layout->setMargin(10);
-    layout->setSpacing(0);
+    layout->setHorizontalSpacing(10);
+    layout->setVerticalSpacing(0);
 
     this->setWidget(centralWidget.get());
 
@@ -24,7 +25,7 @@ LEDSubWindow::LEDSubWindow(Simulator *simulator) : SubWindow()
         layout->addWidget(led, ledRow, i % ledColumns);
         leds.push_back(led);
     }
-    this->move(725, 15);
+    this->move(1040, 5);
 }
 
 LEDSubWindow::~LEDSubWindow()

@@ -30,8 +30,8 @@ private:
     std::vector<Button*> buttons;
     std::vector<ChooseIOWidget*> connectors;
 
-    const unsigned buttonNumber = 16;
-    const unsigned buttonColumns = 8;
+    const unsigned buttonNumber = 8;
+    const unsigned buttonColumns = 4;
 
 
     // QWidget interface

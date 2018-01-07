@@ -12,7 +12,7 @@ DebuggerSubWindow::DebuggerSubWindow(Compiler* compiler, Simulator *simulator) :
 
     this->setWidget(debuggerLst.get());
 
-    this->move(340, 15);
+    this->move(700, 5);
 }
 
 DebuggerSubWindow::~DebuggerSubWindow()

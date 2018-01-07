@@ -32,7 +32,7 @@ DebuggerList::DebuggerList(Compiler* compiler, Simulator *simulator) : QTableWid
 
     this->verticalHeader()->setVisible(false);
 
-    this->setMinimumHeight(650);
+    this->setMinimumHeight(525);
     this->setMinimumWidth(325);
 
     connect(this, SIGNAL(cellClicked(int,int)), this, SLOT(handleCellClicked(int,int)));
