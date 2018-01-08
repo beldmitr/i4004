@@ -25,16 +25,7 @@ public:
     static bool isNumber(const std::string& str);
     static unsigned int getUInt(const std::string& str);
 
-    static std::string replaceNumbersWithDec(const std::string& str); /// TODO it is needed for MathExpr, as they can't work with hex and bin numbers
-
-    /// TODO Do I need all this stuff ????
-    static int to4bit(int num);
-    static int to8bit(int num);
-    static int to12bit(int num);
-    static int to4bitStrong(int num);
-    static int to8bitStrong(int num);
-    static int to12bitStrong(int num);
-
+    static std::string replaceNumbersWithDec(const std::string& str);
 };
 
 

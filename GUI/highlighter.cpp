@@ -89,7 +89,6 @@ void Highlighter::highlight(const QString &text, QTextCharFormat format, QString
     QRegExp expression(pattern);
     if (!expression.isValid())
     {
-        // TODO maybe make GUI exception?
         std::cerr << QString("Pattern is not valid: ").append(pattern).toStdString() << std::endl;
     }
     Qt::CaseSensitivity sensetive = (caseSensetive) ? Qt::CaseSensitive : Qt::CaseInsensitive;

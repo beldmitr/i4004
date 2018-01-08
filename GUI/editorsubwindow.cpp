@@ -1,6 +1,5 @@
 #include "editorsubwindow.h"
 
-/// TODO there is some commented code, investigate what I may use
 EditorSubWindow::EditorSubWindow(QWidget *parent) : SubWindow(parent)
 {
     editor = std::shared_ptr<Editor>(new Editor(parent));

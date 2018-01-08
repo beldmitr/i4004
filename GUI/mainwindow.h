@@ -36,14 +36,12 @@
 #include "Compiler/compiler.h"
 #include "Simulator/simulator.h"
 
-#include "programramwidget.h"
 #include "romwidget.h"
 #include "cpuwidget.h"
 #include "dataramwidget.h"
 
 #include "editorsubwindow.h"
 #include "ledsubwindow.h"
-//#include "sevensegmentsubwindow.h"
 #include "buttonsubwindow.h"
 #include "debuggersubwindow.h"
 
@@ -51,8 +49,6 @@ class MainWindow : public QMainWindow
 {
     Q_OBJECT
 private:
-    /// TODO Check for undeleted pointers
-
     QString filename;
     QString outputname;
 

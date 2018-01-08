@@ -10,7 +10,6 @@ CONFIG += c++14
 SOURCES += \
     GUI/mainwindow.cpp \
     GUI/romwidget.cpp \
-    GUI/programramwidget.cpp \
     GUI/subwindow.cpp \
     GUI/memorytable.cpp \
     GUI/chipdataram.cpp \
@@ -28,13 +27,10 @@ SOURCES += \
     GUI/button.cpp \
     GUI/coloredcombobox.cpp \
     GUI/chooseiowidget.cpp \
-    GUI/sevensegmentio.cpp \
-    GUI/sevensegmentpanel.cpp \
     GUI/editor.cpp \
     GUI/highlighter.cpp \
     GUI/editorsubwindow.cpp \
     GUI/ledsubwindow.cpp \
-    GUI/sevensegmentsubwindow.cpp \
     GUI/buttonsubwindow.cpp \
     GUI/dataramwidget.cpp \
     Compiler/number.cpp \
@@ -68,7 +64,6 @@ SOURCES += \
 HEADERS += \
     GUI/mainwindow.h \
     GUI/romwidget.h \
-    GUI/programramwidget.h \
     GUI/subwindow.h \
     GUI/memorytable.h \
     GUI/chipdataram.h \
@@ -85,13 +80,10 @@ HEADERS += \
     GUI/button.h \
     GUI/coloredcombobox.h \
     GUI/chooseiowidget.h \
-    GUI/sevensegmentio.h \
-    GUI/sevensegmentpanel.h \
     GUI/editor.h \
     GUI/highlighter.h \
     GUI/editorsubwindow.h \
     GUI/ledsubwindow.h \
-    GUI/sevensegmentsubwindow.h \
     GUI/buttonsubwindow.h \
     GUI/dataramwidget.h \
     Compiler/number.h \

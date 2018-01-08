@@ -576,7 +576,7 @@ void Simulator::FIN(unsigned int pair)
      * the upper 4 bits of the designated address will be assumed equal to the upper 4 bits of the
      * next page.
      *
-     * SEE NOTE ABOVE
+     * See note above
      */
     if ((cpu->getPC() & 0xFF) == 0xFF)
     {

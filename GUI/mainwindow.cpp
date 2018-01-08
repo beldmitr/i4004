@@ -357,15 +357,6 @@ MainWindow::MainWindow(Compiler& compiler, Simulator &simulator, QWidget *parent
     this->setCentralWidget(mdi.get());
     this->setStatusBar(statusBar.get());
 
-    // form settings
-    //    QTextEdit* textEditor = this->editorSubWindow->getTextEditor();
-    //    textEditor->setFocus();
-    //    setWindowTitleFilename();
-    //    this->resize(960, 640);
-
-    //    // connects
-    //    connect(textEditor, SIGNAL(textChanged()), this, SLOT(setWindowTitleFilename()));
-
     connect(this->compiler, SIGNAL(onCompiled()), this, SLOT(handleBuildCode()));
 
     connect(this->compiler, SIGNAL(onCompiledError()), this, SLOT(handleCompiledError()));

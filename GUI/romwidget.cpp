@@ -35,14 +35,14 @@ RomWidget::RomWidget(Simulator *simulator, QWidget *parent) : QWidget(parent)
 
     for (unsigned j = 0; j < pagesNumber; j++)
     {
-        QGroupBox* ioGB = new QGroupBox("I/O " + QString::number(j));   /// TODO delete this pointer
+        QGroupBox* ioGB = new QGroupBox("I/O " + QString::number(j));
         ioGB->setMinimumWidth(65);
 
-        QVBoxLayout* ioLayout = new QVBoxLayout(ioGB);  /// TODO delete this pointer
+        QVBoxLayout* ioLayout = new QVBoxLayout(ioGB);
 
         for(unsigned i=0; i < ioPerPage; i++)
         {
-            QCheckBox* ioCB = new QCheckBox();  /// TODO delete this pointer
+            QCheckBox* ioCB = new QCheckBox();
             ioCB->setDisabled(true);
             ioLayout->addWidget(ioCB);
             ioLayout->setAlignment(ioCB, Qt::AlignHCenter);
@@ -181,7 +181,7 @@ void RomWidget::write(std::vector<unsigned int> instructions)
             (highByte < 16) ? t.append("0") : t.append("");
             t.append(QString::number(highByte, 16));
 
-            QTableWidgetItem* w = new QTableWidgetItem(t);  /// TODO delete this pointer
+            QTableWidgetItem* w = new QTableWidgetItem(t);
             w->setTextAlignment(Qt::AlignCenter);
             if (j > 15)
             {
@@ -196,7 +196,7 @@ void RomWidget::write(std::vector<unsigned int> instructions)
         QString t;
         (lowByte <= 0xF) ? t.append("0") : t.append("");
         t.append(QString::number(lowByte, 16));
-        QTableWidgetItem* w = new QTableWidgetItem(t);  /// TODO delete this pointer
+        QTableWidgetItem* w = new QTableWidgetItem(t);
         w->setTextAlignment(Qt::AlignCenter);
         if (j > 15)
         {

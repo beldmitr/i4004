@@ -31,11 +31,11 @@ private:
 
     Simulator* simulator;
 
-    std::shared_ptr<QGroupBox> memoryGB;    /// TODO make smart_ptr or delete
+    std::shared_ptr<QGroupBox> memoryGB;
     std::shared_ptr<QVBoxLayout> layout;
     std::shared_ptr<QScrollBar> scroll;
     std::shared_ptr<QHBoxLayout> memLayout;
-    QGroupBox* activeIOGroupBox; /// TODO wtf ????
+    QGroupBox* activeIOGroupBox;
     std::shared_ptr<QComboBox> comboTitle;
     std::shared_ptr<QGridLayout> titleLayout;
     std::shared_ptr<QHBoxLayout> mainLayout;
