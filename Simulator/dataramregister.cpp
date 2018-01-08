@@ -68,7 +68,8 @@ int DataRAMRegister::getCharacter(unsigned index) const
     {
         std::cerr << "A DataRAM Chip has got " << charactersLength << " registers. "
                   << index << " is bad index of a register." << std::endl;
-        throw "DataRAM chip access error, because of wrong index"; /// FIXME Exception
+        std::string msg = "DataRAM chip access error, because of wrong index";
+        throw LogExceptions("DataRAMRegister", msg);
     }
 
     return characters[index];
@@ -101,7 +102,8 @@ int DataRAMRegister::getStatus(unsigned index) const
     {
         std::cerr << "A DataRAM Chip has got " << statusLength << " status registers. "
                   << index << " is bad index of a register." << std::endl;
-        throw "DataRAM chip access error, because of wrong index"; /// FIXME Exception
+        std::string msg =  "DataRAM chip access error, because of wrong index";
+        throw LogExceptions("DataRAMRegister", msg);
     }
 
     return status[index];

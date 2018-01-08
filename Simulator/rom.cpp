@@ -7,7 +7,8 @@ ROM::ROM(unsigned pages) : QObject(),
     {
         std::cerr << "Number of pages of ROM may be less than 16. "
                   << pages << " is too much pages." << std::endl;
-        throw "Number of pages of ROM may be less than 16";
+        std::string msg = "Number of pages of ROM may be less than 16";
+        throw LogExceptions("Rom", msg);
     }
 
     for (unsigned int i = 0; i < pages * bytesPerPage; i++)
@@ -38,7 +39,7 @@ unsigned int ROM::getValue(unsigned index) const
                 .append(std::to_string(index)).append(" is wrong address");
 
         std::cerr << msg << std::endl;
-        throw msg;
+        throw LogExceptions("Rom", msg);
     }
 
     return table[index];

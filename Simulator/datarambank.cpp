@@ -38,7 +38,8 @@ std::shared_ptr<DataRAMChip> DataRAMBank::getDataRAMChip(int index)
     {
         std::cerr << "Error accessing Data RAM. " << index << " Data RAM Chip doesn't exist. There are "
                   << length << " chips." << std::endl;
-        throw "Error accessing Data RAM Chip."; /// FIXME Exception
+        QString msg = QString("Error accessing Data RAM Chip.");
+        throw LogExceptions("DataRamBank", msg.toStdString());
     }
 
     return chips[index];

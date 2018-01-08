@@ -248,7 +248,7 @@ std::string CommandSet::operandTypeToString(CommandSet::OperandType type)
             break;
         default:
             std::string msg = "Wrong operand type";
-            throw msg;
+            throw CompilerException("CommandSet", msg);
     }
 
     return res;

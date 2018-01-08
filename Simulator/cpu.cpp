@@ -139,9 +139,10 @@ unsigned int CPU::getRegisterAt(unsigned int index) const
     {
         std::cerr << "Indexes of registers could be 0-15. " << index
                   << " is wrong index." << std::endl;
-        throw QString("Indexes of registers could be 0-15. ")
+        std::string msg = QString("Indexes of registers could be 0-15. ")
                 .append(QString::number(index))
                 .append(" is wrong index.").toStdString();
+        throw LogExceptions("CPU", msg);
     }
 
     return registers.at(index);
@@ -175,9 +176,10 @@ unsigned int CPU::getPairAt(unsigned int index) const
     {
         std::cerr << "Indexes of pairs could be 0-7. " << index
                   << " is wrong index." << std::endl;
-        throw QString("Indexes of pairs could be 0-7. ")
+        std::string msg = QString("Indexes of pairs could be 0-7. ")
                 .append(QString::number(index))
                 .append(" is wrong index.").toStdString();
+        throw LogExceptions("CPU", msg);
     }
 
     unsigned int registerLow = getRegisterAt(2*index);

@@ -27,8 +27,6 @@ DataRAMChip::DataRAMChip(unsigned int bank, unsigned int number) : QObject()
 
         registers.push_back(reg);
     }
-
-
 }
 
 DataRAMChip::~DataRAMChip()
@@ -42,7 +40,9 @@ std::shared_ptr<DataRAMRegister> DataRAMChip::getDataRAMRegister(int index)
     {
         std::cerr << "The number of registers in Data RAM Chip is " << length
                   << ". " << index << " is wrong number." << std::endl;
-        throw "Data RAM access error. Wrong index of a register in a chip."; /// FIXME Exception
+
+        std::string msg = "Data RAM access error. Wrong index of a register in a chip.";
+        throw LogExceptions("DataRAMChip", msg);
     }
 
     return registers[index];

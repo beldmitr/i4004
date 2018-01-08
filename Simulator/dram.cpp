@@ -36,7 +36,8 @@ std::shared_ptr<DataRAMBank> DRAM::getDataRAMBank(int index)
     {
         std::cerr << "Data RAM accessing error. " << index
                   << " is wrong index of a bank, because there are " << length << " banks." << std::endl;
-        throw "Data RAM accessing error.";  /// FIXME Exception
+        std::string msg = "Data RAM accessing error.";
+        throw LogExceptions("DRam", msg);
     }
 
     return banks[index];
