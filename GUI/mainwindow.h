@@ -82,9 +82,7 @@ private:
     std::shared_ptr<QDockWidget> dockResult;
     std::shared_ptr<QDockWidget> dockDRam;
     std::shared_ptr<QDockWidget> dockRom;
-//    std::shared_ptr<QDockWidget> dockPRam;
 
-//    std::shared_ptr<ProgramRamWidget> pramWidget;
     std::shared_ptr<RomWidget> romWidget;
     std::shared_ptr<CpuWidget> cpuWidget;
     std::shared_ptr<QListWidget> lstResult;
@@ -130,42 +128,24 @@ private:
      */
     std::vector<QAction*> listWindowsToolbarBtn;
 
-    // In help menu
-    std::shared_ptr<QAction> actHelp;
-
     fstream file;
-
     Compiler* compiler;   // I do not create this pointer here, so I don't it delete now
     Simulator* simulator; // I do not create this pointer here, so I don't it delete now
-
 
     // Methods
     void createActions();
     void createMenu();
     void createToolbars();
-
-//    void readFile();
-//    void writeFile();
     void createOutputFilename();
-
     void createSubWindows();
-
     void createDocks();
-
     void buildCode();
-
     void handleCompile();
     void handleRun();
 
-
-    
 public:
     explicit MainWindow(Compiler &compiler, Simulator& simulator, QWidget *parent = 0);
     virtual ~MainWindow();
-
-signals:
-    //    void setWindowTitleFilename();
-
 
 public slots:
     void closeEvent(QCloseEvent*);
@@ -174,10 +154,8 @@ private slots:
     void handleBuildCode();
     void handleCompiledError();
     void handleCompiled();
-
     void handleCursorPosChanged(unsigned line);
     void handleEvalCommand(const QString& msg);
-
 };
 
 #endif // MAINWINDOW_H

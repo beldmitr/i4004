@@ -30,7 +30,7 @@ void ObjectCode::writeBigEndian(unsigned int hiByte, unsigned int lowByte)
 
 void ObjectCode::setProgramCounter(unsigned int address)
 {
-    if (address > 0x1000)  /// TODO magic number
+    if (address > 0x1000)
     {
         std::string msg = "Couldn't set address 0x" + String::int2hex_string(address) + ". Allowed only 12 bit addresses";
         throw CompilerException("ObjectCode", msg);

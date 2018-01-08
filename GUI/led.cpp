@@ -5,7 +5,7 @@ Led::Led(Simulator *simulator, QWidget *parent) : QWidget(parent)
     this->simulator = simulator;
 
     ledImage = std::shared_ptr<LedImage>(new LedImage);
-    coloredComboBox = std::shared_ptr<ColoredComboBox>(new ColoredComboBox);
+//    coloredComboBox = std::shared_ptr<ColoredComboBox>(new ColoredComboBox);
     connector = std::shared_ptr<ChooseIOWidget>(new ChooseIOWidget(true));
 
     layout = std::shared_ptr<QGridLayout>(new QGridLayout(this));
@@ -17,11 +17,11 @@ Led::Led(Simulator *simulator, QWidget *parent) : QWidget(parent)
     layout->setSpacing(10);
     layout->setHorizontalSpacing(0);
 
-    connect(coloredComboBox.get(), static_cast<void (QComboBox::*)(const QString&)>(&ColoredComboBox::activated),
-            [=](const QString& color)
-    {
-        ledImage->setColor(color);
-    });
+//    connect(coloredComboBox.get(), static_cast<void (QComboBox::*)(const QString&)>(&ColoredComboBox::activated),
+//            [=](const QString& color)
+//    {
+//        ledImage->setColor(color);
+//    });
 
     connect(connector.get(), &ChooseIOWidget::onROMConnected,
             [=](unsigned page, unsigned bit)
@@ -35,7 +35,6 @@ Led::Led(Simulator *simulator, QWidget *parent) : QWidget(parent)
             bool isLight = (value & (int)pow(2,bit)) >> bit;
             this->ledImage->light(isLight);
         }
-
     });
 
     connect(connector.get(), &ChooseIOWidget::onDRAMConnected,

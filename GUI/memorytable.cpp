@@ -109,7 +109,6 @@ void MemoryTable::clear()
 
 void MemoryTable::wheelEvent(QWheelEvent* event)
 {
-    /// FIXME magic number 120
     int p = event->delta() / 120; // +1 when scroll up, -1 when down
 
     int row = this->currentRow() - p;

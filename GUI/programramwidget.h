@@ -14,6 +14,8 @@
 #include "Simulator/simulator.h"
 #include "memorytable.h"
 
+/// TODO delete this class
+
 class ProgramRamWidget : public QWidget
 {
     Q_OBJECT

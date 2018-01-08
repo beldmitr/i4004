@@ -21,7 +21,7 @@ private:
     Simulator* simulator;
 
     std::shared_ptr<LedImage> ledImage;
-    std::shared_ptr<ColoredComboBox> coloredComboBox;
+//    std::shared_ptr<ColoredComboBox> coloredComboBox;
     std::shared_ptr<ChooseIOWidget> connector;
 
     std::shared_ptr<QGridLayout> layout;

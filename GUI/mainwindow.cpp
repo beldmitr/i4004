@@ -2,14 +2,6 @@
 
 void MainWindow::createActions()
 {
-//    // Add some non-menu shortcuts
-//    QAction* actDockRomRaise = new QAction(this);
-//    actDockRomRaise->setShortcut(tr("Ctrl+R"));
-//    connect(actDockRomRaise, &QAction::triggered, [=](){
-//        std::cout << "Hello" << std::endl;
-//    });
-
-
     // Actions File
     actNew = std::shared_ptr<QAction>(new QAction(tr("&New"), this));
     actNew->setIcon(QIcon(":/Resources/icons/new.png"));
@@ -133,19 +125,6 @@ void MainWindow::createActions()
     connect(actReset.get(), &QAction::triggered, [=](){
         simulator->reset();
     });
-
-    actHelp = std::shared_ptr<QAction>(new QAction(tr("Help"), this));
-    actHelp->setIcon(QIcon(":/Resources/icons/help.png"));
-    actHelp->setShortcut(tr("F1"));
-    connect(actHelp.get(), &QAction::triggered, [=](){
-        QFile file("help file"); /// TODO add path to help file
-        if (!file.open(QIODevice::ReadOnly))
-        {
-           return;
-        }
-
-        QDesktopServices::openUrl(file.fileName());
-    });
 }
 
 void MainWindow::createMenu()
@@ -233,10 +212,6 @@ void MainWindow::createMenu()
         connect(showWindows.get(), SIGNAL(triggered(bool)), w, SLOT(showNormal()));
     }
     menuWindows->addAction(showWindows.get());
-
-    // Create menu Help
-//    menuHelp = std::shared_ptr<QMenu>(mainMenu->addMenu("Help"));
-//    menuHelp->addAction(actHelp.get());
 }
 
 void MainWindow::createToolbars()
@@ -270,7 +245,6 @@ void MainWindow::createToolbars()
     toolBarEdit->addAction(actRedo.get());
     toolBarEdit->addSeparator();
     toolBarEdit->addAction(actCut.get());
-//    toolBarEdit->setStyleSheet("QToolBar { border: 1px solid black; }"); /// TODO play with styles
     toolBarEdit->addAction(actCopy.get());
     toolBarEdit->addAction(actPaste.get());
     toolBarEdit->addAction(actDelete.get());
@@ -416,35 +390,10 @@ MainWindow::~MainWindow()
 
 void MainWindow::createOutputFilename()
 {
-    //    outputname = filename.split("/").last();
     outputname = filename;
     outputname = outputname.split(".").first();
     outputname.append(".bin");
 }
-
-//void MainWindow::setWindowTitleFilename()
-//{
-//    QString title = "Intel4004";
-////    QTextEdit* textEditor = this->editorSubWindow->getTextEditor();
-
-////    if (textEditor->document()->isModified())
-////    {
-////        title = "*Intel4004";
-////    }
-////    else
-////    {
-////        title = "Intel4004";
-////    }
-////    if (!filename.isEmpty())
-////    {
-////        title.append(" - [").append(filename).append("]");
-////    }
-//    this->setWindowTitle(title);
-//}
-
-
-
-
 
 void MainWindow::buildCode()
 {
@@ -461,10 +410,6 @@ void MainWindow::buildCode()
     QtConcurrent::run([=](){
        compiler->compile(filename.toStdString());
     });
-
-//    QThread* thr = new QThread;
-//    connect(thr, SIGNAL(started()), this, SLOT(compile()));
-//    thr->start();
 }
 
 void MainWindow::handleCompile()
@@ -515,10 +460,7 @@ void MainWindow::handleBuildCode()
         for (const std::shared_ptr<CompilerError> e : errors)
         {
             QString msg;
-            //            if (e.row != -1)
-            //            {
             msg.append("Line ").append(QString::number(e->row));
-            //            }
             msg.append(": ")
                     .append(QString(e->message.c_str()));
             lstResult->addItem(msg);

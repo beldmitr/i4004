@@ -1,8 +1,5 @@
 #include "debuggerlist.h"
 
-
-/// TODO next/prev breakpoint, list of breakpoints ???
-
 DebuggerList::DebuggerList(Compiler* compiler, Simulator *simulator) : QTableWidget()
 {
     this->compiler = compiler;
@@ -74,18 +71,11 @@ void DebuggerList::setCode(std::vector<unsigned> code)
 {
     addrToRow.clear();
 
-    //    this->clear();
-
     while (this->rowCount() > 0)
     {
         this->removeRow(0);
     }
 
-    //    for (unsigned row = 0; row < rows; row++)
-    //    {
-    //        this->removeRow(row);
-    //    }
-    //    this->setRowCount(0);
     rows = 0;
 
     // This address will be shown in the table
@@ -171,8 +161,6 @@ void DebuggerList::init()
     std::vector<unsigned> code(rowMaxNumbers); /// TODO check on all OS, if it fills the free space with zeroes
     this->setCode(code);
     this->selectAddress(0);
-
-    //    this->setRowCount(0xFFF);
 }
 
 void DebuggerList::handleSectionClicked(int index)

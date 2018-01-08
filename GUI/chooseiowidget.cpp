@@ -1,12 +1,6 @@
 #include "chooseiowidget.h"
 
-/// TODO delete pointers
-/**
- * TODO make more universal widget:
- *   1. setROMEnabled
- *   2. setDRAMEnabled
- *   3. Hint to status menu
-*/
+
 ChooseIOWidget::ChooseIOWidget(bool isDRAM, QWidget *parent) : QWidget(parent)
 {
     this->isDRAM = isDRAM;

@@ -37,13 +37,11 @@ public:
     void setConnection(IOType type, unsigned page, unsigned bit);
     void setConnection(IOType type, unsigned bank, unsigned chip, unsigned bit);
 
-
 signals:
     void onROMConnected(unsigned page, unsigned bit);
     void onDRAMConnected(unsigned bank, unsigned chip, unsigned bit); // Data RAM connection
 
     void onDisconnected();
-
 
 public slots:
 };

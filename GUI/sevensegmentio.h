@@ -10,6 +10,8 @@
 
 #include <map>
 
+/// TODO delete this class
+
 class SevenSegmentIO : public QLabel
 {
     Q_OBJECT

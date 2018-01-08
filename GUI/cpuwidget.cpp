@@ -20,9 +20,6 @@ CpuWidget::CpuWidget(Simulator *simulator, QWidget *parent) : QWidget(parent)
     connect(stack, SIGNAL(onStackChanged()), this, SLOT(handleStackChanged()));
 
     connect(cpu, SIGNAL(onCpuChanged()), this, SLOT(handleCpuChanged()));
-
-//    connect(simulator, SIGNAL(onActualCommand(QString)), this, SLOT(handleActualCommand(QString)));
-
 }
 
 CpuWidget::~CpuWidget()
@@ -34,8 +31,6 @@ void CpuWidget::createWidgetStack()
 {
     gbStack = std::make_shared<QGroupBox>("Stack");
     layoutStack = std::make_shared<QGridLayout>(gbStack.get());
-
-//    gbStack->setSizePolicy(QSizePolicy::Maximum, QSizePolicy::Maximum);
 
     lblPC = std::make_shared<QLabel>("PC");
     lblLevel1 = std::make_shared<QLabel>("Level 1");
@@ -49,7 +44,6 @@ void CpuWidget::createWidgetStack()
 
     edtPC->setReadOnly(true);
     edtPC->setFixedWidth(75);
-//    edtPC->setFontWeight(QFont::Bold);
     edtPC->setText("0");
 
     edtLevel1->setReadOnly(true);
@@ -81,8 +75,6 @@ void CpuWidget::createWidgetRegisters()
 {
     gbRegisters = std::make_shared<QGroupBox>("Registers");
     layoutRegisters = std::make_shared<QGridLayout>(gbRegisters.get());
-
-//    gbRegisters->setSizePolicy(QSizePolicy::Maximum, QSizePolicy::Maximum);
 
     for (int i = 0; i < 16; i++)
     {
@@ -119,8 +111,6 @@ void CpuWidget::createWidgetOther()
     gbOther = std::make_shared<QGroupBox>("");
     layoutOther = std::make_shared<QGridLayout>(gbOther.get());
 
-//    gbOther->setSizePolicy(QSizePolicy::Maximum, QSizePolicy::Maximum);
-
     lblAccumulator = std::make_shared<QLabel>("Accumulator");
     edtAccumulator = std::shared_ptr<QLineEdit>(new QLineEdit("0"));
 
@@ -130,9 +120,6 @@ void CpuWidget::createWidgetOther()
 
     lblTest = std::make_shared<QLabel>("Test");
     cbxTest = std::shared_ptr<QCheckBox>(new QCheckBox);
-
-//    lblInstruction = std::make_shared<QLabel>("");
-//    lblInstruction->setFixedWidth(300);
 
     lblCycles = std::make_shared<QLabel>("Cycles");
     edtCycles = std::make_shared<QLineEdit>("0");
@@ -162,8 +149,6 @@ void CpuWidget::createWidgetOther()
 
     layoutOther->addWidget(lblTest.get(), 0, 4, Qt::AlignRight);
     layoutOther->addWidget(cbxTest.get(), 0, 5, Qt::AlignHCenter);
-
-//    layoutOther->addWidget(lblInstruction.get(), 1, 0);   //TODO new class Debugger, and DebuggerList of instructions, for now I don't need this
 
     layoutOther->addWidget(lblCycles.get(), 1, 0);
     layoutOther->addWidget(edtCycles.get(), 1, 1, 1, 5);
@@ -210,11 +195,6 @@ void CpuWidget::setTest(bool value)
 {
     cbxTest->setChecked(value);
 }
-
-//void CpuWidget::setInstruction(QString value)
-//{
-//    lblInstruction->setText(value);
-//}
 
 void CpuWidget::setCycles(unsigned int value)
 {
@@ -282,8 +262,3 @@ void CpuWidget::handleCpuChanged()
 
     edtCycles->setText(QString::number(cpu->getCycles(), 16));
 }
-
-//void CpuWidget::handleActualCommand(const QString& cmd)
-//{
-//    lblInstruction->setText(cmd);
-//}

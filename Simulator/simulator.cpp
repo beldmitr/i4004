@@ -104,7 +104,6 @@ void Simulator::reset()
     }
 }
 
-/// TODO TESTME evalCommand
 std::shared_ptr<CPU> Simulator::getCpu() const
 {
     return cpu;
@@ -394,8 +393,6 @@ void Simulator::JCN(unsigned int condition, unsigned int address)
      * on the next page.
      */
 
-    /// TODO JCN Note
-
     if (condition > 0xF)
     {
         std::cerr << std::hex << "Error: JCN condition. 0x" << condition
@@ -480,7 +477,8 @@ void Simulator::FIM(unsigned int pair, unsigned int data)
 
     if (data > 0xFF)
     {
-        std::cerr << std::hex << "Warning: 0x" << data << " may consider only 8 bit. It will be reduced." << std::endl;
+        std::cerr << std::hex << "Warning: 0x" << data
+                  << " may consider only 8 bit. It will be reduced." << std::endl;
     }
 
     cpu->setPairs(pair, data & 0xFF);
@@ -681,12 +679,14 @@ void Simulator::JUN(unsigned int address1, unsigned int address2)
 
     if (address1 > 0xF)
     {
-        std::cerr << std::hex << "Warning: address1 0x" << address1 << " may consider 4 bit. It will be reduced." << std::endl;
+        std::cerr << std::hex << "Warning: address1 0x" << address1
+                  << " may consider 4 bit. It will be reduced." << std::endl;
     }
 
     if (address2 > 0xFF)
     {
-        std::cerr << std::hex << "Warning: address2 0x" << address2 << " may consider 8 bit. It will be reduced." << std::endl;
+        std::cerr << std::hex << "Warning: address2 0x" << address2
+                  << " may consider 8 bit. It will be reduced." << std::endl;
     }
 
     cpu->setPC(((address1 & 0xF) << 8) | (address2 & 0xFF));
@@ -718,12 +718,14 @@ void Simulator::JMS(unsigned int address1, unsigned int address2)
 
     if (address1 > 0xF)
     {
-        std::cerr << std::hex << "Warning: address1 0x" << address1 << " may consider 4 bit. It will be reduced." << std::endl;
+        std::cerr << std::hex << "Warning: address1 0x" << address1
+                  << " may consider 4 bit. It will be reduced." << std::endl;
     }
 
     if (address2 > 0xFF)
     {
-        std::cerr << std::hex << "Warning: address2 0x" << address2 << " may consider 8 bit. It will be reduced." << std::endl;
+        std::cerr << std::hex << "Warning: address2 0x" << address2
+                  << " may consider 8 bit. It will be reduced." << std::endl;
     }
 
     cpu->getStack()->write(cpu->getPC() + 2);
@@ -791,8 +793,6 @@ void Simulator::ISZ(unsigned int reg, unsigned int address)
      * corresponding location on the next page.
      */
 
-    /// TODO Note !!!
-
     if (reg > 0xF)
     {
         std::cerr << "Error: wrong number of register " << reg << std::endl;
@@ -805,7 +805,6 @@ void Simulator::ISZ(unsigned int reg, unsigned int address)
                   << " may consider only 8 bit. It will be reduced." << std::endl;
     }
 
-    // Increment reg, don't use INC method, cause it adds PC too!!!
     int value = (cpu->getRegisterAt(reg) + 1) % 0x10;
     cpu->setRegisters(reg & 0xF, value);
 

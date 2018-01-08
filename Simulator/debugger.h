@@ -24,15 +24,9 @@ public:
 
     static bool isBreakpoint(unsigned addr);
 
-//    static void nextBreakpoint(unsigned addr);
-//    static void prevBreakpoint(unsigned addr);
-
 private:
     static std::unordered_set<unsigned> breakpointAddresses;
 
-signals:
-
-public slots:
 };
 
 #endif // DEBUGGER_H

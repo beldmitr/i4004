@@ -25,7 +25,6 @@ private:
     bool isLight;
     std::map<QString, QImage> pics;
 
-    // I delete image_on and image_off pointersr from the map
     QImage image_on;
     QImage image_off;
 

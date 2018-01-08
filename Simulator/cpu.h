@@ -9,8 +9,8 @@
 #include <memory>
 
 #include "stack.h"
+#include "Exceptions/logexceptions.h"
 
-/// TESTME test all cpu class how does it works
 class CPU : public QObject
 {
     Q_OBJECT
@@ -53,9 +53,9 @@ public:
     Stack* getStack() const;
     void setStack(const Stack &value);
     unsigned int getRegisterAt(unsigned int index) const;
-    void setRegisters(unsigned int index, unsigned int value);  /// TODO maybe rename to setRegisterAt
+    void setRegisters(unsigned int index, unsigned int value);
     unsigned int getPairAt(unsigned int index) const;
-    void setPairs(unsigned int index, unsigned int value);  /// TODO maybe rename to setPairAt
+    void setPairs(unsigned int index, unsigned int value);
     int getPC() const;
     void setPC(unsigned int value);
     int getDcl() const;

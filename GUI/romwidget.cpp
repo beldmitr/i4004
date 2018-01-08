@@ -150,13 +150,13 @@ void RomWidget::setIO(unsigned page, unsigned value)
     if (page > pagesNumber)
     {
         std::cerr << "RomWidget: setIO: Wrong page: " << page << std::endl;
-        return; /// TODO make an exception
+        return;
     }
 
     if (value > (pow(2, ioPerPage) - 1))    // 4 bits number
     {
         std::cerr << "RomWidget: setIO: Wrong value: " << value << std::endl;
-        return; /// TODO make an exception
+        return;
     }
 
     for (unsigned i = 0; i < ioPerPage; i++)

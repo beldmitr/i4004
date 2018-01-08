@@ -9,6 +9,8 @@
 #include "subwindow.h"
 #include "sevensegmentpanel.h"
 
+/// TODO delete this class
+
 class SevenSegmentSubWindow : public SubWindow
 {
     Q_OBJECT

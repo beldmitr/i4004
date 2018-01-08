@@ -15,6 +15,8 @@
 #include "sevensegmentio.h"
 #include "chooseiowidget.h"
 
+/// TODO delete this class
+
 class SevenSegmentPanel : public QWidget
 {
     Q_OBJECT

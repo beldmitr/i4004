@@ -1,5 +1,3 @@
-//#include "i4004.h"
-
 #include <QApplication>
 #include <QObject>
 #include <QThread>

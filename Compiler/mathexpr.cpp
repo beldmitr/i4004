@@ -8,11 +8,7 @@
  *
  * In this case regex_match returns result too slow, very slow, minutes...
  */
-//std::regex MathExpr::mathExpression = std::regex("([(]*[)]*[[:blank:]]*[*]?[[:blank:]]*[+-]?[[:blank:]]*[[:alnum:]]*)+");
-/// Test new mathExpression
 std::regex MathExpr::mathExpression = std::regex("(\\w?\\s?[(]*[)]*[+-]?\\s?[*]?)+");
-
-/// TODO test class and delete commented code
 
 bool MathExpr::isMathExpression(const std::string& str)
 {

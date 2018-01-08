@@ -3,6 +3,8 @@
 
 #include <QCompleter>
 
+/// TODO delete this class
+
 class AutoCompleter : public QCompleter
 {
     Q_OBJECT

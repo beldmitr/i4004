@@ -24,7 +24,6 @@ EditorSubWindow::~EditorSubWindow()
 void EditorSubWindow::readFile()
 {
     std::fstream file(filename.toStdString(), ios::in);
-    //    file.open();
 
     if(file.is_open())
     {
@@ -47,8 +46,6 @@ void EditorSubWindow::readFile()
         }
 
         file.close();
-        //        QTextEdit* textEditor = this->editorSubWindow->getTextEditor();
-        //        textEditor->setPlainText(doc);
         editor->setPlainText(doc);
     }
     else
@@ -87,12 +84,6 @@ void EditorSubWindow::newFile()
         editor->document()->setModified(false);
 
         this->filename.clear();
-
-        //        setWindowTitleFilename();
-
-        //        actCompile->setDisabled(true);
-        //        actRun->setDisabled(true);
-        //        actCompileRun->setDisabled(true);
     }
 }
 
@@ -105,16 +96,7 @@ void EditorSubWindow::openFile()
     if (!filename.isEmpty())
     {
         this->filename = filename;
-        //        createOutputFilename();
         readFile();
-
-        //        QTextEdit* textEditor = this->editorSubWindow->getTextEditor();
-        //        textEditor->document()->setModified(false);
-        //        setWindowTitleFilename();
-
-        //        actCompile->setDisabled(false);
-        //        actRun->setDisabled(false);
-        //        actCompileRun->setDisabled(false);
     }
 }
 
@@ -126,12 +108,8 @@ void EditorSubWindow::saveFile()
     }
     else
     {
-        //        QTextEdit* textEditor = this->editorSubWindow->getTextEditor();
-        //        textEditor->document()->setModified(false);
         writeFile();
     }
-
-    //    setWindowTitleFilename();
 }
 
 void EditorSubWindow::saveAsFile()
@@ -143,16 +121,7 @@ void EditorSubWindow::saveAsFile()
     if (!filename.isEmpty())
     {
         this->filename = filename;
-        //        createOutputFilename();
         writeFile();
-
-        //        QTextEdit* textEditor = this->editorSubWindow->getTextEditor();
-        //        textEditor->document()->setModified(false);
-        //        setWindowTitleFilename();
-
-        //        actCompile->setDisabled(false);
-        //        actRun->setDisabled(false);
-        //        actCompileRun->setDisabled(false);
     }
 }
 

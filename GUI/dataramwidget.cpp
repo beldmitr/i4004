@@ -65,7 +65,6 @@ DataRamWidget::DataRamWidget(Simulator *simulator, QWidget *parent) : QWidget(pa
     layout->addLayout(memLayout.get(), 1, 0);
 
     // connects
-
     connect(comboTitle.get(), static_cast<void (QComboBox::*)(int)>(&QComboBox::currentIndexChanged),
         [=](int index)
         {
@@ -108,7 +107,6 @@ DataRamWidget::~DataRamWidget()
 
 void DataRamWidget::wheelEvent(QWheelEvent* event)
 {
-    /// FIXME 120 is a magic number
     int p = event->delta() / 120; // +1 when scroll up, -1 when down
     int newValue = scrollBar->value() - p;
 

@@ -19,7 +19,7 @@ Line::Line(std::string line)
         parsedLine = comment.prefix;
     }
     /*
-     * Check if the parsed line is empty now, so that means, that at the line was only a comment.
+     * Check if the parsed line is empty now, so that means, that this line considerred only the comment.
      * It isn't an error. Just finish a parsing
      */
     if (String::trimStrong(parsedLine).empty())
@@ -102,6 +102,7 @@ Line::Line(std::string line)
         /// return;
         // because it doesn't work with f.e. this line: end, JUN end
         // Probably this will cause some other bug
+        // It is needed more time for testing
     }
     if (String::trim(parsedLine).empty())
     {

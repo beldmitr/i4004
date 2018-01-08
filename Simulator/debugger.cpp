@@ -22,8 +22,8 @@ bool Debugger::hasNextByte(unsigned code)
      *  and after we read the lowest byte.
      */
 
-    return ((code & 0xF0) == 0x10    // JCN
-            || (code & 0xF1) == 0x20 // FIM
+    return ((code & 0xF0) == 0x10       // JCN
+            || (code & 0xF1) == 0x20    // FIM
             || (code & 0xF0) == 0x40     // JUN
             || (code & 0xF0) == 0x50     // JMS
             || (code & 0xF0) == 0x70);    // ISZ

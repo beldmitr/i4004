@@ -27,8 +27,6 @@ private:
     const unsigned statusRowsNumber = 4;
     const unsigned statusColumnsNumber = 4;
 
-
-
     Simulator* simulator;
 
     unsigned int bank;

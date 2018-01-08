@@ -67,7 +67,6 @@ private:
     std::shared_ptr<QCheckBox> cbxCarry;    // cbx means CheckBox
     std::shared_ptr<QLabel> lblTest;
     std::shared_ptr<QCheckBox> cbxTest;
-//    std::shared_ptr<QLabel> lblInstruction;
     std::shared_ptr<QLabel> lblCycles;
     std::shared_ptr<QLineEdit> edtCycles;
 
@@ -91,7 +90,6 @@ public:
     void setAccumulator(unsigned int value);
     void setCarry(bool value);
     void setTest(bool value);
-//    void setInstruction(QString value);
     void setCycles(unsigned int value);
 
 signals:
@@ -99,7 +97,6 @@ signals:
 private slots:
     void handleStackChanged();
     void handleCpuChanged();
-//    void handleActualCommand(const QString &cmd);
 };
 
 #endif // CPUWIDGET_H

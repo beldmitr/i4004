@@ -33,10 +33,7 @@ std::vector<std::string> String::divideBy(const std::string& str, const std::str
     size_t findPosition = str.find(divider, beginPosition);
 
     std::string part = str.substr(beginPosition, findPosition-beginPosition);
-//    if (!part.empty())
-//    {
-        result.push_back(part);
-//    }
+    result.push_back(part);
 
     while (findPosition != std::string::npos)
     {
@@ -44,10 +41,7 @@ std::vector<std::string> String::divideBy(const std::string& str, const std::str
         findPosition = str.find(divider, beginPosition+1);
 
         part = str.substr(beginPosition+1, findPosition-beginPosition-1);
-//        if (!part.empty())
-//        {
-            result.push_back(part);
-//        }
+        result.push_back(part);
     }
 
     return result;
