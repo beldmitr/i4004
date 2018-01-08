@@ -17,7 +17,6 @@ SOURCES += \
     main.cpp \
     Simulator/simulator.cpp \
     Simulator/rom.cpp \
-    Simulator/pram.cpp \
     Simulator/dram.cpp \
     Simulator/cpu.cpp \
     Simulator/stack.cpp \
@@ -75,7 +74,6 @@ HEADERS += \
     GUI/chipdataram.h \
     Simulator/simulator.h \
     Simulator/rom.h \
-    Simulator/pram.h \
     Simulator/dram.h \
     Simulator/cpu.h \
     Simulator/stack.h \
