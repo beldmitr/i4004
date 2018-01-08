@@ -10,7 +10,6 @@
 #include "Compiler/compiler.h"
 #include "debugger.h"
 #include "rom.h"
-#include "pram.h"
 #include "dram.h"
 #include "cpu.h"
 
@@ -29,7 +28,6 @@ private:
     bool isStopped = false; // stopped by breakpoint
 
     std::shared_ptr<ROM> rom;
-    std::shared_ptr<PRAM> pram;
     std::shared_ptr<DRAM> dram;
     std::shared_ptr<CPU> cpu;
 
@@ -57,7 +55,6 @@ private:
     void WRM();
     void WMP();
     void WRR();
-    void WPM();
     void WR0();
     void WR1();
     void WR2();
@@ -98,8 +95,6 @@ public:
     std::shared_ptr<CPU> getCpu() const;
 
     std::shared_ptr<DRAM> getDram() const;
-
-    std::shared_ptr<PRAM> getPram() const;
 
     std::shared_ptr<ROM> getRom() const;
 
