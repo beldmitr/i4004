@@ -8,6 +8,7 @@
 #include <memory>
 
 #include "datarambank.h"
+#include "Exceptions/logexceptions.h"
 
 class DRAM : public QObject
 {

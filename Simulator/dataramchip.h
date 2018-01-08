@@ -6,7 +6,9 @@
 #include <vector>
 #include <iostream>
 #include <memory>
+
 #include "dataramregister.h"
+#include "Exceptions/logexceptions.h"
 
 class DataRAMChip : public QObject
 {
@@ -14,9 +16,7 @@ class DataRAMChip : public QObject
 private:
     std::vector<std::shared_ptr<DataRAMRegister>> registers;
     int output = 0;
-
     const int length = 4;
-
     unsigned int bank;
     unsigned int chip;
 
@@ -27,9 +27,7 @@ public:
     std::shared_ptr<DataRAMRegister> getDataRAMRegister(int index);
     int getOutput() const;
     void setOutput(int value);
-
     int getLength() const;
-
     void reset();
 
 signals:

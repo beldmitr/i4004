@@ -6,16 +6,16 @@
 #include <vector>
 #include <iostream>
 
+#include "Exceptions/logexceptions.h"
+
 class DataRAMRegister : public QObject
 {
     Q_OBJECT
 private:
     std::vector<int> characters;
     std::vector<int> status;
-
     const unsigned charactersLength = 16;
     const unsigned statusLength = 4;
-
     unsigned bank;
     unsigned chip;
     unsigned reg;    // register number

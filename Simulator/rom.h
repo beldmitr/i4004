@@ -10,6 +10,8 @@
 #include "Utils/string.h"
 #include "debugger.h"
 
+#include "Exceptions/logexceptions.h"
+
 class ROM : public QObject
 {
     Q_OBJECT

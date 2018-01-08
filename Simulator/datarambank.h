@@ -6,7 +6,9 @@
 #include <vector>
 #include <iostream>
 #include <memory>
+
 #include "dataramchip.h"
+#include "Exceptions/logexceptions.h"
 
 class DataRAMBank : public QObject
 {
@@ -26,10 +28,6 @@ public:
     int getLength() const;
 
     void reset();
-
-signals:
-
-
 };
 
 #endif // DATARAMBANK_H
