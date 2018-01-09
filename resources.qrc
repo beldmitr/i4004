@@ -1,8 +1,6 @@
 <RCC>
     <qresource prefix="/">
-        <file>Resources/icons/about.png</file>
         <file>Resources/icons/compile.png</file>
-        <file>Resources/icons/compile_run.png</file>
         <file>Resources/icons/copy.png</file>
         <file>Resources/icons/cut.png</file>
         <file>Resources/icons/delete.png</file>
@@ -19,34 +17,19 @@
         <file>Resources/icons/selectall.png</file>
         <file>Resources/icons/undo.png</file>
         <file>Resources/components/button.png</file>
-        <file>Resources/components/led.png</file>
         <file>Resources/icons/editor.png</file>
         <file>Resources/icons/io.png</file>
         <file>Resources/icons/debug_resume.png</file>
         <file>Resources/icons/debug_step_over.png</file>
         <file>Resources/icons/debug_stop.png</file>
         <file>Resources/icons/debug_restart.png</file>
-        <file>Resources/components/LedBlue.png</file>
-        <file>Resources/components/LedGreen.png</file>
-        <file>Resources/components/LedOrange.png</file>
-        <file>Resources/components/LedPink.png</file>
         <file>Resources/components/LedRed.png</file>
         <file>Resources/components/LedWhite.png</file>
-        <file>Resources/components/LedYellow.png</file>
-        <file>Resources/components/SevenSegment.png</file>
-        <file>Resources/icons/SevenSegment.png</file>
-        <file>Resources/components/SevenSegmentHorizontalOff.png</file>
-        <file>Resources/components/SevenSegmentHorizontalOn.png</file>
-        <file>Resources/components/SevenSegmentPointOff.png</file>
-        <file>Resources/components/SevenSegmentPointOn.png</file>
-        <file>Resources/components/SevenSegmentVerticalOff.png</file>
-        <file>Resources/components/SevenSegmentVerticalOn.png</file>
         <file>Resources/icons/button.png</file>
         <file>Resources/icons/led.png</file>
         <file>Resources/completer.txt</file>
         <file>Resources/icons/assembly.png</file>
         <file>Resources/icons/breakpoint.png</file>
         <file>Resources/icons/removeBreakpoint.png</file>
-        <file>Resources/icons/help.png</file>
     </qresource>
 </RCC>
