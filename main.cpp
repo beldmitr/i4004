@@ -41,6 +41,5 @@ int main (int argc, char* argv[])
         std::cerr << "Log exception : " << ex.what() << " from " << ex.who() << std::endl;
     }
 
-
     return app->exec();
 }

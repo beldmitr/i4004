@@ -183,6 +183,9 @@ void MainWindow::createMenu()
         QMdiSubWindow* w = mdi->subWindowList().at(i);
 
         QAction* act = new QAction(w->windowTitle(), this);
+
+        QIcon ico = w->windowIcon();
+        act->setIcon(ico);
         if (i < 9)
         {
             std::string shortcut = QString("Ctrl+"+ QString::number(i+1)).toStdString();
@@ -418,7 +421,7 @@ void MainWindow::closeEvent(QCloseEvent* event)
     bool isPlaying = this->simulator->getIsPlaying();
     this->simulator->stop();
     QMessageBox::StandardButton btn;
-    btn = QMessageBox::question(this, tr("Exit"), tr("Do you want to exit?"));
+    btn = QMessageBox::question(this, tr("Exit"), tr("Please, don't forget to save your changes.\n\nDo you want to exit?"));
     if (btn == QMessageBox::Yes)
     {
         event->accept();
