@@ -29,9 +29,17 @@ ButtonSubWindow::ButtonSubWindow(Simulator* simulator) : SubWindow()
         connectors.push_back(chooseIO);
 
         chooseIO->setConnection(ChooseIOWidget::IOType::ROM_IO, 4 + i / 4, 3 - i % 4);
-    }
+    } 
 
-    this->move(1040, 350);
+    QString os = QSysInfo::kernelType();
+    if (os == "darwin")
+    {
+        this->move(1040, 350);
+    }
+    else
+    {
+        this->move(1200, 350);
+    }
 }
 
 ButtonSubWindow::~ButtonSubWindow()

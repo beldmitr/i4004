@@ -25,7 +25,16 @@ LEDSubWindow::LEDSubWindow(Simulator *simulator) : SubWindow()
         layout->addWidget(led, ledRow, i % ledColumns);
         leds.push_back(led);
     }
-    this->move(1040, 5);
+
+    QString os = QSysInfo::kernelType();
+    if (os == "darwin")
+    {
+        this->move(1040, 5);
+    }
+    else
+    {
+        this->move(1200, 5);
+    }
 }
 
 LEDSubWindow::~LEDSubWindow()

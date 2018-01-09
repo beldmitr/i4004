@@ -13,8 +13,6 @@ EditorSubWindow::EditorSubWindow(QWidget *parent) : SubWindow(parent)
     connect(editor.get(), SIGNAL(cursorPositionChanged()), this, SLOT(handleCursorPosChanged()));
 }
 
-
-
 EditorSubWindow::~EditorSubWindow()
 {
     // Delete here something or finalize

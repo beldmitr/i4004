@@ -4,6 +4,8 @@
 #include <QWidget>
 #include <QTableWidget>
 #include <QHeaderView>
+#include <QSysInfo>
+
 #include <memory>
 #include <unordered_map>
 #include <vector>
