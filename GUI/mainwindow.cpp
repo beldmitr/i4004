@@ -420,8 +420,9 @@ void MainWindow::closeEvent(QCloseEvent* event)
 {
     bool isPlaying = this->simulator->getIsPlaying();
     this->simulator->stop();
-    QMessageBox::StandardButton btn;
-    btn = QMessageBox::question(this, tr("Exit"), tr("Please, don't forget to save your changes.\n\nDo you want to exit?"));
+
+    QString msg = tr("Please, don't forget to save your changes.\n\nDo you want to exit?");
+    QMessageBox::StandardButton btn = QMessageBox::question(this, tr("Exit"), msg);
     if (btn == QMessageBox::Yes)
     {
         event->accept();

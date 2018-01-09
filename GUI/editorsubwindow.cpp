@@ -74,7 +74,8 @@ void EditorSubWindow::writeFile()
 
 void EditorSubWindow::newFile()
 {
-    QMessageBox::StandardButton btn = QMessageBox::question(this, tr("New file"), tr("Do you want to start a new file?"));
+    QString msg = tr("Please, don't forget to save your changes.\n\nDo you want to start a new file?");
+    QMessageBox::StandardButton btn = QMessageBox::question(this, tr("New file"), msg);
     if (btn == QMessageBox::Yes)
     {
         editor->clear();
