@@ -6,8 +6,10 @@ std::map<std::string, unsigned int> Constant::table = std::map<std::string, unsi
 
 void Constant::add(const std::string name, unsigned int value)
 {
-    /// TODO decide if labels can be rewritten or it is an error to reassign a new value to a label.
-    /// For now, we can't reassign a new value to them, so they behave like constants
+    /// It is a dilemma. There are 2 choices:
+    /// 1. Labels can be rewritten
+    /// 2. It is an error to reassign a new value to a label.
+    /// For now works 2. choice, we can't reassign a new value to them, so they behave like constants
     if (isConstantExist(name))
     {
         std::string msg = "Constant " + name + " is already defined. "

@@ -77,7 +77,7 @@ void Compiler::compile(const std::string& inputFilename)
         catch(const CompilerException& ex)
         {
             /*
-             * Here is a dilema. If I left this block empty, then some errors in label won't be shown.
+             * Here is a dilemma. If I left this block empty, then some errors in label won't be shown.
              * But if I will show these errors, some of them will be repeated in the second pass.
              * For best solution I need to make several types of CompilerExceptions, f.e. special
              * exceptions for labels or for first pass, which will be shown here.
