@@ -3,6 +3,7 @@
 
 #include <QObject>
 #include <QWidget>
+#include <QDesktopWidget>
 
 #include "GUI/subwindow.h"
 #include "GUI/debuggerlist.h"

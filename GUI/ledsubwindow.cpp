@@ -1,6 +1,6 @@
 #include "ledsubwindow.h"
 
-LEDSubWindow::LEDSubWindow(QWidget *parent, Simulator *simulator) : SubWindow()
+LEDSubWindow::LEDSubWindow(QWidget*, Simulator *simulator) : SubWindow()
 {
     this->simulator = simulator;
 

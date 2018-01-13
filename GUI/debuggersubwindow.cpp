@@ -1,6 +1,6 @@
 #include "debuggersubwindow.h"
 
-DebuggerSubWindow::DebuggerSubWindow(QWidget *parent, Compiler* compiler, Simulator *simulator) : SubWindow()
+DebuggerSubWindow::DebuggerSubWindow(QWidget*, Compiler* compiler, Simulator *simulator) : SubWindow()
 {
     this->compiler = compiler;
     this->simulator = simulator;
@@ -12,10 +12,12 @@ DebuggerSubWindow::DebuggerSubWindow(QWidget *parent, Compiler* compiler, Simula
 
     this->setWidget(debuggerLst.get());
 
-    this->move(415, 5);
+    QDesktopWidget desktop;
+
+    this->move(desktop.width() / 2, 5);
 
     QRect r = this->geometry();
-    r.setHeight(parent->height());
+    r.setHeight((desktop.height() / 2) - 100);
 
     QString os = QSysInfo::kernelType();
     if (os == "darwin")

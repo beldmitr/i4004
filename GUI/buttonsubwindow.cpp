@@ -1,6 +1,6 @@
 #include "buttonsubwindow.h"
 
-ButtonSubWindow::ButtonSubWindow(QWidget *parent, Simulator* simulator) : SubWindow()
+ButtonSubWindow::ButtonSubWindow(QWidget*, Simulator* simulator) : SubWindow()
 {
     this->setWindowTitle("Button panel");
     this->setWindowIcon(QIcon(":/Resources/icons/button.png"));
