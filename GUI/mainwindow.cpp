@@ -284,6 +284,7 @@ void MainWindow::createSubWindows()
 
     mdi->setActiveSubWindow(editorSubWindow.get()); // Editor window is activated (focused) by default
 
+    debuggerSubWindow->setWindowState(Qt::WindowMinimized);
     ledSubWindow->setWindowState(Qt::WindowMinimized);
     buttonSubWindow->setWindowState(Qt::WindowMinimized);
 }

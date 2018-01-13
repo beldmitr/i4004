@@ -10,9 +10,11 @@ EditorSubWindow::EditorSubWindow(QWidget *parent) : SubWindow(parent)
 
     this->move(5, 5);
 
+    QDesktopWidget desktop;
+
     QRect r = this->geometry();
-    r.setHeight(parent->height());
-    r.setWidth(400);
+    r.setHeight((desktop.height() / 2) - 50);
+    r.setWidth(desktop.width() - 100);
     this->setGeometry(r);
 
     connect(editor.get(), SIGNAL(cursorPositionChanged()), this, SLOT(handleCursorPosChanged()));

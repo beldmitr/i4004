@@ -6,6 +6,7 @@
 #include <QObject>
 #include <QIcon>
 #include <QTextEdit>
+#include <QDesktopWidget>
 
 #include <memory>
 #include <fstream>
