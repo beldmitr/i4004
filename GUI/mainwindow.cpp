@@ -283,6 +283,9 @@ void MainWindow::createSubWindows()
     mdi->addSubWindow(buttonSubWindow.get(), Qt::CustomizeWindowHint | Qt::WindowMinimizeButtonHint | Qt::WindowCloseButtonHint);
 
     mdi->setActiveSubWindow(editorSubWindow.get()); // Editor window is activated (focused) by default
+
+    ledSubWindow->setWindowState(Qt::WindowMinimized);
+    buttonSubWindow->setWindowState(Qt::WindowMinimized);
 }
 
 void MainWindow::createDocks()

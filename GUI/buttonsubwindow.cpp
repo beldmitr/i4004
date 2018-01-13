@@ -29,17 +29,25 @@ ButtonSubWindow::ButtonSubWindow(Simulator* simulator) : SubWindow()
         connectors.push_back(chooseIO);
 
         chooseIO->setConnection(ChooseIOWidget::IOType::ROM_IO, 4 + i / 4, 3 - i % 4);
-    } 
+    }
 
-    QString os = QSysInfo::kernelType();
-    if (os == "darwin")
-    {
-        this->move(1040, 350);
-    }
-    else
-    {
-        this->move(1200, 350);
-    }
+//    QSizePolicy sp = this->sizePolicy();
+//    sp.setHorizontalPolicy(QSizePolicy::Maximum);
+//    sp.setVerticalPolicy(QSizePolicy::Maximum);
+//    this->setSizePolicy(sp);
+
+//    this->move(35, 35);
+
+//    QString os = QSysInfo::kernelType();
+//    if (os == "darwin")
+//    {
+//        this->move(1040, 350);
+//    }
+//    else
+//    {
+//        this->move(1200, 350);
+//    }
+
 }
 
 ButtonSubWindow::~ButtonSubWindow()

@@ -3,7 +3,7 @@
 LedImage::LedImage(QWidget *parent) : QLabel(parent)
 {
     this->setMargin(0);
-    this->setMaximumWidth(50);
+//    this->setMaximumWidth(50);
 
     pics =
     {

@@ -10,8 +10,8 @@ Editor::Editor(QWidget *parent) : QTextEdit(parent)
     completer->setCaseSensitivity(Qt::CaseInsensitive);
     connect(completer.get(), SIGNAL(activated(QString)), this, SLOT(insertCompletion(QString)));
 
-    this->setMinimumHeight(525);
-    this->setMinimumWidth(675);
+//    this->setMinimumHeight(525);
+//    this->setMinimumWidth(675);
 
     this->setMouseTracking(true);
 

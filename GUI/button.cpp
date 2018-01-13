@@ -2,7 +2,7 @@
 
 Button::Button(Simulator* simulator, ChooseIOWidget *connector) : QPushButton()
 {
-    this->setMaximumSize(48, 48);
+//    this->setMaximumSize(48, 48);
 
     this->simulator = simulator;
 
