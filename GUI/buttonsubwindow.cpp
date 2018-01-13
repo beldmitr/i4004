@@ -1,6 +1,6 @@
 #include "buttonsubwindow.h"
 
-ButtonSubWindow::ButtonSubWindow(Simulator* simulator) : SubWindow()
+ButtonSubWindow::ButtonSubWindow(QWidget *parent, Simulator* simulator) : SubWindow()
 {
     this->setWindowTitle("Button panel");
     this->setWindowIcon(QIcon(":/Resources/icons/button.png"));
@@ -30,24 +30,6 @@ ButtonSubWindow::ButtonSubWindow(Simulator* simulator) : SubWindow()
 
         chooseIO->setConnection(ChooseIOWidget::IOType::ROM_IO, 4 + i / 4, 3 - i % 4);
     }
-
-//    QSizePolicy sp = this->sizePolicy();
-//    sp.setHorizontalPolicy(QSizePolicy::Maximum);
-//    sp.setVerticalPolicy(QSizePolicy::Maximum);
-//    this->setSizePolicy(sp);
-
-//    this->move(35, 35);
-
-//    QString os = QSysInfo::kernelType();
-//    if (os == "darwin")
-//    {
-//        this->move(1040, 350);
-//    }
-//    else
-//    {
-//        this->move(1200, 350);
-//    }
-
 }
 
 ButtonSubWindow::~ButtonSubWindow()

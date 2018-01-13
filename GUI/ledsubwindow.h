@@ -19,7 +19,7 @@ class LEDSubWindow : public SubWindow
 {
     Q_OBJECT
 public:
-    explicit LEDSubWindow(Simulator* simulator);
+    explicit LEDSubWindow(QWidget *parent, Simulator* simulator);
     virtual ~LEDSubWindow();
 
 private:

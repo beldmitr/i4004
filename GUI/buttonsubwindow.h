@@ -19,7 +19,7 @@ class ButtonSubWindow : public SubWindow
 {
     Q_OBJECT
 public:
-    explicit ButtonSubWindow(Simulator* simulator);
+    explicit ButtonSubWindow(QWidget *parent, Simulator* simulator);
     virtual ~ButtonSubWindow();
 
 private:

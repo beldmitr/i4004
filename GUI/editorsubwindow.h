@@ -18,7 +18,7 @@ class EditorSubWindow : public SubWindow
 {
     Q_OBJECT
 public:
-    explicit EditorSubWindow(QWidget *parent = 0);
+    explicit EditorSubWindow(QWidget *parent);
     virtual ~EditorSubWindow();
 
     void readFile();

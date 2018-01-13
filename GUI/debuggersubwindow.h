@@ -12,7 +12,7 @@
 class DebuggerSubWindow : public SubWindow
 {
 public:
-    explicit DebuggerSubWindow(Compiler *compiler, Simulator* simulator);
+    explicit DebuggerSubWindow(QWidget *parent, Compiler *compiler, Simulator* simulator);
     virtual ~DebuggerSubWindow();
 
 private:

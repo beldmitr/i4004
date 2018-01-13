@@ -11,7 +11,7 @@ EditorSubWindow::EditorSubWindow(QWidget *parent) : SubWindow(parent)
     this->move(5, 5);
 
     QRect r = this->geometry();
-    r.setHeight(525);
+    r.setHeight(parent->height());
     r.setWidth(400);
     this->setGeometry(r);
 

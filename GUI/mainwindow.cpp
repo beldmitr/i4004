@@ -270,16 +270,16 @@ void MainWindow::createToolbars()
 
 void MainWindow::createSubWindows()
 {
-    editorSubWindow = std::shared_ptr<EditorSubWindow>(new EditorSubWindow(this));
+    editorSubWindow = std::shared_ptr<EditorSubWindow>(new EditorSubWindow(mdi.get()));
     mdi->addSubWindow(editorSubWindow.get(), Qt::CustomizeWindowHint | Qt::WindowMinimizeButtonHint | Qt::WindowCloseButtonHint);
 
-    debuggerSubWindow = std::shared_ptr<DebuggerSubWindow>(new DebuggerSubWindow(compiler, simulator));
+    debuggerSubWindow = std::shared_ptr<DebuggerSubWindow>(new DebuggerSubWindow(mdi.get(), compiler, simulator));
     mdi->addSubWindow(debuggerSubWindow.get(), Qt::CustomizeWindowHint | Qt::WindowMinimizeButtonHint | Qt::WindowCloseButtonHint);
 
-    ledSubWindow = std::shared_ptr<LEDSubWindow>(new LEDSubWindow(simulator));
+    ledSubWindow = std::shared_ptr<LEDSubWindow>(new LEDSubWindow(mdi.get(), simulator));
     mdi->addSubWindow(ledSubWindow.get(), Qt::CustomizeWindowHint | Qt::WindowMinimizeButtonHint | Qt::WindowCloseButtonHint);
 
-    buttonSubWindow = std::shared_ptr<ButtonSubWindow>(new ButtonSubWindow(simulator));
+    buttonSubWindow = std::shared_ptr<ButtonSubWindow>(new ButtonSubWindow(mdi.get(), simulator));
     mdi->addSubWindow(buttonSubWindow.get(), Qt::CustomizeWindowHint | Qt::WindowMinimizeButtonHint | Qt::WindowCloseButtonHint);
 
     mdi->setActiveSubWindow(editorSubWindow.get()); // Editor window is activated (focused) by default
