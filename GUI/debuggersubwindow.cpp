@@ -12,7 +12,7 @@ DebuggerSubWindow::DebuggerSubWindow(QWidget*, Compiler* compiler, Simulator *si
 
     this->setWidget(debuggerLst.get());
 
-    QDesktopWidget desktop;
+    QRect desktop = QApplication::desktop()->screenGeometry();
 
     this->move(desktop.width() / 2, 5);
 
@@ -22,7 +22,7 @@ DebuggerSubWindow::DebuggerSubWindow(QWidget*, Compiler* compiler, Simulator *si
     QString os = QSysInfo::kernelType();
     if (os == "darwin")
     {
-        r.setWidth(325);
+        r.setWidth(375);
     }
     else
     {

@@ -3,6 +3,7 @@
 
 #include <QObject>
 #include <QWidget>
+#include <QApplication>
 #include <QDesktopWidget>
 
 #include "GUI/subwindow.h"

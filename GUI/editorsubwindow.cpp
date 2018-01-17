@@ -10,7 +10,7 @@ EditorSubWindow::EditorSubWindow(QWidget *parent) : SubWindow(parent)
 
     this->move(5, 5);
 
-    QDesktopWidget desktop;
+    QRect desktop = QApplication::desktop()->screenGeometry();
 
     QRect r = this->geometry();
     r.setHeight((desktop.height() / 2) - 100);
