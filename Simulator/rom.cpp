@@ -105,44 +105,8 @@ void ROM::flashRom(std::vector<unsigned> compiledCode)
 
     for (int code : compiledCode)
     {
-        /*
-         * If this byte is an instruction, then look for length of this instruction.
-         * Because 2 byte instructions can't be cutted between 2 pages:
-         * first byte at one page and the second byte at the next page.
-         *
-         * There are 5 instructons, which are 2 byte long:
-         * JCN - 0001 CCCC AAAA AAAA
-         * FIM - 0010 RRR0 DDDD DDDD
-         * JUN - 0100 AAAA AAAA AAAA
-         * JMS - 0101 AAAA AAAA AAAA
-         * ISZ - 0111 RRRR AAAA AAAA
-         *
-         * So before to save them to ROM we should to check if the place of saveing has got enaugh bytes.
-         * And the 2 byte long instruction won't be cutted by 2 pages after flashing it to ROM.
-         *
-         * So, we look if this is an instruction, look a length of it and if there is enough place.
-         * If it is enaugh, just write it as is, if not enought, place a NOP (0x0) instruction
-         * and write a 2 byte instruction at a new page.
-         */
-        bool longCommand = Debugger::hasNextByte(code);
-
-        if (longCommand) // if 2 byte long instruction
-        {
-            // if it is not enaugh place in a ROM page
-            int leavePlace = (bytesPerPage - addr % bytesPerPage);
-            if (leavePlace > 0 && leavePlace < 2)
-            {
-                setValue(addr, 0x0); // Write a NOP and this cause a step to a next page
-                addr += 1;
-            }
-            setValue(addr, code & 0xFF);
-            addr += 1;
-        }
-        else // if 1 byte long instruction
-        {
-            setValue(addr, code & 0xFF); // write this 1 byte instruction
-            addr += 1;
-        }
+        setValue(addr, code & 0xFF);
+        addr += 1;
     }
 
     //  We do not need here "emit onRomChanged();", because it is emitted in setValue method
