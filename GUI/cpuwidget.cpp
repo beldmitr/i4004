@@ -73,14 +73,12 @@ void CpuWidget::createWidgetStack()
 
 void CpuWidget::createWidgetRegisters()
 {
-    gbRegisters = std::make_shared<QGroupBox>("Registers");
+    gbRegisters = std::make_shared<QGroupBox>("Pairs (Registers)");
     layoutRegisters = std::make_shared<QGridLayout>(gbRegisters.get());
 
-    for (int i = 0; i < 16; i++)
+    for (int i = 0; i < 8; i++)
     {
-        QString text = (i < 10) ?
-                    QString("0").append(QString::number(i))
-                  : QString::number(i);
+        QString text = "P" + QString::number(i) + " (R" + QString::number(i * 2) + ":R" + QString::number(i * 2 + 1) + ")";
         lblR.push_back(std::make_shared<QLabel>(text));
     }
 
@@ -97,8 +95,7 @@ void CpuWidget::createWidgetRegisters()
 
     for (int i = 0; i < 16; i+=2)
     {
-        layoutRegisters->addWidget((lblR[i]).get(),   (i/2) % 4, (i/8) * 8 + 0);
-        layoutRegisters->addWidget((lblR[i+1]).get(), (i/2) % 4, (i/8) * 8 + 1);
+        layoutRegisters->addWidget((lblR[i / 2]).get(),   (i/2) % 4, (i/8) * 8 + 0);
         layoutRegisters->addWidget((edtR[i]).get(),   (i/2) % 4, (i/8) * 8 + 2);
         layoutRegisters->addWidget((edtR[i+1]).get(), (i/2) % 4, (i/8) * 8 + 3);
     }
