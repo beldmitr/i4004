@@ -1,7 +1,7 @@
 #include "compiler.h"
 
 const std::regex Compiler::labelRegex = std::regex("^[[:alpha:]][[:alnum:]]{2,}[,:]");
-const std::regex Compiler::commandRegex = std::regex("[[:alpha:]]{2,}[[:alnum:]]?");
+const std::regex Compiler::commandRegex = std::regex("NOP|JCN|FIM|SRC|FIN|JIN|JUN|JMS|INC|ISZ|ADD|SUB|LD|XCH|BBL|LDM|WRM|WMP|WRR|WPM|WR0|WR1|WR2|WR3|SBM|RDM|RDR|ADM|RD0|RD1|RD2|RD3|CLB|CLC|IAC|CMC|CMA|RAL|RAR|TCC|DAC|TCS|STC|DAA|KBP|DCL");
 const std::regex Compiler::paramsRegex = std::regex("([[:blank:]]+[[:print:]]+[[:blank:]]*)(,)?([[:blank:]]*[[:print:]]+[[:blank:]]*)?");
 const std::regex Compiler::commentRegex = std::regex("[/;][[:print:]]*");
 const std::regex Compiler::pseudoRegex = std::regex("[[:blank:]]*=[[:blank:]]+");
