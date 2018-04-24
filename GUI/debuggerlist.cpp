@@ -9,7 +9,7 @@ DebuggerList::DebuggerList(Compiler* compiler, Simulator *simulator) : QTableWid
 
     this->horizontalHeader()->setSectionResizeMode(QHeaderView::Fixed);
     this->horizontalHeader()->setStretchLastSection(true);
-    this->setHorizontalHeaderLabels(QStringList() << "" << tr("Address") << tr("(Lenght) Code") << tr("Command"));
+    this->setHorizontalHeaderLabels(QStringList() << "" << tr("(Label) Address") << tr("(Lenght) Code") << tr("Command"));
 
     QTableWidgetItem* delBrkpnt = this->horizontalHeaderItem(0);
     delBrkpnt->setIcon(QIcon(":/Resources/icons/removeBreakpoint.png"));
@@ -120,11 +120,26 @@ void DebuggerList::setCode(std::vector<unsigned> code)
         this->setItem(rows-1, 0, brkptItem);
         items.push_back(brkptItem);
 
-        QTableWidgetItem* addrItem = new QTableWidgetItem(Debugger::addressToString(addrInTable), QTableWidgetItem::UserType);
+
+
+        QString lblName = QString::fromStdString(Constant::getByAddr(addrInTable));
+        QString lblNameBrief = lblName;
+        if (lblName.length() > 6)
+        {
+            lblNameBrief = lblNameBrief.fromStdString(lblNameBrief.toStdString().substr(0,3)) + "... ";
+        }
+
+        QString valueBrief = lblName.isEmpty() ? Debugger::addressToString(addrInTable) : lblNameBrief + ": " + Debugger::addressToString(addrInTable);
+        QString valueFull = lblName.isEmpty() ? Debugger::addressToString(addrInTable) : lblName + ": " + Debugger::addressToString(addrInTable);
+
+        QTableWidgetItem* addrItem = new QTableWidgetItem(valueBrief, QTableWidgetItem::UserType);
+        addrItem->setToolTip(valueFull);
         addrItem->setTextAlignment(Qt::AlignCenter);
         addrItem->setFlags(Qt::ItemIsSelectable|Qt::ItemIsEnabled);
         this->setItem(rows-1, 1, addrItem);
         items.push_back(addrItem);
+
+
 
         QTableWidgetItem* codeItem = new QTableWidgetItem((longCommand ? "(2) " : "(1) ") + Debugger::commandToString(command), QTableWidgetItem::UserType);
         codeItem->setTextAlignment(Qt::AlignCenter);

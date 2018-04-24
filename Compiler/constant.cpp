@@ -31,6 +31,19 @@ unsigned int Constant::getByName(const std::string& name)
     throw CompilerException("Constant", msg);
 }
 
+std::string Constant::getByAddr(unsigned addr)
+{
+    for(auto it = table.begin(); it != table.end(); it++)
+    {
+        if (it->second == addr)
+        {
+            return it->first;
+        }
+    }
+
+    return "";
+}
+
 void Constant::clear()
 {
     table.clear();

@@ -10,6 +10,7 @@
 #include <unordered_map>
 #include <vector>
 #include <iostream>
+#include <string>
 
 #include "Simulator/debugger.h"
 #include "Compiler/compiler.h"

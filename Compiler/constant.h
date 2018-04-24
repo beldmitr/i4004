@@ -30,6 +30,7 @@ private:
 public:
     static void add(const std::string name, unsigned int value);
     static unsigned int getByName(const std::string& name);
+    static std::string getByAddr(unsigned addr);
     static void clear();
     static bool isConstantExist(const std::string& name);
     static bool isConstant(const std::string& str);
