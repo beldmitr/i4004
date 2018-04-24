@@ -118,6 +118,8 @@ ChipDataRam::ChipDataRam(Simulator* simulator, unsigned int bank, unsigned int c
         outputs.push_back(output);
         output->setEnabled(false);
 
+        output->setToolTip("Bank: " + QString::number(bank) + ", chip: " + QString::number(chip) + ", bit: " + QString::number(i));
+
         outputLayout->addWidget(output, i, 0, Qt::AlignCenter);
     }
 

@@ -35,7 +35,8 @@ RomWidget::RomWidget(Simulator *simulator, QWidget *parent) : QWidget(parent)
 
     for (unsigned j = 0; j < pagesNumber; j++)
     {
-        QGroupBox* ioGB = new QGroupBox("I/O " + QString::number(j));
+        QGroupBox* ioGB = new QGroupBox("I/O");
+        ioGB->setToolTip("Input/Output");
         ioGB->setMinimumWidth(65);
 
         QVBoxLayout* ioLayout = new QVBoxLayout(ioGB);
@@ -56,6 +57,7 @@ RomWidget::RomWidget(Simulator *simulator, QWidget *parent) : QWidget(parent)
                                         "color: #000;"
                                   "}");
 
+            ioCB->setToolTip("Page: " + QString::number(j) + ", bit: " + QString::number(i));
             ios.push_back(ioCB);
         }
 
