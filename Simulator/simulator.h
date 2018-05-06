@@ -27,6 +27,9 @@ private:
     bool isPlaying = false;
     bool isStopped = false; // stopped by breakpoint
 
+    unsigned int delay = 50;
+    const unsigned int threshold = 500;
+
     std::shared_ptr<ROM> rom;
     std::shared_ptr<DRAM> dram;
     std::shared_ptr<CPU> cpu;
@@ -86,6 +89,7 @@ public:
     Simulator(Compiler &compiler);
     virtual ~Simulator();
 
+    void setDelay(unsigned int delay);
     void setCode(std::vector<unsigned int> compiledCode);
     void step();
     void play();
@@ -103,6 +107,7 @@ public:
 signals:
     void onStopPlaying();
     void onStartPlaying();
+    void onPlaying();
 
     void onEvalCommand(const QString& msg);
 

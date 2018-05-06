@@ -21,6 +21,11 @@ Simulator::~Simulator()
     // delete or finalize here something
 }
 
+void Simulator::setDelay(unsigned int delay)
+{
+    this->delay = delay;
+}
+
 void Simulator::setCode(std::vector<unsigned int> compiledCode)
 {
     rom->flashRom(compiledCode);
@@ -53,7 +58,7 @@ void Simulator::step()
         emit onEvalCommand(lastError);
     }
 
-    if (!isPlaying)
+    if (delay >= threshold)
     {
         emit onStopPlaying();
     }
@@ -68,6 +73,7 @@ void Simulator::play()
         {
             while(isPlaying)
             {
+                emit onStartPlaying();
                 int pc = this->cpu->getPC();
                 bool isBreakpoint = Debugger::isBreakpoint(pc);
                 if (isBreakpoint && !isStopped)
@@ -78,10 +84,9 @@ void Simulator::play()
                 }
                 isStopped = false;
                 step();
-                QThread::msleep(10);
+                QThread::msleep(delay);
             }
         });
-        emit onStartPlaying();
     }
 }
 

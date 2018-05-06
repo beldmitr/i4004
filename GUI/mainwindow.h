@@ -100,6 +100,15 @@ private:
 
     std::shared_ptr<QAction> actCompile;
 
+    std::shared_ptr<QActionGroup> actionGroup;
+    std::shared_ptr<QMenu> speedMenu;
+    std::shared_ptr<QAction> actVerySlow;
+    std::shared_ptr<QAction> actSlow;
+    std::shared_ptr<QAction> actNormal;
+    std::shared_ptr<QAction> actFast;
+    std::shared_ptr<QAction> actVeryFast;
+
+
     std::shared_ptr<QAction> actPlay;
     std::shared_ptr<QAction> actStep;
     std::shared_ptr<QAction> actStop;
@@ -136,8 +145,7 @@ private:
     void createSubWindows();
     void createDocks();
     void buildCode();
-    void handleCompile();
-    void handleRun();
+
 
 public:
     explicit MainWindow(Compiler &compiler, Simulator& simulator, QWidget *parent = 0);

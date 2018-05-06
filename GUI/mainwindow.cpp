@@ -98,6 +98,45 @@ void MainWindow::createActions()
     });
 
     // Actions Debug
+
+    actionGroup = std::make_shared<QActionGroup>(this);
+
+    actVerySlow = std::shared_ptr<QAction>(new QAction(tr("Very Slow"), this));
+    actVerySlow->setCheckable(true);
+    actionGroup->addAction(actVerySlow.get());
+    connect(actVerySlow.get(), &QAction::triggered, [=](){
+        simulator->setDelay(2000);
+    });
+
+    actSlow = std::shared_ptr<QAction>(new QAction(tr("Slow"), this));
+    actSlow->setCheckable(true);
+    actionGroup->addAction(actSlow.get());
+    connect(actSlow.get(), &QAction::triggered, [=](){
+        simulator->setDelay(1000);
+    });
+
+    actNormal = std::shared_ptr<QAction>(new QAction(tr("Normal"), this));
+    actNormal->setCheckable(true);
+    actNormal->setChecked(true);
+    actionGroup->addAction(actNormal.get());
+    connect(actNormal.get(), &QAction::triggered, [=](){
+        simulator->setDelay(50);
+    });
+
+    actFast = std::shared_ptr<QAction>(new QAction(tr("Fast"), this));
+    actFast->setCheckable(true);
+    actionGroup->addAction(actFast.get());
+    connect(actFast.get(), &QAction::triggered, [=](){
+        simulator->setDelay(25);
+    });
+
+    actVeryFast = std::shared_ptr<QAction>(new QAction(tr("Very Fast"), this));
+    actVeryFast->setCheckable(true);
+    actionGroup->addAction(actVeryFast.get());
+    connect(actVeryFast.get(), &QAction::triggered, [=](){
+        simulator->setDelay(10);
+    });
+
     actPlay = std::shared_ptr<QAction>(new QAction(tr("Play"), this));
     actPlay->setIcon(QIcon(":/Resources/icons/debug_resume.png"));
     actPlay->setShortcut(tr("F5"));
@@ -159,6 +198,15 @@ void MainWindow::createMenu()
     menuBuild = std::shared_ptr<QMenu>(mainMenu->addMenu("Build"));
     menuBuild->addAction(actCompile.get());
     menuBuild->addSeparator();
+    speedMenu = std::make_shared<QMenu>("Play speed");
+    menuBuild->addMenu(speedMenu.get());
+
+    speedMenu->addAction(actVerySlow.get());
+    speedMenu->addAction(actSlow.get());
+    speedMenu->addAction(actNormal.get());
+    speedMenu->addAction(actFast.get());
+    speedMenu->addAction(actVeryFast.get());
+
     menuBuild->addAction(actPlay.get());
     menuBuild->addAction(actStop.get());
     menuBuild->addAction(actStep.get());
@@ -408,16 +456,6 @@ void MainWindow::buildCode()
     QtConcurrent::run([=](){
        compiler->compile(filename.toStdString());
     });
-}
-
-void MainWindow::handleCompile()
-{
-    buildCode();
-}
-
-void MainWindow::handleRun()
-{
-    simulator->play();
 }
 
 void MainWindow::closeEvent(QCloseEvent* event)
