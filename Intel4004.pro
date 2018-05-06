@@ -1,6 +1,21 @@
 TEMPLATE = app
 TARGET = Intel4004
 
+BUILDDIR = "/Users/dima/dev/bak/build"
+#MAKEFILE = $${BUILDDIR}/Makefile
+
+Release:DESTDIR = $${BUILDDIR}/release
+Release:OBJECTS_DIR = $${BUILDDIR}/release/.obj
+Release:MOC_DIR = $${BUILDDIR}/release/.moc
+Release:RCC_DIR = $${BUILDDIR}/release/.rcc
+Release:UI_DIR = $${BUILDDIR}/release/.ui
+
+Debug:DESTDIR = $${BUILDDIR}/debug
+Debug:OBJECTS_DIR = $${BUILDDIR}/debug/.obj
+Debug:MOC_DIR = $${BUILDDIR}/debug/.moc
+Debug:RCC_DIR = $${BUILDDIR}/debug/.rcc
+Debug:UI_DIR = $${BUILDDIR}/debug/.ui
+
 QT += core gui
 
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
