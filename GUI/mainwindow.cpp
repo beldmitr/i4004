@@ -512,6 +512,17 @@ void MainWindow::handleBuildCode()
 void MainWindow::handleCompiled()
 {
     dockResult->raise();
+
+    if (compiler->getErrors().empty())
+    {
+        this->actPlay->setEnabled(true);
+        this->actStep->setEnabled(true);
+    }
+    else
+    {
+        this->actPlay->setEnabled(false);
+        this->actStep->setEnabled(false);
+    }
 }
 
 void MainWindow::handleCursorPosChanged(unsigned line)
