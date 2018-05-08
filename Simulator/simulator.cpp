@@ -58,7 +58,7 @@ void Simulator::step()
         emit onEvalCommand(lastError);
     }
 
-    if (delay >= threshold)
+    if (!isPlaying || delay >= threshold)
     {
         emit onStopPlaying();
     }
