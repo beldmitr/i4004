@@ -40,6 +40,10 @@ int main (int argc, char* argv[])
     {
         std::cerr << "Log exception : " << ex.what() << " from " << ex.who() << std::endl;
     }
+    catch(const std::exception& ex)
+    {
+        std::cerr << "Exception : " << ex.what() << std::endl;
+    }
 
     return app->exec();
 }
