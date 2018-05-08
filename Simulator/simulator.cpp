@@ -102,7 +102,7 @@ void Simulator::reset()
     rom->reset();
     dram->reset();
 
-    if (!isPlaying)
+    if (!isPlaying || delay >= threshold)
     {
         emit onStopPlaying();
     }
